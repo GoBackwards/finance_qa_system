@@ -63,7 +63,7 @@ def _vectors(value: np.ndarray | str | Path, *, dimension: int | None = None) ->
 
 
 def validate_vectors(vectors: np.ndarray | str | Path, *, dimension: int | None = None,
-                     batch_size: int = 8192) -> dict:
+                     batch_size: int = 1024) -> dict:
     """Validate all rows in bounded memory; never normalize or drop rows silently."""
     batch_size = _positive_int(batch_size, "batch_size")
     array = _vectors(vectors, dimension=dimension)
@@ -179,7 +179,8 @@ def build_faiss_index(vectors: np.ndarray | str | Path, output_path: str | Path,
     if isinstance(train_seed, bool) or not isinstance(train_seed, int) or not 0 <= train_seed < 2**31:
         raise ValueError("train_seed must be a non-negative signed 32-bit integer")
     array = _vectors(vectors)
-    validation = validate_vectors(array, batch_size=batch_size)
+    validation_batch_size = min(batch_size, 1024)
+    validation = validate_vectors(array, batch_size=validation_batch_size)
     count, dimension = array.shape
     target = Path(output_path).resolve()
     manifest_target = manifest_path(target)
@@ -199,7 +200,8 @@ def build_faiss_index(vectors: np.ndarray | str | Path, output_path: str | Path,
     effective_threads = 1 if kind == "hnsw" else threads
     config: dict[str, Any] = {"kind": kind, "metric": "inner_product", "similarity": "cosine",
                               "requested_threads": threads, "construction_threads": effective_threads,
-                              "train_seed": train_seed, "batch_size": batch_size}
+                              "train_seed": train_seed, "batch_size": batch_size,
+                              "validation_batch_size": validation_batch_size}
     try:
         if chunks_path is not None:
             source_metadata = _metadata(Path(chunks_path), temporary_metadata, count)
@@ -223,16 +225,20 @@ def build_faiss_index(vectors: np.ndarray | str | Path, output_path: str | Path,
                 index.cp.max_points_per_centroid = max(index.cp.max_points_per_centroid,
                                                        (sample_count + effective_nlist - 1) // effective_nlist)
                 sample_ids = np.sort(np.random.default_rng(train_seed).choice(count, sample_count, replace=False))
+                sample_ids_sha256 = hashlib.sha256(sample_ids.astype("<i8", copy=False).tobytes()).hexdigest()
                 train_vectors = np.ascontiguousarray(array[sample_ids])
                 training_start = time.perf_counter()
                 index.train(train_vectors)
                 training_seconds = time.perf_counter() - training_start
+                # FAISS retains learned centroids, not the caller's training
+                # matrix. Release its corpus-sized copy before adding vectors.
+                del train_vectors, sample_ids
                 index.nprobe = effective_nprobe
                 config.update({"class": "IndexIVFFlat", "requested_nlist": nlist, "nlist": effective_nlist,
                                "requested_nprobe": nprobe, "nprobe": effective_nprobe,
                                "requested_training_sample_size": train_sample_size,
                                "training_sample_size": sample_count,
-                               "training_sample_ids_sha256": hashlib.sha256(sample_ids.astype("<i8").tobytes()).hexdigest(),
+                               "training_sample_ids_sha256": sample_ids_sha256,
                                "training_iterations": index.cp.niter,
                                "minimum_training_points_per_centroid": MIN_TRAINING_POINTS_PER_CENTROID,
                                "adaptive_nlist": effective_nlist != nlist})
@@ -357,11 +363,10 @@ def benchmark_indexes(indexfiles: Mapping[str, str | Path], query_vectors: np.nd
         raise ValueError("warmup must be a non-negative integer")
     if not indexfiles:
         raise ValueError("Provide at least one Flat index")
-    indexes, manifests = {}, {}
+    manifests = {}
     for name, path in indexfiles.items():
         manifests[name] = json.loads(manifest_path(path).read_text(encoding="utf-8"))
-        indexes[name] = load_faiss_index(path)
-    flat_names = [name for name in indexes if manifests[name]["configuration"]["kind"] == "flat"]
+    flat_names = [name for name in indexfiles if manifests[name]["configuration"]["kind"] == "flat"]
     if len(flat_names) != 1:
         raise ValueError("Benchmark requires exactly one Flat baseline")
     flat_name = flat_names[0]
@@ -375,35 +380,57 @@ def benchmark_indexes(indexfiles: Mapping[str, str | Path], query_vectors: np.nd
     queries = np.ascontiguousarray(queries)
     effective_k = min(k, flat_manifest["vector_count"])
     with _threads(threads):
-        exact_ids = _ranked_search(indexes[flat_name], queries, k)[1]
-        exact_scores, extra_ids = _ranked_search(indexes[flat_name], queries, k + 1)
-        boundary_ties = [bool(len(scores) > k and ids[k] >= 0 and scores[k - 1] == scores[k])
-                         for scores, ids in zip(exact_scores, extra_ids)]
-        comparisons = []
-        for name, index in indexes.items():
-            for _ in range(warmup):
-                for query in queries:
-                    index.search(query.reshape(1, -1), k)
-            per_query, all_times = [], []
+        # Match timed single-query searches exactly. FAISS may dispatch batches
+        # and single queries to different SIMD/BLAS/database-parallel kernels;
+        # their floating-point reductions can change near-tied neighbor IDs.
+        exact_ids = np.empty((len(queries), k), dtype=np.int64)
+        boundary_ties, near_boundary_ties, boundary_gaps = [], [], []
+        flat_index = load_faiss_index(indexfiles[flat_name])
+        try:
             for query_number, query in enumerate(queries):
-                times = []
-                candidates = None
-                scores = None
-                for _ in range(repeats):
-                    start = time.perf_counter_ns()
-                    scores, candidates = index.search(query.reshape(1, -1), k)
-                    times.append((time.perf_counter_ns() - start) / 1_000_000)
-                candidate_set = {int(value) for value in candidates[0] if value >= 0}
-                truth = {int(value) for value in exact_ids[query_number] if value >= 0}
-                recall = len(candidate_set.intersection(truth)) / effective_k
-                ordering = np.lexsort((candidates[0], -scores[0]))
-                per_query.append({"query_index": query_number,
-                                  f"exact_neighbor_recall_at_{k}": recall,
-                                  "exact_boundary_tie": boundary_ties[query_number],
-                                  "mean_search_ms": float(np.mean(times)), "search_ms_samples": times,
-                                  "vector_ids": [int(value) for value in candidates[0, ordering] if value >= 0],
-                                  "scores": [float(scores[0, position]) for position in ordering if candidates[0, position] >= 0]})
-                all_times.extend(times)
+                single_query = query.reshape(1, -1)
+                exact_ids[query_number] = _ranked_search(flat_index, single_query, k)[1][0]
+                extra_scores, extra_ids = _ranked_search(flat_index, single_query, k + 1)
+                gap = (float(extra_scores[0, k - 1]) - float(extra_scores[0, k])
+                       if extra_ids[0, k] >= 0 else None)
+                boundary_gaps.append(gap)
+                boundary_ties.append(gap == 0.0)
+                near_boundary_ties.append(gap is not None and abs(gap) <= 1e-6)
+        finally:
+            del flat_index
+        comparisons = []
+        for name, path in indexfiles.items():
+            # A large benchmark needs only one resident index at a time. Index
+            # loading/checksumming remain outside all search latency samples.
+            index = load_faiss_index(path)
+            try:
+                for _ in range(warmup):
+                    for query in queries:
+                        index.search(query.reshape(1, -1), k)
+                per_query, all_times = [], []
+                for query_number, query in enumerate(queries):
+                    times = []
+                    candidates = None
+                    scores = None
+                    for _ in range(repeats):
+                        start = time.perf_counter_ns()
+                        scores, candidates = index.search(query.reshape(1, -1), k)
+                        times.append((time.perf_counter_ns() - start) / 1_000_000)
+                    candidate_set = {int(value) for value in candidates[0] if value >= 0}
+                    truth = {int(value) for value in exact_ids[query_number] if value >= 0}
+                    recall = len(candidate_set.intersection(truth)) / effective_k
+                    ordering = np.lexsort((candidates[0], -scores[0]))
+                    per_query.append({"query_index": query_number,
+                                      f"exact_neighbor_recall_at_{k}": recall,
+                                      "exact_boundary_tie": boundary_ties[query_number],
+                                      "near_boundary_tie": near_boundary_ties[query_number],
+                                      "exact_boundary_score_gap": boundary_gaps[query_number],
+                                      "mean_search_ms": float(np.mean(times)), "search_ms_samples": times,
+                                      "vector_ids": [int(value) for value in candidates[0, ordering] if value >= 0],
+                                      "scores": [float(scores[0, position]) for position in ordering if candidates[0, position] >= 0]})
+                    all_times.extend(times)
+            finally:
+                del index
             manifest = manifests[name]
             comparisons.append({"name": name, "kind": manifest["configuration"]["kind"],
                                 "vector_count": manifest["vector_count"], "dimension": manifest["dimension"],
@@ -418,7 +445,11 @@ def benchmark_indexes(indexfiles: Mapping[str, str | Path], query_vectors: np.nd
             "flat_baseline": flat_name, "k": k, "effective_k": effective_k,
             "query_count": len(queries), "query_vectors_sha256": query_stats["vectors_sha256"],
             "faiss_threads": threads, "warmup_passes": warmup, "repeats_per_query": repeats,
+            "reference_search_policy": "Flat reference and timed searches both use batch size 1, identical k, and identical FAISS thread count",
+            "index_loading_policy": "One resident index at a time; reference Flat released before comparison stages",
             "latency_scope": "Single-query CPU index.search only; excludes embedding, loading, validation, sorting, and warmup",
             "boundary_tie_query_count": sum(boundary_ties),
+            "near_boundary_tie_query_count": sum(near_boundary_ties),
+            "near_boundary_tie_absolute_tolerance": 1e-6,
             "tie_policy": "ID-set recall can penalize equivalent candidates tied at the kth score",
             "results": comparisons}

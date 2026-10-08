@@ -1,0 +1,193 @@
+{
+  "measured_date": "2026-10-08",
+  "scope": "40 agent-curated development questions; full-corpus unfiltered retrieval, not a held-out production estimate.",
+  "model": "BAAI/bge-m3",
+  "model_revision": "5617a9f61b028005a4858fdac845db406aefb181",
+  "dimension": 1024,
+  "document_count": 200,
+  "chunk_count": 56525,
+  "vector_count": 56525,
+  "source_sha256": "d9dc54b432956aec565f3ede839e0062ee90d2c7166f48eaf22e733f6da474c6",
+  "benchmark_sha256": "c9039c7e81970d421be97c3fbabcb7144658a3e9aa7d219f6f54603e25f7b3c0",
+  "vector_matrix_sha256": "5759b06bb42b50cb29de72d0dafbf4e7c84a78044e6a5bb58ac7c6e7edae6950",
+  "dtype": "float32",
+  "normalized": true,
+  "max_actual_model_tokens": 7921,
+  "truncated_chunks": 0,
+  "skipped_chunks": 0,
+  "encoding_and_write_seconds": 1437.3265225999057,
+  "encoding_timing_semantics": {
+    "encoding_and_write_seconds": "Sum of committed shard times; includes token checks, encoding, shard writes, and first-shard model initialization/weight download when needed",
+    "last_run_seconds": "Wall time of this invocation, including input hashing, preflight, resume validation, and any newly encoded shards"
+  },
+  "runtime": {
+    "device": "cuda:0",
+    "gpu_memory_fraction": 0.6,
+    "faiss_threads": 4,
+    "gpu_name": "NVIDIA GeForce RTX 4060 Laptop GPU"
+  },
+  "resumed_existing_vectors": 49664,
+  "benchmark_controls": {
+    "query_count": 40,
+    "faiss_threads": 4,
+    "warmup_passes": 2,
+    "repeats_per_query": 3,
+    "latency_scope": "Single-query CPU index.search only; excludes embedding, loading, validation, sorting, and warmup",
+    "reference_search_policy": "Flat reference and timed searches both use batch size 1, identical k, and identical FAISS thread count",
+    "index_loading_policy": "One resident index at a time; reference Flat released before comparison stages"
+  },
+  "bm25_baseline_evidence_recall_at_5": 0.5,
+  "indexes": [
+    {
+      "name": "flat",
+      "kind": "flat",
+      "vector_count": 56525,
+      "dimension": 1024,
+      "index_size_bytes": 231526445,
+      "build_seconds": 12.372088900010567,
+      "configuration": {
+        "kind": "flat",
+        "metric": "inner_product",
+        "similarity": "cosine",
+        "requested_threads": 4,
+        "construction_threads": 4,
+        "train_seed": 20261008,
+        "batch_size": 8192,
+        "validation_batch_size": 1024,
+        "class": "IndexFlatIP",
+        "training_sample_size": 0
+      },
+      "exact_neighbor_recall_at_5": 1.0,
+      "median_search_ms": 31.852200000000003,
+      "p95_search_ms": 40.08396,
+      "document_count": 200,
+      "gold_evidence_recall_at_5": 0.4875,
+      "by_type": {
+        "table": {
+          "question_count": 20,
+          "recall_at_5": 0.575,
+          "hit_at_5": 0.6,
+          "all_evidence_hit_at_5": 0.55,
+          "gold_units": 25,
+          "recovered_units": 14
+        },
+        "prose": {
+          "question_count": 20,
+          "recall_at_5": 0.4,
+          "hit_at_5": 0.4,
+          "all_evidence_hit_at_5": 0.4,
+          "gold_units": 23,
+          "recovered_units": 10
+        }
+      },
+      "average_top5_tokens": 1913.3,
+      "index_sha256": "fb375f7eb7dfaa0e2f583f4927b766d18fd0a39cb848b9cfd6d1b578ce58a75d"
+    },
+    {
+      "name": "ivf",
+      "kind": "ivf",
+      "vector_count": 56525,
+      "dimension": 1024,
+      "index_size_bytes": 233029363,
+      "build_seconds": 15.521370500035118,
+      "configuration": {
+        "kind": "ivf",
+        "metric": "inner_product",
+        "similarity": "cosine",
+        "requested_threads": 4,
+        "construction_threads": 4,
+        "train_seed": 20261008,
+        "batch_size": 8192,
+        "validation_batch_size": 1024,
+        "class": "IndexIVFFlat",
+        "requested_nlist": 256,
+        "nlist": 256,
+        "requested_nprobe": 16,
+        "nprobe": 16,
+        "requested_training_sample_size": 100000,
+        "training_sample_size": 56525,
+        "training_sample_ids_sha256": "07859a7e7fb54262fcc5946d0bb37f599929255cf1d88f93868f1389313f114e",
+        "training_iterations": 10,
+        "minimum_training_points_per_centroid": 39,
+        "adaptive_nlist": false
+      },
+      "exact_neighbor_recall_at_5": 1.0,
+      "median_search_ms": 0.95275,
+      "p95_search_ms": 1.45006,
+      "document_count": 200,
+      "gold_evidence_recall_at_5": 0.4875,
+      "by_type": {
+        "table": {
+          "question_count": 20,
+          "recall_at_5": 0.575,
+          "hit_at_5": 0.6,
+          "all_evidence_hit_at_5": 0.55,
+          "gold_units": 25,
+          "recovered_units": 14
+        },
+        "prose": {
+          "question_count": 20,
+          "recall_at_5": 0.4,
+          "hit_at_5": 0.4,
+          "all_evidence_hit_at_5": 0.4,
+          "gold_units": 23,
+          "recovered_units": 10
+        }
+      },
+      "average_top5_tokens": 1913.3,
+      "index_sha256": "0b05f0afae444258ba5b360c302abda8dde607583fe8d94cd0a51f1d2d6122b5"
+    },
+    {
+      "name": "hnsw",
+      "kind": "hnsw",
+      "vector_count": 56525,
+      "dimension": 1024,
+      "index_size_bytes": 246897406,
+      "build_seconds": 46.3074907999835,
+      "configuration": {
+        "kind": "hnsw",
+        "metric": "inner_product",
+        "similarity": "cosine",
+        "requested_threads": 4,
+        "construction_threads": 1,
+        "train_seed": 20261008,
+        "batch_size": 8192,
+        "validation_batch_size": 1024,
+        "class": "IndexHNSWFlat",
+        "hnsw_m": 32,
+        "ef_construction": 200,
+        "ef_search": 64,
+        "training_sample_size": 0,
+        "construction_seed": 20261008,
+        "single_thread_construction_reason": "deterministic graph insertion"
+      },
+      "exact_neighbor_recall_at_5": 1.0,
+      "median_search_ms": 0.20525,
+      "p95_search_ms": 0.44761999999999996,
+      "document_count": 200,
+      "gold_evidence_recall_at_5": 0.4875,
+      "by_type": {
+        "table": {
+          "question_count": 20,
+          "recall_at_5": 0.575,
+          "hit_at_5": 0.6,
+          "all_evidence_hit_at_5": 0.55,
+          "gold_units": 25,
+          "recovered_units": 14
+        },
+        "prose": {
+          "question_count": 20,
+          "recall_at_5": 0.4,
+          "hit_at_5": 0.4,
+          "all_evidence_hit_at_5": 0.4,
+          "gold_units": 23,
+          "recovered_units": 10
+        }
+      },
+      "average_top5_tokens": 1913.3,
+      "index_sha256": "fa04fa5d00b723105364efc22fc89edd764f5aa9e6d0eece25c5fccc65909f51"
+    }
+  ],
+  "artifact_directory": "data/indexes/bge-m3/table_preserving_s512_o50",
+  "tests_passed": 127
+}

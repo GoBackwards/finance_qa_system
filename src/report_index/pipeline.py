@@ -159,6 +159,8 @@ def main(argv=None) -> int:
     parser.add_argument('--revision', help='Immutable 40-character model commit; defaults to pinned release')
     parser.add_argument('--device', default='auto', help='auto, cpu, or cuda:0')
     parser.add_argument('--batch-size', type=int, default=8)
+    parser.add_argument('--gpu-memory-fraction', type=float, default=0.6,
+                        help='Maximum CUDA allocator fraction (0 < fraction <= 1); ignored on CPU')
     parser.add_argument('--shard-size', type=int, default=512)
     parser.add_argument('--threads', type=int, default=4)
     parser.add_argument('--index-types', nargs='+', choices=['flat', 'ivf', 'hnsw'], default=['flat'])
@@ -173,6 +175,8 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     if args.threads < 1 or args.shard_size < 1:
         parser.error('threads and shard-size must be positive')
+    if not 0 < args.gpu_memory_fraction <= 1:
+        parser.error('gpu-memory-fraction must be greater than zero and at most one')
     chunks = args.chunks.resolve()
     if not chunks.is_file():
         parser.error(f'Missing chunks file: {chunks}')
@@ -182,6 +186,12 @@ def main(argv=None) -> int:
     if device == 'auto':
         import torch
         device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+    runtime = {'device': device, 'gpu_memory_fraction': None, 'faiss_threads': args.threads}
+    if device.startswith('cuda:'):
+        import torch
+        torch.cuda.set_per_process_memory_fraction(args.gpu_memory_fraction, device=device)
+        runtime.update(gpu_memory_fraction=args.gpu_memory_fraction,
+                       gpu_name=torch.cuda.get_device_name(device))
     encoder = DenseEncoder(args.model, args.revision, device, args.batch_size)
     embeddings_dir = output / 'embeddings'
     if args.preflight_only:
@@ -189,7 +199,13 @@ def main(argv=None) -> int:
         print(json.dumps(audit, indent=2), flush=True)
         return 0
     start = time.perf_counter()
+    checkpoint_path = embeddings_dir / 'embedding_checkpoint.json'
+    starting_vectors = (json.loads(checkpoint_path.read_text(encoding='utf-8'))['vector_count']
+                        if checkpoint_path.exists() else 0)
     embeddings = build_embeddings(chunks, embeddings_dir, encoder, args.shard_size, on_progress=_progress)
+    if device.startswith('cuda:'):
+        # Release unused inference cache before the CPU indexes need host memory.
+        torch.cuda.empty_cache()
     vectors_path = consolidate_vectors(embeddings_dir, embeddings)
     indexes = {}
     index_manifests = {}
@@ -207,6 +223,8 @@ def main(argv=None) -> int:
         query_start = time.perf_counter()
         query_vectors = encoder.encode_queries([q['question'] for q in benchmark['questions']])
         query_seconds = time.perf_counter() - query_start
+        if device.startswith('cuda:'):
+            torch.cuda.empty_cache()
         np.save(output / 'query_vectors.npy', query_vectors, allow_pickle=False)
         query_identity = {'benchmark_path': str(args.benchmark.resolve()),
                           'benchmark_sha256': sha256_file(args.benchmark),
@@ -232,8 +250,10 @@ def main(argv=None) -> int:
                'chunk_count': embeddings['chunk_count'], 'vector_count': embeddings['vector_count'],
                'source_chunks_path': str(chunks), 'source_sha256': embeddings['source_sha256'],
                'embedding_manifest': str(embeddings_dir / 'embedding_manifest.json'),
-               'indexes': index_manifests, 'evaluation': evaluation_summary,
+               'indexes': index_manifests, 'evaluation': evaluation_summary, 'runtime': runtime,
+               'embedding_vectors_reused': starting_vectors,
                'duration_seconds': time.perf_counter() - start,
+               'duration_scope': 'This invocation, including resume validation; cumulative committed-shard time is in the embedding manifest.',
                'scope': 'Dense embeddings only; starter benchmark is agent-curated exploratory evidence retrieval.'}
     write_json(output / 'index_creation.json', summary)
     print(f'Complete: {output / "index_creation.json"}', flush=True)

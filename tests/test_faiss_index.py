@@ -176,6 +176,27 @@ class FaissIndexTests(unittest.TestCase):
         self.assertEqual(result["results"][0]["exact_neighbor_recall_at_5"], 1)
         self.assertEqual(result["boundary_tie_query_count"], 1)
 
+    def test_flat_self_recall_with_parallel_single_query_and_near_identical_vectors(self):
+        # At >=10k vectors and four threads, FAISS can use database-parallel
+        # SGEMM for one query while a 40-query batch uses a different kernel.
+        # Near-identical vectors expose rounding-induced top-k differences when
+        # a batched reference is incorrectly compared with timed single queries.
+        rng = np.random.default_rng(20261008)
+        center = rng.standard_normal(64, dtype=np.float32)
+        center /= np.linalg.norm(center)
+        vectors = rng.standard_normal((10000, 64), dtype=np.float32)
+        vectors *= 1e-6
+        vectors += center
+        vectors /= np.linalg.norm(vectors, axis=1, keepdims=True)
+        queries = np.repeat(center[None, :], 40, axis=0)
+        path = self.folder / "near-identical.faiss"
+        build_faiss_index(vectors, path, threads=4)
+        result = benchmark_indexes({"flat": path}, queries, warmup=0, repeats=1, threads=4)
+        self.assertEqual(result["query_count"], 40)
+        self.assertEqual(result["results"][0]["exact_neighbor_recall_at_5"], 1.0)
+        self.assertTrue(all(row["exact_neighbor_recall_at_5"] == 1.0
+                            for row in result["results"][0]["per_query"]))
+
 
 if __name__ == "__main__":
     unittest.main()

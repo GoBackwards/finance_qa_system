@@ -62,6 +62,8 @@ After the Flat baseline, compare IVF and HNSW using the same saved embeddings:
 
 Completed embedding shards are reused only after checking source/model/tokenizer/configuration fingerprints and artifact hashes. Source changes require a separate output directory. An interrupted run resumes from its last durable shard. CUDA runs use FP16 model inference; vectors are normalized and persisted in float32. CPU inference uses FP32. Floating-point inference can vary across hardware or library versions; saved-vector hashes identify the exact matrix used in an index comparison.
 
+CUDA allocation defaults to 60% of device memory (`--gpu-memory-fraction 0.6`). FlagEmbedding can reduce the inference batch when necessary; this never shortens inputs. Unused GPU cache is released before CPU index work. The full corpus run exercised checkpoint resumption after host memory pressure at 49,664 saved vectors; model, source inputs, precision, and requested batch size remained unchanged. `runtime_restart.json` records that boundary and allocator change.
+
 ## Index design and comparisons
 
 All vectors and query vectors are L2-normalized, so inner product is cosine similarity. Flat performs exact nearest-neighbor search without a training stage. At 56,525 vectors and 1,024 dimensions, the float32 vector payload alone occupies about 220.8 MiB. This is small enough to make Flat a useful baseline. [FAISS metric documentation](https://github.com/facebookresearch/faiss/wiki/MetricType-and-distances), [index selection guidance](https://github.com/facebookresearch/faiss/wiki/Guidelines-to-choose-an-index).
@@ -103,3 +105,19 @@ Default output: `data/indexes/bge-m3/table_preserving_s512_o50/`.
 `document_count` means distinct annual reports, not vector count. `vector_count` and `chunk_count` must match. An index with a mismatched source hash is rejected before source payloads are read. The original chunks remain authoritative; vector metadata does not replace page-level evidence.
 
 Large PDFs, parsed text, embedding shards, and FAISS indexes are excluded from Git. Code, dependency pins, corpus provenance, benchmark labels, and documentation are versioned. The local repository's origin is `https://github.com/GoBackwards/finance_qa_system.git`.
+
+## Measured index run — 2026-10-08
+
+The full run produced **56,525 normalized float32 vectors of dimension 1,024 from 200 annual reports**, with zero truncated or skipped chunks. The actual longest input was 7,921 M3 tokens. All three persisted indexes contain the same vectors and original source mappings. The source and matrix hashes, model revision, settings, and measurements are saved in the versioned [result record](vector_index_results.json); full per-query judgments remain in the generated artifact directory.
+
+| Index | Size (MiB) | Build and validation (s) | Search median (ms) | Search p95 (ms) | Neighbor Recall@5 vs Flat | Gold-evidence Recall@5 |
+|---|---:|---:|---:|---:|---:|---:|
+| Flat IP | 220.8 | 12.37 | 31.85 | 40.08 | 100% | 48.75% |
+| IVF Flat IP | 222.2 | 15.52 | 0.95 | 1.45 | 100% | 48.75% |
+| HNSW Flat IP | 235.5 | 46.31 | 0.21 | 0.45 | 100% | 48.75% |
+
+Measurements use the same **40 agent-curated development questions**, four FAISS CPU search threads, two warmup passes, and three timed single-query searches per question. Search latency excludes embedding, loading, and validation. Build time includes validation and artifact writing, but excludes model inference. HNSW construction uses one thread; IVF uses 256 lists and 16 probes. These are measurements on this laptop, not a production latency or approximation-recall guarantee. The approximate indexes matched every exact top-five neighbor in this pilot; that does not imply perfect agreement for other questions.
+
+The prior BM25 baseline scored **50.00%** overall, versus dense retrieval's **48.75%**. Dense table recall was **57.5%** (BM25: 35%), while dense prose recall was **40%** (BM25: 65%). This motivates a later hybrid experiment; it does not establish that combining the retrievers will improve results. The small development set and non-exhaustive source judgments remain limitations. Retain Flat as the exact reference when tuning approximate indexes or evaluating new questions.
+
+The independent artifact audit checked all vector norms/dimensions, persisted index sizes and counts, hashes, source mappings, and every retrieved evidence judgment. All **127 tests passed**, including a regression for near-tie arithmetic differences between batch and single-query Flat search. Exact-neighbor references now use the same single-query shape and thread settings as timed searches. Indexes are loaded one at a time during benchmarking to reduce peak memory.

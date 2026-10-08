@@ -115,7 +115,7 @@ The [dense embedding and FAISS stage](docs/vector_index.md) adds pinned BGE mode
 - All 200 reports, 40 tickers, and 23,280 PDF pages processed; no document-level failures.
 - 13,141 detected table regions: 12,055 passed numeric consistency checks; 1,086 use original-text fallbacks.
 - All 1,639,474 active native text lines accounted for. Source-manifest coverage, metadata, citation references, and artifact hashes passed with zero integrity errors.
-- 43 parser tests pass (126 tests across the project after adding chunking, embeddings, and retrieval). Rendered spot checks covered complex NVIDIA spreads, Microsoft headings/bullets/statements, and financial statements from Coca-Cola, Walmart, and Caterpillar. These are sample checks, not a corpus-wide semantic-accuracy benchmark.
+- 43 parser tests pass (127 tests across the project after adding chunking, embeddings, and retrieval). Rendered spot checks covered complex NVIDIA spreads, Microsoft headings/bullets/statements, and financial statements from Coca-Cola, Walmart, and Caterpillar. These are sample checks, not a corpus-wide semantic-accuracy benchmark.
 - 324 pages have sparse-text or encoding warnings that can require OCR/review. Table extraction produced explicit warnings on 313 pages; native text remains available. Other layout/table review flags are recorded separately.
 
 The machine-readable results are in [data/parsed_validation_report.json](data/parsed_validation_report.json). A real cached rerun of NVIDIA FY2025 reused the verified artifacts successfully.
