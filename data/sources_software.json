@@ -1,0 +1,408 @@
+[
+  {
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "fiscal_year": 2021,
+    "url": "https://microsoft.gcs-web.com/static-files/0a2b8528-fb8b-4d11-8da2-fd9fa988a155",
+    "source_page": "https://microsoft.gcs-web.com/financial-information/sec-filings",
+    "fiscal_label_note": "Official investor-relations Form 10-K PDF; fiscal year ends June 30.",
+    "fallback_urls": [
+      "https://www.annreports.com/microsoft/microsoft-ar-2021.pdf",
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/m/NASDAQ_MSFT_2021.pdf"
+    ]
+  },
+  {
+    "company": "Oracle",
+    "ticker": "ORCL",
+    "fiscal_year": 2021,
+    "url": "https://s23.q4cdn.com/440135859/files/doc_financials/2021/q4/b6108535-b35e-408f-987e-5c98dea80f60.pdf",
+    "source_page": "https://investor.oracle.com/financials/default.aspx",
+    "fiscal_label_note": "Fiscal year ends May 31; Oracle Corporation, not Oracle Financial Services Software.",
+    "fallback_urls": [
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2021.pdf"
+    ]
+  },
+  {
+    "company": "Salesforce",
+    "ticker": "CRM",
+    "fiscal_year": 2021,
+    "url": "https://s205.q4cdn.com/626266368/files/doc_financials/2021/ar/Salesforce-FY-2021-Annual-Report.pdf",
+    "source_page": "https://investor.salesforce.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Fiscal year ends January 31 of the labeled year.",
+    "fallback_urls": [
+      "https://s23.q4cdn.com/574569502/files/doc_financials/2021/ar/Salesforce-FY-2021-Annual-Report.pdf",
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_CRM_2021.pdf"
+    ]
+  },
+  {
+    "company": "Adobe",
+    "ticker": "ADBE",
+    "fiscal_year": 2021,
+    "url": "https://www.adobe.com/cc-shared/assets/investor-relations/pdfs/adbe-10k-fy21-final.pdf",
+    "source_page": "https://www.adobe.com/investor-relations/financial-documents.html",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends on Friday nearest November 30."
+  },
+  {
+    "company": "ServiceNow",
+    "ticker": "NOW",
+    "fiscal_year": 2021,
+    "url": "https://stocklight.com/stocks/us/nyse-now/servicenow/annual-reports/nyse-now-2022-10K-22589576.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-now/servicenow/annual-reports",
+    "fiscal_label_note": "FY2021 ended December 31, 2021. Stocklight labels this PDF 2022 by its filing/publication year (February 3, 2022); PDF page 3 is the SEC 10-K cover with the correct FY2021 period.",
+    "fallback_urls": [],
+    "quality_note": "Third-party published PDF rendering of the SEC filing, with two Stocklight front-matter pages. 96 pages; full extraction and cross-parser checks passed. Replaces issuer formatted report with garbled font encoding. Preserve physical PDF page numbering for citations."
+  },
+  {
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "fiscal_year": 2022,
+    "url": "https://microsoft.gcs-web.com/static-files/07cf3c30-cfc3-4567-b20f-f4b0f0bd5087",
+    "source_page": "https://microsoft.gcs-web.com/financial-information/sec-filings",
+    "fiscal_label_note": "Official investor-relations Form 10-K PDF; fiscal year ends June 30.",
+    "fallback_urls": [
+      "https://www.annreports.com/microsoft/microsoft-ar-2022.pdf",
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/m/NASDAQ_MSFT_2022.pdf"
+    ]
+  },
+  {
+    "company": "Oracle",
+    "ticker": "ORCL",
+    "fiscal_year": 2022,
+    "url": "https://s23.q4cdn.com/440135859/files/doc_downloads/proxy-voting-material/Bookmarked-PDF-10-K-FY22.pdf",
+    "source_page": "https://investor.oracle.com/financials/default.aspx",
+    "fiscal_label_note": "Fiscal year ends May 31; Oracle Corporation, not Oracle Financial Services Software.",
+    "fallback_urls": [
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2022.pdf"
+    ]
+  },
+  {
+    "company": "Salesforce",
+    "ticker": "CRM",
+    "fiscal_year": 2022,
+    "url": "https://s205.q4cdn.com/626266368/files/doc_financials/2022/ar/Salesforce-FY-2022-Annual-Report.pdf",
+    "source_page": "https://investor.salesforce.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Fiscal year ends January 31 of the labeled year.",
+    "fallback_urls": [
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_CRM_2022.pdf"
+    ]
+  },
+  {
+    "company": "Adobe",
+    "ticker": "ADBE",
+    "fiscal_year": 2022,
+    "url": "https://www.adobe.com/cc-shared/assets/investor-relations/pdfs/adbe-10k-fy22-final.pdf",
+    "source_page": "https://www.adobe.com/investor-relations/financial-documents.html",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends on Friday nearest November 30."
+  },
+  {
+    "company": "ServiceNow",
+    "ticker": "NOW",
+    "fiscal_year": 2022,
+    "url": "https://s205.q4cdn.com/916135447/files/doc_financials/2022/ar/servicenow-annual-report-2022.pdf",
+    "source_page": "https://investor.servicenow.com/financial-resources/annual-reports-and-proxy-statements/default.aspx",
+    "fiscal_label_note": "Fiscal year ends December 31.",
+    "fallback_urls": [
+      "https://www.servicenow.com/content/dam/servicenow-assets/public/en-us/doc-type/public-document/servicenow-annual-report-2022.pdf",
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_NOW_2022.pdf"
+    ]
+  },
+  {
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "fiscal_year": 2023,
+    "url": "https://microsoft.gcs-web.com/static-files/e2931fdb-9823-4130-b2a8-f6b8db0b15a9",
+    "source_page": "https://microsoft.gcs-web.com/financial-information/sec-filings",
+    "fiscal_label_note": "Official investor-relations Form 10-K PDF; fiscal year ends June 30.",
+    "fallback_urls": [
+      "https://www.sec.gov/Archives/edgar/data/789019/000119312523259254/d506673dars.pdf",
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/m/NASDAQ_MSFT_2023.pdf"
+    ]
+  },
+  {
+    "company": "Oracle",
+    "ticker": "ORCL",
+    "fiscal_year": 2023,
+    "url": "https://s23.q4cdn.com/440135859/files/doc_financials/2023/q4/10-K.pdf",
+    "source_page": "https://investor.oracle.com/financials/default.aspx",
+    "fiscal_label_note": "Fiscal year ends May 31; Oracle Corporation, not Oracle Financial Services Software.",
+    "fallback_urls": [
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2023.pdf"
+    ]
+  },
+  {
+    "company": "Salesforce",
+    "ticker": "CRM",
+    "fiscal_year": 2023,
+    "url": "https://s205.q4cdn.com/626266368/files/doc_financials/2023/ar/salesforce-fy-2023-annual-report.pdf",
+    "source_page": "https://investor.salesforce.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Fiscal year ends January 31 of the labeled year.",
+    "fallback_urls": [
+      "https://s23.q4cdn.com/574569502/files/doc_financials/2023/ar/salesforce-fy-2023-annual-report.pdf",
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_CRM_2023.pdf"
+    ]
+  },
+  {
+    "company": "Adobe",
+    "ticker": "ADBE",
+    "fiscal_year": 2023,
+    "url": "https://www.adobe.com/cc-shared/assets/investor-relations/pdfs/adbe-10k-fy23-final.pdf",
+    "source_page": "https://www.adobe.com/investor-relations/financial-documents.html",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends on Friday nearest November 30."
+  },
+  {
+    "company": "ServiceNow",
+    "ticker": "NOW",
+    "fiscal_year": 2023,
+    "url": "https://s205.q4cdn.com/916135447/files/doc_financials/2023/ar/servicenow-annual-report-2023.pdf",
+    "source_page": "https://investor.servicenow.com/financial-resources/annual-reports-and-proxy-statements/default.aspx",
+    "fiscal_label_note": "Fiscal year ends December 31.",
+    "fallback_urls": [
+      "https://www.servicenow.com/content/dam/servicenow-assets/public/en-us/doc-type/public-document/servicenow-annual-report-2023.pdf",
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_NOW_2023.pdf"
+    ]
+  },
+  {
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "fiscal_year": 2024,
+    "url": "https://microsoft.gcs-web.com/static-files/1c864583-06f7-40cc-a94d-d11400c83cc8",
+    "source_page": "https://microsoft.gcs-web.com/financial-information/sec-filings",
+    "fiscal_label_note": "Official investor-relations Form 10-K PDF; fiscal year ends June 30.",
+    "fallback_urls": [
+      "https://www.sec.gov/Archives/edgar/data/789019/000119312524242888/d815777dars.pdf",
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/m/NASDAQ_MSFT_2024.pdf"
+    ]
+  },
+  {
+    "company": "Oracle",
+    "ticker": "ORCL",
+    "fiscal_year": 2024,
+    "url": "https://s23.q4cdn.com/440135859/files/doc_financials/2024/q4/d92207b0-c016-44ea-a770-4b6f6bb7982e.pdf",
+    "source_page": "https://investor.oracle.com/financials/default.aspx",
+    "fiscal_label_note": "Fiscal year ends May 31; Oracle Corporation, not Oracle Financial Services Software.",
+    "fallback_urls": [
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/o/NYSE_ORCL_2024.pdf"
+    ]
+  },
+  {
+    "company": "Salesforce",
+    "ticker": "CRM",
+    "fiscal_year": 2024,
+    "url": "https://s205.q4cdn.com/626266368/files/doc_financials/2024/ar/salesforce-fy24-annual-report.pdf",
+    "source_page": "https://investor.salesforce.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Fiscal year ends January 31 of the labeled year.",
+    "fallback_urls": [
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_CRM_2024.pdf"
+    ]
+  },
+  {
+    "company": "Adobe",
+    "ticker": "ADBE",
+    "fiscal_year": 2024,
+    "url": "https://www.adobe.com/cc-shared/assets/investor-relations/pdfs/adbe-10k-fy24-final.pdf",
+    "source_page": "https://www.adobe.com/investor-relations/financial-documents.html",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends on Friday nearest November 30."
+  },
+  {
+    "company": "ServiceNow",
+    "ticker": "NOW",
+    "fiscal_year": 2024,
+    "url": "https://s205.q4cdn.com/916135447/files/doc_financials/2024/ar/servicenow-annual-report-2024.pdf",
+    "source_page": "https://investor.servicenow.com/financial-resources/annual-reports-and-proxy-statements/default.aspx",
+    "fiscal_label_note": "Fiscal year ends December 31.",
+    "fallback_urls": [
+      "https://www.annualreports.com/HostedData/AnnualReportArchive/s/NYSE_NOW_2024.pdf"
+    ]
+  },
+  {
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "fiscal_year": 2025,
+    "url": "https://microsoft.gcs-web.com/static-files/9640e86d-a99f-4502-934d-1d3c883fa786",
+    "source_page": "https://microsoft.gcs-web.com/financial-information/sec-filings",
+    "fiscal_label_note": "Official investor-relations Form 10-K PDF; fiscal year ends June 30.",
+    "fallback_urls": [
+      "https://www.sec.gov/Archives/edgar/data/789019/000119312525245177/d61995dars.pdf",
+      "https://www.annualreports.com/Click/37135"
+    ]
+  },
+  {
+    "company": "Oracle",
+    "ticker": "ORCL",
+    "fiscal_year": 2025,
+    "url": "https://s23.q4cdn.com/440135859/files/doc_downloads/proxy-voting-material/2025/09/Oracle-2025-10-K-PDF-Final-9-26-25.pdf",
+    "source_page": "https://investor.oracle.com/financials/default.aspx",
+    "fiscal_label_note": "Fiscal year ends May 31; Oracle Corporation, not Oracle Financial Services Software.",
+    "fallback_urls": [
+      "https://www.annualreports.com/Click/37043"
+    ]
+  },
+  {
+    "company": "Salesforce",
+    "ticker": "CRM",
+    "fiscal_year": 2025,
+    "url": "https://s205.q4cdn.com/626266368/files/doc_financials/2025/ar/Salesforce-FY25-Annual-Report.pdf",
+    "source_page": "https://investor.salesforce.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Fiscal year ends January 31 of the labeled year."
+  },
+  {
+    "company": "Adobe",
+    "ticker": "ADBE",
+    "fiscal_year": 2025,
+    "url": "https://www.adobe.com/cc-shared/assets/investor-relations/pdfs/adbe-10k-fy25-final.pdf",
+    "source_page": "https://www.adobe.com/investor-relations/financial-documents.html",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends on Friday nearest November 30."
+  },
+  {
+    "company": "ServiceNow",
+    "ticker": "NOW",
+    "fiscal_year": 2025,
+    "url": "https://s205.q4cdn.com/916135447/files/doc_downloads/annual-meeting-of-share-holders/2026/NOW-2025-Annual-Report-bookmarked.pdf",
+    "source_page": "https://investor.servicenow.com/financial-resources/annual-reports-and-proxy-statements/default.aspx",
+    "fallback_urls": [
+      "https://www.annualreports.com/Click/38171"
+    ],
+    "fiscal_label_note": "Fiscal year ends December 31."
+  },
+  {
+    "company": "Intuit",
+    "ticker": "INTU",
+    "fiscal_year": 2021,
+    "url": "https://investors.intuit.com/sec-filings/all-sec-filings/content/0000896878-21-000233/0000896878-21-000233.pdf",
+    "source_page": "https://investors.intuit.com/sec-filings/annual-reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends July 31."
+  },
+  {
+    "company": "Intuit",
+    "ticker": "INTU",
+    "fiscal_year": 2022,
+    "url": "https://investors.intuit.com/sec-filings/all-sec-filings/content/0000896878-22-000028/0000896878-22-000028.pdf",
+    "source_page": "https://investors.intuit.com/sec-filings/annual-reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends July 31."
+  },
+  {
+    "company": "Intuit",
+    "ticker": "INTU",
+    "fiscal_year": 2023,
+    "url": "https://investors.intuit.com/sec-filings/all-sec-filings/content/0000896878-23-000034/0000896878-23-000034.pdf",
+    "source_page": "https://investors.intuit.com/sec-filings/annual-reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends July 31."
+  },
+  {
+    "company": "Intuit",
+    "ticker": "INTU",
+    "fiscal_year": 2024,
+    "url": "https://investors.intuit.com/sec-filings/all-sec-filings/content/0000896878-24-000039/0000896878-24-000039.pdf",
+    "source_page": "https://investors.intuit.com/sec-filings/annual-reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends July 31."
+  },
+  {
+    "company": "Intuit",
+    "ticker": "INTU",
+    "fiscal_year": 2025,
+    "url": "https://investors.intuit.com/sec-filings/all-sec-filings/content/0000896878-25-000035/0000896878-25-000035.pdf",
+    "source_page": "https://investors.intuit.com/sec-filings/annual-reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends July 31."
+  },
+  {
+    "company": "Autodesk",
+    "ticker": "ADSK",
+    "fiscal_year": 2021,
+    "url": "https://investors.autodesk.com/static-files/f0ab7605-383c-4d23-9bcf-abb168d0489d",
+    "source_page": "https://investors.autodesk.com/financials/annual-reports",
+    "fiscal_label_note": "Fiscal year ends January 31 of the labeled year.",
+    "quality_note": "Official archive links; FY2024 web extraction shows malformed font encoding, so validate local text extraction and consider mirror/10-K alternative.",
+    "fallback_urls": [
+      "https://www.annreports.com/autodesk/autodesk-ar-2021.pdf"
+    ]
+  },
+  {
+    "company": "Autodesk",
+    "ticker": "ADSK",
+    "fiscal_year": 2022,
+    "url": "https://investors.autodesk.com/static-files/0a1a30ad-77ea-4457-8157-e41049f0b9e1",
+    "source_page": "https://investors.autodesk.com/sec-filings/sec-filing/10-k/0000769397-22-000019",
+    "fiscal_label_note": "Fiscal year ends January 31 of the labeled year.",
+    "quality_note": "Official 126-page Form 10-K preferred; downloaded Stocklight fallback is a readable 121-page published rendering of the SEC filing with two publisher front-matter pages. Full extraction and cross-parser checks passed. Replaces combined proxy/annual report with garbled 10-K body.",
+    "fallback_urls": [
+      "https://stocklight.com/stocks/us/nasdaq-adsk/autodesk/annual-reports/nasdaq-adsk-2022-10K-22736542.pdf"
+    ]
+  },
+  {
+    "company": "Autodesk",
+    "ticker": "ADSK",
+    "fiscal_year": 2023,
+    "url": "https://investors.autodesk.com/static-files/1dfc0d11-9c1d-40f3-9008-d981b6bdadc2",
+    "source_page": "https://investors.autodesk.com/financials/annual-reports",
+    "fiscal_label_note": "Fiscal year ends January 31 of the labeled year.",
+    "quality_note": "Official archive links; FY2024 web extraction shows malformed font encoding, so validate local text extraction and consider mirror/10-K alternative.",
+    "fallback_urls": [
+      "https://www.annreports.com/autodesk/autodesk-ar-2023.pdf"
+    ]
+  },
+  {
+    "company": "Autodesk",
+    "ticker": "ADSK",
+    "fiscal_year": 2024,
+    "url": "https://investors.autodesk.com/static-files/aa9a2d30-bb4d-46ee-8f26-f558c8270546",
+    "source_page": "https://investors.autodesk.com/sec-filings/sec-filing/10-k/0000769397-24-000090",
+    "fiscal_label_note": "Fiscal year ends January 31 of the labeled year.",
+    "quality_note": "Official Form 10-K selected because formatted annual report has malformed font encoding during web extraction; this PDF text is readable.",
+    "fallback_urls": [
+      "https://www.sec.gov/Archives/edgar/data/769397/000076939724000102/adskfy24annualreport.pdf",
+      "https://investors.autodesk.com/static-files/c8b18520-59fa-478b-b665-2fb51c45062f"
+    ]
+  },
+  {
+    "company": "Autodesk",
+    "ticker": "ADSK",
+    "fiscal_year": 2025,
+    "url": "https://investors.autodesk.com/static-files/5a13740d-d370-40e9-aeac-8ac257ca85ff",
+    "source_page": "https://investors.autodesk.com/financials/annual-reports",
+    "fiscal_label_note": "Fiscal year ends January 31 of the labeled year.",
+    "quality_note": "Official archive links; FY2024 web extraction shows malformed font encoding, so validate local text extraction and consider mirror/10-K alternative.",
+    "fallback_urls": [
+      "https://www.sec.gov/Archives/edgar/data/769397/000076939725000060/autodeskannualreportfy25.pdf"
+    ]
+  },
+  {
+    "company": "Cadence Design Systems",
+    "ticker": "CDNS",
+    "fiscal_year": 2021,
+    "url": "https://s206.q4cdn.com/597110084/files/doc_financials/2021/ar/2021-annual-report.pdf",
+    "source_page": "https://investor.cadence.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Fiscal 2021 ended January 1, 2022 (52-week year ending Saturday closest to December 31). This is FY2021 per the issuer annual-report archive and FY2021 results release, not FY2022."
+  },
+  {
+    "company": "Cadence Design Systems",
+    "ticker": "CDNS",
+    "fiscal_year": 2022,
+    "url": "https://s206.q4cdn.com/597110084/files/doc_financials/2022/ar/Cadence-Annual-Report-2022.pdf",
+    "source_page": "https://investor.cadence.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Form 10-K annual report. FY2021/FY2022 ended Saturday nearest December 31. From FY2023 fiscal year ends December 31."
+  },
+  {
+    "company": "Cadence Design Systems",
+    "ticker": "CDNS",
+    "fiscal_year": 2023,
+    "url": "https://s206.q4cdn.com/597110084/files/doc_financials/2023/ar/Cadence-Annual-Report-2023.pdf",
+    "source_page": "https://investor.cadence.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Form 10-K annual report. FY2021/FY2022 ended Saturday nearest December 31. From FY2023 fiscal year ends December 31."
+  },
+  {
+    "company": "Cadence Design Systems",
+    "ticker": "CDNS",
+    "fiscal_year": 2024,
+    "url": "https://s206.q4cdn.com/597110084/files/doc_financials/2024/ar/Cadence-Annual-Report-2024.pdf",
+    "source_page": "https://investor.cadence.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Form 10-K annual report. FY2021/FY2022 ended Saturday nearest December 31. From FY2023 fiscal year ends December 31."
+  },
+  {
+    "company": "Cadence Design Systems",
+    "ticker": "CDNS",
+    "fiscal_year": 2025,
+    "url": "https://s206.q4cdn.com/597110084/files/doc_financials/2025/ar/CDNS-FY-2025-Form-10-K.pdf",
+    "source_page": "https://investor.cadence.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Form 10-K annual report. FY2021/FY2022 ended Saturday nearest December 31. From FY2023 fiscal year ends December 31."
+  }
+]

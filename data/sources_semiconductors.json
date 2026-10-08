@@ -1,0 +1,339 @@
+[
+  {
+    "ticker": "NVDA",
+    "company": "NVIDIA",
+    "sector": "Semiconductors",
+    "fiscal_year": 2021,
+    "url": "https://s201.q4cdn.com/141608511/files/doc_financials/2021/ar/2021-annual-report-insert-web-ir-update.pdf",
+    "source_page": "https://investor.nvidia.com/financial-info/annual-reports-and-proxies/default.aspx"
+  },
+  {
+    "ticker": "NVDA",
+    "company": "NVIDIA",
+    "sector": "Semiconductors",
+    "fiscal_year": 2022,
+    "url": "https://s201.q4cdn.com/141608511/files/doc_financials/2022/ar/2022-annual-report-insert-web-IR-update.pdf",
+    "source_page": "https://investor.nvidia.com/financial-info/annual-reports-and-proxies/default.aspx"
+  },
+  {
+    "ticker": "NVDA",
+    "company": "NVIDIA",
+    "sector": "Semiconductors",
+    "fiscal_year": 2023,
+    "url": "https://s201.q4cdn.com/141608511/files/doc_financials/2023/ar/2023-annual-report-insert-web-IR-update.pdf",
+    "source_page": "https://investor.nvidia.com/financial-info/annual-reports-and-proxies/default.aspx"
+  },
+  {
+    "ticker": "NVDA",
+    "company": "NVIDIA",
+    "sector": "Semiconductors",
+    "fiscal_year": 2024,
+    "url": "https://s201.q4cdn.com/141608511/files/doc_financials/2024/ar/2024-annual-report-insert-web-IR-update.pdf",
+    "source_page": "https://investor.nvidia.com/financial-info/annual-reports-and-proxies/default.aspx"
+  },
+  {
+    "ticker": "NVDA",
+    "company": "NVIDIA",
+    "sector": "Semiconductors",
+    "fiscal_year": 2025,
+    "url": "https://s201.q4cdn.com/141608511/files/doc_financials/2025/annual/NVIDIA-2025-Annual-Report.pdf",
+    "source_page": "https://investor.nvidia.com/financial-info/annual-reports-and-proxies/default.aspx"
+  },
+  {
+    "ticker": "MU",
+    "company": "Micron Technology",
+    "sector": "Semiconductors",
+    "fiscal_year": 2021,
+    "url": "https://www.annreports.com/micron/micron-ar-2021.pdf",
+    "source_page": "https://www.annreports.com/micron/"
+  },
+  {
+    "ticker": "MU",
+    "company": "Micron Technology",
+    "sector": "Semiconductors",
+    "fiscal_year": 2022,
+    "url": "https://s25.q4cdn.com/621799436/files/doc_financials/2022/ar/MU-10-K.pdf",
+    "source_page": "https://investors.micron.com/financials/annual-reports/default.aspx"
+  },
+  {
+    "ticker": "MU",
+    "company": "Micron Technology",
+    "sector": "Semiconductors",
+    "fiscal_year": 2023,
+    "url": "https://s25.q4cdn.com/621799436/files/doc_financials/2023/ar/Form-10-K-for-Micron-Technology-INC-filed-10-06-23.pdf",
+    "source_page": "https://investors.micron.com/financials/annual-reports/default.aspx"
+  },
+  {
+    "ticker": "MU",
+    "company": "Micron Technology",
+    "sector": "Semiconductors",
+    "fiscal_year": 2024,
+    "url": "https://s25.q4cdn.com/621799436/files/doc_financials/2024/ar/2024-10K.pdf",
+    "source_page": "https://investors.micron.com/financials/annual-reports/default.aspx"
+  },
+  {
+    "ticker": "MU",
+    "company": "Micron Technology",
+    "sector": "Semiconductors",
+    "fiscal_year": 2025,
+    "url": "https://s25.q4cdn.com/621799436/files/doc_financials/2025/ar/2025-Form-10-K.pdf",
+    "source_page": "https://investors.micron.com/financials/annual-reports/default.aspx"
+  },
+  {
+    "ticker": "INTC",
+    "company": "Intel",
+    "sector": "Semiconductors",
+    "fiscal_year": 2021,
+    "url": "https://www.intc.com/filings-reports/annual-reports/content/0000050863-22-000007/0000050863-22-000007.pdf",
+    "source_page": "https://www.intc.com/news-events/annual-stockholders-meeting",
+    "fallback_urls": [
+      "https://www.annreports.com/intel/intel-ar-2021.pdf"
+    ]
+  },
+  {
+    "ticker": "INTC",
+    "company": "Intel",
+    "sector": "Semiconductors",
+    "fiscal_year": 2022,
+    "url": "https://d1io3yog0oux5.cloudfront.net/_a0dbd358c0dfe27d139bef6d4198de40/intel/db/887/8894/annual_report/412439%281%29_12_Intel_AR_WR.pdf",
+    "source_page": "https://www.intc.com/news-events/annual-stockholders-meeting"
+  },
+  {
+    "ticker": "INTC",
+    "company": "Intel",
+    "sector": "Semiconductors",
+    "fiscal_year": 2023,
+    "url": "https://d1io3yog0oux5.cloudfront.net/_a0dbd358c0dfe27d139bef6d4198de40/intel/db/887/8982/annual_report/2023-Intel-AR.pdf",
+    "source_page": "https://www.intc.com/news-events/annual-stockholders-meeting"
+  },
+  {
+    "ticker": "INTC",
+    "company": "Intel",
+    "sector": "Semiconductors",
+    "fiscal_year": 2024,
+    "url": "https://d1io3yog0oux5.cloudfront.net/_a0dbd358c0dfe27d139bef6d4198de40/intel/db/887/9101/annual_report/2024%2BARS%2BForm%2B10-K.pdf",
+    "source_page": "https://www.intc.com/news-events/annual-stockholders-meeting"
+  },
+  {
+    "ticker": "INTC",
+    "company": "Intel",
+    "sector": "Semiconductors",
+    "fiscal_year": 2025,
+    "url": "https://www.intc.com/filings-reports/all-sec-filings/content/0000050863-26-000060/0000050863-26-000060.pdf",
+    "source_page": "https://www.intc.com/filings-reports/annual-reports/default.aspx"
+  },
+  {
+    "company": "Advanced Micro Devices",
+    "ticker": "AMD",
+    "fiscal_year": 2021,
+    "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-22-000016/0000002488-22-000016.pdf",
+    "source_page": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-22-000016/amd-20211225.htm",
+    "fiscal_label_note": "Company fiscal year ended 2021-12-25; issuer-published Form 10-K PDF, including filing exhibits. Filed in 2022."
+  },
+  {
+    "company": "Advanced Micro Devices",
+    "ticker": "AMD",
+    "fiscal_year": 2022,
+    "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-23-000047/0000002488-23-000047.pdf",
+    "source_page": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-23-000047/amd-20221231.htm",
+    "fiscal_label_note": "Company fiscal year ended 2022-12-31; issuer-published Form 10-K PDF, including filing exhibits. Filed in 2023."
+  },
+  {
+    "company": "Advanced Micro Devices",
+    "ticker": "AMD",
+    "fiscal_year": 2023,
+    "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-24-000012/0000002488-24-000012.pdf",
+    "source_page": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-24-000012/amd-20231230.htm",
+    "fiscal_label_note": "Company fiscal year ended 2023-12-30; issuer-published Form 10-K PDF, including filing exhibits. Filed in 2024."
+  },
+  {
+    "company": "Advanced Micro Devices",
+    "ticker": "AMD",
+    "fiscal_year": 2024,
+    "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-25-000012/0000002488-25-000012.pdf",
+    "source_page": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-25-000012/amd-20241228.htm",
+    "fiscal_label_note": "Company fiscal year ended 2024-12-28; issuer-published Form 10-K PDF, including filing exhibits. Filed in 2025."
+  },
+  {
+    "company": "Advanced Micro Devices",
+    "ticker": "AMD",
+    "fiscal_year": 2025,
+    "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000018/0000002488-26-000018.pdf",
+    "source_page": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000018/amd-20251227.htm",
+    "fiscal_label_note": "Company fiscal year ended 2025-12-27; issuer-published Form 10-K PDF, including filing exhibits. Filed in 2026."
+  },
+  {
+    "company": "Qualcomm",
+    "ticker": "QCOM",
+    "fiscal_year": 2021,
+    "url": "https://s204.q4cdn.com/645488518/files/doc_financials/2021/q4/0001728949-21-000076.pdf",
+    "source_page": "https://investor.qualcomm.com/financial-info-sec-filings/proxy-annual-meeting/default.aspx",
+    "fiscal_label_note": "Company fiscal year ended 2021-09-26; official investor-relations CDN Form 10-K PDF."
+  },
+  {
+    "company": "Qualcomm",
+    "ticker": "QCOM",
+    "fiscal_year": 2022,
+    "url": "https://s204.q4cdn.com/645488518/files/doc_financials/2022/ar/0000804328-22-000021-1.pdf",
+    "source_page": "https://investor.qualcomm.com/financial-info-sec-filings/proxy-annual-meeting/default.aspx",
+    "fiscal_label_note": "Company fiscal year ended 2022-09-25; official investor-relations CDN Form 10-K PDF."
+  },
+  {
+    "company": "Qualcomm",
+    "ticker": "QCOM",
+    "fiscal_year": 2023,
+    "url": "https://s204.q4cdn.com/645488518/files/doc_financials/2023/q4/0000804328-23-000055.pdf",
+    "source_page": "https://investor.qualcomm.com/financial-info-sec-filings/proxy-annual-meeting/default.aspx",
+    "fiscal_label_note": "Company fiscal year ended 2023-09-24; official investor-relations CDN Form 10-K PDF."
+  },
+  {
+    "company": "Qualcomm",
+    "ticker": "QCOM",
+    "fiscal_year": 2024,
+    "url": "https://s204.q4cdn.com/645488518/files/doc_downloads/2025/07/Annual-Report-on-Form-10-K-of-Qualcomm-Incorporated-for-the-fiscal-year-ended-29-September-2024.pdf",
+    "source_page": "https://investor.qualcomm.com/financial-info-sec-filings/proxy-annual-meeting/default.aspx",
+    "fiscal_label_note": "Company fiscal year ended 2024-09-29; official investor-relations CDN Form 10-K PDF."
+  },
+  {
+    "company": "Qualcomm",
+    "ticker": "QCOM",
+    "fiscal_year": 2025,
+    "url": "https://s204.q4cdn.com/645488518/files/doc_financials/2025/q4/QCOM-09-28-25-FY2025-10-K-Final.pdf",
+    "source_page": "https://investor.qualcomm.com/financial-info-sec-filings/proxy-annual-meeting/default.aspx",
+    "fiscal_label_note": "Company fiscal year ended 2025-09-28; official investor-relations CDN Form 10-K PDF."
+  },
+  {
+    "ticker": "ADI",
+    "company": "Analog Devices",
+    "fiscal_year": 2021,
+    "url": "https://www.annreports.com/analog-devices/analog-devices-ar-2021.pdf",
+    "source_page": "https://www.annreports.com/analog-devices/",
+    "fallback_urls": [
+      "https://stocklight.com/stocks/us/nasdaq-adi/analog-devices/annual-reports/nasdaq-adi-2021-10K-211469947.pdf"
+    ]
+  },
+  {
+    "ticker": "ADI",
+    "company": "Analog Devices",
+    "fiscal_year": 2022,
+    "url": "https://www.annreports.com/analog-devices/analog-devices-ar-2022.pdf",
+    "source_page": "https://www.annreports.com/analog-devices/",
+    "fallback_urls": [
+      "https://stocklight.com/stocks/us/nasdaq-adi/analog-devices/annual-reports/nasdaq-adi-2022-10K-221410257.pdf"
+    ]
+  },
+  {
+    "ticker": "ADI",
+    "company": "Analog Devices",
+    "fiscal_year": 2023,
+    "url": "https://www.annreports.com/analog-devices/analog-devices-ar-2023.pdf",
+    "source_page": "https://www.annreports.com/analog-devices/",
+    "fallback_urls": [
+      "https://stocklight.com/stocks/us/nasdaq-adi/analog-devices/annual-reports/nasdaq-adi-2023-10K-231428464.pdf"
+    ]
+  },
+  {
+    "ticker": "ADI",
+    "company": "Analog Devices",
+    "fiscal_year": 2024,
+    "url": "https://analogdevices.gcs-web.com/static-files/cc2bbf08-9ebc-490b-8be3-e396d9ef5934",
+    "source_page": "https://analogdevices.gcs-web.com/financial-info/annual-reports",
+    "fallback_urls": [
+      "https://stocklight.com/stocks/us/nasdaq-adi/analog-devices/annual-reports/nasdaq-adi-2024-10K-241503596.pdf"
+    ]
+  },
+  {
+    "ticker": "ADI",
+    "company": "Analog Devices",
+    "fiscal_year": 2025,
+    "url": "https://analogdevices.gcs-web.com/static-files/51ff6918-30d4-40d9-81ad-5e3bb2b2658a",
+    "source_page": "https://analogdevices.gcs-web.com/financial-info/annual-reports",
+    "fallback_urls": [
+      "https://stocklight.com/stocks/us/nasdaq-adi/analog-devices/annual-reports/nasdaq-adi-2025-10K-251520817.pdf"
+    ]
+  },
+  {
+    "ticker": "AVGO",
+    "company": "Broadcom",
+    "fiscal_year": 2021,
+    "url": "https://www.annreports.com/broadcom/broadcom-ar-2021.pdf",
+    "source_page": "https://www.annreports.com/broadcom/"
+  },
+  {
+    "ticker": "AVGO",
+    "company": "Broadcom",
+    "fiscal_year": 2022,
+    "url": "https://www.annreports.com/broadcom/broadcom-ar-2022.pdf",
+    "source_page": "https://www.annreports.com/broadcom/"
+  },
+  {
+    "ticker": "AVGO",
+    "company": "Broadcom",
+    "fiscal_year": 2023,
+    "url": "https://www.annreports.com/broadcom/broadcom-ar-2023.pdf",
+    "source_page": "https://www.annreports.com/broadcom/"
+  },
+  {
+    "ticker": "AVGO",
+    "company": "Broadcom",
+    "fiscal_year": 2024,
+    "url": "https://stocklight.com/stocks/us/nasdaq-avgo/broadcom/annual-reports/nasdaq-avgo-2024-10K-241569053.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nasdaq-avgo/broadcom/annual-reports"
+  },
+  {
+    "ticker": "AVGO",
+    "company": "Broadcom",
+    "fiscal_year": 2025,
+    "url": "https://stocklight.com/stocks/us/nasdaq-avgo/broadcom/annual-reports/nasdaq-avgo-2025-10K-251583043.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nasdaq-avgo/broadcom/annual-reports"
+  },
+  {
+    "ticker": "TXN",
+    "company": "Texas Instruments",
+    "fiscal_year": 2021,
+    "url": "https://www.annreports.com/texas-instruments/texas-instruments-ar-2021.pdf",
+    "source_page": "https://www.annreports.com/texas-instruments/",
+    "fallback_urls": [
+      "https://stocklight.com/stocks/us/nasdaq-txn/texas-instruments-incorporated/annual-reports/nasdaq-txn-2022-10K-22592215.pdf"
+    ],
+    "fiscal_label_note": "Company fiscal year ended December 31, 2021. Stocklight URL and cover label use following filing year 2022; actual Form 10-K fiscal year is 2021."
+  },
+  {
+    "ticker": "TXN",
+    "company": "Texas Instruments",
+    "fiscal_year": 2022,
+    "url": "https://www.annreports.com/texas-instruments/texas-instruments-ar-2022.pdf",
+    "source_page": "https://www.annreports.com/texas-instruments/",
+    "fallback_urls": [
+      "https://stocklight.com/stocks/us/nasdaq-txn/texas-instruments-incorporated/annual-reports/nasdaq-txn-2023-10K-23584314.pdf"
+    ],
+    "fiscal_label_note": "Company fiscal year ended December 31, 2022. Stocklight URL and cover label use following filing year 2023; actual Form 10-K fiscal year is 2022."
+  },
+  {
+    "ticker": "TXN",
+    "company": "Texas Instruments",
+    "fiscal_year": 2023,
+    "url": "https://stocklight.com/stocks/us/nasdaq-txn/texas-instruments-incorporated/annual-reports/nasdaq-txn-2024-10K-24589357.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nasdaq-txn/texas-instruments/annual-reports",
+    "fallback_urls": [],
+    "fiscal_label_note": "Company fiscal year ended December 31, 2023. Stocklight URL and cover label use following filing year 2024; actual Form 10-K fiscal year is 2023."
+  },
+  {
+    "ticker": "TXN",
+    "company": "Texas Instruments",
+    "fiscal_year": 2024,
+    "url": "https://stocklight.com/stocks/us/nasdaq-txn/texas-instruments-incorporated/annual-reports/nasdaq-txn-2025-10K-25626890.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nasdaq-txn/texas-instruments/annual-reports",
+    "fallback_urls": [],
+    "fiscal_label_note": "Company fiscal year ended December 31, 2024. Stocklight URL and cover label use following filing year 2025; actual Form 10-K fiscal year is 2024."
+  },
+  {
+    "ticker": "TXN",
+    "company": "Texas Instruments",
+    "fiscal_year": 2025,
+    "url": "https://stocklight.com/stocks/us/nasdaq-txn/texas-instruments-incorporated/annual-reports/nasdaq-txn-2026-10K-26605887.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nasdaq-txn/texas-instruments/annual-reports",
+    "fallback_urls": [],
+    "fiscal_label_note": "Company fiscal year ended December 31, 2025. Stocklight URL and cover label use following filing year 2026; actual Form 10-K fiscal year is 2025."
+  }
+]

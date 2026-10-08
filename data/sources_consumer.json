@@ -1,0 +1,644 @@
+[
+  {
+    "company": "Amazon",
+    "ticker": "AMZN",
+    "fiscal_year": 2021,
+    "url": "https://s2.q4cdn.com/299287126/files/doc_financials/2022/ar/Amazon-2021-Annual-Report.pdf",
+    "source_page": "https://ir.aboutamazon.com/annual-reports-proxies-and-shareholder-letters/default.aspx",
+    "fiscal_label_note": "Annual report fiscal year ends December 31; report is posted the following calendar year."
+  },
+  {
+    "company": "Amazon",
+    "ticker": "AMZN",
+    "fiscal_year": 2022,
+    "url": "https://s2.q4cdn.com/299287126/files/doc_financials/2023/ar/Amazon-2022-Annual-Report.pdf",
+    "source_page": "https://ir.aboutamazon.com/annual-reports-proxies-and-shareholder-letters/default.aspx",
+    "fiscal_label_note": "Annual report fiscal year ends December 31; report is posted the following calendar year."
+  },
+  {
+    "company": "Amazon",
+    "ticker": "AMZN",
+    "fiscal_year": 2023,
+    "url": "https://s2.q4cdn.com/299287126/files/doc_financials/2024/ar/Amazon-com-Inc-2023-Annual-Report.pdf",
+    "source_page": "https://ir.aboutamazon.com/annual-reports-proxies-and-shareholder-letters/default.aspx",
+    "fiscal_label_note": "Annual report fiscal year ends December 31; report is posted the following calendar year."
+  },
+  {
+    "company": "Amazon",
+    "ticker": "AMZN",
+    "fiscal_year": 2024,
+    "url": "https://s2.q4cdn.com/299287126/files/doc_financials/2025/ar/Amazon-2024-Annual-Report.pdf",
+    "source_page": "https://ir.aboutamazon.com/annual-reports-proxies-and-shareholder-letters/default.aspx",
+    "fiscal_label_note": "Annual report fiscal year ends December 31; report is posted the following calendar year."
+  },
+  {
+    "ticker": "AMZN",
+    "company": "Amazon",
+    "fiscal_year": 2025,
+    "url": "https://s2.q4cdn.com/299287126/files/doc_financials/2026/ar/Amazon-2025-Annual-Report.pdf",
+    "source_page": "https://ir.aboutamazon.com/annual-reports-proxies-and-shareholder-letters/default.aspx",
+    "fiscal_label_note": "Annual report fiscal year ends December 31; report is posted the following calendar year."
+  },
+  {
+    "company": "Colgate-Palmolive",
+    "ticker": "CL",
+    "fiscal_year": 2021,
+    "url": "https://stocklight.com/stocks/us/nyse-cl/colgate-palmolive/annual-reports/nyse-cl-2022-10K-22648333.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-cl/colgate-palmolive/annual-reports",
+    "fiscal_label_note": "Fiscal year ends December 31. Stocklight cover uses following publication year, while embedded Form 10-K states the requested fiscal year."
+  },
+  {
+    "company": "Colgate-Palmolive",
+    "ticker": "CL",
+    "fiscal_year": 2022,
+    "url": "https://stocklight.com/stocks/us/nyse-cl/colgate-palmolive/annual-reports/nyse-cl-2023-10K-23638717.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-cl/colgate-palmolive/annual-reports",
+    "fiscal_label_note": "Fiscal year ends December 31. Stocklight cover uses following publication year, while embedded Form 10-K states the requested fiscal year."
+  },
+  {
+    "ticker": "CL",
+    "company": "Colgate-Palmolive",
+    "fiscal_year": 2023,
+    "url": "https://stocklight.com/stocks/us/nyse-cl/colgate-palmolive/annual-reports/nyse-cl-2024-10K-24643733.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-cl/colgate-palmolive/annual-reports",
+    "fiscal_label_note": "Fiscal year ends December 31. Stocklight cover uses following publication year, while embedded Form 10-K states the requested fiscal year."
+  },
+  {
+    "company": "Colgate-Palmolive",
+    "ticker": "CL",
+    "fiscal_year": 2024,
+    "url": "https://stocklight.com/stocks/us/nyse-cl/colgate-palmolive/annual-reports/nyse-cl-2025-10K-25620103.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-cl/colgate-palmolive/annual-reports",
+    "fiscal_label_note": "Fiscal year ended December 31, 2024; mirror publication year 2025. Alternate PDF selected because official annual report has garbled character mappings in body text and financial statements."
+  },
+  {
+    "company": "Colgate-Palmolive",
+    "ticker": "CL",
+    "fiscal_year": 2025,
+    "url": "https://stocklight.com/stocks/us/nyse-cl/colgate-palmolive/annual-reports/nyse-cl-2026-10K-26665034.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-cl/colgate-palmolive/annual-reports",
+    "fiscal_label_note": "Fiscal year ends December 31. Stocklight cover uses following publication year, while embedded Form 10-K states the requested fiscal year."
+  },
+  {
+    "company": "Costco",
+    "ticker": "COST",
+    "fiscal_year": 2021,
+    "url": "https://s201.q4cdn.com/287523651/files/doc_financials/2021/ar/FY-2021-Annual-Report..pdf",
+    "source_page": "https://investor.costco.com/financials/annual-reports-and-proxy-statements/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends on the Sunday nearest the end of August."
+  },
+  {
+    "company": "Costco",
+    "ticker": "COST",
+    "fiscal_year": 2022,
+    "url": "https://s201.q4cdn.com/287523651/files/doc_financials/2022/ar/Costco-2022-Annual-Report.pdf",
+    "source_page": "https://investor.costco.com/financials/annual-reports-and-proxy-statements/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends on the Sunday nearest the end of August."
+  },
+  {
+    "company": "Costco",
+    "ticker": "COST",
+    "fiscal_year": 2023,
+    "url": "https://s201.q4cdn.com/287523651/files/doc_financials/2023/ar/cost-annual-report-final-pdf-from-dfin.pdf",
+    "source_page": "https://investor.costco.com/financials/annual-reports-and-proxy-statements/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends on the Sunday nearest the end of August."
+  },
+  {
+    "company": "Costco",
+    "ticker": "COST",
+    "fiscal_year": 2024,
+    "url": "https://s201.q4cdn.com/287523651/files/doc_financials/2024/ar/COST-2024-Annual-Report.pdf",
+    "source_page": "https://investor.costco.com/financials/annual-reports-and-proxy-statements/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends on the Sunday nearest the end of August."
+  },
+  {
+    "ticker": "COST",
+    "company": "Costco",
+    "fiscal_year": 2025,
+    "url": "https://s201.q4cdn.com/287523651/files/doc_financials/2025/ar/COST-Annual-Report-2025.pdf",
+    "source_page": "https://investor.costco.com/financials/annual-reports-and-proxy-statements/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends on the Sunday nearest the end of August."
+  },
+  {
+    "ticker": "GIS",
+    "company": "General Mills",
+    "fiscal_year": 2021,
+    "url": "https://s29.q4cdn.com/993087495/files/doc_financials/2021/ar/Final-GMI-2021-Annual-Report.pdf",
+    "source_page": "https://investors.generalmills.com/financial-information/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends in late May."
+  },
+  {
+    "ticker": "GIS",
+    "company": "General Mills",
+    "fiscal_year": 2022,
+    "url": "https://s29.q4cdn.com/993087495/files/doc_financials/2022/AR/Final-GMI-2022-Annual-Report.pdf",
+    "source_page": "https://investors.generalmills.com/financial-information/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends in late May."
+  },
+  {
+    "ticker": "GIS",
+    "company": "General Mills",
+    "fiscal_year": 2023,
+    "url": "https://s29.q4cdn.com/993087495/files/doc_financials/2023/ar/2023-Annual-Report.pdf",
+    "source_page": "https://investors.generalmills.com/financial-information/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends in late May."
+  },
+  {
+    "ticker": "GIS",
+    "company": "General Mills",
+    "fiscal_year": 2024,
+    "url": "https://s29.q4cdn.com/993087495/files/doc_financials/2024/ar/2024-Annual-Report.pdf",
+    "source_page": "https://investors.generalmills.com/financial-information/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends in late May."
+  },
+  {
+    "ticker": "GIS",
+    "company": "General Mills",
+    "fiscal_year": 2025,
+    "url": "https://s29.q4cdn.com/993087495/files/doc_financials/2025/ar/GIS009_10K_2025_Bookmarked.pdf",
+    "source_page": "https://investors.generalmills.com/financial-information/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends in late May."
+  },
+  {
+    "company": "Home Depot",
+    "ticker": "HD",
+    "fiscal_year": 2021,
+    "url": "https://ir.homedepot.com/~/media/Files/H/HomeDepot-IR/2022/2021_AnnualReport_IR_Site_FINAL.pdf",
+    "source_page": "https://ir.homedepot.com/financial-reports/annual-reports/recent",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Reports are typically posted in the following calendar year."
+  },
+  {
+    "company": "Home Depot",
+    "ticker": "HD",
+    "fiscal_year": 2022,
+    "url": "https://ir.homedepot.com/~/media/Files/H/HomeDepot-IR/2023/2022-HD-Annual-Report.pdf",
+    "source_page": "https://ir.homedepot.com/financial-reports/annual-reports/recent",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Reports are typically posted in the following calendar year."
+  },
+  {
+    "company": "Home Depot",
+    "ticker": "HD",
+    "fiscal_year": 2023,
+    "url": "https://ir.homedepot.com/~/media/Files/H/HomeDepot-IR/2024/_2023_HD%20Annual%20Report%20-%20Combined%20IRsite_VF.pdf",
+    "source_page": "https://ir.homedepot.com/financial-reports/annual-reports/recent",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Reports are typically posted in the following calendar year."
+  },
+  {
+    "company": "Home Depot",
+    "ticker": "HD",
+    "fiscal_year": 2024,
+    "url": "https://ir.homedepot.com/~/media/Files/H/HomeDepot-IR/2025/HD_2024_AR_IRsite_v2.pdf",
+    "source_page": "https://ir.homedepot.com/financial-reports/annual-reports/recent",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Reports are typically posted in the following calendar year."
+  },
+  {
+    "company": "Home Depot",
+    "ticker": "HD",
+    "fiscal_year": 2025,
+    "url": "https://ir.homedepot.com/~/media/Files/H/HomeDepot-IR/2026/thd-annualreport-2025.pdf",
+    "source_page": "https://ir.homedepot.com/financial-reports/annual-reports/recent",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Reports are typically posted in the following calendar year."
+  },
+  {
+    "company": "Kraft Heinz",
+    "ticker": "KHC",
+    "fiscal_year": 2021,
+    "url": "https://ir-api.eqs.com/redirect/88786f48-a515-48d7-b9e0-338dd3f18426?disposition=inline&t=1742502422495",
+    "source_page": "https://ir.kraftheinzcompany.com/financials/annual-reports",
+    "fiscal_label_note": "Annual report is grouped under the following year proxy heading in the archive. FY2025 is under the 2026 proxy section."
+  },
+  {
+    "company": "Kraft Heinz",
+    "ticker": "KHC",
+    "fiscal_year": 2022,
+    "url": "https://ir-api.eqs.com/redirect/ae63b266-e670-4854-9285-4951cd705572?disposition=inline&t=1742502363736",
+    "source_page": "https://ir.kraftheinzcompany.com/financials/annual-reports",
+    "fiscal_label_note": "Annual report is grouped under the following year proxy heading in the archive. FY2025 is under the 2026 proxy section."
+  },
+  {
+    "company": "Kraft Heinz",
+    "ticker": "KHC",
+    "fiscal_year": 2023,
+    "url": "https://ir-api.eqs.com/redirect/e9e57524-c248-4a84-b9d7-a7cca060587c?disposition=inline&t=1742502281344",
+    "source_page": "https://ir.kraftheinzcompany.com/financials/annual-reports",
+    "fiscal_label_note": "Annual report is grouped under the following year proxy heading in the archive. FY2025 is under the 2026 proxy section."
+  },
+  {
+    "company": "Kraft Heinz",
+    "ticker": "KHC",
+    "fiscal_year": 2024,
+    "url": "https://ir-api.eqs.com/redirect/d2e8598e-e0e6-452a-98d3-9b3a46df52d5?disposition=inline&t=1743104379113",
+    "source_page": "https://ir.kraftheinzcompany.com/financials/annual-reports",
+    "fiscal_label_note": "Annual report is grouped under the following year proxy heading in the archive. FY2025 is under the 2026 proxy section."
+  },
+  {
+    "company": "Kraft Heinz",
+    "ticker": "KHC",
+    "fiscal_year": 2025,
+    "url": "https://ir-api.eqs.com/redirect/fb20c79a-624d-47fa-be56-50b115e58f51?disposition=inline&t=1775215524667",
+    "source_page": "https://ir.kraftheinzcompany.com/financials/annual-reports",
+    "fiscal_label_note": "Annual report is grouped under the following year proxy heading in the archive. FY2025 is under the 2026 proxy section."
+  },
+  {
+    "company": "Kimberly-Clark",
+    "ticker": "KMB",
+    "fiscal_year": 2021,
+    "url": "https://stocklight.com/stocks/us/nasdaq-kmb/kimberly-clark-corporation/annual-reports/nasdaq-kmb-2022-10K-22614749.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nasdaq-kmb/kimberly-clark-corporation/annual-reports",
+    "fiscal_label_note": "Fiscal year ended December 31, 2021; mirror publication year 2022. Alternate PDF selected because official 2021 annual report text extraction returns noncharacters."
+  },
+  {
+    "company": "Kimberly-Clark",
+    "ticker": "KMB",
+    "fiscal_year": 2022,
+    "url": "https://www.kimberly-clark.com/-/media/kimberly/pdf/annual-report/Kimberly%20Clark%202022%20Annual%20Report.pdf?hash=343878D1ABC961862FC52324F00AD269&rev=-1",
+    "source_page": "https://www.kimberly-clark.com/en-us/investors/annual-reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends December 31."
+  },
+  {
+    "company": "Kimberly-Clark",
+    "ticker": "KMB",
+    "fiscal_year": 2023,
+    "url": "https://www.kimberly-clark.com/-/media/kimberly/pdf/annual-report/kimberly%20clark%202023%20annual%20report.pdf?hash=B56ADC959DFFC115809C94F4190FBEF5&rev=-1",
+    "source_page": "https://www.kimberly-clark.com/en-us/investors/annual-reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends December 31."
+  },
+  {
+    "company": "Kimberly-Clark",
+    "ticker": "KMB",
+    "fiscal_year": 2024,
+    "url": "https://www.kimberly-clark.com/-/media/kimberly/pdf/annual-report/KMB%20KimberlyClark%20Corporation%20%2010K%2020250213pdf.pdf?hash=BA335D8288941E876B90DF670D1587B4&rev=-1",
+    "source_page": "https://www.kimberly-clark.com/en-us/investors/annual-reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends December 31."
+  },
+  {
+    "company": "Kimberly-Clark",
+    "ticker": "KMB",
+    "fiscal_year": 2025,
+    "url": "https://www.kimberly-clark.com/-/media/feature/kcc/corporate/pdf/annual-report/0001628280-26-007567.pdf?hash=DC966D32B7DD0448D94871869442B002&rev=-1",
+    "source_page": "https://www.kimberly-clark.com/en-us/investors/annual-reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends December 31."
+  },
+  {
+    "ticker": "KO",
+    "company": "Coca-Cola",
+    "fiscal_year": 2021,
+    "url": "https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k/content/0000021344-22-000009/0000021344-22-000009.pdf",
+    "source_page": "https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k",
+    "fiscal_label_note": "Form 10-K annual filing PDF, including exhibits. Fiscal year ends December 31."
+  },
+  {
+    "ticker": "KO",
+    "company": "Coca-Cola",
+    "fiscal_year": 2022,
+    "url": "https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k/content/0000021344-23-000011/0000021344-23-000011.pdf",
+    "source_page": "https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k",
+    "fiscal_label_note": "Form 10-K annual filing PDF, including exhibits. Fiscal year ends December 31."
+  },
+  {
+    "ticker": "KO",
+    "company": "Coca-Cola",
+    "fiscal_year": 2023,
+    "url": "https://investors.coca-colacompany.com/filings-reports/all-sec-filings/content/0000021344-24-000009/0000021344-24-000009.pdf",
+    "source_page": "https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k",
+    "fiscal_label_note": "Form 10-K annual filing PDF, including exhibits. Fiscal year ends December 31."
+  },
+  {
+    "ticker": "KO",
+    "company": "Coca-Cola",
+    "fiscal_year": 2024,
+    "url": "https://investors.coca-colacompany.com/filings-reports/all-sec-filings/content/0000021344-25-000011/0000021344-25-000011.pdf",
+    "source_page": "https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k",
+    "fiscal_label_note": "Form 10-K annual filing PDF, including exhibits. Fiscal year ends December 31."
+  },
+  {
+    "ticker": "KO",
+    "company": "Coca-Cola",
+    "fiscal_year": 2025,
+    "url": "https://investors.coca-colacompany.com/filings-reports/all-sec-filings/content/0001628280-26-010047/0001628280-26-010047.pdf",
+    "source_page": "https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k",
+    "fiscal_label_note": "Form 10-K annual filing PDF, including exhibits. Fiscal year ends December 31."
+  },
+  {
+    "company": "Lowe's",
+    "ticker": "LOW",
+    "fiscal_year": 2021,
+    "url": "https://corporate.lowes.com/sites/lowes-corp/files/2026-04/Lowe-2021-Annual-Report.pdf",
+    "source_page": "https://corporate.lowes.com/investors/financial-information/annual-reports-proxy-statements?page=0",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Reports are typically posted in the following calendar year."
+  },
+  {
+    "company": "Lowe's",
+    "ticker": "LOW",
+    "fiscal_year": 2023,
+    "url": "https://corporate.lowes.com/sites/lowes-corp/files/2026-04/lowes-23-ar-4-11-24.pdf",
+    "source_page": "https://corporate.lowes.com/investors/financial-information/annual-reports-proxy-statements?page=0",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Reports are typically posted in the following calendar year."
+  },
+  {
+    "company": "Lowe's",
+    "ticker": "LOW",
+    "fiscal_year": 2024,
+    "url": "https://corporate.lowes.com/sites/lowes-corp/files/2026-04/Lowes_2024_Annual_Report_Website.pdf",
+    "source_page": "https://corporate.lowes.com/investors/financial-information/annual-reports-proxy-statements?page=0",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Reports are typically posted in the following calendar year."
+  },
+  {
+    "company": "Lowe's",
+    "ticker": "LOW",
+    "fiscal_year": 2025,
+    "url": "https://corporate.lowes.com/sites/lowes-corp/files/2026-04/lowes-2025-annual-report.pdf",
+    "source_page": "https://corporate.lowes.com/investors/financial-information/annual-reports-proxy-statements?page=0",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Reports are typically posted in the following calendar year."
+  },
+  {
+    "company": "Mondelez International",
+    "ticker": "MDLZ",
+    "fiscal_year": 2021,
+    "url": "https://www.mondelezinternational.com/assets/PDFs/MONDELEZ-INTERNATIONAL-INC_10K_2021.pdf",
+    "source_page": "https://www.mondelezinternational.com/investors/financials/annual-reports/",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends December 31."
+  },
+  {
+    "company": "Mondelez International",
+    "ticker": "MDLZ",
+    "fiscal_year": 2022,
+    "url": "https://www.mondelezinternational.com/assets/PDFs/MONDELEZ-INTERNATIONAL-INC_10K_2022.pdf",
+    "source_page": "https://www.mondelezinternational.com/investors/financials/annual-reports/",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends December 31."
+  },
+  {
+    "company": "Mondelez International",
+    "ticker": "MDLZ",
+    "fiscal_year": 2023,
+    "url": "https://www.mondelezinternational.com/assets/PDFs/MONDELEZ-INTERNATIONAL-INC_10K_2023.pdf",
+    "source_page": "https://www.mondelezinternational.com/investors/financials/annual-reports/",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends December 31."
+  },
+  {
+    "company": "Mondelez International",
+    "ticker": "MDLZ",
+    "fiscal_year": 2024,
+    "url": "https://www.mondelezinternational.com/assets/PDFs/MONDELEZ-INTERNATIONAL-INC_10K_2024.pdf",
+    "source_page": "https://www.mondelezinternational.com/investors/financials/annual-reports/",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends December 31."
+  },
+  {
+    "ticker": "NKE",
+    "company": "Nike",
+    "fiscal_year": 2021,
+    "url": "https://s1.q4cdn.com/806093406/files/doc_downloads/2021/08/Nike10k2021.pdf",
+    "source_page": "https://investors.nike.com/investors/news-events-and-reports/?toggle=reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends May 31. FY2023 PDF metadata title says Proxy, but actual cover and filing are FY2023 Form 10-K."
+  },
+  {
+    "ticker": "NKE",
+    "company": "Nike",
+    "fiscal_year": 2022,
+    "url": "https://s1.q4cdn.com/806093406/files/doc_downloads/2022/399556(1)_27_Nike-Inc._NPS_Combo_Form-10-K_WR.pdf",
+    "source_page": "https://investors.nike.com/investors/news-events-and-reports/?toggle=reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends May 31. FY2023 PDF metadata title says Proxy, but actual cover and filing are FY2023 Form 10-K."
+  },
+  {
+    "ticker": "NKE",
+    "company": "Nike",
+    "fiscal_year": 2023,
+    "url": "https://s1.q4cdn.com/806093406/files/doc_downloads/2023/414759-1-_5_Nike-NPS-Combo_Form-10-K_WR.pdf",
+    "source_page": "https://investors.nike.com/investors/news-events-and-reports/?toggle=reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends May 31. FY2023 PDF metadata title says Proxy, but actual cover and filing are FY2023 Form 10-K."
+  },
+  {
+    "ticker": "NKE",
+    "company": "Nike",
+    "fiscal_year": 2024,
+    "url": "https://s1.q4cdn.com/806093406/files/doc_financials/2024/ar/427857-1-_7_Nike-2024-Combo_Form-10-K_WR.pdf",
+    "source_page": "https://investors.nike.com/investors/news-events-and-reports/?toggle=reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends May 31. FY2023 PDF metadata title says Proxy, but actual cover and filing are FY2023 Form 10-K."
+  },
+  {
+    "ticker": "NKE",
+    "company": "Nike",
+    "fiscal_year": 2025,
+    "url": "https://s1.q4cdn.com/806093406/files/doc_financials/2025/ar/Nike-Inc-2025_10K.pdf",
+    "source_page": "https://investors.nike.com/investors/news-events-and-reports/?toggle=reports",
+    "fiscal_label_note": "Form 10-K annual report. Fiscal year ends May 31. FY2023 PDF metadata title says Proxy, but actual cover and filing are FY2023 Form 10-K."
+  },
+  {
+    "company": "PepsiCo",
+    "ticker": "PEP",
+    "fiscal_year": 2021,
+    "url": "https://www.pepsico.com/docs/pepsico-5v9wci20/media/Files/investors/2021-annual-report.pdf",
+    "source_page": "https://www.pepsico.com/en/investors/annual-reports-proxy-information",
+    "fiscal_label_note": "Company fiscal-year label; 52/53-week fiscal year ends near late December."
+  },
+  {
+    "company": "PepsiCo",
+    "ticker": "PEP",
+    "fiscal_year": 2022,
+    "url": "https://www.pepsico.com/docs/pepsico-5v9wci20/media/Files/investors/2022-PepsiCo-Annual-Report.pdf",
+    "source_page": "https://www.pepsico.com/en/investors/annual-reports-proxy-information",
+    "fiscal_label_note": "Company fiscal-year label; 52/53-week fiscal year ends near late December."
+  },
+  {
+    "company": "PepsiCo",
+    "ticker": "PEP",
+    "fiscal_year": 2023,
+    "url": "https://www.pepsico.com/docs/pepsico-5v9wci20/media/Files/investors/2023-pepsico-annual-report.pdf",
+    "source_page": "https://www.pepsico.com/en/investors/annual-reports-proxy-information",
+    "fiscal_label_note": "Company fiscal-year label; 52/53-week fiscal year ends near late December."
+  },
+  {
+    "company": "PepsiCo",
+    "ticker": "PEP",
+    "fiscal_year": 2024,
+    "url": "https://www.pepsico.com/docs/pepsico-5v9wci20/media/Files/investors/2024-pepsico-annual-report-01.pdf",
+    "source_page": "https://www.pepsico.com/en/investors/annual-reports-proxy-information",
+    "fiscal_label_note": "Company fiscal-year label; 52/53-week fiscal year ends near late December."
+  },
+  {
+    "company": "PepsiCo",
+    "ticker": "PEP",
+    "fiscal_year": 2025,
+    "url": "https://www.pepsico.com/docs/pepsico-5v9wci20/media/Files/investors/pepsico-2025-annual-report.pdf",
+    "source_page": "https://www.pepsico.com/en/investors/annual-reports-proxy-information",
+    "fiscal_label_note": "Company fiscal-year label; 52/53-week fiscal year ends near late December."
+  },
+  {
+    "company": "Procter & Gamble",
+    "ticker": "PG",
+    "fiscal_year": 2021,
+    "url": "https://s204.q4cdn.com/332108499/files/doc_financials/2021/ar/PG_2021_Annual_Report.pdf",
+    "source_page": "https://www.pginvestor.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends June 30."
+  },
+  {
+    "company": "Procter & Gamble",
+    "ticker": "PG",
+    "fiscal_year": 2022,
+    "url": "https://s204.q4cdn.com/332108499/files/doc_financials/2022/ar/2022_annual_report.pdf",
+    "source_page": "https://www.pginvestor.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends June 30."
+  },
+  {
+    "company": "Procter & Gamble",
+    "ticker": "PG",
+    "fiscal_year": 2023,
+    "url": "https://s204.q4cdn.com/332108499/files/doc_financials/2023/ar/2023_annual_report.pdf",
+    "source_page": "https://www.pginvestor.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends June 30."
+  },
+  {
+    "company": "Procter & Gamble",
+    "ticker": "PG",
+    "fiscal_year": 2024,
+    "url": "https://s204.q4cdn.com/332108499/files/doc_financials/2024/ar/2024_annual_report.pdf",
+    "source_page": "https://www.pginvestor.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends June 30."
+  },
+  {
+    "ticker": "PG",
+    "company": "Procter & Gamble",
+    "fiscal_year": 2025,
+    "url": "https://s204.q4cdn.com/332108499/files/doc_financials/2025/ar/2025_annual_report.pdf",
+    "source_page": "https://www.pginvestor.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. Fiscal year ends June 30."
+  },
+  {
+    "ticker": "SBUX",
+    "company": "Starbucks",
+    "fiscal_year": 2021,
+    "url": "https://s203.q4cdn.com/326826266/files/doc_financials/2021/q4-21-10k.pdf",
+    "source_page": "https://investor.starbucks.com/financials/annual-reports/default.aspx?languageid=1",
+    "fiscal_label_note": "Company fiscal-year label. FY2021 ends October 3, 2021, and FY2023 ends October 1, 2023; FY2021 PDF is the annual Form 10-K."
+  },
+  {
+    "ticker": "SBUX",
+    "company": "Starbucks",
+    "fiscal_year": 2022,
+    "url": "https://s203.q4cdn.com/326826266/files/doc_financials/2022/ar/Starbucks-FY22-Annual-Report.pdf",
+    "source_page": "https://investor.starbucks.com/financials/annual-reports/default.aspx?languageid=1",
+    "fiscal_label_note": "Company fiscal-year label. FY2021 ends October 3, 2021, and FY2023 ends October 1, 2023; FY2021 PDF is the annual Form 10-K."
+  },
+  {
+    "ticker": "SBUX",
+    "company": "Starbucks",
+    "fiscal_year": 2023,
+    "url": "https://s203.q4cdn.com/326826266/files/doc_financials/2024/ar/fy23-annual-report.pdf",
+    "source_page": "https://investor.starbucks.com/financials/annual-reports/default.aspx",
+    "fiscal_label_note": "Company fiscal-year label. FY2021 ends October 3, 2021, and FY2023 ends October 1, 2023; FY2021 PDF is the annual Form 10-K."
+  },
+  {
+    "ticker": "SBUX",
+    "company": "Starbucks",
+    "fiscal_year": 2024,
+    "url": "https://s203.q4cdn.com/326826266/files/doc_financials/2024/ar/Starbucks-Fiscal-2024-Annual-Report.pdf",
+    "source_page": "https://investor.starbucks.com/financials/annual-reports/default.aspx?languageid=1",
+    "fiscal_label_note": "Company fiscal-year label. FY2021 ends October 3, 2021, and FY2023 ends October 1, 2023; FY2021 PDF is the annual Form 10-K."
+  },
+  {
+    "ticker": "SBUX",
+    "company": "Starbucks",
+    "fiscal_year": 2025,
+    "url": "https://s203.q4cdn.com/326826266/files/doc_financials/2025/ar/Starbucks-Corporation_2025-Annual-Report-Web-Ready.pdf",
+    "source_page": "https://investor.starbucks.com/financials/annual-reports/default.aspx?languageid=1",
+    "fiscal_label_note": "Company fiscal-year label. FY2021 ends October 3, 2021, and FY2023 ends October 1, 2023; FY2021 PDF is the annual Form 10-K."
+  },
+  {
+    "company": "Target",
+    "ticker": "TGT",
+    "fiscal_year": 2021,
+    "url": "https://corporate.target.com/getmedia/47f21e1d-6732-4e40-a7fb-3fb1c8510466/2021-Target-Annual-Report.pdf",
+    "source_page": "https://corporate.target.com/investors/annual/annual-reports-and-archive",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Do not relabel by calendar filing year."
+  },
+  {
+    "company": "Target",
+    "ticker": "TGT",
+    "fiscal_year": 2022,
+    "url": "https://corporate.target.com/getmedia/47558ecc-2461-437f-894b-0f8533dd704c/2022-Target-Annual-Report.pdf",
+    "source_page": "https://corporate.target.com/investors/annual/annual-reports-and-archive",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Do not relabel by calendar filing year."
+  },
+  {
+    "company": "Target",
+    "ticker": "TGT",
+    "fiscal_year": 2024,
+    "url": "https://corporate.target.com/getmedia/c23bca62-1790-47bd-ad0e-6971aee4f78d/2024-Annual-Report-Target-Corporation.pdf",
+    "source_page": "https://corporate.target.com/investors/annual/annual-reports-and-archive",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Do not relabel by calendar filing year."
+  },
+  {
+    "company": "Target",
+    "ticker": "TGT",
+    "fiscal_year": 2025,
+    "url": "https://corporate.target.com/getmedia/79214b4b-6331-4b1c-b76f-acff121b40f9/2025-Annual-Report-Target-Corporation.pdf",
+    "source_page": "https://corporate.target.com/investors/annual/annual-reports-and-archive",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ends in early 2026. Do not relabel by calendar filing year."
+  },
+  {
+    "company": "Walmart",
+    "ticker": "WMT",
+    "fiscal_year": 2022,
+    "url": "https://stock.walmart.com/_assets/_8c8425b76a1d46bbbbc16466da2a6b9c/walmart/db/950/9649/annual_report/WMT-FY2022-Annual-Report.pdf",
+    "source_page": "https://stock.walmart.com/financial-information/annual-reports",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ended January 31, 2025."
+  },
+  {
+    "company": "Walmart",
+    "ticker": "WMT",
+    "fiscal_year": 2023,
+    "url": "https://stock.walmart.com/_assets/_8c8425b76a1d46bbbbc16466da2a6b9c/walmart/db/950/9650/annual_report/Walmart+2023+Annual+Report.pdf",
+    "source_page": "https://stock.walmart.com/financial-information/annual-reports",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ended January 31, 2025."
+  },
+  {
+    "company": "Walmart",
+    "ticker": "WMT",
+    "fiscal_year": 2024,
+    "url": "https://stock.walmart.com/_assets/_8c8425b76a1d46bbbbc16466da2a6b9c/walmart/db/950/9651/annual_report/Walmart+2024+Annual+Report.pdf",
+    "source_page": "https://stock.walmart.com/financial-information/annual-reports",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ended January 31, 2025."
+  },
+  {
+    "company": "Walmart",
+    "ticker": "WMT",
+    "fiscal_year": 2025,
+    "url": "https://stock.walmart.com/_assets/_8c8425b76a1d46bbbbc16466da2a6b9c/walmart/db/950/9949/annual_report/Walmart+2025+Annual+Report.pdf",
+    "source_page": "https://stock.walmart.com/financial-information/annual-reports",
+    "fiscal_label_note": "Fiscal year is the company label; FY2025 ended January 31, 2025."
+  },
+  {
+    "company": "Mondelez International",
+    "ticker": "MDLZ",
+    "fiscal_year": 2025,
+    "url": "https://stocklight.com/stocks/us/nasdaq-mdlz/mondelez-international/annual-reports/nasdaq-mdlz-2026-10K-26597063.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nasdaq-mdlz/mondelez-international/annual-reports",
+    "quality_note": "Third-party published PDF rendering of the SEC filing, with three Stocklight front-matter pages. 122 pages. Web PDF text confirms Mondelez International identity, Dec31 2025 period, and readable annual-report body. Preserve PDF page numbers for citations.",
+    "fallback_urls": [],
+    "fiscal_label_note": "Fiscal year ended December 31, 2025; mirror publication year 2026."
+  },
+  {
+    "ticker": "WMT",
+    "company": "Walmart",
+    "fiscal_year": 2021,
+    "url": "https://stocklight.com/stocks/us/nasdaq-wmt/walmart/annual-reports/nasdaq-wmt-2021-10K-21758706.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nasdaq-wmt/walmart/annual-reports",
+    "fiscal_label_note": "Walmart FY2021 ended January 31, 2021. Stocklight-hosted Form 10-K includes publisher cover."
+  },
+  {
+    "ticker": "TGT",
+    "company": "Target",
+    "fiscal_year": 2023,
+    "url": "https://stocklight.com/stocks/us/nyse-tgt/target-corporation/annual-reports/nyse-tgt-2024-10K-24746895.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-tgt/target/annual-reports",
+    "fiscal_label_note": "Target FY2023 ended February 3, 2024. Stocklight URL and publisher cover use filing year 2024."
+  },
+  {
+    "ticker": "LOW",
+    "company": "Lowe's",
+    "fiscal_year": 2022,
+    "url": "https://stocklight.com/stocks/us/nyse-low/lowe-s-companies/annual-reports/nyse-low-2023-10K-23765072.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-low/lowe-s-companies/annual-reports",
+    "fiscal_label_note": "Lowe's FY2022 ended February 3, 2023. Stocklight URL and publisher cover use filing year 2023."
+  }
+]

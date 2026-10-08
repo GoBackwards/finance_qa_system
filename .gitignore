@@ -1,0 +1,14 @@
+.venv/
+.cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+tmp/
+data/raw/
+data/processed/
+data/experiments/
+data/indexes/
+.env
+.env.*
+!.env.example
+*.pem

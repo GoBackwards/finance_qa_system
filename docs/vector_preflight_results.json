@@ -1,0 +1,43 @@
+{
+  "audit_date": "2026-10-08",
+  "scope": "Tokenizer-only audit; dimensions are model specifications until embeddings are built.",
+  "models": [
+    {
+      "model": "BAAI/bge-m3",
+      "revision": "5617a9f61b028005a4858fdac845db406aefb181",
+      "expected_dimension": 1024,
+      "status": "passed",
+      "source_sha256": "d9dc54b432956aec565f3ede839e0062ee90d2c7166f48eaf22e733f6da474c6",
+      "document_count": 200,
+      "chunk_count": 56525,
+      "max_model_tokens": 8192,
+      "max_actual_model_tokens": 7921,
+      "mean_model_tokens": 431.1428394515701,
+      "overflow_count": 0,
+      "overflow_by_kind": {},
+      "truncated_chunks": 0,
+      "skipped_chunks": 0
+    },
+    {
+      "model": "BAAI/bge-large-en-v1.5",
+      "revision": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+      "expected_dimension": 1024,
+      "status": "failed",
+      "source_sha256": "d9dc54b432956aec565f3ede839e0062ee90d2c7166f48eaf22e733f6da474c6",
+      "document_count": 200,
+      "chunk_count": 56525,
+      "max_model_tokens": 512,
+      "max_actual_model_tokens": 5230,
+      "mean_model_tokens": 381.2378947368421,
+      "overflow_count": 14704,
+      "overflow_by_kind": {
+        "prose": 14044,
+        "table_fallback": 95,
+        "table": 306,
+        "page_fallback": 259
+      },
+      "truncated_chunks": 0,
+      "skipped_chunks": 0
+    }
+  ]
+}

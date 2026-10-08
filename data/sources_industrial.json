@@ -1,0 +1,362 @@
+[
+  {
+    "company": "Caterpillar",
+    "ticker": "CAT",
+    "fiscal_year": 2025,
+    "url": "https://s7d2.scene7.com/is/content/Caterpillar/CM20260430-c61ea-6d76f",
+    "source_page": "https://www.caterpillar.com/en/investors/financial-information/proxy-materials.html",
+    "notes": "FY ended December 31, 2025. Official PDF URL has no extension. SEC copy: https://www.sec.gov/Archives/edgar/data/18230/000130817926000360/cat015318-ars.pdf",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Caterpillar",
+    "ticker": "CAT",
+    "fiscal_year": 2021,
+    "url": "https://s7d2.scene7.com/is/content/Caterpillar/CM20220429-5abae-1adc1",
+    "source_page": "https://www.caterpillar.com/en/investors/reports/reports-archive.html",
+    "notes": "Calendar fiscal year. Official annual-report archive PDF, including Form 10-K. PDF URL has no extension.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Caterpillar",
+    "ticker": "CAT",
+    "fiscal_year": 2022,
+    "url": "https://s7d2.scene7.com/is/content/Caterpillar/CM20230503-58d3d-2ac19",
+    "source_page": "https://www.caterpillar.com/en/investors/reports/reports-archive.html",
+    "notes": "Calendar fiscal year. Official annual-report archive PDF, including Form 10-K. PDF URL has no extension.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Caterpillar",
+    "ticker": "CAT",
+    "fiscal_year": 2023,
+    "url": "https://s7d2.scene7.com/is/content/Caterpillar/CM20240506-916bd-768d9",
+    "source_page": "https://www.caterpillar.com/en/investors/reports/reports-archive.html",
+    "notes": "Calendar fiscal year. Official annual-report archive PDF, including Form 10-K. PDF URL has no extension.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Caterpillar",
+    "ticker": "CAT",
+    "fiscal_year": 2024,
+    "url": "https://s7d2.scene7.com/is/content/Caterpillar/CM20250506-c118a-5d3cb",
+    "source_page": "https://www.caterpillar.com/en/investors/reports/reports-archive.html",
+    "notes": "Calendar fiscal year. Official annual-report archive PDF, including Form 10-K. PDF URL has no extension.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Deere & Company",
+    "ticker": "DE",
+    "fiscal_year": 2021,
+    "url": "https://s22.q4cdn.com/253594569/files/doc_financials/2021/ar/Annual-Report-2021_.pdf",
+    "source_page": "https://investor.deere.com/Home/",
+    "notes": "Fiscal year uses 52/53 weeks ending around late October/early November. FY2025 ended November 2, 2025; FY2024 ended October 27, 2024. FY2024 file is Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Deere & Company",
+    "ticker": "DE",
+    "fiscal_year": 2022,
+    "url": "https://investor.deere.com/files/doc_downloads/2022/12/DE-2022-10-K.pdf",
+    "source_page": "https://investor.deere.com/Home/",
+    "notes": "Fiscal year ended October 30, 2022. Official Form 10-K PDF.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Deere & Company",
+    "ticker": "DE",
+    "fiscal_year": 2023,
+    "url": "https://s22.q4cdn.com/253594569/files/doc_financials/2023/ar/2023-deere-company-annual-report.pdf",
+    "source_page": "https://investor.deere.com/Home/",
+    "notes": "Fiscal year uses 52/53 weeks ending around late October/early November. FY2025 ended November 2, 2025; FY2024 ended October 27, 2024. FY2024 file is Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Deere & Company",
+    "ticker": "DE",
+    "fiscal_year": 2024,
+    "url": "https://investor.deere.com/files/doc_downloads/2024/12/Deere-Company-2024-10-K.pdf",
+    "source_page": "https://investor.deere.com/Home/",
+    "notes": "Fiscal year uses 52/53 weeks ending around late October/early November. FY2025 ended November 2, 2025; FY2024 ended October 27, 2024. FY2024 file is Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Deere & Company",
+    "ticker": "DE",
+    "fiscal_year": 2025,
+    "url": "https://s22.q4cdn.com/253594569/files/doc_financials/2025/ar/2025-Deere-Company-Annual-Report.pdf",
+    "source_page": "https://investor.deere.com/Home/",
+    "notes": "Fiscal year uses 52/53 weeks ending around late October/early November. FY2025 ended November 2, 2025; FY2024 ended October 27, 2024. FY2024 file is Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Cummins",
+    "ticker": "CMI",
+    "fiscal_year": 2021,
+    "url": "https://investor.cummins.com/sec-filings/annual-reports/content/0000026172-22-000008/0000026172-22-000008.pdf",
+    "source_page": "https://investor.cummins.com/sec-filings/annual-reports",
+    "notes": "Calendar fiscal year; filing/publication is in following calendar year. FY2021 is Form 10-K. FY2022–25 annual-report packages include proxy materials as well as the Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Cummins",
+    "ticker": "CMI",
+    "fiscal_year": 2022,
+    "url": "https://stocklight.com/stocks/us/nyse-cmi/cummins/annual-reports/nyse-cmi-2023-10K-23627796.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-cmi/cummins/annual-reports",
+    "notes": "Published Form 10-K PDF mirror. Fiscal label follows the embedded SEC cover, not the mirror publication year. Alternate copy selected because original investor-relations PDF has garbled extractable text on body pages.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Cummins",
+    "ticker": "CMI",
+    "fiscal_year": 2023,
+    "url": "https://investor.cummins.com/sec-filings/annual-reports/content/0001104659-24-041839/tm2327733d6_ars.pdf",
+    "source_page": "https://investor.cummins.com/sec-filings/annual-reports",
+    "notes": "Calendar fiscal year; filing/publication is in following calendar year. FY2021 is Form 10-K. FY2022–25 annual-report packages include proxy materials as well as the Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Cummins",
+    "ticker": "CMI",
+    "fiscal_year": 2024,
+    "url": "https://investor.cummins.com/sec-filings/annual-reports/content/0001104659-25-029890/tm2510926d1_ars.pdf",
+    "source_page": "https://investor.cummins.com/sec-filings/annual-reports",
+    "notes": "Calendar fiscal year; filing/publication is in following calendar year. FY2021 is Form 10-K. FY2022–25 annual-report packages include proxy materials as well as the Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Cummins",
+    "ticker": "CMI",
+    "fiscal_year": 2025,
+    "url": "https://investor.cummins.com/sec-filings/annual-reports/content/0001104659-26-039182/0001104659-26-039182.pdf",
+    "source_page": "https://investor.cummins.com/sec-filings/annual-reports",
+    "notes": "Calendar fiscal year; filing/publication is in following calendar year. FY2021 is Form 10-K. FY2022–25 annual-report packages include proxy materials as well as the Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Illinois Tool Works",
+    "ticker": "ITW",
+    "fiscal_year": 2021,
+    "url": "https://stocklight.com/stocks/us/nyse-itw/illinois-tool-works/annual-reports/nyse-itw-2022-10K-22619591.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-itw/illinois-tool-works/annual-reports",
+    "notes": "Published Form 10-K mirror. Fiscal year follows embedded SEC cover; mirror cover may use publication year. Used because official download is unavailable or its body text has broken font encoding.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Illinois Tool Works",
+    "ticker": "ITW",
+    "fiscal_year": 2022,
+    "url": "https://stocklight.com/stocks/us/nyse-itw/illinois-tool-works/annual-reports/nyse-itw-2023-10K-23611430.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-itw/illinois-tool-works/annual-reports",
+    "notes": "Published Form 10-K mirror. Fiscal year follows embedded SEC cover; mirror cover may use publication year. Used because official download is unavailable or its body text has broken font encoding.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Illinois Tool Works",
+    "ticker": "ITW",
+    "fiscal_year": 2023,
+    "url": "https://stocklight.com/stocks/us/nyse-itw/illinois-tool-works/annual-reports/nyse-itw-2024-10K-24614201.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-itw/illinois-tool-works/annual-reports",
+    "notes": "Published Form 10-K mirror. Fiscal year follows embedded SEC cover; mirror cover may use publication year. Used because official download is unavailable or its body text has broken font encoding.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Illinois Tool Works",
+    "ticker": "ITW",
+    "fiscal_year": 2024,
+    "url": "https://s204.q4cdn.com/218186261/files/doc_financials/2024/ar/2024-annual-report.pdf",
+    "source_page": "https://investor.itw.com/financials/annual-reports/default.aspx",
+    "notes": "Calendar fiscal year.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Illinois Tool Works",
+    "ticker": "ITW",
+    "fiscal_year": 2025,
+    "url": "https://s204.q4cdn.com/218186261/files/doc_financials/2025/ar/2025-annual-report.pdf",
+    "source_page": "https://investor.itw.com/financials/annual-reports/default.aspx",
+    "notes": "Calendar fiscal year.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Emerson Electric",
+    "ticker": "EMR",
+    "fiscal_year": 2021,
+    "url": "https://ir.emerson.com/_assets/_63a40912a0f3bfdf82cc7e8b9093b233/emerson/db/950/9597/annual_report/2021-emerson-annual-report-en-us-7875442.pdf",
+    "source_page": "https://ir.emerson.com/company-info/annual-reports-proxy",
+    "notes": "Fiscal year ends September 30.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Emerson Electric",
+    "ticker": "EMR",
+    "fiscal_year": 2022,
+    "url": "https://ir.emerson.com/_assets/_63a40912a0f3bfdf82cc7e8b9093b233/emerson/db/950/9598/annual_report/2022-annual-report-en-us-8673706.pdf",
+    "source_page": "https://ir.emerson.com/company-info/annual-reports-proxy",
+    "notes": "Fiscal year ends September 30.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Emerson Electric",
+    "ticker": "EMR",
+    "fiscal_year": 2023,
+    "url": "https://ir.emerson.com/_assets/_63a40912a0f3bfdf82cc7e8b9093b233/emerson/db/950/9599/annual_report/2023-annual-report-en-us-9998076.pdf",
+    "source_page": "https://ir.emerson.com/company-info/annual-reports-proxy",
+    "notes": "Fiscal year ends September 30.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Emerson Electric",
+    "ticker": "EMR",
+    "fiscal_year": 2024,
+    "url": "https://ir.emerson.com/_assets/_63a40912a0f3bfdf82cc7e8b9093b233/emerson/db/950/9600/annual_report/2024-annual-report-en-us-11357028.pdf",
+    "source_page": "https://ir.emerson.com/company-info/annual-reports-proxy",
+    "notes": "Fiscal year ends September 30.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Emerson Electric",
+    "ticker": "EMR",
+    "fiscal_year": 2025,
+    "url": "https://stocklight.com/stocks/us/nyse-emr/emerson-electric/annual-reports/nyse-emr-2025-10K-251466090.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-emr/emerson-electric/annual-reports",
+    "notes": "Published Form 10-K mirror. Fiscal year follows embedded SEC cover; mirror cover may use publication year. Used because official download is unavailable or its body text has broken font encoding.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Parker-Hannifin",
+    "ticker": "PH",
+    "fiscal_year": 2021,
+    "url": "https://d1io3yog0oux5.cloudfront.net/_55d659baa16abc95332b8cf9d2e06a2a/parker/db/2301/21356/annual_report/bb351415-5c07-4fe0-81fc-80b803fdb9e9.pdf",
+    "source_page": "https://investors.parker.com/financial-information/annual-reports-proxy-statements",
+    "notes": "Fiscal year ends June 30. FY2024 is Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Parker-Hannifin",
+    "ticker": "PH",
+    "fiscal_year": 2022,
+    "url": "https://stocklight.com/stocks/us/nyse-ph/parker-hannifin/annual-reports/nyse-ph-2022-10K-221188809.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-ph/parker-hannifin/annual-reports",
+    "notes": "Published Form 10-K PDF mirror. Fiscal label follows the embedded SEC cover, not the mirror publication year. Alternate copy selected because original investor-relations PDF has garbled extractable text on body pages.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Parker-Hannifin",
+    "ticker": "PH",
+    "fiscal_year": 2023,
+    "url": "https://investors.parker.com/sec-filings/annual-reports/content/0000076334-23-000054/0000076334-23-000054.pdf",
+    "source_page": "https://investors.parker.com/financial-information/annual-reports-proxy-statements",
+    "notes": "Fiscal year ends June 30. FY2024 is Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Parker-Hannifin",
+    "ticker": "PH",
+    "fiscal_year": 2024,
+    "url": "https://investors.parker.com/sec-filings/all-sec-filings/content/0000076334-24-000044/0000076334-24-000044.pdf",
+    "source_page": "https://investors.parker.com/financial-information/annual-reports-proxy-statements",
+    "notes": "Fiscal year ends June 30. FY2024 is Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Parker-Hannifin",
+    "ticker": "PH",
+    "fiscal_year": 2025,
+    "url": "https://investors.parker.com/sec-filings/all-sec-filings/content/0000076334-25-000042/a2025annualreport.pdf",
+    "source_page": "https://investors.parker.com/financial-information/annual-reports-proxy-statements",
+    "notes": "Fiscal year ends June 30. FY2024 is Form 10-K.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Rockwell Automation",
+    "ticker": "ROK",
+    "fiscal_year": 2021,
+    "url": "https://www.rockwellautomation.com/content/dam/rockwell-automation/documents/pdf/company/about-us/ir/annual-reports-proxy/2021-annual-report-form-10K.pdf",
+    "source_page": "https://www.rockwellautomation.com/en-us/company/investor-relations/annual-reports.html",
+    "notes": "Fiscal year ends September 30. Annual reports on Form 10-K. FY2025 web extraction showed duplicate/garbled font text alongside readable text; assess extraction quality when indexing.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Rockwell Automation",
+    "ticker": "ROK",
+    "fiscal_year": 2022,
+    "url": "https://www.rockwellautomation.com/content/dam/rockwell-automation/documents/pdf/company/about-us/ir/annual-reports-proxy/2022-annual-report-form-10K.pdf",
+    "source_page": "https://www.rockwellautomation.com/en-us/company/investor-relations/annual-reports.html",
+    "notes": "Fiscal year ends September 30. Annual reports on Form 10-K. FY2025 web extraction showed duplicate/garbled font text alongside readable text; assess extraction quality when indexing.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Rockwell Automation",
+    "ticker": "ROK",
+    "fiscal_year": 2023,
+    "url": "https://d18rn0p25nwr6d.cloudfront.net/CIK-0001024478/d6fa8cb3-522c-4d8e-b452-1b699920b583.pdf",
+    "source_page": "https://www.rockwellautomation.com/en-us/company/investor-relations/annual-reports.html",
+    "notes": "Fiscal year ends September 30. Annual reports on Form 10-K. FY2025 web extraction showed duplicate/garbled font text alongside readable text; assess extraction quality when indexing.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Rockwell Automation",
+    "ticker": "ROK",
+    "fiscal_year": 2024,
+    "url": "https://www.rockwellautomation.com/content/dam/rockwell-automation/documents/pdf/company/about-us/ir/2024/annual-report-on-form-10-K-2024.pdf",
+    "source_page": "https://www.rockwellautomation.com/en-us/company/investor-relations/annual-reports.html",
+    "notes": "Fiscal year ends September 30. Annual reports on Form 10-K. FY2025 web extraction showed duplicate/garbled font text alongside readable text; assess extraction quality when indexing.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Rockwell Automation",
+    "ticker": "ROK",
+    "fiscal_year": 2025,
+    "url": "https://stocklight.com/stocks/us/nyse-rok/rockwell-automation/annual-reports/nyse-rok-2025-10K-251471503.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-rok/rockwell-automation/annual-reports",
+    "notes": "Published Form 10-K PDF mirror. Fiscal label follows the embedded SEC cover, not the mirror publication year. Alternate copy selected because original investor-relations PDF has garbled extractable text on body pages.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Dover",
+    "ticker": "DOV",
+    "fiscal_year": 2021,
+    "url": "https://stocklight.com/stocks/us/nyse-dov/dover-corporation/annual-reports/nyse-dov-2022-10K-22621798.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-dov/dover-corporation/annual-reports",
+    "notes": "Published Form 10-K mirror. Fiscal year follows embedded SEC cover; mirror cover may use publication year. Used because official download is unavailable or its body text has broken font encoding.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Dover",
+    "ticker": "DOV",
+    "fiscal_year": 2022,
+    "url": "https://stocklight.com/stocks/us/nyse-dov/dover-corporation/annual-reports/nyse-dov-2023-10K-23612444.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-dov/dover-corporation/annual-reports",
+    "notes": "Published Form 10-K mirror. Fiscal year follows embedded SEC cover; mirror cover may use publication year. Used because official download is unavailable or its body text has broken font encoding.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Dover",
+    "ticker": "DOV",
+    "fiscal_year": 2023,
+    "url": "https://stocklight.com/stocks/us/nyse-dov/dover-corporation/annual-reports/nyse-dov-2024-10K-24615539.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-dov/dover-corporation/annual-reports",
+    "notes": "Published Form 10-K mirror. Fiscal year follows embedded SEC cover; mirror cover may use publication year. Used because official download is unavailable or its body text has broken font encoding.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Dover",
+    "ticker": "DOV",
+    "fiscal_year": 2024,
+    "url": "https://stocklight.com/stocks/us/nyse-dov/dover-corporation/annual-reports/nyse-dov-2025-10K-25629390.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-dov/dover-corporation/annual-reports",
+    "notes": "Published Form 10-K mirror. Fiscal year follows embedded SEC cover; mirror cover may use publication year. Used because official download is unavailable or its body text has broken font encoding.",
+    "sector": "Industrial and Machinery Companies"
+  },
+  {
+    "company": "Dover",
+    "ticker": "DOV",
+    "fiscal_year": 2025,
+    "url": "https://stocklight.com/stocks/us/nyse-dov/dover-corporation/annual-reports/nyse-dov-2026-10K-26633239.pdf",
+    "source_page": "https://stocklight.com/stocks/us/nyse-dov/dover-corporation/annual-reports",
+    "notes": "Published Form 10-K mirror. Fiscal year follows embedded SEC cover; mirror cover may use publication year. Used because official download is unavailable or its body text has broken font encoding.",
+    "sector": "Industrial and Machinery Companies"
+  }
+]

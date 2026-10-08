@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "financial-report-parser"
+version = "0.1.0"
+description = "Page-grounded annual-report text and table parsing"
+requires-python = ">=3.11"
+dependencies = ["PyMuPDF==1.28.2", "pdfplumber==0.11.9"]
+
+[project.optional-dependencies]
+experiments = ["tiktoken==0.14.0"]
+vectors = [
+    "FlagEmbedding==1.3.5",
+    "faiss-cpu==1.15.1",
+    "torch==2.7.1",
+    "transformers==4.51.3",
+    "sentence-transformers==4.1.0",
+    "peft==0.15.2",
+    "accelerate==1.7.0",
+]
+
+[project.scripts]
+parse-reports = "report_parser.cli:main"
+chunk-experiment = "report_chunker.experiment:main"
+build-vector-index = "report_index.pipeline:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

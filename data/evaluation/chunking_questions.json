@@ -1,0 +1,5118 @@
+{
+  "schema_version": "1.0",
+  "benchmark_id": "financial_chunking_pilot_v1",
+  "provenance": {
+    "created_at": "2026-10-08",
+    "creator": "Codex agent; source-inspected and curated, not independently human-labeled",
+    "status": "exploratory_development_set",
+    "source_corpus": "200 downloaded annual reports; 40 companies; FY2021-FY2025",
+    "selection": "One question per company, cycling source fiscal year 2021-2025; 20 narrative and 20 accepted-table questions; selected for readable source evidence. No retrieval results were used to select or rewrite questions.",
+    "limitations": [
+      "Not a held-out or production-quality benchmark.",
+      "Questions are generated after inspecting the corpus, so selection and phrasing may favor lexically retrievable or clearly extracted content.",
+      "Only selected canonical evidence and listed alternatives are judged; other valid answer locations may be unjudged.",
+      "Image-only pages, rejected tables, cross-company synthesis, and open-domain or unanswerable questions are not represented.",
+      "Measures recovery of supporting source spans/rows, not answer generation accuracy."
+    ],
+    "evaluation_contract": {
+      "k": 5,
+      "prose": "A unit is recovered when the union of source character intervals from the top 5 chunks covers [char_start,char_end) for the canonical element_id or a listed alternative. Offsets are in the original extracted element text, not normalized text.",
+      "table": "A unit is recovered when a top 5 chunk contains the complete canonical table_id row_index. Canonical row key is table_id + :row: + 0-based row_index.",
+      "per_question_recall": "Recovered required evidence units divided by number of required evidence units; alternatives do not add denominator units.",
+      "aggregate": "Macro-average the per-question evidence Recall@5; separately report all-required-evidence success and prose/table subsets.",
+      "fixed_controls": "Use identical questions, corpus, tokenizer, retriever, ranking settings, and top-k across chunking groups. Do not index reference answers, quotes, or other benchmark labels."
+    },
+    "validation": {
+      "source_identity": "All 48 required units validated against the corresponding parsed element or accepted table row with document and source hash identity.",
+      "native_pdf_text": "All 23 narrative evidence quotes also matched whitespace-normalized text extracted directly from their raw-PDF bounding boxes.",
+      "table_check": "All 25 selected table rows were compared with native raw-PDF row text; year-column headers and contextual units were inspected.",
+      "independent_human_review": false,
+      "retrieval_results_used_for_question_selection": false
+    }
+  },
+  "summary": {
+    "questions": 40,
+    "companies": 40,
+    "prose_questions": 20,
+    "table_questions": 20,
+    "multi_evidence_questions": 8,
+    "required_evidence_units": 48,
+    "questions_per_fiscal_year": {
+      "2021": 8,
+      "2022": 8,
+      "2023": 8,
+      "2024": 8,
+      "2025": 8
+    }
+  },
+  "questions": [
+    {
+      "question_id": "chunking-001",
+      "question": "According to NVIDIA's FY2021 annual report, how much cash did operations generate in fiscal 2021 versus fiscal 2020, as shown in the cash-flow summary?",
+      "ticker": "NVDA",
+      "company": "NVIDIA",
+      "fiscal_year": 2021,
+      "sector": "Semiconductors",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "NVDA_FY2021_annual_report-3771ab7b69a2:p118:table2:row:0",
+          "table_id": "NVDA_FY2021_annual_report-3771ab7b69a2:p118:table2",
+          "row_index": 0,
+          "row_text": "Net cash provided by operating activities | $ 5,822 | $ 4,761",
+          "row_cells": [
+            "Net cash provided by operating activities",
+            "$ 5,822",
+            "$ 4,761"
+          ],
+          "bbox": [
+            49.597,
+            392.29,
+            546.5,
+            401.996
+          ],
+          "table_bbox": [
+            49.597,
+            392.29,
+            546.5,
+            431.113
+          ],
+          "header_context": [
+            {
+              "text": "Year Ended",
+              "bbox": [
+                455.963,
+                336.966,
+                504.182,
+                346.672
+              ],
+              "position": "above"
+            },
+            {
+              "text": "January 31,",
+              "bbox": [
+                421.682,
+                350.554,
+                471.502,
+                360.26
+              ],
+              "position": "above"
+            },
+            {
+              "text": "January 26,",
+              "bbox": [
+                488.652,
+                350.554,
+                538.473,
+                360.26
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                435.93,
+                360.26,
+                457.244,
+                369.966
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2020",
+              "bbox": [
+                502.901,
+                360.26,
+                524.215,
+                369.966
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(In millions)",
+              "bbox": [
+                456.885,
+                377.731,
+                503.269,
+                387.437
+              ],
+              "position": "above"
+            },
+            {
+              "text": "As of January 31, 2021, we had $11.56 billion in cash, cash equivalents and marketable securities, an increase of $664",
+              "bbox": [
+                48.044,
+                441.304,
+                548.285,
+                451.01
+              ],
+              "position": "below"
+            },
+            {
+              "text": "million from the end of fiscal year 2020. Our investment policy requires the purchase of highly rated fixed income",
+              "bbox": [
+                48.044,
+                452.952,
+                548.305,
+                462.657
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "Year Ended\nJanuary 31,\nJanuary 26,\n2021\n2020\n(In millions)",
+          "page_context": [
+            {
+              "element_id": "NVDA_FY2021_annual_report-3771ab7b69a2:p118:e7",
+              "text": "(In millions)",
+              "bbox": [
+                456.885,
+                252.525,
+                503.269,
+                262.231
+              ]
+            },
+            {
+              "element_id": "NVDA_FY2021_annual_report-3771ab7b69a2:p118:e12",
+              "text": "(In millions)",
+              "bbox": [
+                456.885,
+                377.731,
+                503.269,
+                387.437
+              ]
+            },
+            {
+              "element_id": "NVDA_FY2021_annual_report-3771ab7b69a2:p118:e14",
+              "text": "As of January 31, 2021, we had $11.56 billion in cash, cash equivalents and marketable securities, an increase of $664 million from the end of fiscal year 2020. Our investment policy requires the purchase of highly rated fixed income securities, the diversification of investment types and credit exposures, and certain maturity limits on our portfolio.",
+              "bbox": [
+                48.044,
+                441.304,
+                548.305,
+                474.304
+              ]
+            }
+          ],
+          "document_id": "NVDA_FY2021_annual_report-3771ab7b69a2",
+          "pdf_page": 118,
+          "source_sha256": "3771ab7b69a2a0f308a1669e58dbc4f13146a00e7131ef042235b6d39202e72c",
+          "source_file": "NVDA_FY2021_annual_report.pdf",
+          "ticker": "NVDA",
+          "fiscal_year": 2021
+        }
+      ],
+      "reference_answer": "Operating cash flow was $5,822 million in fiscal 2021 and $4,761 million in fiscal 2020.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-002",
+      "question": "According to Advanced Micro Devices's FY2022 annual report, what were fiscal 2022 Data Center sales and company-wide net revenue in the segment-results summary?",
+      "ticker": "AMD",
+      "company": "Advanced Micro Devices",
+      "fiscal_year": 2022,
+      "sector": "Semiconductors",
+      "type": "table",
+      "multi_evidence": true,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "AMD_FY2022_annual_report-a3bd74088fae:p48:table1:row:1",
+          "table_id": "AMD_FY2022_annual_report-a3bd74088fae:p48:table1",
+          "row_index": 1,
+          "row_text": "Data Center | $ | 6,043 |  | $ | 3,694",
+          "row_cells": [
+            "Data Center",
+            "$",
+            "6,043",
+            "",
+            "$",
+            "3,694"
+          ],
+          "bbox": [
+            23.802,
+            228.473,
+            587.865,
+            238.677
+          ],
+          "table_bbox": [
+            23.802,
+            218.27,
+            587.865,
+            356.918
+          ],
+          "header_context": [
+            {
+              "text": "The following table provides a summary of net revenue and operating income (loss) by segment for 2022 and 2021:",
+              "bbox": [
+                23.802,
+                166.011,
+                432.021,
+                174.949
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Year Ended",
+              "bbox": [
+                476.622,
+                184.868,
+                511.462,
+                192.016
+              ],
+              "position": "above"
+            },
+            {
+              "text": "December 31,",
+              "bbox": [
+                424.61,
+                194.47,
+                466.211,
+                201.618
+              ],
+              "position": "above"
+            },
+            {
+              "text": "December 25,",
+              "bbox": [
+                521.853,
+                194.47,
+                563.454,
+                201.618
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                438.293,
+                200.473,
+                452.522,
+                207.622
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                535.536,
+                200.473,
+                549.765,
+                207.622
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(In millions)",
+              "bbox": [
+                476.097,
+                210.075,
+                511.984,
+                217.223
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Data Center",
+              "bbox": [
+                23.802,
+                369.484,
+                68.701,
+                378.422
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "The following table provides a summary of net revenue and operating income (loss) by segment for 2022 and 2021:\nYear Ended\nDecember 31,\nDecember 25,\n2022\n2021\n(In millions)",
+          "page_context": [
+            {
+              "element_id": "AMD_FY2022_annual_report-a3bd74088fae:p48:e10",
+              "text": "(In millions)",
+              "bbox": [
+                476.097,
+                210.075,
+                511.984,
+                217.223
+              ]
+            },
+            {
+              "element_id": "AMD_FY2022_annual_report-a3bd74088fae:p48:e14",
+              "text": "Data Center operating income was $1.8 billion in 2022, compared to operating income of $991 million in 2021. The increase in operating income was primarily driven by higher revenue, partially offset by higher operating expenses. Operating expenses increased for the reasons outlined under “Expenses” below.",
+              "bbox": [
+                23.802,
+                412.699,
+                588.589,
+                431.238
+              ]
+            }
+          ],
+          "document_id": "AMD_FY2022_annual_report-a3bd74088fae",
+          "pdf_page": 48,
+          "source_sha256": "a3bd74088fae0ad4aa03d04998a1f4c64fd0b3c693841601b0ac49b46cf5c1f4",
+          "source_file": "AMD_FY2022_annual_report.pdf",
+          "ticker": "AMD",
+          "fiscal_year": 2022
+        },
+        {
+          "kind": "table",
+          "evidence_id": "AMD_FY2022_annual_report-a3bd74088fae:p48:table1:row:5",
+          "table_id": "AMD_FY2022_annual_report-a3bd74088fae:p48:table1",
+          "row_index": 5,
+          "row_text": "Total net revenue | $ | 23,601 |  | $ | 16,434",
+          "row_cells": [
+            "Total net revenue",
+            "$",
+            "23,601",
+            "",
+            "$",
+            "16,434"
+          ],
+          "bbox": [
+            23.802,
+            270.349,
+            587.865,
+            282.492
+          ],
+          "table_bbox": [
+            23.802,
+            218.27,
+            587.865,
+            356.918
+          ],
+          "header_context": [
+            {
+              "text": "The following table provides a summary of net revenue and operating income (loss) by segment for 2022 and 2021:",
+              "bbox": [
+                23.802,
+                166.011,
+                432.021,
+                174.949
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Year Ended",
+              "bbox": [
+                476.622,
+                184.868,
+                511.462,
+                192.016
+              ],
+              "position": "above"
+            },
+            {
+              "text": "December 31,",
+              "bbox": [
+                424.61,
+                194.47,
+                466.211,
+                201.618
+              ],
+              "position": "above"
+            },
+            {
+              "text": "December 25,",
+              "bbox": [
+                521.853,
+                194.47,
+                563.454,
+                201.618
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                438.293,
+                200.473,
+                452.522,
+                207.622
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                535.536,
+                200.473,
+                549.765,
+                207.622
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(In millions)",
+              "bbox": [
+                476.097,
+                210.075,
+                511.984,
+                217.223
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Data Center",
+              "bbox": [
+                23.802,
+                369.484,
+                68.701,
+                378.422
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "The following table provides a summary of net revenue and operating income (loss) by segment for 2022 and 2021:\nYear Ended\nDecember 31,\nDecember 25,\n2022\n2021\n(In millions)",
+          "page_context": [
+            {
+              "element_id": "AMD_FY2022_annual_report-a3bd74088fae:p48:e10",
+              "text": "(In millions)",
+              "bbox": [
+                476.097,
+                210.075,
+                511.984,
+                217.223
+              ]
+            },
+            {
+              "element_id": "AMD_FY2022_annual_report-a3bd74088fae:p48:e14",
+              "text": "Data Center operating income was $1.8 billion in 2022, compared to operating income of $991 million in 2021. The increase in operating income was primarily driven by higher revenue, partially offset by higher operating expenses. Operating expenses increased for the reasons outlined under “Expenses” below.",
+              "bbox": [
+                23.802,
+                412.699,
+                588.589,
+                431.238
+              ]
+            }
+          ],
+          "document_id": "AMD_FY2022_annual_report-a3bd74088fae",
+          "pdf_page": 48,
+          "source_sha256": "a3bd74088fae0ad4aa03d04998a1f4c64fd0b3c693841601b0ac49b46cf5c1f4",
+          "source_file": "AMD_FY2022_annual_report.pdf",
+          "ticker": "AMD",
+          "fiscal_year": 2022
+        }
+      ],
+      "reference_answer": "Data Center net revenue was $6,043 million and total net revenue was $23,601 million for 2022.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-003",
+      "question": "According to Intel's FY2023 annual report, what amount of cash came from operations in 2023, and what was the comparable 2022 amount in the cash-flow summary?",
+      "ticker": "INTC",
+      "company": "Intel",
+      "fiscal_year": 2023,
+      "sector": "Semiconductors",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "INTC_FY2023_annual_report-6288f19d1bd7:p48:table2:row:1",
+          "table_id": "INTC_FY2023_annual_report-6288f19d1bd7:p48:table2",
+          "row_index": 1,
+          "row_text": "Net cash provided by operating activities | $ 11,471 | $ 15,433 | $ 29,456",
+          "row_cells": [
+            "Net cash provided by operating activities",
+            "$ 11,471",
+            "$ 15,433",
+            "$ 29,456"
+          ],
+          "bbox": [
+            23.999,
+            508.584,
+            572.687,
+            517.863
+          ],
+          "table_bbox": [
+            23.999,
+            495.075,
+            572.687,
+            561.063
+          ],
+          "header_context": [
+            {
+              "text": "actions have benefited, and may further benefit, cash flow in the near term, we may experience a corresponding detriment to cash flow in",
+              "bbox": [
+                22.362,
+                436.926,
+                569.616,
+                448.905
+              ],
+              "position": "above"
+            },
+            {
+              "text": "future periods as these actions cease or as the impacts of these actions reverse or normalize.",
+              "bbox": [
+                22.362,
+                447.726,
+                397.527,
+                459.705
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Our cash flows for each period were as follows:",
+              "bbox": [
+                22.362,
+                467.526,
+                210.93,
+                479.505
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Years Ended (In Millions)",
+              "bbox": [
+                24.99,
+                491.601,
+                132.018,
+                504.075
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Operating Activities",
+              "bbox": [
+                22.38,
+                571.738,
+                125.088,
+                587.71
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "actions have benefited, and may further benefit, cash flow in the near term, we may experience a corresponding detriment to cash flow in\nfuture periods as these actions cease or as the impacts of these actions reverse or normalize.\nOur cash flows for each period were as follows:",
+          "page_context": [
+            {
+              "element_id": "INTC_FY2023_annual_report-6288f19d1bd7:p48:e2",
+              "text": "(In Millions)",
+              "bbox": [
+                25.012,
+                43.951,
+                75.016,
+                56.425
+              ]
+            },
+            {
+              "element_id": "INTC_FY2023_annual_report-6288f19d1bd7:p48:e17",
+              "text": "Years Ended (In Millions)",
+              "bbox": [
+                24.99,
+                491.601,
+                132.018,
+                504.075
+              ]
+            }
+          ],
+          "document_id": "INTC_FY2023_annual_report-6288f19d1bd7",
+          "pdf_page": 48,
+          "source_sha256": "6288f19d1bd7246683240498aa3138f85a458ffbee1fdf2ca185408fa20aecdb",
+          "source_file": "INTC_FY2023_annual_report.pdf",
+          "ticker": "INTC",
+          "fiscal_year": 2023
+        }
+      ],
+      "reference_answer": "Net cash provided by operating activities was $11,471 million in 2023 and $15,433 million in 2022.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-004",
+      "question": "According to Qualcomm's FY2024 annual report, how much revenue did the QCT automotive business report in 2024 and 2023?",
+      "ticker": "QCOM",
+      "company": "Qualcomm",
+      "fiscal_year": 2024,
+      "sector": "Semiconductors",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "QCOM_FY2024_annual_report-89851f1bb2a3:p44:table1:row:1",
+          "table_id": "QCOM_FY2024_annual_report-89851f1bb2a3:p44:table1",
+          "row_index": 1,
+          "row_text": "Automotive | 2,910 | 1,872 | 1,038",
+          "row_cells": [
+            "Automotive",
+            "2,910",
+            "1,872",
+            "1,038"
+          ],
+          "bbox": [
+            55.63,
+            161.257,
+            559.264,
+            170.257
+          ],
+          "table_bbox": [
+            55.63,
+            147.007,
+            559.264,
+            213.007
+          ],
+          "header_context": [
+            {
+              "text": "QCT Segment (in millions, except percentages)",
+              "bbox": [
+                72.0,
+                95.359,
+                265.68,
+                106.433
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2024",
+              "bbox": [
+                389.62,
+                117.54,
+                407.62,
+                127.507
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023",
+              "bbox": [
+                454.12,
+                117.54,
+                472.12,
+                127.507
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Change",
+              "bbox": [
+                511.76,
+                117.54,
+                543.512,
+                127.507
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Revenues",
+              "bbox": [
+                56.63,
+                131.79,
+                93.125,
+                141.757
+              ],
+              "position": "above"
+            },
+            {
+              "text": "EBT as a % of revenues",
+              "bbox": [
+                56.63,
+                217.29,
+                143.354,
+                227.257
+              ],
+              "position": "below"
+            },
+            {
+              "text": "29%",
+              "bbox": [
+                408.77,
+                217.29,
+                427.517,
+                227.257
+              ],
+              "position": "below"
+            },
+            {
+              "text": "26%",
+              "bbox": [
+                473.27,
+                217.29,
+                492.017,
+                227.257
+              ],
+              "position": "below"
+            },
+            {
+              "text": "3 points",
+              "bbox": [
+                526.62,
+                217.29,
+                555.375,
+                227.257
+              ],
+              "position": "below"
+            },
+            {
+              "text": "(1) Descriptions of our three QCT revenue streams can be found in this Annual Report in “Notes to Consolidated Financial Statements,",
+              "bbox": [
+                54.0,
+                234.97,
+                543.438,
+                244.937
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "QCT Segment (in millions, except percentages)\n2024\n2023\nChange\nRevenues",
+          "page_context": [
+            {
+              "element_id": "QCOM_FY2024_annual_report-89851f1bb2a3:p44:e1",
+              "text": "Segment Results The following should be read in conjunction with the fiscal 2024 and 2023 results of operations for each reportable segment included in this Annual Report in “Notes to Consolidated Financial Statements, Note 8. Segment Information.” QCT Segment (in millions, except percentages)",
+              "bbox": [
+                54.0,
+                51.859,
+                534.59,
+                106.433
+              ]
+            },
+            {
+              "element_id": "QCOM_FY2024_annual_report-89851f1bb2a3:p44:e12",
+              "text": "higher handsets revenues, due to $2.8 billion in higher chipset shipments driven by certain major OEMs (primarily driven by the normalization of customer inventory levels, which were elevated in the prior year), partially offset by $533 million in lower revenues per chipset primarily driven by unfavorable mix +",
+              "bbox": [
+                72.0,
+                352.189,
+                552.77,
+                394.802
+              ]
+            },
+            {
+              "element_id": "QCOM_FY2024_annual_report-89851f1bb2a3:p44:e13",
+              "text": "higher automotive revenues, primarily driven by an increase in demand from new vehicle launches with our Snapdragon digital cockpit and connectivity products - lower IoT revenues, due to $834 million in lower revenues per unit primarily driven by unfavorable mix, partially offset by a $317 million increase in demand (primarily in consumer products, partially offset by edge networking products as customers continued drawing down on their elevated inventory levels)",
+              "bbox": [
+                72.0,
+                383.689,
+                547.3,
+                436.193
+              ]
+            },
+            {
+              "element_id": "QCOM_FY2024_annual_report-89851f1bb2a3:p44:e14",
+              "text": "QCT EBT as a percentage of revenues increased in fiscal 2024 primarily due to higher revenues. Gross margin percentage remained flat in fiscal 2024. QTL Segment (in millions, except percentages)",
+              "bbox": [
+                54.0,
+                441.619,
+                440.19,
+                485.533
+              ]
+            },
+            {
+              "element_id": "QCOM_FY2024_annual_report-89851f1bb2a3:p44:e34",
+              "text": "$402 million increase in estimated sales of 3G/4G/5G-based multimode products - $90 million decrease in estimated revenues per unit - $68 million decrease in revenues from the ending of the recognition of certain upfront license fee consideration in the first quarter of fiscal 2023 from our long-term license agreement with Nokia",
+              "bbox": [
+                72.0,
+                583.689,
+                547.78,
+                625.693
+              ]
+            }
+          ],
+          "document_id": "QCOM_FY2024_annual_report-89851f1bb2a3",
+          "pdf_page": 44,
+          "source_sha256": "89851f1bb2a38db997bd0c637dc0745d6f51e536353cb078f9e371be4585aa86",
+          "source_file": "QCOM_FY2024_annual_report.pdf",
+          "ticker": "QCOM",
+          "fiscal_year": 2024
+        }
+      ],
+      "reference_answer": "QCT Automotive revenues were $2,910 million in 2024 and $1,872 million in 2023.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-005",
+      "question": "According to Broadcom's FY2025 annual report, what measures can Broadcom take when unique components are difficult to obtain from alternate suppliers?",
+      "ticker": "AVGO",
+      "company": "Broadcom",
+      "fiscal_year": 2025,
+      "sector": "Semiconductors",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "AVGO_FY2025_annual_report-56e3343ddf27:p11:e5:chars:290:530",
+          "element_id": "AVGO_FY2025_annual_report-56e3343ddf27:p11:e5",
+          "quote": "To address the potential disruption in our supply chain, we may use a number of techniques, including redesigning products for alternative components, making incremental or “lifetime” purchases, or qualifying more than one source of supply.",
+          "char_start": 290,
+          "char_end": 530,
+          "bbox": [
+            33.301,
+            366.107,
+            559.533,
+            409.92
+          ],
+          "document_id": "AVGO_FY2025_annual_report-56e3343ddf27",
+          "pdf_page": 11,
+          "source_sha256": "56e3343ddf275dec5e218d8b141737dfea6d2ad42ae95af51b0dc2672103ef0d",
+          "source_file": "AVGO_FY2025_annual_report.pdf",
+          "ticker": "AVGO",
+          "fiscal_year": 2025
+        }
+      ],
+      "reference_answer": "Broadcom may redesign products for alternative components, make incremental or lifetime purchases, or qualify multiple supply sources.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-006",
+      "question": "According to Texas Instruments's FY2021 annual report, why does Texas Instruments consider ownership of manufacturing, process, and packaging technology a strategic advantage?",
+      "ticker": "TXN",
+      "company": "Texas Instruments",
+      "fiscal_year": 2021,
+      "sector": "Semiconductors",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "TXN_FY2021_annual_report-07d0f07b2d64:p2:e31:chars:0:190",
+          "element_id": "TXN_FY2021_annual_report-07d0f07b2d64:p2:e31",
+          "quote": "We believe owning our own manufacturing, process and packaging technology provides us with lower costs and greater control of our supply chain, which will be of growing strategic importance.",
+          "char_start": 0,
+          "char_end": 190,
+          "bbox": [
+            36.0,
+            544.53,
+            539.66,
+            589.29
+          ],
+          "document_id": "TXN_FY2021_annual_report-07d0f07b2d64",
+          "pdf_page": 2,
+          "source_sha256": "07d0f07b2d6487be3cdc49973a15d994afbc5b3c9b243b2e0c84d95d9aeada45",
+          "source_file": "TXN_FY2021_annual_report.pdf",
+          "ticker": "TXN",
+          "fiscal_year": 2021
+        }
+      ],
+      "reference_answer": "It believes ownership lowers costs and gives greater control over its supply chain.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-007",
+      "question": "According to Micron Technology's FY2022 annual report, which technical factors does Micron identify as the primary drivers of semiconductor manufacturing cost?",
+      "ticker": "MU",
+      "company": "Micron Technology",
+      "fiscal_year": 2022,
+      "sector": "Semiconductors",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "MU_FY2022_annual_report-b26295f9bd76:p12:e6:chars:340:557",
+          "element_id": "MU_FY2022_annual_report-b26295f9bd76:p12:e6",
+          "quote": "The primary determinants of manufacturing cost are process line-width, 3D non-volatile layers, NAND cell levels, process complexity (including the number of mask layers and fabrication steps), and manufacturing yield.",
+          "char_start": 340,
+          "char_end": 557,
+          "bbox": [
+            49.5,
+            429.627,
+            565.07,
+            572.799
+          ],
+          "document_id": "MU_FY2022_annual_report-b26295f9bd76",
+          "pdf_page": 12,
+          "source_sha256": "b26295f9bd76da6d601e3af9a34e0c5e317f1d1d0445eb71d438532e07a45238",
+          "source_file": "MU_FY2022_annual_report.pdf",
+          "ticker": "MU",
+          "fiscal_year": 2022
+        }
+      ],
+      "reference_answer": "The primary determinants are process line-width, 3D non-volatile layers, NAND cell levels, process complexity (including mask layers and fabrication steps), and manufacturing yield.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-008",
+      "question": "According to Analog Devices's FY2023 annual report, what operational consequences could follow if key suppliers cannot meet Analog Devices delivery or quality needs?",
+      "ticker": "ADI",
+      "company": "Analog Devices",
+      "fiscal_year": 2023,
+      "sector": "Semiconductors",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "ADI_FY2023_annual_report-ea2afbb9dbfe:p10:e2:chars:268:666",
+          "element_id": "ADI_FY2023_annual_report-ea2afbb9dbfe:p10:e2",
+          "quote": "If any of our key suppliers are unable or unwilling to manufacture and deliver sufficient quantities of components to us on the time schedule and of the quality that we require, we may be forced to seek to engage additional or replacement suppliers, which could result in significant expenses and disruptions or delays in manufacturing, product development and shipment of product to our customers.",
+          "char_start": 268,
+          "char_end": 666,
+          "bbox": [
+            41.474,
+            59.637,
+            555.577,
+            175.617
+          ],
+          "document_id": "ADI_FY2023_annual_report-ea2afbb9dbfe",
+          "pdf_page": 10,
+          "source_sha256": "ea2afbb9dbfe1f6819a68bc6e6f28138966197ccc413b5735c53a91a94e2092e",
+          "source_file": "ADI_FY2023_annual_report.pdf",
+          "ticker": "ADI",
+          "fiscal_year": 2023
+        }
+      ],
+      "reference_answer": "ADI may need additional or replacement suppliers, causing significant expense and disruptions or delays in manufacturing, product development, and customer shipments.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-009",
+      "question": "According to Microsoft's FY2024 annual report, what were GAAP net income and diluted EPS for 2024 in the summary results of operations?",
+      "ticker": "MSFT",
+      "company": "Microsoft",
+      "fiscal_year": 2024,
+      "sector": "Software and Cloud Services",
+      "type": "table",
+      "multi_evidence": true,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "MSFT_FY2024_annual_report-979a3f819970:p35:table1:row:3",
+          "table_id": "MSFT_FY2024_annual_report-979a3f819970:p35:table1",
+          "row_index": 3,
+          "row_text": "Net income | 88,136 | 72,361 | 22%",
+          "row_cells": [
+            "Net income",
+            "88,136",
+            "72,361",
+            "22%"
+          ],
+          "bbox": [
+            38.0,
+            159.345,
+            556.954,
+            171.345
+          ],
+          "table_bbox": [
+            38.0,
+            124.34,
+            556.954,
+            236.35
+          ],
+          "header_context": [
+            {
+              "text": "SUMMARY RESULTS OF OPERATIONS",
+              "bbox": [
+                213.9,
+                76.41,
+                380.047,
+                86.41
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Percentage",
+              "bbox": [
+                512.8,
+                97.922,
+                554.921,
+                105.922
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(In millions, except percentages and per share amounts)",
+              "bbox": [
+                39.0,
+                105.922,
+                249.719,
+                113.922
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2024",
+              "bbox": [
+                420.376,
+                105.922,
+                438.774,
+                113.922
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023",
+              "bbox": [
+                482.314,
+                105.922,
+                500.712,
+                113.922
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Change",
+              "bbox": [
+                526.75,
+                105.922,
+                554.978,
+                113.922
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Adjusted gross margin, operating income, net income, and diluted earnings per share (“EPS”) are non-GAAP financial",
+              "bbox": [
+                39.0,
+                254.41,
+                555.099,
+                264.41
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "SUMMARY RESULTS OF OPERATIONS\nPercentage\n(In millions, except percentages and per share amounts)\n2024\n2023\nChange",
+          "page_context": [
+            {
+              "element_id": "MSFT_FY2024_annual_report-979a3f819970:p35:e2",
+              "text": "(In millions, except percentages and per share amounts)",
+              "bbox": [
+                39.0,
+                105.922,
+                249.719,
+                113.922
+              ]
+            },
+            {
+              "element_id": "MSFT_FY2024_annual_report-979a3f819970:p35:e16",
+              "text": "Prior year gross margin, operating income, net income, and diluted EPS were negatively impacted by the Q2 charge, which resulted in decreases of $152 million, $1.2 billion, $946 million, and $0.13, respectively.",
+              "bbox": [
+                39.0,
+                632.41,
+                555.045,
+                654.41
+              ]
+            }
+          ],
+          "document_id": "MSFT_FY2024_annual_report-979a3f819970",
+          "pdf_page": 35,
+          "source_sha256": "979a3f8199702397e080719dc1212242eb2580bed78b5dab92d3f576d6abf5bc",
+          "source_file": "MSFT_FY2024_annual_report.pdf",
+          "ticker": "MSFT",
+          "fiscal_year": 2024
+        },
+        {
+          "kind": "table",
+          "evidence_id": "MSFT_FY2024_annual_report-979a3f819970:p35:table1:row:4",
+          "table_id": "MSFT_FY2024_annual_report-979a3f819970:p35:table1",
+          "row_index": 4,
+          "row_text": "Diluted earnings per share | 11.80 | 9.68 | 22%",
+          "row_cells": [
+            "Diluted earnings per share",
+            "11.80",
+            "9.68",
+            "22%"
+          ],
+          "bbox": [
+            38.0,
+            171.345,
+            556.954,
+            182.35
+          ],
+          "table_bbox": [
+            38.0,
+            124.34,
+            556.954,
+            236.35
+          ],
+          "header_context": [
+            {
+              "text": "SUMMARY RESULTS OF OPERATIONS",
+              "bbox": [
+                213.9,
+                76.41,
+                380.047,
+                86.41
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Percentage",
+              "bbox": [
+                512.8,
+                97.922,
+                554.921,
+                105.922
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(In millions, except percentages and per share amounts)",
+              "bbox": [
+                39.0,
+                105.922,
+                249.719,
+                113.922
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2024",
+              "bbox": [
+                420.376,
+                105.922,
+                438.774,
+                113.922
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023",
+              "bbox": [
+                482.314,
+                105.922,
+                500.712,
+                113.922
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Change",
+              "bbox": [
+                526.75,
+                105.922,
+                554.978,
+                113.922
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Adjusted gross margin, operating income, net income, and diluted earnings per share (“EPS”) are non-GAAP financial",
+              "bbox": [
+                39.0,
+                254.41,
+                555.099,
+                264.41
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "SUMMARY RESULTS OF OPERATIONS\nPercentage\n(In millions, except percentages and per share amounts)\n2024\n2023\nChange",
+          "page_context": [
+            {
+              "element_id": "MSFT_FY2024_annual_report-979a3f819970:p35:e2",
+              "text": "(In millions, except percentages and per share amounts)",
+              "bbox": [
+                39.0,
+                105.922,
+                249.719,
+                113.922
+              ]
+            },
+            {
+              "element_id": "MSFT_FY2024_annual_report-979a3f819970:p35:e16",
+              "text": "Prior year gross margin, operating income, net income, and diluted EPS were negatively impacted by the Q2 charge, which resulted in decreases of $152 million, $1.2 billion, $946 million, and $0.13, respectively.",
+              "bbox": [
+                39.0,
+                632.41,
+                555.045,
+                654.41
+              ]
+            }
+          ],
+          "document_id": "MSFT_FY2024_annual_report-979a3f819970",
+          "pdf_page": 35,
+          "source_sha256": "979a3f8199702397e080719dc1212242eb2580bed78b5dab92d3f576d6abf5bc",
+          "source_file": "MSFT_FY2024_annual_report.pdf",
+          "ticker": "MSFT",
+          "fiscal_year": 2024
+        }
+      ],
+      "reference_answer": "Net income was $88,136 million and diluted earnings per share were $11.80 in 2024.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-010",
+      "question": "According to Oracle's FY2025 annual report, what were the 2025 revenues of the hardware and services businesses, respectively?",
+      "ticker": "ORCL",
+      "company": "Oracle",
+      "fiscal_year": 2025,
+      "sector": "Software and Cloud Services",
+      "type": "table",
+      "multi_evidence": true,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "ORCL_FY2025_annual_report-ba355951a779:p48:table1:row:3",
+          "table_id": "ORCL_FY2025_annual_report-ba355951a779:p48:table1",
+          "row_index": 3,
+          "row_text": "Total revenues................................................................. | 2,936 | -4% | -4% | 3,066",
+          "row_cells": [
+            "Total revenues.................................................................",
+            "2,936",
+            "-4%",
+            "-4%",
+            "3,066"
+          ],
+          "bbox": [
+            62.0,
+            144.478,
+            528.303,
+            154.478
+          ],
+          "table_bbox": [
+            62.0,
+            103.694,
+            528.303,
+            292.509
+          ],
+          "header_context": [
+            {
+              "text": "Year Ended May 31,",
+              "bbox": [
+                388.725,
+                64.065,
+                446.582,
+                71.065
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Percent Change",
+              "bbox": [
+                397.263,
+                73.11,
+                442.734,
+                80.11
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(Dollars in millions)",
+              "bbox": [
+                63.0,
+                82.155,
+                119.238,
+                89.155
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2025",
+              "bbox": [
+                324.554,
+                82.155,
+                338.753,
+                89.155
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Actual",
+              "bbox": [
+                382.085,
+                82.155,
+                400.616,
+                89.155
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Constant",
+              "bbox": [
+                435.608,
+                82.155,
+                461.693,
+                89.155
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2024",
+              "bbox": [
+                496.554,
+                82.155,
+                510.753,
+                89.155
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Hardware Revenues:",
+              "bbox": [
+                63.0,
+                91.656,
+                149.12,
+                101.656
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(1)",
+              "bbox": [
+                63.0,
+                302.474,
+                68.565,
+                307.474
+              ],
+              "position": "below"
+            },
+            {
+              "text": "Excludes stock-based compensation and certain expense allocations. Also excludes amortization of intangible assets and certain other GAAP-based",
+              "bbox": [
+                81.0,
+                302.746,
+                530.996,
+                310.246
+              ],
+              "position": "below"
+            },
+            {
+              "text": "expenses, which were not allocated to our operating segment results for purposes of reporting to and review by our CODMs, as further described",
+              "bbox": [
+                81.0,
+                311.901,
+                531.0,
+                319.401
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "Year Ended May 31,\nPercent Change\n(Dollars in millions)\n2025\nActual\nConstant\n2024\nHardware Revenues:",
+          "page_context": [
+            {
+              "element_id": "ORCL_FY2025_annual_report-ba355951a779:p48:e1",
+              "text": "(Dollars in millions)",
+              "bbox": [
+                63.0,
+                82.155,
+                119.238,
+                89.155
+              ]
+            },
+            {
+              "element_id": "ORCL_FY2025_annual_report-ba355951a779:p48:e12",
+              "text": "Total hardware revenues decreased by $130 million in reported currency in fiscal 2025 relative to fiscal 2024. Excluding the unfavorable impact of currency rate fluctuations of less than 1% in fiscal 2025, the decrease in hardware revenues was primarily due to our continued emphasis on the marketing and sale of our cloud-based infrastructure technologies, which resulted in reduced sales volumes of certain of our hardware product lines and also impacted the volume of hardware support contracts sold in recent periods. Geographically, we experienced constant currency hardware revenue declines in all regions in fiscal 2025.",
+              "bbox": [
+                63.0,
+                336.591,
+                530.995,
+                407.626
+              ]
+            },
+            {
+              "element_id": "ORCL_FY2025_annual_report-ba355951a779:p48:e13",
+              "text": "Total hardware expenses decreased by $133 million in reported currency in fiscal 2025 relative to fiscal 2024. The decrease in hardware expenses aligned with lower hardware revenues. Excluding the favorable currency rate fluctuations effect of 1% in fiscal 2025, the constant currency decrease in hardware expenses during fiscal 2025 relative to fiscal 2024 was due to a $106 million decrease in hardware product and support costs and an $18 million decrease in sales and marketing expenses.",
+              "bbox": [
+                63.0,
+                415.833,
+                531.01,
+                474.661
+              ]
+            }
+          ],
+          "document_id": "ORCL_FY2025_annual_report-ba355951a779",
+          "pdf_page": 48,
+          "source_sha256": "ba355951a779c6f1335e598b68ce9929616d8f5738477287ca5a85c5b190c772",
+          "source_file": "ORCL_FY2025_annual_report.pdf",
+          "ticker": "ORCL",
+          "fiscal_year": 2025
+        },
+        {
+          "kind": "table",
+          "evidence_id": "ORCL_FY2025_annual_report-ba355951a779:p49:table1:row:3",
+          "table_id": "ORCL_FY2025_annual_report-ba355951a779:p49:table1",
+          "row_index": 3,
+          "row_text": "Total revenues................................................................. | 5,233 | -4% | -3% | 5,431",
+          "row_cells": [
+            "Total revenues.................................................................",
+            "5,233",
+            "-4%",
+            "-3%",
+            "5,431"
+          ],
+          "bbox": [
+            62.0,
+            151.803,
+            528.303,
+            161.803
+          ],
+          "table_bbox": [
+            62.0,
+            111.019,
+            528.303,
+            259.049
+          ],
+          "header_context": [
+            {
+              "text": "Year Ended May 31,",
+              "bbox": [
+                388.725,
+                71.389,
+                446.582,
+                78.389
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Percent Change",
+              "bbox": [
+                397.263,
+                80.434,
+                442.734,
+                87.434
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(Dollars in millions)",
+              "bbox": [
+                63.0,
+                89.479,
+                119.238,
+                96.479
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2025",
+              "bbox": [
+                324.554,
+                89.479,
+                338.753,
+                96.479
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Actual",
+              "bbox": [
+                382.085,
+                89.479,
+                400.616,
+                96.479
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Constant",
+              "bbox": [
+                435.608,
+                89.479,
+                461.693,
+                96.479
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2024",
+              "bbox": [
+                496.554,
+                89.479,
+                510.753,
+                96.479
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Services Revenues:",
+              "bbox": [
+                63.0,
+                98.98,
+                140.77,
+                108.98
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(1)",
+              "bbox": [
+                63.0,
+                271.314,
+                68.565,
+                276.314
+              ],
+              "position": "below"
+            },
+            {
+              "text": "Excludes stock-based compensation and certain allocations. Also excludes certain other GAAP-based expenses, which were not allocated to our",
+              "bbox": [
+                81.0,
+                271.586,
+                531.0,
+                279.086
+              ],
+              "position": "below"
+            },
+            {
+              "text": "operating segment results for purposes of reporting to and review by our CODMs, as further described under “Presentation of Operating Segment",
+              "bbox": [
+                81.0,
+                280.741,
+                531.0,
+                288.241
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "Year Ended May 31,\nPercent Change\n(Dollars in millions)\n2025\nActual\nConstant\n2024\nServices Revenues:",
+          "page_context": [
+            {
+              "element_id": "ORCL_FY2025_annual_report-ba355951a779:p49:e1",
+              "text": "(Dollars in millions)",
+              "bbox": [
+                63.0,
+                89.479,
+                119.238,
+                96.479
+              ]
+            },
+            {
+              "element_id": "ORCL_FY2025_annual_report-ba355951a779:p49:e12",
+              "text": "Total services revenues decreased by $198 million in reported currency in fiscal 2025 relative to fiscal 2024. Excluding the effects of unfavorable currency rate fluctuations of 1% in fiscal 2025, the decrease in total services revenues in fiscal 2025 relative to fiscal 2024 was due to a decrease in revenues in each of our primary services offerings. The constant currency decrease in services revenues in the Americas region was partially offset by a constant currency increase in services revenues in the EMEA and the Asia Pacific regions in fiscal 2025.",
+              "bbox": [
+                63.0,
+                305.431,
+                531.01,
+                364.259
+              ]
+            },
+            {
+              "element_id": "ORCL_FY2025_annual_report-ba355951a779:p49:e13",
+              "text": "Total services expenses decreased by $275 million in reported currency in fiscal 2025 relative to fiscal 2024. Excluding the favorable effects of currency rate fluctuations of less than 1% in fiscal 2025, the constant currency decrease in services expenses in fiscal 2025 relative to fiscal 2024 was primarily due to a $158 million decrease in external contractor expenses and an $81 million decrease in employee-related expenses.",
+              "bbox": [
+                63.0,
+                372.466,
+                531.01,
+                419.087
+              ]
+            },
+            {
+              "element_id": "ORCL_FY2025_annual_report-ba355951a779:p49:e16",
+              "text": "(Dollars in millions)",
+              "bbox": [
+                63.0,
+                524.862,
+                119.238,
+                531.862
+              ]
+            },
+            {
+              "element_id": "ORCL_FY2025_annual_report-ba355951a779:p49:e38",
+              "text": "Total research and development expenses increased by $945 million in reported currency in fiscal 2025 relative to fiscal 2024. Excluding the favorable effects of currency rate fluctuations of less than 1% in fiscal 2025, the increase in research and development expenses was primarily due to an increase in employee-related expenses, including higher stock-based compensation expenses.",
+              "bbox": [
+                63.0,
+                606.756,
+                531.0,
+                653.377
+              ]
+            }
+          ],
+          "document_id": "ORCL_FY2025_annual_report-ba355951a779",
+          "pdf_page": 49,
+          "source_sha256": "ba355951a779c6f1335e598b68ce9929616d8f5738477287ca5a85c5b190c772",
+          "source_file": "ORCL_FY2025_annual_report.pdf",
+          "ticker": "ORCL",
+          "fiscal_year": 2025
+        }
+      ],
+      "reference_answer": "Hardware revenue was $2,936 million and services revenue was $5,233 million for the year ended May 31, 2025.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-011",
+      "question": "According to Salesforce's FY2021 annual report, how much did subscription and support contribute to fiscal 2021 revenue, both in dollars and as a share of the total?",
+      "ticker": "CRM",
+      "company": "Salesforce",
+      "fiscal_year": 2021,
+      "sector": "Software and Cloud Services",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "CRM_FY2021_annual_report-b9cdc802e93e:p63:table1:row:0",
+          "table_id": "CRM_FY2021_annual_report-b9cdc802e93e:p63:table1",
+          "row_index": 0,
+          "row_text": "Subscription and support . . . . . . . . . . . . . . | $19,976 | 94% | $16,043 | 94% | $12,413 | 93%",
+          "row_cells": [
+            "Subscription and support . . . . . . . . . . . . . .",
+            "$19,976",
+            "94%",
+            "$16,043",
+            "94%",
+            "$12,413",
+            "93%"
+          ],
+          "bbox": [
+            68.0,
+            157.287,
+            527.88,
+            169.726
+          ],
+          "table_bbox": [
+            68.0,
+            157.287,
+            527.88,
+            456.737
+          ],
+          "header_context": [
+            {
+              "text": "Fiscal Year Ended January 31,",
+              "bbox": [
+                344.9,
+                104.264,
+                450.452,
+                112.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "% of",
+              "bbox": [
+                324.05,
+                116.264,
+                340.714,
+                124.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "% of",
+              "bbox": [
+                412.25,
+                116.264,
+                428.914,
+                124.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "% of",
+              "bbox": [
+                500.45,
+                116.264,
+                517.114,
+                124.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Total",
+              "bbox": [
+                323.25,
+                124.264,
+                341.474,
+                132.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Total",
+              "bbox": [
+                411.45,
+                124.264,
+                429.674,
+                132.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Total",
+              "bbox": [
+                499.65,
+                124.264,
+                517.874,
+                132.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                280.25,
+                132.264,
+                296.25,
+                140.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Revenues",
+              "bbox": [
+                316.15,
+                132.264,
+                348.59,
+                140.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2020",
+              "bbox": [
+                368.45,
+                132.264,
+                384.45,
+                140.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Revenues",
+              "bbox": [
+                404.35,
+                132.264,
+                436.79,
+                140.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2019",
+              "bbox": [
+                456.65,
+                132.264,
+                472.65,
+                140.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Revenues",
+              "bbox": [
+                492.55,
+                132.264,
+                524.99,
+                140.264
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Revenues:",
+              "bbox": [
+                69.0,
+                146.569,
+                110.66,
+                156.569
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(1)",
+              "bbox": [
+                69.0,
+                472.719,
+                80.66,
+                482.719
+              ],
+              "position": "below"
+            },
+            {
+              "text": "Amounts related to amortization of intangible assets acquired through business combinations, as follows (in",
+              "bbox": [
+                89.0,
+                472.719,
+                521.465,
+                482.719
+              ],
+              "position": "below"
+            },
+            {
+              "text": "millions):",
+              "bbox": [
+                89.0,
+                484.719,
+                127.9,
+                494.719
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "Fiscal Year Ended January 31,\n% of\n% of\n% of\nTotal\nTotal\nTotal\n2021\nRevenues\n2020\nRevenues\n2019\nRevenues\nRevenues:",
+          "page_context": [
+            {
+              "element_id": "CRM_FY2021_annual_report-b9cdc802e93e:p63:e2",
+              "text": "The following tables set forth selected data for each of the periods indicated (in millions):",
+              "bbox": [
+                89.0,
+                84.519,
+                448.502,
+                94.519
+              ]
+            },
+            {
+              "element_id": "CRM_FY2021_annual_report-b9cdc802e93e:p63:e14",
+              "text": "Amounts related to amortization of intangible assets acquired through business combinations, as follows (in millions):",
+              "bbox": [
+                89.0,
+                472.719,
+                521.465,
+                494.719
+              ]
+            },
+            {
+              "element_id": "CRM_FY2021_annual_report-b9cdc802e93e:p63:e35",
+              "text": "Amounts related to stock-based expenses, as follows (in millions):",
+              "bbox": [
+                89.0,
+                580.019,
+                355.204,
+                590.019
+              ]
+            }
+          ],
+          "document_id": "CRM_FY2021_annual_report-b9cdc802e93e",
+          "pdf_page": 63,
+          "source_sha256": "b9cdc802e93e15813e59e27bd8d3b48d50bcd442b8f4d431d0811ffef0264af2",
+          "source_file": "CRM_FY2021_annual_report.pdf",
+          "ticker": "CRM",
+          "fiscal_year": 2021
+        }
+      ],
+      "reference_answer": "Subscription and support contributed $19,976 million, or 94% of fiscal 2021 revenues.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-012",
+      "question": "According to Adobe's FY2022 annual report, what was subscription revenue in 2022 and what percentage of total revenue did it represent?",
+      "ticker": "ADBE",
+      "company": "Adobe",
+      "fiscal_year": 2022,
+      "sector": "Software and Cloud Services",
+      "type": "table",
+      "multi_evidence": true,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:table1:row:0",
+          "table_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:table1",
+          "row_index": 0,
+          "row_text": "Subscription | $ 16,388 | $ 14,573 | $ 11,626 | 12 %",
+          "row_cells": [
+            "Subscription",
+            "$ 16,388",
+            "$ 14,573",
+            "$ 11,626",
+            "12 %"
+          ],
+          "bbox": [
+            51.13,
+            460.763,
+            563.75,
+            470.763
+          ],
+          "table_bbox": [
+            51.13,
+            460.763,
+            563.75,
+            556.263
+          ],
+          "header_context": [
+            {
+              "text": "Revenue for fiscal 2021 benefited from an extra week in the first quarter of fiscal 2021 due to our 52/53 week financial",
+              "bbox": [
+                76.5,
+                401.769,
+                564.85,
+                412.843
+              ],
+              "position": "above"
+            },
+            {
+              "text": "calendar whereby fiscal 2021 was a 53-week year compared with fiscal 2022 and 2020 which were 52-week years.",
+              "bbox": [
+                49.5,
+                413.769,
+                508.44,
+                424.843
+              ],
+              "position": "above"
+            },
+            {
+              "text": "% Change",
+              "bbox": [
+                517.02,
+                439.651,
+                553.228,
+                448.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(dollars in millions)",
+              "bbox": [
+                52.13,
+                447.651,
+                116.138,
+                456.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                351.62,
+                447.651,
+                367.62,
+                456.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                410.12,
+                447.651,
+                426.12,
+                456.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2020",
+              "bbox": [
+                468.62,
+                447.651,
+                484.62,
+                456.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022-2021",
+              "bbox": [
+                517.79,
+                447.651,
+                552.454,
+                456.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Subscription",
+              "bbox": [
+                49.5,
+                570.779,
+                100.02,
+                581.853
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "Revenue for fiscal 2021 benefited from an extra week in the first quarter of fiscal 2021 due to our 52/53 week financial\ncalendar whereby fiscal 2021 was a 53-week year compared with fiscal 2022 and 2020 which were 52-week years.\n% Change\n(dollars in millions)\n2022\n2021\n2020\n2022-2021",
+          "page_context": [
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e2",
+              "text": "• Total Digital Media ARR of approximately $13.97 billion as of December 2, 2022 increased by $1.82 billion, or 15%, from $12.15 billion as of December 3, 2021. The change in our Digital Media ARR was primarily due to new user adoption of our Creative Cloud and Document Cloud offerings, partially offset by an $87 million ARR reduction taken in March 2022 in response to the Russia-Ukraine war.",
+              "bbox": [
+                76.5,
+                61.769,
+                565.0,
+                108.843
+              ]
+            },
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e3",
+              "text": "• Creative revenue of $10.46 billion increased by $913 million, or 10%, during fiscal 2022, from $9.55 billion in fiscal 2021. Document Cloud revenue of $2.38 billion increased by $409 million, or 21%, during fiscal 2022, from $1.97 billion in fiscal 2021. The increases were primarily due to subscription revenue growth associated with our Creative Cloud and Document Cloud offerings.",
+              "bbox": [
+                76.5,
+                118.769,
+                564.98,
+                165.843
+              ]
+            },
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e4",
+              "text": "• Digital Experience revenue of $4.42 billion increased by $555 million, or 14%, during fiscal 2022, from $3.87 billion in fiscal 2021. The increase was primarily due to subscription revenue growth across our offerings.",
+              "bbox": [
+                76.5,
+                175.769,
+                564.95,
+                198.843
+              ]
+            },
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e6",
+              "text": "• Cost of revenue of $2.17 billion increased by $300 million, or 16%, during fiscal 2022, from $1.87 billion in fiscal 2021 primarily due to increases in hosting services and data center costs, as well as increases in base and incentive compensation and related benefits costs.",
+              "bbox": [
+                76.5,
+                253.769,
+                564.83,
+                288.843
+              ]
+            },
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e8",
+              "text": "• Cash flows from operations of $7.84 billion during fiscal 2022 increased by $608 million, or 8%, from $7.23 billion in fiscal 2021 primarily due to higher net income after adjustment for non-cash items.",
+              "bbox": [
+                76.5,
+                343.769,
+                564.88,
+                366.843
+              ]
+            },
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e11",
+              "text": "% Change (dollars in millions)",
+              "bbox": [
+                52.13,
+                439.651,
+                553.228,
+                456.51
+              ]
+            }
+          ],
+          "document_id": "ADBE_FY2022_annual_report-ce8c716abac2",
+          "pdf_page": 40,
+          "source_sha256": "ce8c716abac26bfa38ae6b71d703112852c8591a4bb19f7c1177beb1dfc87ad2",
+          "source_file": "ADBE_FY2022_annual_report.pdf",
+          "ticker": "ADBE",
+          "fiscal_year": 2022
+        },
+        {
+          "kind": "table",
+          "evidence_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:table1:row:1",
+          "table_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:table1",
+          "row_index": 1,
+          "row_text": "Percentage of total revenue | 93 % | 92 % | 90 % | ",
+          "row_cells": [
+            "Percentage of total revenue",
+            "93 %",
+            "92 %",
+            "90 %",
+            ""
+          ],
+          "bbox": [
+            51.13,
+            475.013,
+            563.75,
+            485.013
+          ],
+          "table_bbox": [
+            51.13,
+            460.763,
+            563.75,
+            556.263
+          ],
+          "header_context": [
+            {
+              "text": "Revenue for fiscal 2021 benefited from an extra week in the first quarter of fiscal 2021 due to our 52/53 week financial",
+              "bbox": [
+                76.5,
+                401.769,
+                564.85,
+                412.843
+              ],
+              "position": "above"
+            },
+            {
+              "text": "calendar whereby fiscal 2021 was a 53-week year compared with fiscal 2022 and 2020 which were 52-week years.",
+              "bbox": [
+                49.5,
+                413.769,
+                508.44,
+                424.843
+              ],
+              "position": "above"
+            },
+            {
+              "text": "% Change",
+              "bbox": [
+                517.02,
+                439.651,
+                553.228,
+                448.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(dollars in millions)",
+              "bbox": [
+                52.13,
+                447.651,
+                116.138,
+                456.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                351.62,
+                447.651,
+                367.62,
+                456.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                410.12,
+                447.651,
+                426.12,
+                456.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2020",
+              "bbox": [
+                468.62,
+                447.651,
+                484.62,
+                456.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022-2021",
+              "bbox": [
+                517.79,
+                447.651,
+                552.454,
+                456.51
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Subscription",
+              "bbox": [
+                49.5,
+                570.779,
+                100.02,
+                581.853
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "Revenue for fiscal 2021 benefited from an extra week in the first quarter of fiscal 2021 due to our 52/53 week financial\ncalendar whereby fiscal 2021 was a 53-week year compared with fiscal 2022 and 2020 which were 52-week years.\n% Change\n(dollars in millions)\n2022\n2021\n2020\n2022-2021",
+          "page_context": [
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e2",
+              "text": "• Total Digital Media ARR of approximately $13.97 billion as of December 2, 2022 increased by $1.82 billion, or 15%, from $12.15 billion as of December 3, 2021. The change in our Digital Media ARR was primarily due to new user adoption of our Creative Cloud and Document Cloud offerings, partially offset by an $87 million ARR reduction taken in March 2022 in response to the Russia-Ukraine war.",
+              "bbox": [
+                76.5,
+                61.769,
+                565.0,
+                108.843
+              ]
+            },
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e3",
+              "text": "• Creative revenue of $10.46 billion increased by $913 million, or 10%, during fiscal 2022, from $9.55 billion in fiscal 2021. Document Cloud revenue of $2.38 billion increased by $409 million, or 21%, during fiscal 2022, from $1.97 billion in fiscal 2021. The increases were primarily due to subscription revenue growth associated with our Creative Cloud and Document Cloud offerings.",
+              "bbox": [
+                76.5,
+                118.769,
+                564.98,
+                165.843
+              ]
+            },
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e4",
+              "text": "• Digital Experience revenue of $4.42 billion increased by $555 million, or 14%, during fiscal 2022, from $3.87 billion in fiscal 2021. The increase was primarily due to subscription revenue growth across our offerings.",
+              "bbox": [
+                76.5,
+                175.769,
+                564.95,
+                198.843
+              ]
+            },
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e6",
+              "text": "• Cost of revenue of $2.17 billion increased by $300 million, or 16%, during fiscal 2022, from $1.87 billion in fiscal 2021 primarily due to increases in hosting services and data center costs, as well as increases in base and incentive compensation and related benefits costs.",
+              "bbox": [
+                76.5,
+                253.769,
+                564.83,
+                288.843
+              ]
+            },
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e8",
+              "text": "• Cash flows from operations of $7.84 billion during fiscal 2022 increased by $608 million, or 8%, from $7.23 billion in fiscal 2021 primarily due to higher net income after adjustment for non-cash items.",
+              "bbox": [
+                76.5,
+                343.769,
+                564.88,
+                366.843
+              ]
+            },
+            {
+              "element_id": "ADBE_FY2022_annual_report-ce8c716abac2:p40:e11",
+              "text": "% Change (dollars in millions)",
+              "bbox": [
+                52.13,
+                439.651,
+                553.228,
+                456.51
+              ]
+            }
+          ],
+          "document_id": "ADBE_FY2022_annual_report-ce8c716abac2",
+          "pdf_page": 40,
+          "source_sha256": "ce8c716abac26bfa38ae6b71d703112852c8591a4bb19f7c1177beb1dfc87ad2",
+          "source_file": "ADBE_FY2022_annual_report.pdf",
+          "ticker": "ADBE",
+          "fiscal_year": 2022
+        }
+      ],
+      "reference_answer": "Subscription revenue was $16,388 million in 2022 and represented 93% of total revenue.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-013",
+      "question": "According to Intuit's FY2023 annual report, how does the QuickBooks ProAdvisor program support the accountants in Intuit's network?",
+      "ticker": "INTU",
+      "company": "Intuit",
+      "fiscal_year": 2023,
+      "sector": "Software and Cloud Services",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "INTU_FY2023_annual_report-96e3c010327f:p8:e5:chars:289:624",
+          "element_id": "INTU_FY2023_annual_report-96e3c010327f:p8:e5",
+          "quote": "To enable our network of hundreds of thousands of accountants, we offer memberships to the QuickBooks ProAdvisor program, which provides accountants access to QuickBooks Online Accountant, technical support, training, product certification, marketing tools, and discounts on Intuit products and services purchased on behalf of clients.",
+          "char_start": 289,
+          "char_end": 624,
+          "bbox": [
+            23.802,
+            200.345,
+            565.338,
+            234.201
+          ],
+          "document_id": "INTU_FY2023_annual_report-96e3c010327f",
+          "pdf_page": 8,
+          "source_sha256": "96e3c010327f88f761c40ca15d5e06404c4268bc9a66e19709fac5794cf44171",
+          "source_file": "INTU_FY2023_annual_report.pdf",
+          "ticker": "INTU",
+          "fiscal_year": 2023
+        }
+      ],
+      "reference_answer": "It provides QuickBooks Online Accountant access, technical support, training, certification, marketing tools, and discounts on products and services purchased for clients.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-014",
+      "question": "According to ServiceNow's FY2024 annual report, why can a slowdown in new or renewed subscriptions take time to affect ServiceNow's reported revenue?",
+      "ticker": "NOW",
+      "company": "ServiceNow",
+      "fiscal_year": 2024,
+      "sector": "Software and Cloud Services",
+      "type": "prose",
+      "multi_evidence": true,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "NOW_FY2024_annual_report-7022cf7db0d2:p31:e5:chars:0:483",
+          "element_id": "NOW_FY2024_annual_report-7022cf7db0d2:p31:e5",
+          "quote": "We generally recognize revenues from customers ratably over the terms of their subscriptions. Net new annual contract value from new subscriptions and expansion contracts entered into during a period can generally be expected to generate revenues for the duration of the subscription term. As a result, a significant portion of the revenues we report in each period are derived from the recognition of deferred revenues relating to subscriptions entered into during previous periods.",
+          "char_start": 0,
+          "char_end": 483,
+          "bbox": [
+            49.504,
+            162.834,
+            546.927,
+            265.574
+          ],
+          "document_id": "NOW_FY2024_annual_report-7022cf7db0d2",
+          "pdf_page": 31,
+          "source_sha256": "7022cf7db0d2338f88d573d6cdfa82b03b746af284fa46dd68395243afcd6ab2",
+          "source_file": "NOW_FY2024_annual_report.pdf",
+          "ticker": "NOW",
+          "fiscal_year": 2024
+        },
+        {
+          "kind": "prose",
+          "evidence_id": "NOW_FY2024_annual_report-7022cf7db0d2:p31:e5:chars:484:725",
+          "element_id": "NOW_FY2024_annual_report-7022cf7db0d2:p31:e5",
+          "quote": "Consequently, a decrease in new or renewed subscriptions, expansion contracts in any single reporting period will have a limited impact on our revenues for that period, but they will negatively affect our operating results in future periods.",
+          "char_start": 484,
+          "char_end": 725,
+          "bbox": [
+            49.504,
+            162.834,
+            546.927,
+            265.574
+          ],
+          "document_id": "NOW_FY2024_annual_report-7022cf7db0d2",
+          "pdf_page": 31,
+          "source_sha256": "7022cf7db0d2338f88d573d6cdfa82b03b746af284fa46dd68395243afcd6ab2",
+          "source_file": "NOW_FY2024_annual_report.pdf",
+          "ticker": "NOW",
+          "fiscal_year": 2024
+        }
+      ],
+      "reference_answer": "Subscription revenue is recognized ratably over the subscription term, so reported revenue includes deferred revenue from earlier contracts. Fewer new or renewed subscriptions have limited current-period impact but hurt future results.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-015",
+      "question": "According to Autodesk's FY2025 annual report, what does Autodesk mean by unbilled deferred revenue, and is that balance recorded as a receivable or deferred revenue under ASC 606?",
+      "ticker": "ADSK",
+      "company": "Autodesk",
+      "fiscal_year": 2025,
+      "sector": "Software and Cloud Services",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "ADSK_FY2025_annual_report-adad5a89684d:p142:e6:chars:0:441",
+          "element_id": "ADSK_FY2025_annual_report-adad5a89684d:p142:e6",
+          "quote": "Unbilled Deferred Revenue: Unbilled deferred revenue represents contractually stated or committed orders under early renewal and multi-year billing plans for subscription, services, and maintenance for which the associated deferred revenue has not been recognized. Under FASB Accounting Standards Codification (\"ASC\") Topic 606, unbilled deferred revenue is not included as a receivable or deferred revenue on our Consolidated Balance Sheet.",
+          "char_start": 0,
+          "char_end": 441,
+          "bbox": [
+            48.083,
+            206.918,
+            545.383,
+            254.886
+          ],
+          "document_id": "ADSK_FY2025_annual_report-adad5a89684d",
+          "pdf_page": 142,
+          "source_sha256": "adad5a89684de6a443f9aadf92ce83aa674ea360cf5e10b18956017de585e805",
+          "source_file": "ADSK_FY2025_annual_report.pdf",
+          "ticker": "ADSK",
+          "fiscal_year": 2025
+        }
+      ],
+      "reference_answer": "It represents contractually stated or committed orders under early-renewal and multi-year billing plans whose associated deferred revenue has not been recognized. Under ASC 606 it is not recorded as either a receivable or deferred revenue on the consolidated balance sheet.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-016",
+      "question": "According to Cadence Design Systems's FY2021 annual report, what share of annual revenue did Cadence expect to be recurring, and which products primarily generated upfront revenue?",
+      "ticker": "CDNS",
+      "company": "Cadence Design Systems",
+      "fiscal_year": 2021,
+      "sector": "Software and Cloud Services",
+      "type": "prose",
+      "multi_evidence": true,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "CDNS_FY2021_annual_report-5c804276a621:p8:e9:chars:0:113",
+          "element_id": "CDNS_FY2021_annual_report-5c804276a621:p8:e9",
+          "quote": "In any fiscal year, we expect between 85% and 90% of our annual revenue to be characterized as recurring revenue.",
+          "char_start": 0,
+          "char_end": 113,
+          "bbox": [
+            49.5,
+            198.403,
+            565.344,
+            240.857
+          ],
+          "document_id": "CDNS_FY2021_annual_report-5c804276a621",
+          "pdf_page": 8,
+          "source_sha256": "5c804276a621d6b3dc8e5d95f652424010176b69adb28be430d4d0a36dc46faa",
+          "source_file": "CDNS_FY2021_annual_report.pdf",
+          "ticker": "CDNS",
+          "fiscal_year": 2021
+        },
+        {
+          "kind": "prose",
+          "evidence_id": "CDNS_FY2021_annual_report-5c804276a621:p8:e10:chars:0:222",
+          "element_id": "CDNS_FY2021_annual_report-5c804276a621:p8:e10",
+          "quote": "The remainder of our revenue is recognized at a point in time and is characterized as up-front revenue. Up-front revenue is primarily generated by our sales of emulation and prototyping hardware and individual IP licenses.",
+          "char_start": 0,
+          "char_end": 222,
+          "bbox": [
+            49.5,
+            247.603,
+            565.335,
+            290.057
+          ],
+          "alternatives": [
+            {
+              "kind": "prose",
+              "element_id": "CDNS_FY2021_annual_report-5c804276a621:p32:e3",
+              "quote": "The remainder of our revenue is recognized at a point in time and is characterized as up-front revenue. Up-front revenue is primarily generated by our sales of emulation and prototyping hardware and individual IP licenses.",
+              "char_start": 0,
+              "char_end": 222,
+              "document_id": "CDNS_FY2021_annual_report-5c804276a621",
+              "pdf_page": 32,
+              "source_sha256": "5c804276a621d6b3dc8e5d95f652424010176b69adb28be430d4d0a36dc46faa",
+              "bbox": [
+                49.5,
+                162.653,
+                565.335,
+                205.107
+              ]
+            }
+          ],
+          "document_id": "CDNS_FY2021_annual_report-5c804276a621",
+          "pdf_page": 8,
+          "source_sha256": "5c804276a621d6b3dc8e5d95f652424010176b69adb28be430d4d0a36dc46faa",
+          "source_file": "CDNS_FY2021_annual_report.pdf",
+          "ticker": "CDNS",
+          "fiscal_year": 2021
+        }
+      ],
+      "reference_answer": "Cadence expected 85% to 90% of annual revenue to be recurring. Upfront revenue primarily came from emulation and prototyping hardware and individual IP licenses.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-017",
+      "question": "According to Amazon's FY2022 annual report, was free cash flow positive or negative in 2022, and what were the 2022 and 2021 figures in the free-cash-flow reconciliation?",
+      "ticker": "AMZN",
+      "company": "Amazon",
+      "fiscal_year": 2022,
+      "sector": "Retail and Consumer Brands",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "AMZN_FY2022_annual_report-03401abb4272:p39:table1:row:4",
+          "table_id": "AMZN_FY2022_annual_report-03401abb4272:p39:table1",
+          "row_index": 4,
+          "row_text": "Free cash flow | $ (9,069) | $ (11,569)",
+          "row_cells": [
+            "Free cash flow",
+            "$ (9,069)",
+            "$ (11,569)"
+          ],
+          "bbox": [
+            42.13,
+            132.133,
+            554.75,
+            142.803
+          ],
+          "table_bbox": [
+            42.13,
+            77.05,
+            554.75,
+            187.803
+          ],
+          "header_context": [
+            {
+              "text": "Free Cash Flow",
+              "bbox": [
+                51.75,
+                18.819,
+                116.69,
+                29.893
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Free cash flow is cash flow from operations reduced by “Purchases of property and equipment, net of proceeds from sales",
+              "bbox": [
+                65.25,
+                35.809,
+                555.03,
+                46.883
+              ],
+              "position": "above"
+            },
+            {
+              "text": "and incentives.” The following is a reconciliation of free cash flow to the most comparable GAAP cash flow measure, “Net",
+              "bbox": [
+                40.5,
+                47.809,
+                536.56,
+                58.883
+              ],
+              "position": "above"
+            },
+            {
+              "text": "cash provided by (used in) operating activities,” for 2021 and 2022 (in millions):",
+              "bbox": [
+                40.5,
+                59.809,
+                363.26,
+                70.883
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Year Ended December 31,",
+              "bbox": [
+                446.78,
+                76.191,
+                536.508,
+                85.05
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Free cash flow",
+              "bbox": [
+                43.13,
+                131.059,
+                101.95,
+                142.133
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Free Cash Flow Less Principal Repayments of Finance Leases and Financing Obligations",
+              "bbox": [
+                51.75,
+                206.319,
+                413.91,
+                217.393
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "Free Cash Flow\nFree cash flow is cash flow from operations reduced by “Purchases of property and equipment, net of proceeds from sales\nand incentives.” The following is a reconciliation of free cash flow to the most comparable GAAP cash flow measure, “Net\ncash provided by (used in) operating activities,” for 2021 and 2022 (in millions):",
+          "page_context": [
+            {
+              "element_id": "AMZN_FY2022_annual_report-03401abb4272:p39:e1",
+              "text": "Free Cash Flow Free cash flow is cash flow from operations reduced by “Purchases of property and equipment, net of proceeds from sales and incentives.” The following is a reconciliation of free cash flow to the most comparable GAAP cash flow measure, “Net cash provided by (used in) operating activities,” for 2021 and 2022 (in millions):",
+              "bbox": [
+                40.5,
+                18.819,
+                555.03,
+                70.883
+              ]
+            },
+            {
+              "element_id": "AMZN_FY2022_annual_report-03401abb4272:p39:e3",
+              "text": "Free Cash Flow Less Principal Repayments of Finance Leases and Financing Obligations Free cash flow less principal repayments of finance leases and financing obligations is free cash flow reduced by “Principal repayments of finance leases” and “Principal repayments of financing obligations.” Principal repayments of finance leases and financing obligations approximates the actual payments of cash for our finance leases and financing obligations. The following is a reconciliation of free cash flow less principal repayments of finance leases and financing obligations to the most comparable GAAP cash flow measure, “Net cash provided by (used in) operating activities,” for 2021 and 2022 (in millions):",
+              "bbox": [
+                40.5,
+                206.319,
+                552.93,
+                282.383
+              ]
+            }
+          ],
+          "document_id": "AMZN_FY2022_annual_report-03401abb4272",
+          "pdf_page": 39,
+          "source_sha256": "03401abb4272daad181f08878a2aef0382616accf4c9c8852b417b8558bae329",
+          "source_file": "AMZN_FY2022_annual_report.pdf",
+          "ticker": "AMZN",
+          "fiscal_year": 2022
+        }
+      ],
+      "reference_answer": "Free cash flow was negative: $(11,569) million in 2022 and $(9,069) million in 2021.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-018",
+      "question": "According to Walmart's FY2023 annual report, how much free cash flow did Walmart report for fiscal 2023 and fiscal 2022 in its cash-flow reconciliation?",
+      "ticker": "WMT",
+      "company": "Walmart",
+      "fiscal_year": 2023,
+      "sector": "Retail and Consumer Brands",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "WMT_FY2023_annual_report-a18c2dbbd598:p41:table1:row:2",
+          "table_id": "WMT_FY2023_annual_report-a18c2dbbd598:p41:table1",
+          "row_index": 2,
+          "row_text": "Free cash flow | $ 11,984 | $ 11,075 | $ 25,810",
+          "row_cells": [
+            "Free cash flow",
+            "$ 11,984",
+            "$ 11,075",
+            "$ 25,810"
+          ],
+          "bbox": [
+            49.045,
+            450.13,
+            541.286,
+            458.029
+          ],
+          "table_bbox": [
+            49.045,
+            428.139,
+            541.286,
+            491.104
+          ],
+          "header_context": [
+            {
+              "text": "operating activities, which we believe to be the GAAP financial measure most directly comparable to free cash flow, as well as",
+              "bbox": [
+                47.52,
+                373.199,
+                537.791,
+                384.051
+              ],
+              "position": "above"
+            },
+            {
+              "text": "information regarding net cash used in investing activities and net cash used in financing activities.",
+              "bbox": [
+                47.52,
+                384.959,
+                427.574,
+                395.811
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Fiscal Years Ended January 31,",
+              "bbox": [
+                399.677,
+                405.178,
+                503.956,
+                413.862
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(Amounts in millions)",
+              "bbox": [
+                50.045,
+                416.203,
+                116.6,
+                424.885
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023",
+              "bbox": [
+                383.635,
+                416.203,
+                398.995,
+                424.885
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                444.115,
+                416.203,
+                459.475,
+                424.885
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                504.595,
+                416.203,
+                519.955,
+                424.885
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Free cash flow",
+              "bbox": [
+                50.045,
+                449.288,
+                97.377,
+                457.97
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "(1)  \"Net cash used in investing activities\" includes payments for property and equipment, which is also included in our computation of free cash flow.",
+              "bbox": [
+                47.52,
+                494.79,
+                507.118,
+                504.52
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "operating activities, which we believe to be the GAAP financial measure most directly comparable to free cash flow, as well as\ninformation regarding net cash used in investing activities and net cash used in financing activities.\nFiscal Years Ended January 31,\n(Amounts in millions)\n2023\n2022\n2021",
+          "page_context": [
+            {
+              "element_id": "WMT_FY2023_annual_report-a18c2dbbd598:p41:e2",
+              "text": "Fiscal Years Ended January 31, (Amounts in millions)",
+              "bbox": [
+                50.045,
+                405.178,
+                503.956,
+                424.885
+              ]
+            }
+          ],
+          "document_id": "WMT_FY2023_annual_report-a18c2dbbd598",
+          "pdf_page": 41,
+          "source_sha256": "a18c2dbbd5985ff7b77ea6739abf4c1de503649ea2cede21bdab20b9ac88895e",
+          "source_file": "WMT_FY2023_annual_report.pdf",
+          "ticker": "WMT",
+          "fiscal_year": 2023
+        }
+      ],
+      "reference_answer": "Free cash flow was $11,984 million for fiscal 2023 and $11,075 million for fiscal 2022.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-019",
+      "question": "According to Costco's FY2024 annual report, what membership-fee revenue appears in the consolidated income statement for fiscal 2024 and fiscal 2023?",
+      "ticker": "COST",
+      "company": "Costco",
+      "fiscal_year": 2024,
+      "sector": "Retail and Consumer Brands",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "COST_FY2024_annual_report-bdeca9c1891f:p42:table1:row:1",
+          "table_id": "COST_FY2024_annual_report-bdeca9c1891f:p42:table1",
+          "row_index": 1,
+          "row_text": "Membership fees . . . . . . . . . . .. . . . .. . . . . .. . . . | 4,828 | 4,580 | 4,224",
+          "row_cells": [
+            "Membership fees . . . . . . . . . . .. . . . .. . . . . .. . . .",
+            "4,828",
+            "4,580",
+            "4,224"
+          ],
+          "bbox": [
+            88.757,
+            204.977,
+            526.44,
+            213.547
+          ],
+          "table_bbox": [
+            88.757,
+            190.934,
+            526.44,
+            389.589
+          ],
+          "header_context": [
+            {
+              "text": "52 Weeks Ended",
+              "bbox": [
+                290.153,
+                140.513,
+                356.621,
+                152.173
+              ],
+              "position": "above"
+            },
+            {
+              "text": "53 Weeks Ended",
+              "bbox": [
+                371.636,
+                140.513,
+                438.093,
+                152.173
+              ],
+              "position": "above"
+            },
+            {
+              "text": "52 Weeks Ended",
+              "bbox": [
+                452.988,
+                140.513,
+                519.455,
+                152.173
+              ],
+              "position": "above"
+            },
+            {
+              "text": "September 1,",
+              "bbox": [
+                296.99,
+                151.794,
+                349.851,
+                163.454
+              ],
+              "position": "above"
+            },
+            {
+              "text": "September 3,",
+              "bbox": [
+                378.353,
+                151.794,
+                431.213,
+                163.454
+              ],
+              "position": "above"
+            },
+            {
+              "text": "August 28,",
+              "bbox": [
+                464.75,
+                151.794,
+                507.777,
+                163.454
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2024",
+              "bbox": [
+                314.15,
+                160.196,
+                332.876,
+                171.856
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023",
+              "bbox": [
+                395.395,
+                160.196,
+                414.121,
+                171.856
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                476.867,
+                160.196,
+                495.593,
+                171.856
+              ],
+              "position": "above"
+            },
+            {
+              "text": "REVENUE",
+              "bbox": [
+                89.757,
+                174.357,
+                130.493,
+                186.017
+              ],
+              "position": "above"
+            },
+            {
+              "text": "NET INCOME ATTRIBUTABLE TO COSTCO . . . . $",
+              "bbox": [
+                89.757,
+                392.266,
+                291.593,
+                404.061
+              ],
+              "position": "below"
+            },
+            {
+              "text": "7,367",
+              "bbox": [
+                337.794,
+                392.552,
+                358.676,
+                403.749
+              ],
+              "position": "below"
+            },
+            {
+              "text": "$",
+              "bbox": [
+                368.274,
+                392.552,
+                372.955,
+                403.749
+              ],
+              "position": "below"
+            },
+            {
+              "text": "6,292",
+              "bbox": [
+                419.148,
+                392.552,
+                440.155,
+                403.749
+              ],
+              "position": "below"
+            },
+            {
+              "text": "$",
+              "bbox": [
+                449.746,
+                392.552,
+                454.427,
+                403.749
+              ],
+              "position": "below"
+            },
+            {
+              "text": "5,844",
+              "bbox": [
+                500.628,
+                392.552,
+                521.636,
+                403.749
+              ],
+              "position": "below"
+            },
+            {
+              "text": "NET INCOME PER COMMON SHARE",
+              "bbox": [
+                89.757,
+                405.846,
+                235.774,
+                417.506
+              ],
+              "position": "below"
+            },
+            {
+              "text": "ATTRIBUTABLE TO COSTCO:",
+              "bbox": [
+                98.278,
+                414.239,
+                218.322,
+                425.9
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "52 Weeks Ended\n53 Weeks Ended\n52 Weeks Ended\nSeptember 1,\nSeptember 3,\nAugust 28,\n2024\n2023\n2022\nREVENUE",
+          "page_context": [
+            {
+              "element_id": "COST_FY2024_annual_report-bdeca9c1891f:p42:e1",
+              "text": "COSTCO WHOLESALE CORPORATION CONSOLIDATED STATEMENTS OF INCOME (amounts in millions, except per share data)",
+              "bbox": [
+                208.077,
+                81.545,
+                404.394,
+                122.693
+              ]
+            }
+          ],
+          "document_id": "COST_FY2024_annual_report-bdeca9c1891f",
+          "pdf_page": 42,
+          "source_sha256": "bdeca9c1891ffbee65796ade60212f61f7a29790b962e15076b6159c6d288612",
+          "source_file": "COST_FY2024_annual_report.pdf",
+          "ticker": "COST",
+          "fiscal_year": 2024
+        }
+      ],
+      "reference_answer": "Membership fees were $4,828 million for fiscal 2024 (52 weeks) and $4,580 million for fiscal 2023 (53 weeks).",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-020",
+      "question": "According to Target's FY2025 annual report, what diluted EPS figures are shown for 2025 and 2024 in the five-year financial summary?",
+      "ticker": "TGT",
+      "company": "Target",
+      "fiscal_year": 2025,
+      "sector": "Retail and Consumer Brands",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "TGT_FY2025_annual_report-ad0cd2a6e7c0:p5:table1:row:13",
+          "table_id": "TGT_FY2025_annual_report-ad0cd2a6e7c0:p5:table1",
+          "row_index": 13,
+          "row_text": "Diluted earnings per share | $ 8.13 | $ 8.86 | $ 8.94 | $ 5.98 | $ 14.10",
+          "row_cells": [
+            "Diluted earnings per share",
+            "$ 8.13",
+            "$ 8.86",
+            "$ 8.94",
+            "$ 5.98",
+            "$ 14.10"
+          ],
+          "bbox": [
+            51.483,
+            271.23,
+            552.485,
+            278.88
+          ],
+          "table_bbox": [
+            51.483,
+            109.867,
+            552.485,
+            551.071
+          ],
+          "header_context": [
+            {
+              "text": "Five-Year Financial Summary",
+              "bbox": [
+                51.8,
+                36.402,
+                284.7,
+                57.822
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2025",
+              "bbox": [
+                282.448,
+                74.565,
+                299.128,
+                83.422
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2024",
+              "bbox": [
+                345.334,
+                74.565,
+                362.014,
+                83.422
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023(a)",
+              "bbox": [
+                403.493,
+                74.565,
+                424.62,
+                83.422
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                470.754,
+                74.565,
+                487.434,
+                83.422
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                533.805,
+                74.565,
+                550.485,
+                83.422
+              ],
+              "position": "above"
+            },
+            {
+              "text": "FINANCIAL RESULTS (in millions)",
+              "bbox": [
+                53.36,
+                95.977,
+                163.267,
+                104.902
+              ],
+              "position": "above"
+            },
+            {
+              "text": "FINANCIAL POSITION (in millions)",
+              "bbox": [
+                53.36,
+                294.977,
+                173.683,
+                303.902
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Common shares outstanding (in millions)",
+              "bbox": [
+                53.185,
+                454.522,
+                182.77,
+                463.38
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Operating cash flow (in millions)",
+              "bbox": [
+                53.215,
+                467.022,
+                153.37,
+                475.88
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Capital expenditures (in millions)",
+              "bbox": [
+                53.185,
+                479.522,
+                155.005,
+                488.38
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Retail square feet (in thousands)",
+              "bbox": [
+                53.337,
+                504.522,
+                155.405,
+                513.38
+              ],
+              "position": "inside"
+            }
+          ],
+          "caption": "Five-Year Financial Summary\n2025\n2024\n2023(a)\n2022\n2021\nFINANCIAL RESULTS (in millions)",
+          "page_context": [
+            {
+              "element_id": "TGT_FY2025_annual_report-ad0cd2a6e7c0:p5:e7",
+              "text": "FINANCIAL RESULTS (in millions)",
+              "bbox": [
+                53.36,
+                95.977,
+                163.267,
+                104.902
+              ]
+            }
+          ],
+          "document_id": "TGT_FY2025_annual_report-ad0cd2a6e7c0",
+          "pdf_page": 5,
+          "source_sha256": "ad0cd2a6e7c01a2e6b84525dfde0eef2d2fcde379ff17bed9bd969a140dde88c",
+          "source_file": "TGT_FY2025_annual_report.pdf",
+          "ticker": "TGT",
+          "fiscal_year": 2025
+        }
+      ],
+      "reference_answer": "Diluted earnings per share were $8.13 for 2025 and $8.86 for 2024.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-021",
+      "question": "According to Home Depot's FY2021 annual report, how were new fulfillment centers expected to improve Home Depot's delivery capabilities and store operations?",
+      "ticker": "HD",
+      "company": "Home Depot",
+      "fiscal_year": 2021,
+      "sector": "Retail and Consumer Brands",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "HD_FY2021_annual_report-76dc449be9d5:p3:e7:chars:262:604",
+          "element_id": "HD_FY2021_annual_report-76dc449be9d5:p3:e7",
+          "quote": "The new fulfillment centers enable us to expand our assortment and inventory depth, as well as offer faster and more reliable delivery options. In addition, these new facilities relieve fulfillment pressure historically placed on stores, creating a better in-store shopping experience and freeing up associates to help drive additional sales.",
+          "char_start": 262,
+          "char_end": 604,
+          "bbox": [
+            316.85,
+            594.62,
+            569.049,
+            731.28
+          ],
+          "document_id": "HD_FY2021_annual_report-76dc449be9d5",
+          "pdf_page": 3,
+          "source_sha256": "76dc449be9d518fa73a7201b05f09f54455ffcf492492d6dd0c3f982742e7c22",
+          "source_file": "HD_FY2021_annual_report.pdf",
+          "ticker": "HD",
+          "fiscal_year": 2021
+        }
+      ],
+      "reference_answer": "They expand assortment and inventory depth, offer faster and more reliable delivery, and relieve store fulfillment pressure, improving in-store shopping and freeing associates to drive sales.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-022",
+      "question": "According to Lowe's's FY2022 annual report, how did Lowe's plan to build its Pro fulfillment network using existing and new distribution assets?",
+      "ticker": "LOW",
+      "company": "Lowe's",
+      "fiscal_year": 2022,
+      "sector": "Retail and Consumer Brands",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "LOW_FY2022_annual_report-1e32cdf14d1e:p9:e10:chars:505:738",
+          "element_id": "LOW_FY2022_annual_report-1e32cdf14d1e:p9:e10",
+          "quote": "In addition, we are establishing a Pro fulfillment network across the country which will leverage a combination of our existing supply chain as well as new facilities, including our first Pro fulfillment center that opened this year.",
+          "char_start": 505,
+          "char_end": 738,
+          "bbox": [
+            33.28,
+            285.737,
+            561.261,
+            338.317
+          ],
+          "document_id": "LOW_FY2022_annual_report-1e32cdf14d1e",
+          "pdf_page": 9,
+          "source_sha256": "1e32cdf14d1e5952bdb192c7f2f90478809fd58379dfb9a079482eb332ce64fe",
+          "source_file": "LOW_FY2022_annual_report.pdf",
+          "ticker": "LOW",
+          "fiscal_year": 2022
+        }
+      ],
+      "reference_answer": "The Pro fulfillment network would combine its existing supply chain with new facilities, including its first Pro fulfillment center opened that year.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-023",
+      "question": "According to Nike's FY2023 annual report, how are NIKE Brand reportable segments organized, and where do Jordan and NIKE Direct results fit?",
+      "ticker": "NKE",
+      "company": "Nike",
+      "fiscal_year": 2023,
+      "sector": "Retail and Consumer Brands",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "NKE_FY2023_annual_report-51f5a0fc6ede:p6:e6:chars:250:576",
+          "element_id": "NKE_FY2023_annual_report-51f5a0fc6ede:p6:e6",
+          "quote": "The Company's reportable operating segments for the NIKE Brand are: North America; Europe, Middle East & Africa (\"EMEA\"); Greater China; and Asia Pacific & Latin America (\"APLA\"), and include results for the NIKE and Jordan brands. Sales through our NIKE Direct operations are managed within each geographic operating segment.",
+          "char_start": 250,
+          "char_end": 576,
+          "bbox": [
+            52.984,
+            270.101,
+            536.286,
+            323.797
+          ],
+          "document_id": "NKE_FY2023_annual_report-51f5a0fc6ede",
+          "pdf_page": 6,
+          "source_sha256": "51f5a0fc6ede20de4f5cfdeae8791a57bdd65c95db2ceb263eb120696ff90172",
+          "source_file": "NKE_FY2023_annual_report.pdf",
+          "ticker": "NKE",
+          "fiscal_year": 2023
+        }
+      ],
+      "reference_answer": "The geographic segments are North America, EMEA, Greater China, and APLA. They include NIKE and Jordan results, and NIKE Direct sales are managed within each geographic operating segment.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-024",
+      "question": "According to Starbucks's FY2024 annual report, what share of fiscal 2024 revenue came from each of Starbucks' three reportable segments?",
+      "ticker": "SBUX",
+      "company": "Starbucks",
+      "fiscal_year": 2024,
+      "sector": "Retail and Consumer Brands",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "SBUX_FY2024_annual_report-3a4ed724de13:p11:e3:chars:337:527",
+          "element_id": "SBUX_FY2024_annual_report-3a4ed724de13:p11:e3",
+          "quote": "Revenues from our reportable operating segments as a percentage of total net revenues for fiscal 2024 were as follows: North America (75%), International (20%), and Channel Development (5%).",
+          "char_start": 337,
+          "char_end": 527,
+          "bbox": [
+            52.001,
+            96.54,
+            550.636,
+            154.54
+          ],
+          "document_id": "SBUX_FY2024_annual_report-3a4ed724de13",
+          "pdf_page": 11,
+          "source_sha256": "3a4ed724de138fc492b156247da500bdeb3c64ea295ab31772990ccf4e66ea5e",
+          "source_file": "SBUX_FY2024_annual_report.pdf",
+          "ticker": "SBUX",
+          "fiscal_year": 2024
+        }
+      ],
+      "reference_answer": "North America accounted for 75%, International 20%, and Channel Development 5% of total net revenues.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-025",
+      "question": "According to Coca-Cola's FY2025 annual report, what was 2025 net income attributable to Coca-Cola shareowners in the consolidated income statement?",
+      "ticker": "KO",
+      "company": "Coca-Cola",
+      "fiscal_year": 2025,
+      "sector": "Food, Beverages, and Household Products",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "KO_FY2025_annual_report-3cf15f041ac3:p63:table1:row:14",
+          "table_id": "KO_FY2025_annual_report-3cf15f041ac3:p63:table1",
+          "row_index": 14,
+          "row_text": "Net Income Attributable to Shareowners of The Coca-Cola Company | $ | 13,107 | $ | 10,631 | $ | 10,714",
+          "row_cells": [
+            "Net Income Attributable to Shareowners of The Coca-Cola Company",
+            "$",
+            "13,107",
+            "$",
+            "10,631",
+            "$",
+            "10,714"
+          ],
+          "bbox": [
+            23.55,
+            273.573,
+            587.361,
+            285.149
+          ],
+          "table_bbox": [
+            23.55,
+            125.161,
+            587.361,
+            340.949
+          ],
+          "header_context": [
+            {
+              "text": "THE COCA-COLA COMPANY AND SUBSIDIARIES",
+              "bbox": [
+                211.875,
+                65.619,
+                399.824,
+                74.476
+              ],
+              "position": "above"
+            },
+            {
+              "text": "CONSOLIDATED STATEMENTS OF INCOME",
+              "bbox": [
+                221.681,
+                75.221,
+                390.011,
+                84.078
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(In millions except per share data)",
+              "bbox": [
+                251.109,
+                84.822,
+                360.579,
+                93.679
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Year Ended December 31,",
+              "bbox": [
+                24.347,
+                116.25,
+                91.519,
+                123.333
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2025",
+              "bbox": [
+                441.656,
+                116.25,
+                454.445,
+                123.333
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2024",
+              "bbox": [
+                508.078,
+                116.25,
+                520.867,
+                123.333
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023",
+              "bbox": [
+                574.566,
+                116.25,
+                587.354,
+                123.333
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Consolidated Net Income",
+              "bbox": [
+                24.347,
+                253.42,
+                110.534,
+                262.277
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "1",
+              "bbox": [
+                23.55,
+                348.177,
+                27.059,
+                353.36
+              ],
+              "position": "below"
+            },
+            {
+              "text": "Calculated based on net income attributable to shareowners of The Coca-Cola Company.",
+              "bbox": [
+                27.066,
+                348.33,
+                282.789,
+                356.304
+              ],
+              "position": "below"
+            },
+            {
+              "text": "Refer to Notes to Consolidated Financial Statements.",
+              "bbox": [
+                23.55,
+                361.42,
+                193.453,
+                370.277
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "THE COCA-COLA COMPANY AND SUBSIDIARIES\nCONSOLIDATED STATEMENTS OF INCOME\n(In millions except per share data)\nYear Ended December 31,\n2025\n2024\n2023",
+          "page_context": [
+            {
+              "element_id": "KO_FY2025_annual_report-3cf15f041ac3:p63:e2",
+              "text": "(In millions except per share data)",
+              "bbox": [
+                251.109,
+                84.822,
+                360.579,
+                93.679
+              ]
+            }
+          ],
+          "document_id": "KO_FY2025_annual_report-3cf15f041ac3",
+          "pdf_page": 63,
+          "source_sha256": "3cf15f041ac30a094d868f383272d5129762dc4ef457413b95dcdae09e560015",
+          "source_file": "KO_FY2025_annual_report.pdf",
+          "ticker": "KO",
+          "fiscal_year": 2025
+        }
+      ],
+      "reference_answer": "Net income attributable to shareowners of The Coca-Cola Company was $13,107 million for 2025.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-026",
+      "question": "According to PepsiCo's FY2021 annual report, what were diluted earnings per common share in 2021 and 2020 according to the consolidated income statement?",
+      "ticker": "PEP",
+      "company": "PepsiCo",
+      "fiscal_year": 2021,
+      "sector": "Food, Beverages, and Household Products",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "PEP_FY2021_annual_report-9871aabb5020:p72:table1:row:15",
+          "table_id": "PEP_FY2021_annual_report-9871aabb5020:p72:table1",
+          "row_index": 15,
+          "row_text": "Diluted | $ 5.49 | $ 5.12 | $ 5.20",
+          "row_cells": [
+            "Diluted",
+            "$ 5.49",
+            "$ 5.12",
+            "$ 5.20"
+          ],
+          "bbox": [
+            58.384,
+            310.32,
+            518.753,
+            321.952
+          ],
+          "table_bbox": [
+            58.384,
+            98.554,
+            518.753,
+            364.46
+          ],
+          "header_context": [
+            {
+              "text": "Fiscal years ended December 25, 2021, December 26, 2020 and December 28, 2019",
+              "bbox": [
+                57.15,
+                52.011,
+                423.144,
+                66.202
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(in millions except per share amounts)",
+              "bbox": [
+                57.15,
+                64.971,
+                223.027,
+                79.162
+              ],
+              "position": "above"
+            },
+            {
+              "text": "See accompanying notes to the consolidated financial statements.",
+              "bbox": [
+                57.15,
+                375.197,
+                339.71,
+                389.389
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "Fiscal years ended December 25, 2021, December 26, 2020 and December 28, 2019\n(in millions except per share amounts)",
+          "page_context": [
+            {
+              "element_id": "PEP_FY2021_annual_report-9871aabb5020:p72:e2",
+              "text": "Fiscal years ended December 25, 2021, December 26, 2020 and December 28, 2019 (in millions except per share amounts)",
+              "bbox": [
+                57.15,
+                52.011,
+                423.144,
+                79.162
+              ]
+            }
+          ],
+          "document_id": "PEP_FY2021_annual_report-9871aabb5020",
+          "pdf_page": 72,
+          "source_sha256": "9871aabb5020f049334a7401df3aa94e45f842d86a4d52943f74dd55a947eb93",
+          "source_file": "PEP_FY2021_annual_report.pdf",
+          "ticker": "PEP",
+          "fiscal_year": 2021
+        }
+      ],
+      "reference_answer": "Diluted net income attributable to PepsiCo per common share was $5.49 in 2021 and $5.12 in 2020.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-027",
+      "question": "According to Procter & Gamble's FY2022 annual report, what were net sales for fiscal 2022 and fiscal 2021 in the summary of 2022 results?",
+      "ticker": "PG",
+      "company": "Procter & Gamble",
+      "fiscal_year": 2022,
+      "sector": "Food, Beverages, and Household Products",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "PG_FY2022_annual_report-85e6170943b3:p29:table1:row:0",
+          "table_id": "PG_FY2022_annual_report-85e6170943b3:p29:table1",
+          "row_index": 0,
+          "row_text": "Net sales | $ 80,187 |  | $ 76,118 |  | 5 %",
+          "row_cells": [
+            "Net sales",
+            "$ 80,187",
+            "",
+            "$ 76,118",
+            "",
+            "5 %"
+          ],
+          "bbox": [
+            48.231,
+            78.463,
+            558.875,
+            92.28
+          ],
+          "table_bbox": [
+            48.231,
+            78.463,
+            558.875,
+            174.8
+          ],
+          "header_context": [
+            {
+              "text": "SUMMARY OF 2022 RESULTS",
+              "bbox": [
+                49.525,
+                41.62,
+                188.58,
+                52.69
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Change vs. Prior",
+              "bbox": [
+                501.95,
+                60.848,
+                557.788,
+                69.15
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Amounts in millions, except per share amounts",
+              "bbox": [
+                49.525,
+                62.838,
+                202.83,
+                76.122
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                390.18,
+                62.838,
+                408.17,
+                76.122
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                454.7,
+                62.838,
+                472.7,
+                76.122
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Year",
+              "bbox": [
+                520.98,
+                65.838,
+                539.73,
+                79.122
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Cash flow from operating activities",
+              "bbox": [
+                49.525,
+                161.108,
+                187.08,
+                174.392
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "•",
+              "bbox": [
+                49.525,
+                186.03,
+                55.805,
+                197.24
+              ],
+              "position": "below"
+            },
+            {
+              "text": "Net sales increased 5% to $80.2 billion on a 2% increase",
+              "bbox": [
+                67.525,
+                186.17,
+                297.115,
+                197.24
+              ],
+              "position": "below"
+            },
+            {
+              "text": "other written and oral communications.  All such statements,",
+              "bbox": [
+                317.38,
+                186.17,
+                564.88,
+                197.24
+              ],
+              "position": "below"
+            },
+            {
+              "text": "in unit volume.  Unfavorable foreign exchange had a",
+              "bbox": [
+                67.525,
+                198.17,
+                297.085,
+                209.24
+              ],
+              "position": "below"
+            },
+            {
+              "text": "except for historical and present factual information, are",
+              "bbox": [
+                317.38,
+                198.17,
+                565.15,
+                209.24
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "SUMMARY OF 2022 RESULTS\nChange vs. Prior\nAmounts in millions, except per share amounts\n2022\n2021\nYear",
+          "page_context": [
+            {
+              "element_id": "PG_FY2022_annual_report-85e6170943b3:p29:e3",
+              "text": "Amounts in millions, except per share amounts",
+              "bbox": [
+                49.525,
+                62.838,
+                202.83,
+                76.122
+              ]
+            },
+            {
+              "element_id": "PG_FY2022_annual_report-85e6170943b3:p29:e9",
+              "text": "• Operating income decreased $0.2 billion, or 1% versus year ago to $17.8 billion, as the increase in net sales was more than offset by a decrease in operating margin. • Net earnings increased $0.4 billion or 3% versus year ago to $14.8 billion, due to a prior year loss on early debt extinguishment, lower taxes and interest expense in the current year.  Foreign exchange impacts negatively affected net earnings by approximately $274 million. • Net earnings attributable to Procter & Gamble were $14.7 billion, an increase of $0.4 billion or 3% versus the prior year primarily due to the increase in net earnings.",
+              "bbox": [
+                49.525,
+                357.07,
+                297.36,
+                506.31
+              ]
+            }
+          ],
+          "document_id": "PG_FY2022_annual_report-85e6170943b3",
+          "pdf_page": 29,
+          "source_sha256": "85e6170943b3d4d48f30c87068ef989fb6e456cae910e807623255b82d21b307",
+          "source_file": "PG_FY2022_annual_report.pdf",
+          "ticker": "PG",
+          "fiscal_year": 2022
+        }
+      ],
+      "reference_answer": "Net sales were $80,187 million in 2022 and $76,118 million in 2021.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-028",
+      "question": "According to Colgate-Palmolive's FY2023 annual report, what net income was attributable to Colgate-Palmolive shareholders in 2023 and 2022?",
+      "ticker": "CL",
+      "company": "Colgate-Palmolive",
+      "fiscal_year": 2023,
+      "sector": "Food, Beverages, and Household Products",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "CL_FY2023_annual_report-10d62a709cec:p76:table1:row:13",
+          "table_id": "CL_FY2023_annual_report-10d62a709cec:p76:table1",
+          "row_index": 13,
+          "row_text": "Net income attributable to Colgate-Palmolive Company | $ | 2,300 |  | $ | 1,785 |  | $ | 2,166",
+          "row_cells": [
+            "Net income attributable to Colgate-Palmolive Company",
+            "$",
+            "2,300",
+            "",
+            "$",
+            "1,785",
+            "",
+            "$",
+            "2,166"
+          ],
+          "bbox": [
+            33.084,
+            212.459,
+            561.054,
+            221.503
+          ],
+          "table_bbox": [
+            33.084,
+            108.88,
+            561.054,
+            240.758
+          ],
+          "header_context": [
+            {
+              "text": "COLGATE-PALMOLIVE COMPANY",
+              "bbox": [
+                248.322,
+                61.745,
+                346.212,
+                67.705
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Consolidated Statements of Income",
+              "bbox": [
+                246.717,
+                72.292,
+                347.934,
+                78.252
+              ],
+              "position": "above"
+            },
+            {
+              "text": "For the years ended December 31,",
+              "bbox": [
+                248.551,
+                82.835,
+                345.48,
+                88.795
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(Dollars in Millions Except Per Share Amounts)",
+              "bbox": [
+                234.798,
+                93.378,
+                358.495,
+                99.338
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023",
+              "bbox": [
+                382.645,
+                102.089,
+                395.863,
+                108.049
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                452.328,
+                102.089,
+                465.546,
+                108.049
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                522.24,
+                102.089,
+                535.458,
+                108.049
+              ],
+              "position": "above"
+            }
+          ],
+          "caption": "COLGATE-PALMOLIVE COMPANY\nConsolidated Statements of Income\nFor the years ended December 31,\n(Dollars in Millions Except Per Share Amounts)\n2023\n2022\n2021",
+          "page_context": [
+            {
+              "element_id": "CL_FY2023_annual_report-10d62a709cec:p76:e2",
+              "text": "(Dollars in Millions Except Per Share Amounts)",
+              "bbox": [
+                234.798,
+                93.378,
+                358.495,
+                99.338
+              ]
+            }
+          ],
+          "document_id": "CL_FY2023_annual_report-10d62a709cec",
+          "pdf_page": 76,
+          "source_sha256": "10d62a709cec9dc192ac071e63b29bfda3348e54443fe6cf292a7b775f4aed6b",
+          "source_file": "CL_FY2023_annual_report.pdf",
+          "ticker": "CL",
+          "fiscal_year": 2023
+        }
+      ],
+      "reference_answer": "Net income attributable to Colgate-Palmolive Company was $2,300 million in 2023 and $1,785 million in 2022.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-029",
+      "question": "According to Kimberly-Clark's FY2024 annual report, what were Kimberly-Clark's three segments after the realignment, and did the change alter previously reported consolidated results?",
+      "ticker": "KMB",
+      "company": "Kimberly-Clark",
+      "fiscal_year": 2024,
+      "sector": "Food, Beverages, and Household Products",
+      "type": "prose",
+      "multi_evidence": true,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "KMB_FY2024_annual_report-cf76c4115ec1:p3:e9:chars:214:483",
+          "element_id": "KMB_FY2024_annual_report-cf76c4115ec1:p3:e9",
+          "quote": "As a result of this realignment, we manage and report our operations through three reportable segments defined by geographic regions and product groupings: North America (\"NA\"), International Personal Care (\"IPC\") and International Family Care and Professional (\"IFP\").",
+          "char_start": 214,
+          "char_end": 483,
+          "bbox": [
+            16.4,
+            397.104,
+            577.992,
+            482.757
+          ],
+          "alternatives": [
+            {
+              "kind": "prose",
+              "element_id": "KMB_FY2024_annual_report-cf76c4115ec1:p43:e4",
+              "quote": "As a result of this realignment, we manage and report our operations through three reportable segments defined by geographic regions and product groupings: North America (\"NA\"), International Personal Care (\"IPC\") and International Family Care and Professional (\"IFP\").",
+              "char_start": 213,
+              "char_end": 482,
+              "document_id": "KMB_FY2024_annual_report-cf76c4115ec1",
+              "pdf_page": 43,
+              "source_sha256": "cf76c4115ec1db7aa25f2bd8a206515eee6c21d205a273bed0031b67cf89bc47",
+              "bbox": [
+                16.4,
+                200.011,
+                577.969,
+                274.86
+              ]
+            }
+          ],
+          "document_id": "KMB_FY2024_annual_report-cf76c4115ec1",
+          "pdf_page": 3,
+          "source_sha256": "cf76c4115ec1db7aa25f2bd8a206515eee6c21d205a273bed0031b67cf89bc47",
+          "source_file": "KMB_FY2024_annual_report.pdf",
+          "ticker": "KMB",
+          "fiscal_year": 2024
+        },
+        {
+          "kind": "prose",
+          "evidence_id": "KMB_FY2024_annual_report-cf76c4115ec1:p3:e9:chars:839:1000",
+          "element_id": "KMB_FY2024_annual_report-cf76c4115ec1:p3:e9",
+          "quote": "These changes had no impact on our previously reported consolidated net sales, operating profit, net income attributable to Kimberly-Clark or earnings per share.",
+          "char_start": 839,
+          "char_end": 1000,
+          "bbox": [
+            16.4,
+            397.104,
+            577.992,
+            482.757
+          ],
+          "alternatives": [
+            {
+              "kind": "prose",
+              "element_id": "KMB_FY2024_annual_report-cf76c4115ec1:p21:e1",
+              "quote": "These changes had no impact on our previously reported consolidated net sales, operating profit, net income attributable to Kimberly-Clark or earnings per share.",
+              "char_start": 937,
+              "char_end": 1098,
+              "document_id": "KMB_FY2024_annual_report-cf76c4115ec1",
+              "pdf_page": 21,
+              "source_sha256": "cf76c4115ec1db7aa25f2bd8a206515eee6c21d205a273bed0031b67cf89bc47",
+              "bbox": [
+                16.4,
+                79.855,
+                577.983,
+                189.807
+              ]
+            }
+          ],
+          "document_id": "KMB_FY2024_annual_report-cf76c4115ec1",
+          "pdf_page": 3,
+          "source_sha256": "cf76c4115ec1db7aa25f2bd8a206515eee6c21d205a273bed0031b67cf89bc47",
+          "source_file": "KMB_FY2024_annual_report.pdf",
+          "ticker": "KMB",
+          "fiscal_year": 2024
+        }
+      ],
+      "reference_answer": "The segments became North America, International Personal Care, and International Family Care and Professional. The changes did not affect previously reported consolidated net sales, operating profit, net income attributable to Kimberly-Clark, or EPS.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-030",
+      "question": "According to Mondelez International's FY2025 annual report, how does Mondelez respond to higher commodity costs and currency effects, and why is hedging not complete protection?",
+      "ticker": "MDLZ",
+      "company": "Mondelez International",
+      "fiscal_year": 2025,
+      "sector": "Food, Beverages, and Household Products",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "MDLZ_FY2025_annual_report-55c98e69b325:p11:e4:chars:520:992",
+          "element_id": "MDLZ_FY2025_annual_report-55c98e69b325:p11:e4",
+          "quote": "We address higher commodity costs and currency impacts primarily through hedging, higher pricing and manufacturing and overhead cost control. We use hedging techniques to limit the impact of ﬂuctuations in the cost of our principal raw materials; however, we may not be able to fully hedge against commodity cost changes, such as dairy, where there is a limited ability to hedge, and our hedging strategies may not protect us from increases in specific raw material costs.",
+          "char_start": 520,
+          "char_end": 992,
+          "bbox": [
+            33.296,
+            187.081,
+            561.929,
+            248.829
+          ],
+          "document_id": "MDLZ_FY2025_annual_report-55c98e69b325",
+          "pdf_page": 11,
+          "source_sha256": "55c98e69b3251df9f1d2dff896df2d5355327531d418f0440ad372160bb96f46",
+          "source_file": "MDLZ_FY2025_annual_report.pdf",
+          "ticker": "MDLZ",
+          "fiscal_year": 2025
+        }
+      ],
+      "reference_answer": "It uses hedging, higher prices, and manufacturing and overhead cost control. Some commodities, such as dairy, have limited hedging options, and hedges may not protect against all raw-material cost increases.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-031",
+      "question": "According to General Mills's FY2021 annual report, which five operating segments did General Mills use to review financial performance in fiscal 2021?",
+      "ticker": "GIS",
+      "company": "General Mills",
+      "fiscal_year": 2021,
+      "sector": "Food, Beverages, and Household Products",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "GIS_FY2021_annual_report-d53e994570fe:p6:e5:chars:0:196",
+          "element_id": "GIS_FY2021_annual_report-d53e994570fe:p6:e5",
+          "quote": "We manage and review the financial results of our business under five operating segments: North America Retail; Convenience Stores & Foodservice; Europe & Australia; Asia & Latin America; and Pet.",
+          "char_start": 0,
+          "char_end": 196,
+          "bbox": [
+            39.0,
+            170.704,
+            554.526,
+            206.844
+          ],
+          "document_id": "GIS_FY2021_annual_report-d53e994570fe",
+          "pdf_page": 6,
+          "source_sha256": "d53e994570fe51eb815b83e82409f518d6b85b8ad53056c4a2d82018c43a6c56",
+          "source_file": "GIS_FY2021_annual_report.pdf",
+          "ticker": "GIS",
+          "fiscal_year": 2021
+        }
+      ],
+      "reference_answer": "North America Retail; Convenience Stores & Foodservice; Europe & Australia; Asia & Latin America; and Pet.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-032",
+      "question": "According to Kraft Heinz's FY2022 annual report, what changed in Kraft Heinz's regional reporting during 2022, what was the purpose, and were prior periods updated?",
+      "ticker": "KHC",
+      "company": "Kraft Heinz",
+      "fiscal_year": 2022,
+      "sector": "Food, Beverages, and Household Products",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "KHC_FY2022_annual_report-0d87f26308a5:p6:e8:chars:0:606",
+          "element_id": "KHC_FY2022_annual_report-0d87f26308a5:p6:e8",
+          "quote": "Reportable Segments: In the second quarter of 2022, our internal reporting and reportable segments changed. We combined our United States and Canada zones to form the North America zone as a result of previously announced organizational changes, which are intended to advance and support our long-term growth plans by streamlining and synergizing our United States and Canada businesses. Subsequently, we manage and report our operating results through two reportable segments defined by geographic region: North America and International. We have reflected this change in all historical periods presented.",
+          "char_start": 0,
+          "char_end": 606,
+          "bbox": [
+            49.5,
+            324.859,
+            565.0,
+            396.093
+          ],
+          "document_id": "KHC_FY2022_annual_report-0d87f26308a5",
+          "pdf_page": 6,
+          "source_sha256": "0d87f26308a5ea02880702f09d783aa7d33455b7c303b917e71cebef90a0dd71",
+          "source_file": "KHC_FY2022_annual_report.pdf",
+          "ticker": "KHC",
+          "fiscal_year": 2022
+        }
+      ],
+      "reference_answer": "The United States and Canada zones were combined into North America to streamline and synergize those businesses and support long-term growth. North America and International became the two reportable segments, and all historical periods presented were updated.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-033",
+      "question": "According to Caterpillar's FY2023 annual report, how much did Machinery, Energy & Transportation sales and Financial Products revenues each contribute in 2023?",
+      "ticker": "CAT",
+      "company": "Caterpillar",
+      "fiscal_year": 2023,
+      "sector": "Industrial and Machinery Companies",
+      "type": "table",
+      "multi_evidence": true,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "CAT_FY2023_annual_report-5b32036257b2:p51:table1:row:0",
+          "table_id": "CAT_FY2023_annual_report-5b32036257b2:p51:table1",
+          "row_index": 0,
+          "row_text": "Sales of Machinery, Energy & Transportation | $ 63,869 | $ 56,574 | $ 48,188",
+          "row_cells": [
+            "Sales of Machinery, Energy & Transportation",
+            "$ 63,869",
+            "$ 56,574",
+            "$ 48,188"
+          ],
+          "bbox": [
+            43.504,
+            113.031,
+            548.378,
+            121.531
+          ],
+          "table_bbox": [
+            43.504,
+            113.031,
+            548.378,
+            466.912
+          ],
+          "header_context": [
+            {
+              "text": "Consolidated Results of Operations for the Years Ended December 31,",
+              "bbox": [
+                44.504,
+                55.516,
+                296.385,
+                66.487
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(Dollars in millions except per share data)",
+              "bbox": [
+                44.787,
+                72.267,
+                155.638,
+                80.19
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                454.129,
+                85.686,
+                467.982,
+                95.35
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                515.074,
+                85.686,
+                528.927,
+                95.35
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023",
+              "bbox": [
+                392.05,
+                85.842,
+                405.903,
+                95.35
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Sales and revenues:",
+              "bbox": [
+                44.787,
+                99.083,
+                118.529,
+                108.35
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Consolidated profit before taxes",
+              "bbox": [
+                44.504,
+                310.121,
+                165.404,
+                319.387
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Profit of consolidated companies",
+              "bbox": [
+                48.756,
+                338.338,
+                164.336,
+                347.752
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Profit of consolidated and affiliated companies",
+              "bbox": [
+                44.504,
+                366.851,
+                218.896,
+                376.117
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "513.6",
+              "bbox": [
+                404.969,
+                470.284,
+                426.653,
+                481.095
+              ],
+              "position": "below"
+            },
+            {
+              "text": "530.4",
+              "bbox": [
+                465.914,
+                470.315,
+                487.598,
+                480.697
+              ],
+              "position": "below"
+            },
+            {
+              "text": "548.5",
+              "bbox": [
+                526.859,
+                470.315,
+                548.543,
+                480.697
+              ],
+              "position": "below"
+            },
+            {
+              "text": "- Diluted 2",
+              "bbox": [
+                48.756,
+                471.129,
+                84.933,
+                480.396
+              ],
+              "position": "below"
+            },
+            {
+              "text": "Profit attributable to common shareholders.",
+              "bbox": [
+                58.677,
+                484.665,
+                176.54,
+                493.688
+              ],
+              "position": "below"
+            },
+            {
+              "text": "1",
+              "bbox": [
+                44.504,
+                485.148,
+                47.416,
+                490.408
+              ],
+              "position": "below"
+            },
+            {
+              "text": "Diluted by assumed exercise of stock-based compensation awards using the treasury stock method.",
+              "bbox": [
+                58.677,
+                494.515,
+                328.565,
+                503.538
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "Consolidated Results of Operations for the Years Ended December 31,\n(Dollars in millions except per share data)\n2022\n2021\n2023\nSales and revenues:",
+          "page_context": [
+            {
+              "element_id": "CAT_FY2023_annual_report-5b32036257b2:p51:e2",
+              "text": "(Dollars in millions except per share data)",
+              "bbox": [
+                44.787,
+                72.267,
+                155.638,
+                80.19
+              ]
+            }
+          ],
+          "document_id": "CAT_FY2023_annual_report-5b32036257b2",
+          "pdf_page": 51,
+          "source_sha256": "5b32036257b21b26809aa985df8b17a2d8ebaf256b3f8b369dc6b30d3b2a6d84",
+          "source_file": "CAT_FY2023_annual_report.pdf",
+          "ticker": "CAT",
+          "fiscal_year": 2023
+        },
+        {
+          "kind": "table",
+          "evidence_id": "CAT_FY2023_annual_report-5b32036257b2:p51:table1:row:1",
+          "table_id": "CAT_FY2023_annual_report-5b32036257b2:p51:table1",
+          "row_index": 1,
+          "row_text": "Revenues of Financial Products | 3,191 | 2,853 | 2,783",
+          "row_cells": [
+            "Revenues of Financial Products",
+            "3,191",
+            "2,853",
+            "2,783"
+          ],
+          "bbox": [
+            43.504,
+            127.214,
+            548.378,
+            135.713
+          ],
+          "table_bbox": [
+            43.504,
+            113.031,
+            548.378,
+            466.912
+          ],
+          "header_context": [
+            {
+              "text": "Consolidated Results of Operations for the Years Ended December 31,",
+              "bbox": [
+                44.504,
+                55.516,
+                296.385,
+                66.487
+              ],
+              "position": "above"
+            },
+            {
+              "text": "(Dollars in millions except per share data)",
+              "bbox": [
+                44.787,
+                72.267,
+                155.638,
+                80.19
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                454.129,
+                85.686,
+                467.982,
+                95.35
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                515.074,
+                85.686,
+                528.927,
+                95.35
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023",
+              "bbox": [
+                392.05,
+                85.842,
+                405.903,
+                95.35
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Sales and revenues:",
+              "bbox": [
+                44.787,
+                99.083,
+                118.529,
+                108.35
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Consolidated profit before taxes",
+              "bbox": [
+                44.504,
+                310.121,
+                165.404,
+                319.387
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Profit of consolidated companies",
+              "bbox": [
+                48.756,
+                338.338,
+                164.336,
+                347.752
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Profit of consolidated and affiliated companies",
+              "bbox": [
+                44.504,
+                366.851,
+                218.896,
+                376.117
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "513.6",
+              "bbox": [
+                404.969,
+                470.284,
+                426.653,
+                481.095
+              ],
+              "position": "below"
+            },
+            {
+              "text": "530.4",
+              "bbox": [
+                465.914,
+                470.315,
+                487.598,
+                480.697
+              ],
+              "position": "below"
+            },
+            {
+              "text": "548.5",
+              "bbox": [
+                526.859,
+                470.315,
+                548.543,
+                480.697
+              ],
+              "position": "below"
+            },
+            {
+              "text": "- Diluted 2",
+              "bbox": [
+                48.756,
+                471.129,
+                84.933,
+                480.396
+              ],
+              "position": "below"
+            },
+            {
+              "text": "Profit attributable to common shareholders.",
+              "bbox": [
+                58.677,
+                484.665,
+                176.54,
+                493.688
+              ],
+              "position": "below"
+            },
+            {
+              "text": "1",
+              "bbox": [
+                44.504,
+                485.148,
+                47.416,
+                490.408
+              ],
+              "position": "below"
+            },
+            {
+              "text": "Diluted by assumed exercise of stock-based compensation awards using the treasury stock method.",
+              "bbox": [
+                58.677,
+                494.515,
+                328.565,
+                503.538
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "Consolidated Results of Operations for the Years Ended December 31,\n(Dollars in millions except per share data)\n2022\n2021\n2023\nSales and revenues:",
+          "page_context": [
+            {
+              "element_id": "CAT_FY2023_annual_report-5b32036257b2:p51:e2",
+              "text": "(Dollars in millions except per share data)",
+              "bbox": [
+                44.787,
+                72.267,
+                155.638,
+                80.19
+              ]
+            }
+          ],
+          "document_id": "CAT_FY2023_annual_report-5b32036257b2",
+          "pdf_page": 51,
+          "source_sha256": "5b32036257b21b26809aa985df8b17a2d8ebaf256b3f8b369dc6b30d3b2a6d84",
+          "source_file": "CAT_FY2023_annual_report.pdf",
+          "ticker": "CAT",
+          "fiscal_year": 2023
+        }
+      ],
+      "reference_answer": "Sales of Machinery, Energy & Transportation were $63,869 million and revenues of Financial Products were $3,191 million in 2023.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-034",
+      "question": "According to Deere & Company's FY2024 annual report, what operating cash-flow figures are displayed for 2024 and 2023 in the cash-flows summary?",
+      "ticker": "DE",
+      "company": "Deere & Company",
+      "fiscal_year": 2024,
+      "sector": "Industrial and Machinery Companies",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "DE_FY2024_annual_report-ef14ad6dbbe8:p35:table1:row:0",
+          "table_id": "DE_FY2024_annual_report-ef14ad6dbbe8:p35:table1",
+          "row_index": 0,
+          "row_text": "Net cash provided by operating activities | $ 9,231 | $ 8,589 | $ 4,699",
+          "row_cells": [
+            "Net cash provided by operating activities",
+            "$ 9,231",
+            "$ 8,589",
+            "$ 4,699"
+          ],
+          "bbox": [
+            44.36,
+            191.378,
+            298.012,
+            200.378
+          ],
+          "table_bbox": [
+            44.36,
+            191.378,
+            298.012,
+            278.738
+          ],
+          "header_context": [
+            {
+              "text": "CASH FLOWS",
+              "bbox": [
+                86.52,
+                148.631,
+                140.504,
+                160.785
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2024, 2023, and 2022",
+              "bbox": [
+                199.16,
+                148.631,
+                279.044,
+                160.785
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2024",
+              "bbox": [
+                192.62,
+                176.801,
+                212.786,
+                187.718
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2023",
+              "bbox": [
+                231.62,
+                176.801,
+                251.126,
+                187.718
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2022",
+              "bbox": [
+                269.66,
+                176.801,
+                289.406,
+                187.718
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Cash inflows from operating activities were $9.2 billion in 2024,",
+              "bbox": [
+                45.36,
+                288.911,
+                282.978,
+                301.065
+              ],
+              "position": "below"
+            },
+            {
+              "text": "driven by net income adjusted for non-cash provisions and lower",
+              "bbox": [
+                45.36,
+                301.031,
+                289.006,
+                313.185
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "CASH FLOWS\n2024, 2023, and 2022\n2024\n2023\n2022",
+          "page_context": [],
+          "document_id": "DE_FY2024_annual_report-ef14ad6dbbe8",
+          "pdf_page": 35,
+          "source_sha256": "ef14ad6dbbe85698882d610cd9b4bc0ac3e7a8a59cbb7cd842091b2c33a58043",
+          "source_file": "DE_FY2024_annual_report.pdf",
+          "ticker": "DE",
+          "fiscal_year": 2024,
+          "section_unit_context": {
+            "element_id": "DE_FY2024_annual_report-ef14ad6dbbe8:p30:e2",
+            "pdf_page": 30,
+            "quote": "All amounts are presented in millions of dollars, unless otherwise specified.",
+            "char_start": 368,
+            "char_end": 445,
+            "bbox": [
+              45.36,
+              57.471,
+              296.782,
+              178.845
+            ],
+            "note": "Section-wide MD&A units statement, retained for answer audit; not an additional scored evidence unit."
+          }
+        }
+      ],
+      "reference_answer": "Net cash provided by operating activities was $9,231 million in 2024 and $8,589 million in 2023.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-035",
+      "question": "According to Cummins's FY2025 annual report, what were the reported EBITDA margins for 2025 and 2024 in the selected financial highlights?",
+      "ticker": "CMI",
+      "company": "Cummins",
+      "fiscal_year": 2025,
+      "sector": "Industrial and Machinery Companies",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "CMI_FY2025_annual_report-4d50ab4b38f9:p2:table1:row:20",
+          "table_id": "CMI_FY2025_annual_report-4d50ab4b38f9:p2:table1",
+          "row_index": 20,
+          "row_text": "EBITDA margin (%)4 | 16.0% | 18.6%",
+          "row_cells": [
+            "EBITDA margin (%)4",
+            "16.0%",
+            "18.6%"
+          ],
+          "bbox": [
+            71.532,
+            360.027,
+            500.124,
+            368.183
+          ],
+          "table_bbox": [
+            71.532,
+            85.386,
+            500.124,
+            381.383
+          ],
+          "header_context": [
+            {
+              "text": "FINANCIAL SUMMARY",
+              "bbox": [
+                72.611,
+                32.267,
+                242.947,
+                52.091
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Selected financial highlights   $ in millions, except per share data",
+              "bbox": [
+                72.531,
+                69.29,
+                295.886,
+                80.441
+              ],
+              "position": "above"
+            },
+            {
+              "text": "20251",
+              "bbox": [
+                369.063,
+                70.266,
+                390.124,
+                80.178
+              ],
+              "position": "above"
+            },
+            {
+              "text": "20242",
+              "bbox": [
+                421.791,
+                70.266,
+                444.123,
+                80.178
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Change",
+              "bbox": [
+                470.724,
+                70.266,
+                498.124,
+                80.178
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Balance sheet data",
+              "bbox": [
+                72.532,
+                207.791,
+                142.251,
+                217.703
+              ],
+              "position": "inside"
+            },
+            {
+              "text": "Cash flow from operating activities",
+              "bbox": [
+                72.532,
+                318.999,
+                192.674,
+                328.583
+              ],
+              "position": "inside"
+            }
+          ],
+          "caption": "FINANCIAL SUMMARY\nSelected financial highlights   $ in millions, except per share data\n20251\n20242\nChange",
+          "page_context": [
+            {
+              "element_id": "CMI_FY2025_annual_report-4d50ab4b38f9:p2:e2",
+              "text": "Selected financial highlights   $ in millions, except per share data",
+              "bbox": [
+                72.531,
+                69.29,
+                295.886,
+                80.441
+              ]
+            },
+            {
+              "element_id": "CMI_FY2025_annual_report-4d50ab4b38f9:p2:e21",
+              "text": "Equity, royalty and interest income from investees ($ in millions)",
+              "bbox": [
+                372.771,
+                416.216,
+                501.642,
+                436.128
+              ]
+            },
+            {
+              "element_id": "CMI_FY2025_annual_report-4d50ab4b38f9:p2:e33",
+              "text": "Cash flow from operating activities ($ in millions)",
+              "bbox": [
+                222.652,
+                546.488,
+                353.058,
+                566.28
+              ]
+            },
+            {
+              "element_id": "CMI_FY2025_annual_report-4d50ab4b38f9:p2:e54",
+              "text": "EBITDA is a non-GAAP measure defined as earnings or losses before interest expense, income taxes, depreciation and amortization and noncontrolling interests.",
+              "bbox": [
+                81.532,
+                705.862,
+                482.672,
+                712.813
+              ]
+            }
+          ],
+          "document_id": "CMI_FY2025_annual_report-4d50ab4b38f9",
+          "pdf_page": 2,
+          "source_sha256": "4d50ab4b38f99e3e451cca1da3c71adc42d45cc00eec745cff298fc3dcb51cf1",
+          "source_file": "CMI_FY2025_annual_report.pdf",
+          "ticker": "CMI",
+          "fiscal_year": 2025
+        }
+      ],
+      "reference_answer": "The reported EBITDA margins were 16.0% in 2025 and 18.6% in 2024; EBITDA is labeled a non-GAAP measure.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-036",
+      "question": "According to Illinois Tool Works's FY2021 annual report, what was total debt at the end of 2021 compared with the end of 2020 in Note 11?",
+      "ticker": "ITW",
+      "company": "Illinois Tool Works",
+      "fiscal_year": 2021,
+      "sector": "Industrial and Machinery Companies",
+      "type": "table",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "table",
+          "evidence_id": "ITW_FY2021_annual_report-d5479cacf6ca:p64:table2:row:2",
+          "table_id": "ITW_FY2021_annual_report-d5479cacf6ca:p64:table2",
+          "row_index": 2,
+          "row_text": "Total debt $ | 7,687 |  | $ | 8,122",
+          "row_cells": [
+            "Total debt $",
+            "7,687",
+            "",
+            "$",
+            "8,122"
+          ],
+          "bbox": [
+            33.28,
+            317.69,
+            560.715,
+            329.042
+          ],
+          "table_bbox": [
+            33.28,
+            297.375,
+            560.715,
+            329.042
+          ],
+          "header_context": [
+            {
+              "text": "(11)    Debt",
+              "bbox": [
+                33.28,
+                246.302,
+                73.206,
+                254.07
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Total debt as of December 31, 2021 and 2020 was as follows:",
+              "bbox": [
+                33.28,
+                266.619,
+                245.875,
+                274.386
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2021",
+              "bbox": [
+                433.008,
+                289.164,
+                448.925,
+                296.334
+              ],
+              "position": "above"
+            },
+            {
+              "text": "2020",
+              "bbox": [
+                514.865,
+                289.164,
+                530.782,
+                296.334
+              ],
+              "position": "above"
+            },
+            {
+              "text": "In millions",
+              "bbox": [
+                33.877,
+                290.197,
+                66.307,
+                296.769
+              ],
+              "position": "above"
+            },
+            {
+              "text": "Short-term debt— Short-term debt represents obligations with a maturity date of one year or less and is stated at cost which approximates fair value.",
+              "bbox": [
+                33.28,
+                349.076,
+                546.417,
+                356.843
+              ],
+              "position": "below"
+            }
+          ],
+          "caption": "(11)    Debt\nTotal debt as of December 31, 2021 and 2020 was as follows:\n2021\n2020\nIn millions",
+          "page_context": [
+            {
+              "element_id": "ITW_FY2021_annual_report-d5479cacf6ca:p64:e2",
+              "text": "In millions",
+              "bbox": [
+                97.213,
+                115.127,
+                129.642,
+                121.699
+              ]
+            },
+            {
+              "element_id": "ITW_FY2021_annual_report-d5479cacf6ca:p64:e6",
+              "text": "In millions",
+              "bbox": [
+                33.877,
+                290.197,
+                66.307,
+                296.769
+              ]
+            },
+            {
+              "element_id": "ITW_FY2021_annual_report-d5479cacf6ca:p64:e11",
+              "text": "In millions",
+              "bbox": [
+                33.877,
+                394.162,
+                66.307,
+                400.734
+              ]
+            },
+            {
+              "element_id": "ITW_FY2021_annual_report-d5479cacf6ca:p64:e15",
+              "text": "As of December 31, 2021, short-term debt included $568 million related to the 1.75% Euro notes due May 20, 2022 and commercial paper of $ 210 million. As of December 31, 2020, short-term debt included $350 million related to the 3.375% notes due September 15, 2021, which were redeemed in full on June 15, 2021. There was no commercial paper outstanding as of December 31, 2020.",
+              "bbox": [
+                33.28,
+                449.455,
+                567.423,
+                475.148
+              ]
+            }
+          ],
+          "document_id": "ITW_FY2021_annual_report-d5479cacf6ca",
+          "pdf_page": 64,
+          "source_sha256": "d5479cacf6caf43fbc022c609098c73a5df93b32faa5f8eb18dc989e11205701",
+          "source_file": "ITW_FY2021_annual_report.pdf",
+          "ticker": "ITW",
+          "fiscal_year": 2021
+        }
+      ],
+      "reference_answer": "Total debt was $7,687 million at December 31, 2021 and $8,122 million at December 31, 2020.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-037",
+      "question": "According to Emerson Electric's FY2022 annual report, which three principal business areas did Heritage AspenTech's industrial software cover?",
+      "ticker": "EMR",
+      "company": "Emerson Electric",
+      "fiscal_year": 2022,
+      "sector": "Industrial and Machinery Companies",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "EMR_FY2022_annual_report-4f642271d951:p20:e8:chars:0:212",
+          "element_id": "EMR_FY2022_annual_report-4f642271d951:p20:e8",
+          "quote": "Heritage AspenTech develops software applications to design and optimize industrial operations across three principal business areas: engineering, manufacturing and supply chain, and asset performance management.",
+          "char_start": 0,
+          "char_end": 212,
+          "bbox": [
+            35.97,
+            392.72,
+            560.094,
+            478.03
+          ],
+          "document_id": "EMR_FY2022_annual_report-4f642271d951",
+          "pdf_page": 20,
+          "source_sha256": "4f642271d9510b550c6cee46831d29eb2ec5a2dc7e7adb13c9225987520a7d04",
+          "source_file": "EMR_FY2022_annual_report.pdf",
+          "ticker": "EMR",
+          "fiscal_year": 2022
+        }
+      ],
+      "reference_answer": "Engineering, manufacturing and supply chain, and asset performance management.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-038",
+      "question": "According to Parker-Hannifin's FY2023 annual report, what did Parker's Product Vitality Index measure, and what was the aim of Simple by Design?",
+      "ticker": "PH",
+      "company": "Parker-Hannifin",
+      "fiscal_year": 2023,
+      "sector": "Industrial and Machinery Companies",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "PH_FY2023_annual_report-a836fa51b820:p5:e2:chars:394:661",
+          "element_id": "PH_FY2023_annual_report-a836fa51b820:p5:e2",
+          "quote": "To drive returns from our investments in innovation and engineering, we continue to increase our Product Vitality Index which measures the health of our new product pipeline, and deploy Simple by Design™ principles to reduce cost and complexity across our operations.",
+          "char_start": 394,
+          "char_end": 661,
+          "bbox": [
+            33.0,
+            307.842,
+            207.874,
+            621.405
+          ],
+          "document_id": "PH_FY2023_annual_report-a836fa51b820",
+          "pdf_page": 5,
+          "source_sha256": "a836fa51b820d96cea6c3778b41b920c25cb91cb1612ed0d1851ec52dc61383f",
+          "source_file": "PH_FY2023_annual_report.pdf",
+          "ticker": "PH",
+          "fiscal_year": 2023
+        }
+      ],
+      "reference_answer": "The Product Vitality Index measures the health of the new-product pipeline. Simple by Design aims to reduce cost and complexity across operations.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-039",
+      "question": "According to Rockwell Automation's FY2024 annual report, what offerings and joint venture belonged to Rockwell Automation's Lifecycle Services segment?",
+      "ticker": "ROK",
+      "company": "Rockwell Automation",
+      "fiscal_year": 2024,
+      "sector": "Industrial and Machinery Companies",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "ROK_FY2024_annual_report-b4a8bb0b90cd:p5:e7:chars:439:684",
+          "element_id": "ROK_FY2024_annual_report-b4a8bb0b90cd:p5:e7",
+          "quote": "The Lifecycle Services segment includes digital consulting, professional services including engineered-to-order solutions, recurring services including cybersecurity, safety, remote monitoring, and asset management, and the Sensia joint venture.",
+          "char_start": 439,
+          "char_end": 684,
+          "bbox": [
+            42.52,
+            401.447,
+            290.441,
+            518.148
+          ],
+          "document_id": "ROK_FY2024_annual_report-b4a8bb0b90cd",
+          "pdf_page": 5,
+          "source_sha256": "b4a8bb0b90cd22d385e77bea0f13240364f80c5cf83903f784851fde8498322d",
+          "source_file": "ROK_FY2024_annual_report.pdf",
+          "ticker": "ROK",
+          "fiscal_year": 2024
+        }
+      ],
+      "reference_answer": "It included digital consulting; professional services such as engineered-to-order solutions; recurring cybersecurity, safety, remote-monitoring, and asset-management services; and the Sensia joint venture.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    },
+    {
+      "question_id": "chunking-040",
+      "question": "According to Dover's FY2025 annual report, what fuel-related activities and retail operations were served by Dover's Clean Energy & Fueling segment?",
+      "ticker": "DOV",
+      "company": "Dover",
+      "fiscal_year": 2025,
+      "sector": "Industrial and Machinery Companies",
+      "type": "prose",
+      "multi_evidence": false,
+      "evidence": [
+        {
+          "kind": "prose",
+          "evidence_id": "DOV_FY2025_annual_report-025374f9d804:p8:e7:chars:0:461",
+          "element_id": "DOV_FY2025_annual_report-025374f9d804:p8:e7",
+          "quote": "• Our Clean Energy & Fueling segment provides components, equipment, software solutions and services enabling safe and reliable storage, transport, dispensing, and remote monitoring of traditional and clean fuels (including liqueﬁed natural gas, hydrogen, and electric vehicle charging), cryogenic gases, and other hazardous substances along the supply chain, and safe and eﬃcient operation of convenience retail, retail fueling and vehicle wash establishments.",
+          "char_start": 0,
+          "char_end": 461,
+          "bbox": [
+            47.684,
+            277.006,
+            561.675,
+            311.777
+          ],
+          "document_id": "DOV_FY2025_annual_report-025374f9d804",
+          "pdf_page": 8,
+          "source_sha256": "025374f9d80408eb49c990fbd6666834cc93eb4f405f213f48884496ba1cbe3b",
+          "source_file": "DOV_FY2025_annual_report.pdf",
+          "ticker": "DOV",
+          "fiscal_year": 2025
+        }
+      ],
+      "reference_answer": "It supported storage, transport, dispensing, and remote monitoring of traditional and clean fuels, cryogenic gases, and other hazardous substances, plus convenience retail, retail fueling, and vehicle-wash operations.",
+      "judgment_status": "agent_curated_source_checked",
+      "judgment_scope": "Selected canonical source passages/rows, with equivalent locations only where explicitly listed."
+    }
+  ]
+}
