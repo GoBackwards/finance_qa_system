@@ -259,13 +259,19 @@ def _source_matches(gold: dict, atom: dict, chunk: dict) -> bool:
 def _validate_gold(gold: dict) -> None:
     if not _field(gold, {}, "document_id"):
         raise ValueError("Every gold evidence location needs document_id")
-    if gold.get("table_id") is not None:
+    table_source = gold.get("kind") == "table_source"
+    if table_source:
+        if not isinstance(gold.get("table_id"), str) or not gold["table_id"].strip():
+            raise ValueError("Table source evidence needs a nonempty string table_id")
+        if not isinstance(gold.get("quote"), str) or not gold["quote"].strip():
+            raise ValueError("Table source evidence needs a nonempty string quote")
+    if gold.get("table_id") is not None and not table_source:
         if not isinstance(gold.get("row_index"), int) or isinstance(gold.get("row_index"), bool):
             raise ValueError("Table evidence needs an integer row_index")
         if gold["row_index"] < 0:
             raise ValueError("Table row_index must be nonnegative")
     else:
-        if not gold.get("element_id"):
+        if not table_source and not gold.get("element_id"):
             raise ValueError("Prose evidence needs element_id")
         start, end = gold.get("char_start"), gold.get("char_end")
         if (not isinstance(start, int) or not isinstance(end, int)
@@ -280,16 +286,21 @@ def _canonical_unit(gold: dict) -> str:
     for key in ("element_id", "char_start", "char_end", "table_id", "row_index"):
         if key in gold:
             fields[key] = gold[key]
+    if gold.get("kind") == "table_source":
+        fields["kind"] = "table_source"
     return json.dumps(fields, sort_keys=True, separators=(",", ":"))
 
 
 def _match_location(gold: dict, results: list[dict]) -> dict:
     _validate_gold(gold)
     contributors: set[str] = set()
-    if gold.get("table_id") is not None:
+    table_source = gold.get("kind") == "table_source"
+    if gold.get("table_id") is not None and not table_source:
         for chunk in results:
             for atom in chunk.get("evidence", []):
                 if not _source_matches(gold, atom, chunk):
+                    continue
+                if atom.get("kind") == "table_source":
                     continue
                 if atom.get("table_id") != gold["table_id"] or atom.get("row_index") != gold["row_index"]:
                     continue
@@ -304,10 +315,21 @@ def _match_location(gold: dict, results: list[dict]) -> dict:
     rejected_text = 0
     for chunk in results:
         for atom in chunk.get("evidence", []):
-            if not _source_matches(gold, atom, chunk) or atom.get("element_id") != gold["element_id"]:
+            if not _source_matches(gold, atom, chunk):
+                continue
+            if table_source:
+                if atom.get("kind") != "table_source" or atom.get("table_id") != gold["table_id"]:
+                    continue
+                if not isinstance(atom.get("text"), str):
+                    continue
+            elif atom.get("element_id") != gold["element_id"]:
                 continue
             atom_start, atom_end = atom.get("char_start"), atom.get("char_end")
             if not isinstance(atom_start, int) or not isinstance(atom_end, int):
+                continue
+            if table_source and (isinstance(atom_start, bool) or isinstance(atom_end, bool)
+                                 or atom_start < 0 or atom_end <= atom_start
+                                 or len(atom["text"]) != atom_end - atom_start):
                 continue
             left, right = max(start, atom_start), min(end, atom_end)
             if right <= left:

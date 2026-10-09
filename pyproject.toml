@@ -25,6 +25,7 @@ vectors = [
 parse-reports = "report_parser.cli:main"
 chunk-experiment = "report_chunker.experiment:main"
 build-vector-index = "report_index.pipeline:main"
+retrieval-experiment = "report_search.experiment:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

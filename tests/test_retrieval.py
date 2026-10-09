@@ -1,5 +1,6 @@
 """Small, hand-computed retrieval and evidence-recall fixtures."""
 
+import copy
 import json
 from pathlib import Path
 import tempfile
@@ -30,6 +31,17 @@ def gold(text, evidence_id="g1", start=0, element="element", document="doc", pag
     return {"evidence_id": evidence_id, "document_id": document, "pdf_page": page,
             "source_sha256": "abc123", "element_id": element, "char_start": start,
             "char_end": start + len(text), "quote": text}
+
+
+def table_source_gold(text, start=0, table="t1", evidence_id="ts1"):
+    return {"kind": "table_source", "evidence_id": evidence_id, "document_id": "doc", "pdf_page": 1,
+            "source_sha256": "abc123", "table_id": table, "char_start": start,
+            "char_end": start + len(text), "quote": text}
+
+
+def table_source_atom(text, start=0, table="t1"):
+    return {"kind": "table_source", "table_id": table, "char_start": start,
+            "char_end": start + len(text), "text": text, "citation": citation()}
 
 
 class EvidenceRecallTests(unittest.TestCase):
@@ -100,6 +112,72 @@ class EvidenceRecallTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             judge_retrieval({"evidence": [invalid]}, [])
 
+    def test_fallback_table_full_text_and_subspan_match(self):
+        text = "Revenue\t100\t90\nMargin\t20%\t18%"
+        candidate = chunk("fallback", text, [table_source_atom(text)])
+        for target in [table_source_gold(text), table_source_gold("100\t90", start=8)]:
+            with self.subTest(quote=target["quote"]):
+                result = judge_retrieval({"evidence": [target]}, [candidate])
+                self.assertEqual(result["recall_at_5"], 1)
+                self.assertEqual(result["gold_units"], 1)
+
+    def test_fallback_spans_need_complete_union_and_exact_text(self):
+        target = table_source_gold("abcdefghi")
+        first = chunk("a", "abcde", [table_source_atom("abcde")])
+        last = chunk("b", "defghi", [table_source_atom("defghi", 3)])
+        self.assertEqual(judge_retrieval({"evidence": [target]}, [first, last])["recall_at_5"], 1)
+        self.assertEqual(judge_retrieval({"evidence": [target]}, [first])["recall_at_5"], 0)
+        last["evidence"][0]["text"] = "xxxghi"
+        self.assertEqual(judge_retrieval({"evidence": [target]}, [first, last])["recall_at_5"], 0)
+
+    def test_fallback_rejects_wrong_source_row_kind_and_malformed_spans(self):
+        target = table_source_gold("alpha")
+        original = chunk("c", "alpha", [table_source_atom("alpha")])
+        for key, value in [("sha256", "wrong"), ("pdf_page", 2), ("document_id", "other")]:
+            candidate = copy.deepcopy(original)
+            candidate["evidence"][0]["citation"][key] = value
+            self.assertEqual(judge_retrieval({"evidence": [target]}, [candidate])["recall_at_5"], 0)
+        for key, value in [("text", "xxxxx"), ("text", None), ("text", "alph"),
+                           ("kind", "row"), ("kind", "prose"), ("table_id", "other"),
+                           ("char_start", True), ("char_start", -1), ("char_end", 100)]:
+            candidate = copy.deepcopy(original)
+            candidate["evidence"][0][key] = value
+            with self.subTest(key=key, value=value):
+                self.assertEqual(judge_retrieval({"evidence": [target]}, [candidate])["recall_at_5"], 0)
+
+    def test_fallback_requires_nonempty_string_quote_and_table_id(self):
+        for field in ("quote", "table_id"):
+            for value in (None, "", " ", 42, [], {}):
+                target = table_source_gold("alpha")
+                target[field] = value
+                with self.subTest(field=field, value=value), self.assertRaises(ValueError):
+                    judge_retrieval({"evidence": [target]}, [])
+            target = table_source_gold("alpha")
+            del target[field]
+            with self.assertRaises(ValueError):
+                judge_retrieval({"evidence": [target]}, [])
+
+    def test_fallback_canonical_kind_is_distinct_from_structured_row(self):
+        fallback = table_source_gold("alpha")
+        fallback["row_index"] = 0
+        row = dict(fallback, kind="table", evidence_id="row1", row_text="alpha")
+        source = table_source_atom("alpha")
+        source["row_index"] = 0
+        result = judge_retrieval({"evidence": [fallback, row]}, [chunk("c", "alpha", [source])])
+        self.assertEqual(result["gold_units"], 2)
+        self.assertEqual(result["recovered_units"], 1)
+        self.assertEqual(result["recall_at_5"], .5)
+
+    def test_fallback_alternative_and_duplicate_labels_do_not_inflate_recall(self):
+        target = table_source_gold("alpha")
+        target["alternatives"] = [table_source_gold("alpha", table="t2")]
+        duplicate = dict(target, evidence_id="other-label")
+        candidate = chunk("c", "alpha", [table_source_atom("alpha", table="t2")])
+        result = judge_retrieval({"evidence": [target, duplicate]}, [candidate, candidate])
+        self.assertEqual(result["gold_units"], 1)
+        self.assertEqual(result["recall_at_5"], 1)
+        self.assertEqual(result["evidence_judgments"][0]["matched_location"], 1)
+
 
 class PersistedRetrievalTests(unittest.TestCase):
     def setUp(self):
@@ -113,6 +191,28 @@ class PersistedRetrievalTests(unittest.TestCase):
 
     def write_chunks(self, chunks):
         self.source.write_text("".join(json.dumps(value) + "\n" for value in chunks), encoding="utf-8")
+
+    def test_chunking_benchmark_validator_checks_fallback_source_text(self):
+        from report_chunker.experiment import validate_benchmark
+        (self.folder / "document.json").write_text(json.dumps({"document_id": "doc", "sha256": "abc123"}), encoding="utf-8")
+        (self.folder / "pages.jsonl").write_text("", encoding="utf-8")
+        table = {"table_id": "t1", "source_text": "alpha", "structured_reliable": False,
+                 "citation": citation(), "rows": [], "candidate_rows": [["WRONG"]]}
+        table_path = self.folder / "tables.jsonl"
+        table_path.write_text(json.dumps(table) + "\n", encoding="utf-8")
+        benchmark = {"questions": [{"question_id": "fallback", "question": "What is alpha?",
+                                    "evidence": [table_source_gold("alpha")]}]}
+        self.assertTrue(validate_benchmark(benchmark, [self.folder])["valid"])
+        for field, value in [("quote", None), ("quote", "WRONG"), ("table_id", ""),
+                             ("char_start", -1), ("pdf_page", 2), ("source_sha256", "wrong")]:
+            changed = copy.deepcopy(benchmark)
+            changed["questions"][0]["evidence"][0][field] = value
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                validate_benchmark(changed, [self.folder])
+        table["structured_reliable"] = True
+        table_path.write_text(json.dumps(table) + "\n", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "unstructured fallback"):
+            validate_benchmark(benchmark, [self.folder])
 
     def test_streamed_index_search_stemming_metadata_and_persistence(self):
         self.write_chunks([chunk("c1", "The factories manufacture tractors."),

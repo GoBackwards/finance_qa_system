@@ -110,6 +110,8 @@ The next stage is available in [the chunking experiment](docs/chunking_experimen
 
 The [dense embedding and FAISS stage](docs/vector_index.md) adds pinned BGE models, model-token length audits, resumable GPU/CPU embeddings, an exact Flat index, optional IVF/HNSW comparisons, and vector-to-source citations. Run `scripts/build_vector_index.py` after installing the `vectors` dependency extra.
 
+The [retrieval experiment](docs/retrieval_experiment.md) compares FAISS Flat, BM25, and normalized weighted score fusion on a [100-question benchmark](data/evaluation/retrieval_questions.json). It contains 40 factual, 30 comparative, and 30 summary questions with answers and page-grounded evidence. Development and test questions use different companies; hybrid weights are selected on development evidence recall before test scoring. Run `scripts/run_retrieval_experiment.py` with the existing chunks and dense index. See the [measured comparison](docs/retrieval_comparison.md). These agent-authored labels have been source-checked and still need independent human review.
+
 ## Validated corpus run — 2026-10-08
 
 - All 200 reports, 40 tickers, and 23,280 PDF pages processed; no document-level failures.

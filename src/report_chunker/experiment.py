@@ -190,16 +190,27 @@ def validate_benchmark(benchmark,reports):
         units+=len(question['evidence'])
         for unit in question['evidence']:
             for gold in [unit,*unit.get('alternatives',[])]:
+                if gold.get('kind') == 'table_source':
+                    from report_chunker.retrieval import _validate_gold
+                    _validate_gold(gold)
                 meta,elements,tables=data[gold['document_id']]
                 if gold.get('source_sha256',gold.get('sha256'))!=meta['sha256']:
                     raise ValueError(f"Benchmark source hash mismatch: {question['question_id']}")
                 if gold.get('table_id'):
                     source=tables[gold['table_id']]
-                    if source.get('structured_reliable') is not True:
-                        raise ValueError('Benchmark relies on unverified structured cells')
-                    row=source['rows'][gold['row_index']]
-                    if gold.get('row_cells',row)!=row or gold['row_text']!=' | '.join('' if v is None else str(v) for v in row):
-                        raise ValueError('Benchmark table row changed')
+                    if gold.get('kind') == 'table_source':
+                        if source.get('structured_reliable') is not False:
+                            raise ValueError('Benchmark table source requires an unstructured fallback')
+                        source_text=source.get('source_text')
+                        if (not isinstance(source_text,str) or gold['char_end'] > len(source_text)
+                                or source_text[gold['char_start']:gold['char_end']] != gold['quote']):
+                            raise ValueError('Benchmark table source quote/range changed')
+                    else:
+                        if source.get('structured_reliable') is not True:
+                            raise ValueError('Benchmark relies on unverified structured cells')
+                        row=source['rows'][gold['row_index']]
+                        if gold.get('row_cells',row)!=row or gold['row_text']!=' | '.join('' if v is None else str(v) for v in row):
+                            raise ValueError('Benchmark table row changed')
                     citation=source['citation']
                 else:
                     source=elements[gold['element_id']]
