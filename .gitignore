@@ -11,4 +11,5 @@ data/indexes/
 .env
 .env.*
 !.env.example
+.streamlit/secrets.toml
 *.pem

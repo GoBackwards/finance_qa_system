@@ -1,0 +1,56 @@
+{
+  "kind": "Real browser, corpus and GPU retrieval; prescribed localhost generation/review responses",
+  "live_llm_evaluated": false,
+  "answer_visible": true,
+  "source_quote_visible": true,
+  "selected_count": 5,
+  "candidate_count": 20,
+  "source_links": 8,
+  "page_preview_visible": true,
+  "downloaded_pdf": "MSFT_FY2024_annual_report.pdf",
+  "download_sha256": "979a3f8199702397e080719dc1212242eb2580bed78b5dab92d3f576d6abf5bc",
+  "preview_did_not_regenerate": true,
+  "warm_browser_search_seconds": 1.762853600012022,
+  "second_real_query_completed": true,
+  "provider_calls": [
+    {
+      "stage": "generator",
+      "model": "controlled-ui-fixture"
+    },
+    {
+      "stage": "verifier",
+      "model": "controlled-ui-fixture"
+    }
+  ],
+  "threshold": "0 only in this controlled test; no application default change",
+  "all_checks_passed": true,
+  "regression_tests": {
+    "run": 410,
+    "passed": 409,
+    "skipped": 1,
+    "skip_reason": "Windows symlink privilege unavailable; deterministic resolved-path confinement test passed",
+    "new_service": 10,
+    "new_source_catalog": 13,
+    "new_streamlit_apptest": 7
+  },
+  "corpus": {
+    "documents": 200,
+    "chunks": 56525,
+    "encoder": "BAAI/bge-m3",
+    "reranker": "BAAI/bge-reranker-v2-m3",
+    "device": "cuda:0",
+    "vector_index": "Flat"
+  },
+  "warm_timing_scope": "One browser search after models were resident; includes UI settlement and automation; not a production latency benchmark.",
+  "download_check_scope": "Downloaded through the real retrieval UI in the preceding browser run; bytes verified against the same report manifest during the answer/citation integration check.",
+  "implementation_sha256": {
+    "streamlit_app.py": "63e50000eb87e0647aa5408ce4fb6026e12b4ec045ffc6445376f81fa7498e80",
+    "src/report_search/demo_service.py": "626bcfbf7789e439bfc5556be9e25b2ed6026280d4d2a2452c2e9bb6eed28b38",
+    "src/report_search/demo_sources.py": "161008adb0891bc6939c87cad20d8828081f136ebd68d704dd3e01c99fd92ba1",
+    "tests/test_demo_service.py": "d923610b8596f0d9d0c43125a2a1944ecfc0d00ccc60ca28e14b142b0d8f2c57",
+    "tests/test_demo_sources.py": "e63c5cf1f907a30917ff687f1b0c170f0657821c36ef14c0c9cf634c33625e82",
+    "tests/test_streamlit_app.py": "13b01770235103448beee725f22fe6ec3f1b31cfbbb0ba6cfe9092ee8a78c67d",
+    "pyproject.toml": "2988be1b1d73b8e9d80ad451de69f039ff2ef9057bc67dc05d6f1331e7aca781",
+    ".streamlit/config.toml": "0cd743c551e8c8cb217804c50ecf2ab81a79fff74823ee936a1ab1721e4ca43b"
+  }
+}
