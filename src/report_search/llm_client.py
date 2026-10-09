@@ -6,6 +6,7 @@ transport aid: the generation layer still validates both response schemas.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from http.client import HTTPException, IncompleteRead
 import json
 import math
 import os
@@ -30,7 +31,14 @@ def strict_json(text: str) -> dict:
     def constant(value):
         raise ValueError("Non-finite JSON value")
 
-    value = json.loads(text, object_pairs_hook=pairs, parse_constant=constant)
+    def finite_float(value):
+        parsed = float(value)
+        if not math.isfinite(parsed):
+            raise ValueError("Non-finite JSON value")
+        return parsed
+
+    value = json.loads(text, object_pairs_hook=pairs, parse_constant=constant,
+                       parse_float=finite_float)
     if not isinstance(value, dict):
         raise ValueError("Expected a JSON object")
     return value
@@ -39,6 +47,35 @@ def strict_json(text: str) -> dict:
 class _NoRedirect(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
+
+
+def _read_response(response, limit):
+    """Bound the body and reject incomplete HTTP framing, even for valid JSON.
+
+    HTTPResponse.read(amt) can return a short fixed-length body without raising
+    IncompleteRead. A complete JSON prefix is therefore insufficient to prove
+    that the response was fully received. Chunked decoding raises separately.
+    """
+    getheader = getattr(response, "getheader", None)
+    length = getheader("Content-Length") if callable(getheader) else None
+    expected = None
+    if length is not None and not getattr(response, "chunked", False):
+        if not isinstance(length, str) or not length.strip() or any(
+                char not in "0123456789" for char in length.strip()):
+            raise ModelError("invalid_model_response_framing")
+        # Avoid conversion of an attacker-controlled, arbitrarily long integer.
+        digits = length.strip().lstrip("0") or "0"
+        if len(digits) > len(str(limit)):
+            raise ModelError("model_response_too_large")
+        expected = int(digits)
+        if expected > limit:
+            raise ModelError("model_response_too_large")
+    raw = response.read(limit + 1)
+    if len(raw) > limit:
+        raise ModelError("model_response_too_large")
+    if expected is not None and len(raw) != expected:
+        raise ModelError("incomplete_model_response")
+    return raw
 
 
 @dataclass(frozen=True)
@@ -60,7 +97,8 @@ class ModelConfig:
             raise ValueError("API base URL must have a host and no credentials/query/fragment")
         if url.scheme == "http" and url.hostname not in {"localhost", "127.0.0.1", "::1"}:
             raise ValueError("Remote model endpoints require HTTPS")
-        if not isinstance(self.api_key, str) or any(c in self.api_key for c in "\r\n"):
+        if (not isinstance(self.api_key, str) or not self.api_key.isascii()
+                or any(ord(c) < 32 or ord(c) == 127 for c in self.api_key)):
             raise ValueError("Invalid API credential")
         if (isinstance(self.timeout_seconds, bool) or not isinstance(self.timeout_seconds, (int, float))
                 or not math.isfinite(self.timeout_seconds) or self.timeout_seconds <= 0):
@@ -105,19 +143,24 @@ class ChatCompletionsClient:
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
         if config.api_key:
             headers["Authorization"] = "Bearer " + config.api_key
-        request = Request(config.base_url.rstrip("/") + "/chat/completions",
-                          data=json.dumps(payload, ensure_ascii=False, allow_nan=False).encode("utf-8"),
-                          headers=headers, method="POST")
+        try:
+            request = Request(config.base_url.rstrip("/") + "/chat/completions",
+                              data=json.dumps(payload, ensure_ascii=False, allow_nan=False).encode("utf-8"),
+                              headers=headers, method="POST")
+        except (ValueError, TypeError, UnicodeError, RecursionError):
+            raise ModelError("invalid_model_request") from None
         try:
             with build_opener(_NoRedirect()).open(request, timeout=config.timeout_seconds) as response:
-                raw = response.read(config.max_response_bytes + 1)
-                if len(raw) > config.max_response_bytes:
-                    raise ModelError("model_response_too_large")
+                raw = _read_response(response, config.max_response_bytes)
         except HTTPError as error:
             # Do not expose provider bodies, URLs, headers, or credentials.
             raise ModelError(f"model_http_{error.code}") from None
-        except (URLError, TimeoutError, OSError):
+        except IncompleteRead:
+            raise ModelError("incomplete_model_response") from None
+        except (URLError, TimeoutError, OSError, HTTPException):
             raise ModelError("model_unavailable") from None
+        except (ValueError, UnicodeError):
+            raise ModelError("invalid_model_request") from None
         try:
             envelope = strict_json(raw.decode("utf-8"))
             choices = envelope.get("choices")

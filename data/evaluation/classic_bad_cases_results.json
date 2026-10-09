@@ -1,0 +1,1019 @@
+{
+  "schema_version": 1,
+  "case_count": 10,
+  "live_generation_evaluated": false,
+  "case_types": [
+    "retrieval_expansion_regression",
+    "metric_scope_confusion",
+    "unsupported_forecast",
+    "fiscal_column_and_unit_confusion",
+    "incomplete_comparison",
+    "table_parse_corruption",
+    "fabricated_citation",
+    "partial_provider_response",
+    "latency_budget",
+    "incomplete_gold_labels"
+  ],
+  "cases": [
+    {
+      "case_id": "B01",
+      "failure_type": "retrieval_expansion_regression",
+      "controlled_checks": []
+    },
+    {
+      "case_id": "B02",
+      "failure_type": "metric_scope_confusion",
+      "controlled_checks": [
+        "company_scope_substitution"
+      ]
+    },
+    {
+      "case_id": "B03",
+      "failure_type": "unsupported_forecast",
+      "controlled_checks": [
+        "historical_revenue_as_forecast",
+        "supported_future_statement"
+      ]
+    },
+    {
+      "case_id": "B04",
+      "failure_type": "fiscal_column_and_unit_confusion",
+      "controlled_checks": [
+        "wrong_fiscal_column",
+        "wrong_unit_scale"
+      ]
+    },
+    {
+      "case_id": "B05",
+      "failure_type": "incomplete_comparison",
+      "controlled_checks": [
+        "comparison_missing_intel"
+      ]
+    },
+    {
+      "case_id": "B06",
+      "failure_type": "table_parse_corruption",
+      "controlled_checks": [
+        "rejected_table_cells_reintroduced"
+      ]
+    },
+    {
+      "case_id": "B07",
+      "failure_type": "fabricated_citation",
+      "controlled_checks": [
+        "invented_citation",
+        "altered_quote"
+      ]
+    },
+    {
+      "case_id": "B08",
+      "failure_type": "partial_provider_response",
+      "controlled_checks": []
+    },
+    {
+      "case_id": "B09",
+      "failure_type": "latency_budget",
+      "controlled_checks": [
+        "late_generator_with_three_second_example_budget"
+      ]
+    },
+    {
+      "case_id": "B10",
+      "failure_type": "incomplete_gold_labels",
+      "controlled_checks": []
+    }
+  ],
+  "controlled_check_count": 11,
+  "controlled_checks_passed": 11,
+  "controls": [
+    {
+      "name": "company_scope_substitution",
+      "passed": true,
+      "query": "What was Microsoft's company-wide gross margin percentage in FY2024?",
+      "bad_claim": "Microsoft's company-wide gross margin was 71% in FY2024.",
+      "expected_reason": "unsupported_claim",
+      "reference_verified": true,
+      "generator_calls": 1,
+      "verifier_calls": 1,
+      "evidence_status": "controlled_response_with_real_source",
+      "result": {
+        "status": "abstain",
+        "answer": "I'm not sure",
+        "citations": [],
+        "reference_verified": true,
+        "semantic_supported": false,
+        "reason": "unsupported_claim",
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": true,
+          "semantic_verifier_called": true,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "context_characters": 16999,
+          "evidence_count": 16,
+          "context_sha256": "cf5b83ea4b3fe025c03aeedc22e7512b2e49f4717b96c808fd65030c67b75c43",
+          "source_verified": true,
+          "generator": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "verifier": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "reference_check_passed": true,
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "generation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "reference_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "semantic_verification",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "verdict_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            }
+          ],
+          "generation_elapsed_ms": 0.0,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      }
+    },
+    {
+      "name": "historical_revenue_as_forecast",
+      "passed": true,
+      "query": "According to the uploaded reports, what is NVIDIA's revenue forecast for FY2027?",
+      "bad_claim": "NVIDIA forecasts FY2027 revenue of $500 billion.",
+      "expected_reason": "unsupported_claim",
+      "reference_verified": true,
+      "generator_calls": 1,
+      "verifier_calls": 1,
+      "evidence_status": "controlled_response_with_real_source",
+      "result": {
+        "status": "abstain",
+        "answer": "I'm not sure",
+        "citations": [],
+        "reference_verified": true,
+        "semantic_supported": false,
+        "reason": "unsupported_claim",
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": true,
+          "semantic_verifier_called": true,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "context_characters": 19023,
+          "evidence_count": 25,
+          "context_sha256": "70105f0fc2daa04cddf5eca7dd8b3f5e54d5f5f0c011931a9fb61c04138e81d7",
+          "source_verified": true,
+          "generator": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "verifier": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "reference_check_passed": true,
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 16.00000000325963,
+              "status": "completed"
+            },
+            {
+              "stage": "generation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "reference_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "semantic_verification",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "verdict_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            }
+          ],
+          "generation_elapsed_ms": 16.00000000325963,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      }
+    },
+    {
+      "name": "wrong_fiscal_column",
+      "passed": true,
+      "query": "What was Microsoft's operating income in FY2024?",
+      "bad_claim": "Microsoft FY2024 operating income was $88,523 million.",
+      "expected_reason": "unsupported_claim",
+      "reference_verified": true,
+      "generator_calls": 1,
+      "verifier_calls": 1,
+      "evidence_status": "controlled_response_with_real_source",
+      "result": {
+        "status": "abstain",
+        "answer": "I'm not sure",
+        "citations": [],
+        "reference_verified": true,
+        "semantic_supported": false,
+        "reason": "unsupported_claim",
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": true,
+          "semantic_verifier_called": true,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "context_characters": 18690,
+          "evidence_count": 25,
+          "context_sha256": "2b136456af4282f022c8f00651128b2401c2ddc3d2985ff74426972e31ae7692",
+          "source_verified": true,
+          "generator": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "verifier": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "reference_check_passed": true,
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "generation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "reference_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "semantic_verification",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "verdict_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            }
+          ],
+          "generation_elapsed_ms": 0.0,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      }
+    },
+    {
+      "name": "wrong_unit_scale",
+      "passed": true,
+      "query": "What was Microsoft's operating income in FY2024?",
+      "bad_claim": "Microsoft FY2024 operating income was $109,433 billion.",
+      "expected_reason": "unsupported_claim",
+      "reference_verified": true,
+      "generator_calls": 1,
+      "verifier_calls": 1,
+      "evidence_status": "controlled_response_with_real_source",
+      "result": {
+        "status": "abstain",
+        "answer": "I'm not sure",
+        "citations": [],
+        "reference_verified": true,
+        "semantic_supported": false,
+        "reason": "unsupported_claim",
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": true,
+          "semantic_verifier_called": true,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "context_characters": 18690,
+          "evidence_count": 25,
+          "context_sha256": "2b136456af4282f022c8f00651128b2401c2ddc3d2985ff74426972e31ae7692",
+          "source_verified": true,
+          "generator": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "verifier": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "reference_check_passed": true,
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 16.00000000325963,
+              "status": "completed"
+            },
+            {
+              "stage": "generation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "reference_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "semantic_verification",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "verdict_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            }
+          ],
+          "generation_elapsed_ms": 16.00000000325963,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      }
+    },
+    {
+      "name": "comparison_missing_intel",
+      "passed": true,
+      "query": "According to their FY2024 annual reports, which company reported a higher consolidated GAAP gross margin: Intel or AMD?",
+      "bad_claim": "AMD's FY2024 gross margin was 49%.",
+      "expected_reason": "question_not_answered",
+      "reference_verified": true,
+      "generator_calls": 1,
+      "verifier_calls": 1,
+      "evidence_status": "controlled_response_with_real_source",
+      "result": {
+        "status": "abstain",
+        "answer": "I'm not sure",
+        "citations": [],
+        "reference_verified": true,
+        "semantic_supported": false,
+        "reason": "question_not_answered",
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": true,
+          "semantic_verifier_called": true,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "context_characters": 11892,
+          "evidence_count": 14,
+          "context_sha256": "613fddadae03d56524a89a2d2a054aa66beec2be59970e4f18ec49b3dbf57d9d",
+          "source_verified": true,
+          "generator": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "verifier": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "reference_check_passed": true,
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 16.00000000325963,
+              "status": "completed"
+            },
+            {
+              "stage": "generation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "reference_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "semantic_verification",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "verdict_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            }
+          ],
+          "generation_elapsed_ms": 16.00000000325963,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      }
+    },
+    {
+      "name": "invented_citation",
+      "passed": true,
+      "query": "What was Microsoft's operating income in FY2024?",
+      "bad_claim": "Microsoft FY2024 operating income was $109,433 million.",
+      "expected_reason": "unknown_evidence_id",
+      "reference_verified": false,
+      "generator_calls": 1,
+      "verifier_calls": 0,
+      "evidence_status": "controlled_response_with_real_source",
+      "result": {
+        "status": "abstain",
+        "answer": "I'm not sure",
+        "citations": [],
+        "reference_verified": false,
+        "semantic_supported": false,
+        "reason": "unknown_evidence_id",
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": true,
+          "semantic_verifier_called": false,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "context_characters": 18690,
+          "evidence_count": 25,
+          "context_sha256": "2b136456af4282f022c8f00651128b2401c2ddc3d2985ff74426972e31ae7692",
+          "source_verified": true,
+          "generator": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "verifier": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "generation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "reference_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            }
+          ],
+          "generation_elapsed_ms": 0.0,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      }
+    },
+    {
+      "name": "altered_quote",
+      "passed": true,
+      "query": "What was Microsoft's operating income in FY2024?",
+      "bad_claim": "Microsoft FY2024 operating income was $109,433 million.",
+      "expected_reason": "quote_not_in_source",
+      "reference_verified": false,
+      "generator_calls": 1,
+      "verifier_calls": 0,
+      "evidence_status": "controlled_response_with_real_source",
+      "result": {
+        "status": "abstain",
+        "answer": "I'm not sure",
+        "citations": [],
+        "reference_verified": false,
+        "semantic_supported": false,
+        "reason": "quote_not_in_source",
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": true,
+          "semantic_verifier_called": false,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "context_characters": 18690,
+          "evidence_count": 25,
+          "context_sha256": "2b136456af4282f022c8f00651128b2401c2ddc3d2985ff74426972e31ae7692",
+          "source_verified": true,
+          "generator": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "verifier": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "generation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "reference_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            }
+          ],
+          "generation_elapsed_ms": 0.0,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      }
+    },
+    {
+      "name": "rejected_table_cells_reintroduced",
+      "passed": true,
+      "accepted_structured_rows": 0,
+      "source_fallback_preserved": true,
+      "generator_calls": 0,
+      "result": {
+        "status": "abstain",
+        "answer": "I'm not sure",
+        "citations": [],
+        "reference_verified": false,
+        "semantic_supported": false,
+        "reason": "source_verification_failed",
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": false,
+          "semantic_verifier_called": false,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 0.0,
+              "status": "failed"
+            }
+          ],
+          "generation_elapsed_ms": 0.0,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      }
+    },
+    {
+      "name": "supported_reported_value",
+      "passed": true,
+      "result": {
+        "status": "answer",
+        "answer": "Microsoft FY2024 operating income was &#36;109&#44;433 million&#46; [^1]\n\n[^1]: MSFT&#95;FY2024&#95;annual&#95;report&#45;979a3f819970&#44; PDF page 48&#59; table MSFT&#95;FY2024&#95;annual&#95;report&#45;979a3f819970&#58;p48&#58;table1&#44; source row index 13 &#40;zero based&#41;&#46; Evidence E15&#46;\n    > Operating income &#124; 109&#44;433 &#124; 88&#44;523 &#124; 83&#44;383",
+        "citations": [
+          {
+            "reference_number": 1,
+            "evidence_id": "E15",
+            "quote": "Operating income | 109,433 | 88,523 | 83,383",
+            "quote_char_start": 0,
+            "quote_char_end": 44,
+            "source_text": "Operating income | 109,433 | 88,523 | 83,383",
+            "kind": "row",
+            "citation": {
+              "document_id": "MSFT_FY2024_annual_report-979a3f819970",
+              "source_file": "MSFT_FY2024_annual_report.pdf",
+              "sha256": "979a3f8199702397e080719dc1212242eb2580bed78b5dab92d3f576d6abf5bc",
+              "ticker": "MSFT",
+              "fiscal_year": 2024,
+              "pdf_page": 48,
+              "bbox": [
+                38.0,
+                334.34,
+                556.984,
+                345.345
+              ]
+            },
+            "source_locator": {
+              "table_id": "MSFT_FY2024_annual_report-979a3f819970:p48:table1",
+              "row_index": 13,
+              "role": "body"
+            },
+            "chunk_ids": [
+              "MSFT_FY2024_annual_report-979a3f819970:table_preserving_s512_o50:c75:2de9499e4083"
+            ]
+          }
+        ],
+        "reference_verified": true,
+        "semantic_supported": true,
+        "reason": null,
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": true,
+          "semantic_verifier_called": true,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "context_characters": 18690,
+          "evidence_count": 25,
+          "context_sha256": "2b136456af4282f022c8f00651128b2401c2ddc3d2985ff74426972e31ae7692",
+          "source_verified": true,
+          "generator": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "verifier": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "reference_check_passed": true,
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 16.00000000325963,
+              "status": "completed"
+            },
+            {
+              "stage": "generation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "reference_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "semantic_verification",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "verdict_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "rendering",
+              "duration_ms": 0.0,
+              "status": "completed"
+            }
+          ],
+          "generation_elapsed_ms": 16.00000000325963,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      }
+    },
+    {
+      "name": "supported_future_statement",
+      "passed": true,
+      "result": {
+        "status": "answer",
+        "answer": "NVIDIA expects higher capital expenditures in FY2026&#46; [^1]\n\n[^1]: NVDA&#95;FY2025&#95;annual&#95;report&#45;757b344ab62b&#44; PDF page 137&#59; paragraph NVDA&#95;FY2025&#95;annual&#95;report&#45;757b344ab62b&#58;p137&#58;e3&#44; characters 0–261 &#40;end exclusive&#41;&#46; Evidence E4&#46;\n    > During fiscal year 2025 and fiscal year 2024&#44; we spent &#36;3&#46;4 billion and &#36;1&#46;1 billion on capital expenditures&#44; respectively&#46; We expect to increase capital expenditures in fiscal year 2026 relative to fiscal year 2025 to support the future growth of our business&#46;",
+        "citations": [
+          {
+            "reference_number": 1,
+            "evidence_id": "E4",
+            "quote": "During fiscal year 2025 and fiscal year 2024, we spent $3.4 billion and $1.1 billion on capital expenditures, respectively. We expect to increase capital expenditures in fiscal year 2026 relative to fiscal year 2025 to support the future growth of our business.",
+            "quote_char_start": 0,
+            "quote_char_end": 261,
+            "source_text": "During fiscal year 2025 and fiscal year 2024, we spent $3.4 billion and $1.1 billion on capital expenditures, respectively. We expect to increase capital expenditures in fiscal year 2026 relative to fiscal year 2025 to support the future growth of our business.",
+            "kind": "prose",
+            "citation": {
+              "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+              "source_file": "NVDA_FY2025_annual_report.pdf",
+              "sha256": "757b344ab62ba282f6e44e0702e8ce5f190d88fb23b5e0a2beaf4cb277a395cc",
+              "ticker": "NVDA",
+              "fiscal_year": 2025,
+              "pdf_page": 137,
+              "bbox": [
+                40.5,
+                120.03,
+                555.906,
+                152.97
+              ]
+            },
+            "source_locator": {
+              "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p137:e3",
+              "char_start": 0,
+              "char_end": 261
+            },
+            "chunk_ids": [
+              "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c280:46627e327688"
+            ]
+          }
+        ],
+        "reference_verified": true,
+        "semantic_supported": true,
+        "reason": null,
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": true,
+          "semantic_verifier_called": true,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "context_characters": 13634,
+          "evidence_count": 10,
+          "context_sha256": "e31c11d4d340546c475b50e2a2949622054a1c8b9ecb72868603a8ccd4899e2f",
+          "source_verified": true,
+          "generator": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "verifier": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "reference_check_passed": true,
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 16.00000000325963,
+              "status": "completed"
+            },
+            {
+              "stage": "generation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "reference_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "semantic_verification",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "verdict_validation",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "rendering",
+              "duration_ms": 0.0,
+              "status": "completed"
+            }
+          ],
+          "generation_elapsed_ms": 16.00000000325963,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      }
+    },
+    {
+      "name": "late_generator_with_three_second_example_budget",
+      "passed": true,
+      "baseline_commit": "ba6fc6e99e55ff69c96542e6f44c84ac55f10322",
+      "before": {
+        "status": "answer",
+        "verifier_calls": 1
+      },
+      "after": {
+        "status": "abstain",
+        "answer": "I'm not sure",
+        "citations": [],
+        "reference_verified": false,
+        "semantic_supported": false,
+        "reason": "deadline_exceeded",
+        "audit": {
+          "prompt_version": "evidence-bound-claims-v1",
+          "prompt_sha256": "0a6a9268c38b76696f211a231431446e4f3d661c1cd1c21423c266c922a37bee",
+          "generation_called": true,
+          "semantic_verifier_called": false,
+          "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee",
+          "confidence_gate": {
+            "allowed": true,
+            "reason": "above_threshold",
+            "threshold": 0.0,
+            "max_score": 10.0,
+            "candidate_count": 1,
+            "score_kind": "reranker_raw_logit"
+          },
+          "context_characters": 18690,
+          "evidence_count": 25,
+          "context_sha256": "2b136456af4282f022c8f00651128b2401c2ddc3d2985ff74426972e31ae7692",
+          "source_verified": true,
+          "generator": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "verifier": {
+            "backend": "prescribed_response_fixture",
+            "live_model": false
+          },
+          "generation_budget": {
+            "timeout_seconds": 3.0,
+            "elapsed_ms": 4000.0,
+            "remaining_ms": 0.0,
+            "deadline_exceeded": true,
+            "cooperative_deadline": true,
+            "stages": [
+              {
+                "stage": "source_binding",
+                "duration_ms": 0.0,
+                "status": "completed"
+              },
+              {
+                "stage": "generation",
+                "duration_ms": 4000.0,
+                "status": "deadline_exceeded"
+              }
+            ]
+          },
+          "stage_timings": [
+            {
+              "stage": "source_binding",
+              "duration_ms": 0.0,
+              "status": "completed"
+            },
+            {
+              "stage": "generation",
+              "duration_ms": 4000.0,
+              "status": "deadline_exceeded"
+            }
+          ],
+          "generation_elapsed_ms": 4000.0,
+          "timing_scope": "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+        }
+      },
+      "clock": "simulated 4-second active generation; not a production latency measurement"
+    }
+  ],
+  "retrieval_probe": {
+    "artifact": "data\\evaluation\\bad_case_retrieval_results.json",
+    "sha256": "2f39d78c1642aa95c3a5e3d785d9797fd68f45c41a3e0b2ddcbca34057f14d70",
+    "case_count": 4,
+    "generation_calls": 0
+  },
+  "source_audit": {
+    "artifact": "data\\evaluation\\classic_bad_case_sources.json",
+    "sha256": "07ff7306d0172b51a2a39a1cd1a1a60fa9c699cb3ec8975506782ce785f22e18"
+  },
+  "provider_faults": {
+    "artifact": "data\\evaluation\\provider_fault_results.json",
+    "sha256": "f3595d2d618803ffed25a64f4be309f0ffb31b325c4a0738b082e0563c8d1b95",
+    "results": [
+      {
+        "case": "partial_chunked_http",
+        "before": {
+          "type": "IncompleteRead",
+          "message": "IncompleteRead(106 bytes read)"
+        },
+        "after": {
+          "type": "ModelError",
+          "message": "incomplete_model_response"
+        }
+      },
+      {
+        "case": "partial_content_length_http",
+        "before": {
+          "type": "returned",
+          "value": {
+            "status": "abstain",
+            "claims": []
+          }
+        },
+        "after": {
+          "type": "ModelError",
+          "message": "incomplete_model_response"
+        }
+      },
+      {
+        "case": "json_numeric_overflow",
+        "before": {
+          "type": "returned",
+          "nonfinite_number_accepted": true
+        },
+        "after": {
+          "type": "ValueError",
+          "message": "Non-finite JSON value"
+        }
+      },
+      {
+        "case": "unencodable_request",
+        "before": {
+          "type": "UnicodeEncodeError",
+          "message": "'utf-8' codec can't encode character '\\ud800' in position 75: surrogates not allowed"
+        },
+        "after": {
+          "type": "ModelError",
+          "message": "invalid_model_request"
+        }
+      }
+    ]
+  },
+  "source_binding_latency": {
+    "case": "MSFT FY2024 p48 single statement chunk",
+    "cold_ms": 329.2649000068195,
+    "warm_ms": [
+      7.626699996762909,
+      8.008399992831983,
+      7.437799999024719,
+      7.353299995884299,
+      7.75920000160113
+    ],
+    "scope": "source reconstruction/integrity checking only; same store reused; no model work"
+  },
+  "implementation_sha256": {
+    "src/report_search/generation.py": "295839541276e8ca23a93f28140c1a7d990960667314c1f37877e644833ca5d0",
+    "src/report_search/llm_client.py": "dc38a35fd054e7c9b224cae15a4d3f1f9f65c8b67b0346767bcf4c1c1de9c88a",
+    "src/report_search/answer_cli.py": "7d893e13d0b21cfeee717be05775c91af135e51c2f123267a67e9020b3d3f5d1",
+    "src/report_search/evidence_binding.py": "41bc91330e0e25e997a6888374d9cf71874c54863e293e39d310a88576b39e47",
+    "src/report_search/answer_verification.py": "ebbe660705bdd0185d136faf68606c4f3e47c4106078891910d8c1c4fda5a061",
+    "scripts/run_bad_case_audit.py": "96cea8dab2b9d2326892a66f45eefedf0237a72428b6944147cd6ff584656481"
+  },
+  "limitations": [
+    "Source anchors and alternative support are agent-reviewed, not independently human labeled.",
+    "Negative semantic verdicts are prescribed fixtures; passing them does not measure a real model's detection rate.",
+    "The three-second budget is illustrative and cooperative; active operations are not interrupted.",
+    "No production end-to-end latency, generated-answer accuracy or hallucination reduction was measured.",
+    "Frozen benchmark labels and default retrieval/gate policies are unchanged."
+  ]
+}

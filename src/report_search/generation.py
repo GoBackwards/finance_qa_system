@@ -8,11 +8,13 @@ from __future__ import annotations
 
 import hashlib
 import json
+import time
 
 from report_search.answer_verification import validate_draft, validate_semantic_verdict, render_verified_answer
 from report_search.confidence import confidence_gate
 from report_search.evidence_binding import SourceEvidenceStore
 from report_search.llm_client import ChatCompletionsClient, ModelConfig, ModelError
+from report_search.runtime_support import DeadlineExceeded, RequestBudget
 
 
 PROMPT_VERSION = "evidence-bound-claims-v1"
@@ -59,7 +61,53 @@ def _abstain(reason, audit):
 
 
 def generate_answer(query, candidates, *, threshold=None, source_store=None,
-                    generator=None, verifier=None, max_context_chars=100_000):
+                    generator=None, verifier=None, max_context_chars=100_000,
+                    deadline_seconds=None, clock=time.monotonic):
+    """Generate with measured stages and an optional cooperative generation budget.
+
+    The budget starts here, after retrieval. It cannot interrupt an active model
+    or source read; an overrun discards the result and prevents later stages.
+    Provider socket timeouts are separate from this request-boundary check.
+    """
+    started = clock()
+    budget = RequestBudget(deadline_seconds, clock=clock) if deadline_seconds is not None else None
+    timings = []
+
+    def run_stage(name, operation):
+        if budget is not None:
+            with budget.stage(name):
+                return operation()
+        stage_started = clock()
+        status = "completed"
+        try:
+            return operation()
+        except BaseException:
+            status = "failed"
+            raise
+        finally:
+            timings.append({"stage": name, "duration_ms": max(0.0, clock() - stage_started) * 1000,
+                            "status": status})
+
+    result = _generate_answer(query, candidates, threshold=threshold, source_store=source_store,
+                              generator=generator, verifier=verifier, max_context_chars=max_context_chars,
+                              run_stage=run_stage)
+    if budget is not None:
+        snapshot = budget.to_dict()
+        if snapshot["deadline_exceeded"]:
+            result = _abstain("deadline_exceeded", result["audit"])
+        result["audit"]["generation_budget"] = snapshot
+        timings = snapshot["stages"]
+        elapsed_ms = snapshot["elapsed_ms"]
+    else:
+        elapsed_ms = max(0.0, clock() - started) * 1000
+    result["audit"]["stage_timings"] = timings
+    result["audit"]["generation_elapsed_ms"] = elapsed_ms
+    result["audit"]["timing_scope"] = "generation layer including source binding; excludes query embedding, search, reranking and model startup"
+    return result
+
+
+def _generate_answer(query, candidates, *, threshold=None, source_store=None,
+                     generator=None, verifier=None, max_context_chars=100_000, run_stage):
     """Generate from reranked Top5, or abstain before returning unsupported text.
 
     ``generator`` and ``verifier`` implement complete_json(messages). By default
@@ -83,7 +131,7 @@ def generate_answer(query, candidates, *, threshold=None, source_store=None,
         return _abstain(gate.reason, audit)
     try:
         store = source_store if source_store is not None else SourceEvidenceStore()
-        bundle = store.build(candidates)
+        bundle = run_stage("source_binding", lambda: store.build(candidates))
         if not isinstance(bundle, dict):
             return _abstain("source_verification_failed", audit)
         context = {"question": query, "source_evidence": bundle}
@@ -102,14 +150,19 @@ def generate_answer(query, candidates, *, threshold=None, source_store=None,
         verifier = verifier if verifier is not None else ChatCompletionsClient(ModelConfig.from_env(verifier=True))
         audit["generator"] = getattr(generator, "identity", {"backend": "injected"})
         audit["verifier"] = getattr(verifier, "identity", {"backend": "injected"})
-        audit["generation_called"] = True
-        draft = generator.complete_json([{"role": "system", "content": GENERATOR_SYSTEM},
-                                         {"role": "user", "content": serialized}])
+        def call_generator():
+            audit["generation_called"] = True
+            return generator.complete_json(
+                [{"role": "system", "content": GENERATOR_SYSTEM}, {"role": "user", "content": serialized}])
+        draft = run_stage("generation", call_generator)
     except ModelError as error:
         return _abstain(str(error), audit)
     except (ValueError, TypeError, OSError, RuntimeError):
         return _abstain("generation_failed", audit)
-    checked = validate_draft(draft, bundle)
+    try:
+        checked = run_stage("reference_validation", lambda: validate_draft(draft, bundle))
+    except DeadlineExceeded:
+        return _abstain("deadline_exceeded", audit)
     if not checked["ok"] or checked["status"] != "answer":
         return _abstain(checked.get("reason") or "generator_abstained", audit)
     audit["reference_check_passed"] = True
@@ -118,17 +171,25 @@ def generate_answer(query, candidates, *, threshold=None, source_store=None,
     if len(review_input) > max_context_chars:
         return _abstain("verification_context_budget_exceeded", audit)
     try:
-        audit["semantic_verifier_called"] = True
-        verdict = verifier.complete_json([{"role": "system", "content": VERIFIER_SYSTEM},
-                                          {"role": "user", "content": review_input}])
+        def call_verifier():
+            audit["semantic_verifier_called"] = True
+            return verifier.complete_json(
+                [{"role": "system", "content": VERIFIER_SYSTEM}, {"role": "user", "content": review_input}])
+        verdict = run_stage("semantic_verification", call_verifier)
     except ModelError as error:
         return _abstain(str(error), audit)
     except (ValueError, TypeError, OSError, RuntimeError):
         return _abstain("semantic_verifier_failed", audit)
-    semantic = validate_semantic_verdict(verdict, checked["claims"])
+    try:
+        semantic = run_stage("verdict_validation", lambda: validate_semantic_verdict(verdict, checked["claims"]))
+    except DeadlineExceeded:
+        return _abstain("deadline_exceeded", audit)
     if not semantic["ok"]:
         return _abstain(semantic.get("reason") or "unsupported_answer", audit)
-    result = render_verified_answer(checked["claims"], bundle, verdict)
+    try:
+        result = run_stage("rendering", lambda: render_verified_answer(checked["claims"], bundle, verdict))
+    except DeadlineExceeded:
+        return _abstain("deadline_exceeded", audit)
     result["audit"] = audit
     return result
 

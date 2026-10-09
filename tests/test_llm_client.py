@@ -1,14 +1,26 @@
 import io
+from http.client import BadStatusLine, HTTPResponse
 import json
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from urllib.error import HTTPError, URLError
 
 from report_search.llm_client import ChatCompletionsClient, ModelConfig, ModelError, strict_json
+from report_search.generation import generate_answer
 
 
 class Response(io.BytesIO):
     pass
+
+
+class WireSocket:
+    """Exercise real stdlib HTTP framing without a listening socket/network."""
+
+    def __init__(self, wire):
+        self.wire = wire
+
+    def makefile(self, *args):
+        return io.BytesIO(self.wire)
 
 
 def envelope(content='{"status":"abstain","claims":[]}', **changes):
@@ -62,6 +74,7 @@ class ClientTests(unittest.TestCase):
 
     def test_network_error_does_not_expose_credentials_or_body(self):
         errors = [URLError("secret-test-key"),
+                  BadStatusLine("secret-test-key"),
                   HTTPError("https://secret-test-key", 401, "secret-test-key", {}, None)]
         for error in errors:
             with patch("report_search.llm_client.build_opener") as opener:
@@ -69,6 +82,74 @@ class ClientTests(unittest.TestCase):
                 with self.assertRaises(ModelError) as raised:
                     self.client().complete_json([])
                 self.assertNotIn("secret-test-key", str(raised.exception))
+
+    def invoke_wire(self, headers, body, **options):
+        response = HTTPResponse(WireSocket(b"HTTP/1.1 200 OK\r\n" + headers + b"\r\n" + body))
+        response.begin()
+        with patch("report_search.llm_client.build_opener") as opener:
+            opener.return_value.open.return_value = response
+            return self.client(**options).complete_json([])
+
+    def test_short_content_length_rejected_even_when_body_is_valid_json(self):
+        body = envelope()
+        with self.assertRaisesRegex(ModelError, "^incomplete_model_response$"):
+            self.invoke_wire(f"Content-Length: {len(body) + 20}\r\n".encode(), body)
+
+    def test_unterminated_chunked_response_is_sanitized(self):
+        body = envelope()
+        chunk = f"{len(body):x}\r\n".encode() + body + b"\r\n"
+        with self.assertRaisesRegex(ModelError, "^incomplete_model_response$"):
+            self.invoke_wire(b"Transfer-Encoding: chunked\r\n", chunk)
+
+    def test_partial_provider_response_becomes_public_abstention(self):
+        body = envelope()
+        chunk = f"{len(body):x}\r\n".encode() + body + b"\r\n"
+        response = HTTPResponse(WireSocket(b"HTTP/1.1 200 OK\r\nTransfer-Encoding: chunked\r\n\r\n" + chunk))
+        response.begin()
+        source, verifier = Mock(), Mock()
+        source.build.return_value = {"source_verified": True, "evidence": {"E1": {"text": "Revenue was $10 million."}}}
+        with patch("report_search.llm_client.build_opener") as opener:
+            opener.return_value.open.return_value = response
+            result = generate_answer("What was revenue?", [{"chunk_id": "c1", "reranker_score": 7.0}],
+                                     threshold=6.0, source_store=source,
+                                     generator=self.client(), verifier=verifier)
+        self.assertEqual(result["answer"], "I'm not sure")
+        self.assertEqual(result["reason"], "incomplete_model_response")
+        self.assertEqual(result["citations"], [])
+        verifier.complete_json.assert_not_called()
+
+    def test_complete_http_framing_preserves_compatible_responses(self):
+        body = envelope()
+        chunk = f"{len(body):x}\r\n".encode() + body + b"\r\n0\r\n\r\n"
+        for headers, wire_body in ((f"Content-Length: {len(body)}\r\n".encode(), body),
+                                   (b"Transfer-Encoding: chunked\r\n", chunk),
+                                   (b"Connection: close\r\n", body)):
+            with self.subTest(headers=headers):
+                self.assertEqual(self.invoke_wire(headers, wire_body), {"status": "abstain", "claims": []})
+
+    def test_invalid_and_oversized_declared_lengths_are_rejected(self):
+        for length in (b"garbage", b"-1", b"1, 1"):
+            with self.subTest(length=length), self.assertRaisesRegex(ModelError, "framing"):
+                self.invoke_wire(b"Content-Length: " + length + b"\r\n", envelope())
+        for length in (b"2000001", b"9" * 5000):
+            with self.subTest(length=length[:10]), self.assertRaisesRegex(ModelError, "too_large"):
+                self.invoke_wire(b"Content-Length: " + length + b"\r\n", envelope())
+
+    def test_invalid_request_never_reaches_transport_or_exposes_input(self):
+        circular = []
+        circular.append(circular)
+        cases = [[{"role": "user", "content": "secret-test-key\ud800"}],
+                 [{"content": float("nan")}], [{"content": object()}], circular]
+        for messages in cases:
+            with self.subTest(kind=type(messages[0]).__name__), patch("report_search.llm_client.build_opener") as opener:
+                with self.assertRaisesRegex(ModelError, "^invalid_model_request$"):
+                    self.client().complete_json(messages)
+                opener.assert_not_called()
+
+    def test_invalid_credentials_are_rejected_before_transport(self):
+        for key in ("secret-test-key\u2603", "secret-test-key\t", "secret-test-key\x00", "secret-test-key\x7f"):
+            with self.subTest(key_suffix=repr(key[-1:])), self.assertRaisesRegex(ValueError, "^Invalid API credential$"):
+                ModelConfig("https://provider.example/v1", "chosen-model", api_key=key)
 
     def test_endpoint_and_config_validation(self):
         for url in ("http://remote.example/v1", "https://key@host/v1", "https://host/v1?key=x", "", "file:///tmp"):
@@ -83,9 +164,16 @@ class ClientTests(unittest.TestCase):
             ModelConfig.from_env()
 
     def test_json_rejects_duplicate_and_nonfinite_keys(self):
-        for data in ('{"a":1,"a":2}', '{"a":Infinity}', '[]'):
+        for data in ('{"a":1,"a":2}', '{"a":Infinity}', '{"a":1e999}', '{"a":[-1e999]}', '[]'):
             with self.assertRaises(ValueError):
                 strict_json(data)
+
+    def test_numeric_overflow_is_rejected_in_envelope_and_content(self):
+        for response in (envelope(content='{"a":1e999}'),
+                         envelope()[:-1] + b',"usage":{"tokens":1e999}}'):
+            with self.assertRaisesRegex(ModelError, "^invalid_model_json$"):
+                self.invoke(response)
+        self.assertEqual(strict_json('{"a":1e100}'), {"a": 1e100})
 
 
 if __name__ == "__main__":

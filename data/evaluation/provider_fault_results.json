@@ -1,0 +1,69 @@
+{
+  "method": "Actual stdlib HTTPResponse decoding over deterministic in-memory HTTP wire bytes; no server/network or paid model call.",
+  "results": [
+    {
+      "case": "partial_chunked_http",
+      "before": {
+        "type": "IncompleteRead",
+        "message": "IncompleteRead(106 bytes read)"
+      },
+      "after": {
+        "type": "ModelError",
+        "message": "incomplete_model_response"
+      }
+    },
+    {
+      "case": "partial_content_length_http",
+      "before": {
+        "type": "returned",
+        "value": {
+          "status": "abstain",
+          "claims": []
+        }
+      },
+      "after": {
+        "type": "ModelError",
+        "message": "incomplete_model_response"
+      }
+    },
+    {
+      "case": "json_numeric_overflow",
+      "before": {
+        "type": "returned",
+        "nonfinite_number_accepted": true
+      },
+      "after": {
+        "type": "ValueError",
+        "message": "Non-finite JSON value"
+      }
+    },
+    {
+      "case": "unencodable_request",
+      "before": {
+        "type": "UnicodeEncodeError",
+        "message": "'utf-8' codec can't encode character '\\ud800' in position 75: surrogates not allowed"
+      },
+      "after": {
+        "type": "ModelError",
+        "message": "invalid_model_request"
+      }
+    }
+  ],
+  "public_generation_result": {
+    "status": "abstain",
+    "answer": "I'm not sure",
+    "reason": "incomplete_model_response",
+    "citations": [],
+    "verifier_called": false
+  },
+  "targeted_tests": {
+    "command": ".venv/Scripts/python.exe -m unittest discover -s tests -p test_llm_client.py -v",
+    "passed": 16,
+    "new_tests": 8
+  },
+  "source_fingerprints": {
+    "baseline_commit": "ba6fc6e99e55ff69c96542e6f44c84ac55f10322",
+    "baseline_client_sha256": "9f30251f2c12ff9d4c38017c945bc3f0ba4931fefc8f57edc09c7cf699f0a2c9",
+    "patched_client_sha256": "dc38a35fd054e7c9b224cae15a4d3f1f9f65c8b67b0346767bcf4c1c1de9c88a"
+  }
+}

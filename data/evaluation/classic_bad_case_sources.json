@@ -1,0 +1,792 @@
+{
+  "schema_version": "1.0",
+  "audit_kind": "read_only_source_and_index_audit",
+  "measured_generation": false,
+  "limitations": [
+    "Parsed source inspection, not independently human reviewed or a live generation evaluation.",
+    "Rows in accepted tables are zero-indexed; all PDF pages are one-indexed.",
+    "No absence claim is inferred from corpus year limits alone."
+  ],
+  "documents": {
+    "NVDA": {
+      "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+      "source_file": "NVDA_FY2025_annual_report.pdf",
+      "source_sha256": "757b344ab62ba282f6e44e0702e8ce5f190d88fb23b5e0a2beaf4cb277a395cc",
+      "parsed_directory": "data/processed/NVDA/NVDA_FY2025_annual_report"
+    },
+    "MSFT": {
+      "document_id": "MSFT_FY2024_annual_report-979a3f819970",
+      "source_file": "MSFT_FY2024_annual_report.pdf",
+      "source_sha256": "979a3f8199702397e080719dc1212242eb2580bed78b5dab92d3f576d6abf5bc",
+      "parsed_directory": "data/processed/MSFT/MSFT_FY2024_annual_report"
+    },
+    "INTC": {
+      "document_id": "INTC_FY2024_annual_report-5b9ba57e8d60",
+      "source_file": "INTC_FY2024_annual_report.pdf",
+      "source_sha256": "5b9ba57e8d6025b2e78ba0e98933d006f1019dfb22f40dc3670826898a7c258d",
+      "parsed_directory": "data/processed/INTC/INTC_FY2024_annual_report"
+    },
+    "AMD": {
+      "document_id": "AMD_FY2024_annual_report-079208174889",
+      "source_file": "AMD_FY2024_annual_report.pdf",
+      "source_sha256": "079208174889130f5d6696d1199869b3e8f49d7a879473d040c069ffc9620491",
+      "parsed_directory": "data/processed/AMD/AMD_FY2024_annual_report"
+    }
+  },
+  "findings": {
+    "cashflow_repurchases": {
+      "query": "According to its cash-flow statement, how much cash did NVIDIA pay for share buybacks in FY2025?",
+      "target": {
+        "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+        "source_file": "NVDA_FY2025_annual_report.pdf",
+        "source_sha256": "757b344ab62ba282f6e44e0702e8ce5f190d88fb23b5e0a2beaf4cb277a395cc",
+        "parsed_directory": "data/processed/NVDA/NVDA_FY2025_annual_report",
+        "pdf_page": 148,
+        "table_id": "NVDA_FY2025_annual_report-757b344ab62b:p148:table1",
+        "structured_reliable": true,
+        "caption": "(In millions)\nYear Ended\nJan 26, 2025\nJan 28, 2024\nJan 29, 2023\nCash flows from operating activities:",
+        "rows": [
+          {
+            "row_index": 31,
+            "cells": [
+              "Payments related to repurchases of common stock",
+              "(33,706)",
+              "(9,533)",
+              "(10,039)"
+            ],
+            "source_text": "Payments related to repurchases of common stock (33,706) (9,533) (10,039)"
+          }
+        ],
+        "numeric_integrity": {
+          "passed": true,
+          "missing_from_cells": {},
+          "unexpected_in_cells": {}
+        }
+      },
+      "expected_cash_paid_usd_million": 33706,
+      "expected_cash_paid_usd_billion": 33.706,
+      "sign_interpretation": "Parentheses denote an outflow. Report cash paid as positive $33.706 billion with an outflow qualification, not negative cash received.",
+      "different_scope_narrative": {
+        "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+        "source_file": "NVDA_FY2025_annual_report.pdf",
+        "source_sha256": "757b344ab62ba282f6e44e0702e8ce5f190d88fb23b5e0a2beaf4cb277a395cc",
+        "parsed_directory": "data/processed/NVDA/NVDA_FY2025_annual_report",
+        "pdf_page": 125,
+        "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p125:e10",
+        "text": "Issuer Purchases of Equity Securities On August 26, 2024, our Board of Directors approved an additional $50 billion to our share repurchase authorization, without expiration. In fiscal year 2025, we repurchased 310 million shares of our common stock for $34.0 billion. As of January 26, 2025, we were authorized, subject to certain specifications, to repurchase up to $38.7 billion of our common stock.",
+        "bbox": [
+          40.5,
+          639.63,
+          555.872,
+          697.17
+        ]
+      },
+      "indexed_target_chunks": [
+        {
+          "chunk_id": "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c304:290b1c8921d8",
+          "kind": "table",
+          "text": "(In millions)\nYear Ended\nJan 26, 2025\nJan 28, 2024\nJan 29, 2023\nCash flows from operating activities:\n| Column 1 | Column 2 | Column 3 | Column 4 |\n| --- | --- | --- | --- |\n| Purchases of marketable securities | (26,575) | (18,211) | (11,897) |\n| Purchases related to property and equipment and intangible |  |  |  |\n| assets | (3,236) | (1,069) | (1,833) |\n| Purchases of non-marketable equity securities | (1,486) | (862) | (85) |\n| Acquisitions, net of cash acquired | (1,007) | (83) | (49) |\n| Other | 22 | (124) | — |\n| Net cash provided by (used in) investing activities | (20,421) | (10,566) | 7,375 |\n| Cash flows from financing activities: |  |  |  |\n| Proceeds related to employee stock plans | 490 | 403 | 355 |\n| Payments related to repurchases of common stock | (33,706) | (9,533) | (10,039) |\n| Payments related to tax on restricted stock units | (6,930) | (2,783) | (1,475) |\n| Repayment of debt | (1,250) | (1,250) | — |\n| Dividends paid | (834) | (395) | (398) |\n| Principal payments on property and equipment and intangible |  |  |  |\n| assets | (129) | (74) | (58) |\n| Other | — | (1) | (2) |\n| Net cash used in financing activities | (42,359) | (13,633) | (11,617) |\n| Change in cash and cash equivalents | 1,309 | 3,891 | 1,399 |\n| Cash and cash equivalents at beginning of period | 7,280 | 3,389 | 1,990 |\n| Cash and cash equivalents at end of period | $ 8,589 | $ 7,280 | $ 3,389 |\n| Supplemental disclosures of cash flow information: |  |  |  |",
+          "table_ids": null,
+          "citations": null,
+          "source_spans": null
+        }
+      ],
+      "assessment": "Exact cash-flow row, year headings, and millions unit survive parsing and indexing; no confirmed header-loss root cause for this target. The narrative $34.0 billion is a repurchase total; it must not replace the exact cash-flow payment of $33,706 million."
+    },
+    "consolidated_vs_cloud": {
+      "query": "What was Microsoft's company-wide gross margin percentage in FY2024?",
+      "consolidated_inputs": {
+        "document_id": "MSFT_FY2024_annual_report-979a3f819970",
+        "source_file": "MSFT_FY2024_annual_report.pdf",
+        "source_sha256": "979a3f8199702397e080719dc1212242eb2580bed78b5dab92d3f576d6abf5bc",
+        "parsed_directory": "data/processed/MSFT/MSFT_FY2024_annual_report",
+        "pdf_page": 48,
+        "table_id": "MSFT_FY2024_annual_report-979a3f819970:p48:table1",
+        "structured_reliable": true,
+        "caption": "FINANCIAL STATEMENTS AND SUPPLEMENTARY DATA\nINCOME STATEMENTS\n(In millions, except per share amounts)",
+        "rows": [
+          {
+            "row_index": 0,
+            "cells": [
+              "Year Ended June 30,",
+              "2024",
+              "2023",
+              "2022"
+            ],
+            "source_text": "Year Ended June 30, 2024 2023 2022"
+          },
+          {
+            "row_index": 4,
+            "cells": [
+              "Total revenue",
+              "245,122",
+              "211,915",
+              "198,270"
+            ],
+            "source_text": "Total revenue 245,122 211,915 198,270"
+          },
+          {
+            "row_index": 9,
+            "cells": [
+              "Gross margin",
+              "171,008",
+              "146,052",
+              "135,620"
+            ],
+            "source_text": "Gross margin 171,008 146,052 135,620"
+          }
+        ],
+        "numeric_integrity": {
+          "passed": true,
+          "missing_from_cells": {},
+          "unexpected_in_cells": {}
+        }
+      },
+      "derived_consolidated_percentage": 69.76444382797138,
+      "formula": "171008 / 245122 * 100",
+      "cloud_passage": {
+        "document_id": "MSFT_FY2024_annual_report-979a3f819970",
+        "source_file": "MSFT_FY2024_annual_report.pdf",
+        "source_sha256": "979a3f8199702397e080719dc1212242eb2580bed78b5dab92d3f576d6abf5bc",
+        "parsed_directory": "data/processed/MSFT/MSFT_FY2024_annual_report",
+        "pdf_page": 35,
+        "element_id": "MSFT_FY2024_annual_report-979a3f819970:p35:e13",
+        "text": "• Microsoft Cloud gross margin percentage decreased slightly to 71%. Excluding the impact of the change in accounting estimate, Microsoft Cloud gross margin percentage increased slightly driven by improvements in Azure and Office 365 Commercial, inclusive of scaling our AI infrastructure, offset in part by sales mix shift to Azure.",
+        "bbox": [
+          64.0,
+          512.41,
+          555.047,
+          558.41
+        ]
+      },
+      "cloud_percentage": 71,
+      "assessment": "Company-wide percentage is derived from the consolidated numerator and denominator. Cloud 71% does not support the company-wide claim. The summary table also gives 17% relative gross-margin growth, which is not a gross-margin percentage.",
+      "alternate_summary_inputs": {
+        "document_id": "MSFT_FY2024_annual_report-979a3f819970",
+        "source_file": "MSFT_FY2024_annual_report.pdf",
+        "source_sha256": "979a3f8199702397e080719dc1212242eb2580bed78b5dab92d3f576d6abf5bc",
+        "parsed_directory": "data/processed/MSFT/MSFT_FY2024_annual_report",
+        "pdf_page": 35,
+        "table_id": "MSFT_FY2024_annual_report-979a3f819970:p35:table1",
+        "structured_reliable": true,
+        "caption": "SUMMARY RESULTS OF OPERATIONS\nPercentage\n(In millions, except percentages and per share amounts)\n2024\n2023\nChange",
+        "rows": [
+          {
+            "row_index": 0,
+            "cells": [
+              "Revenue",
+              "$ 245,122",
+              "$ 211,915",
+              "16%"
+            ],
+            "source_text": "Revenue $ 245,122 $ 211,915 16%"
+          },
+          {
+            "row_index": 1,
+            "cells": [
+              "Gross margin",
+              "171,008",
+              "146,052",
+              "17%"
+            ],
+            "source_text": "Gross margin 171,008 146,052 17%"
+          }
+        ],
+        "numeric_integrity": {
+          "passed": true,
+          "missing_from_cells": {},
+          "unexpected_in_cells": {}
+        }
+      }
+    },
+    "wrong_year_column": {
+      "query": "What was Microsoft's operating income in FY2024?",
+      "anchor": {
+        "document_id": "MSFT_FY2024_annual_report-979a3f819970",
+        "source_file": "MSFT_FY2024_annual_report.pdf",
+        "source_sha256": "979a3f8199702397e080719dc1212242eb2580bed78b5dab92d3f576d6abf5bc",
+        "parsed_directory": "data/processed/MSFT/MSFT_FY2024_annual_report",
+        "pdf_page": 48,
+        "table_id": "MSFT_FY2024_annual_report-979a3f819970:p48:table1",
+        "structured_reliable": true,
+        "caption": "FINANCIAL STATEMENTS AND SUPPLEMENTARY DATA\nINCOME STATEMENTS\n(In millions, except per share amounts)",
+        "rows": [
+          {
+            "row_index": 0,
+            "cells": [
+              "Year Ended June 30,",
+              "2024",
+              "2023",
+              "2022"
+            ],
+            "source_text": "Year Ended June 30, 2024 2023 2022"
+          },
+          {
+            "row_index": 13,
+            "cells": [
+              "Operating income",
+              "109,433",
+              "88,523",
+              "83,383"
+            ],
+            "source_text": "Operating income 109,433 88,523 83,383"
+          }
+        ],
+        "numeric_integrity": {
+          "passed": true,
+          "missing_from_cells": {},
+          "unexpected_in_cells": {}
+        }
+      },
+      "fiscal_2024_usd_million": 109433,
+      "fiscal_2023_usd_million": 88523,
+      "fiscal_2022_usd_million": 83383,
+      "assessment": "All three years occur in the same source row, so a correct document fiscal year alone cannot validate the association between the value and the year."
+    },
+    "unsupported_forecast": {
+      "query": "According to the uploaded reports, what is NVIDIA's revenue forecast for FY2027?",
+      "historical_revenue_anchor": {
+        "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+        "source_file": "NVDA_FY2025_annual_report.pdf",
+        "source_sha256": "757b344ab62ba282f6e44e0702e8ce5f190d88fb23b5e0a2beaf4cb277a395cc",
+        "parsed_directory": "data/processed/NVDA/NVDA_FY2025_annual_report",
+        "pdf_page": 144,
+        "table_id": "NVDA_FY2025_annual_report-757b344ab62b:p144:table1",
+        "structured_reliable": true,
+        "caption": "NVIDIA Corporation and Subsidiaries\nConsolidated Statements of Income\n(In millions, except per share data)",
+        "rows": [
+          {
+            "row_index": 0,
+            "cells": [
+              "",
+              "",
+              "Year Ended",
+              ""
+            ],
+            "source_text": "Year Ended"
+          },
+          {
+            "row_index": 1,
+            "cells": [
+              "",
+              "Jan 26, 2025",
+              "Jan 28, 2024",
+              "Jan 29, 2023"
+            ],
+            "source_text": "Jan 26, 2025 Jan 28, 2024 Jan 29, 2023"
+          },
+          {
+            "row_index": 2,
+            "cells": [
+              "Revenue",
+              "$ 130,497",
+              "$ 60,922",
+              "$ 26,974"
+            ],
+            "source_text": "Revenue $ 130,497 $ 60,922 $ 26,974"
+          }
+        ],
+        "numeric_integrity": {
+          "passed": true,
+          "missing_from_cells": {},
+          "unexpected_in_cells": {}
+        }
+      },
+      "supported_future_control": {
+        "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+        "source_file": "NVDA_FY2025_annual_report.pdf",
+        "source_sha256": "757b344ab62ba282f6e44e0702e8ce5f190d88fb23b5e0a2beaf4cb277a395cc",
+        "parsed_directory": "data/processed/NVDA/NVDA_FY2025_annual_report",
+        "pdf_page": 137,
+        "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p137:e3",
+        "text": "During fiscal year 2025 and fiscal year 2024, we spent $3.4 billion and $1.1 billion on capital expenditures, respectively. We expect to increase capital expenditures in fiscal year 2026 relative to fiscal year 2025 to support the future growth of our business.",
+        "bbox": [
+          40.5,
+          120.03,
+          555.906,
+          152.97
+        ]
+      },
+      "scope": "Scanned all parsed NVDA FY2021–FY2025 paragraph and table elements containing 2027 and retained matches for audit. This supports no forecast found in the checked text, not a blanket proof of absence in unparsed pixels or all possible forecasts.",
+      "matching_2027_elements": [
+        {
+          "document_id": "NVDA_FY2021_annual_report-3771ab7b69a2",
+          "pdf_page": 141,
+          "element_id": "NVDA_FY2021_annual_report-3771ab7b69a2:p141:e10",
+          "text": "| Column 1 | Column 2 |\n| --- | --- |\n| 2023 | 135 |\n| 2024 | 115 |\n| 2025 | 94 |\n| 2026 | 86 |\n| 2027 and thereafter | 288 |\n| Total | 870 |\n| Less imputed interest | 115 |\n| Present value of net future minimum lease payments | 755 |\n| Less short-term operating lease liabilities | 121 |\n| Long-term operating lease liabilities | $ 634 |"
+        },
+        {
+          "document_id": "NVDA_FY2021_annual_report-3771ab7b69a2",
+          "pdf_page": 145,
+          "element_id": "NVDA_FY2021_annual_report-3771ab7b69a2:p145:e20",
+          "text": "Amortization expense associated with intangible assets for fiscal years 2021, 2020, and 2019 was $612 million, $25 million, and $29 million,  respectively. Future amortization expense related to the net carrying amount of intangible assets as of January 31, 2021 is estimated to be $548 million in fiscal year 2022, $545 million in fiscal year 2023, $423 million in fiscal year 2024, $367 million in fiscal year 2025, $97 million in fiscal year 2026, and $757 million in fiscal year 2027 and thereafter."
+        },
+        {
+          "document_id": "NVDA_FY2022_annual_report-1ee6fabb7560",
+          "pdf_page": 172,
+          "element_id": "NVDA_FY2022_annual_report-1ee6fabb7560:p172:e9",
+          "text": "| Column 1 | Column 2 |\n| --- | --- |\n| 2024 | 162 |\n| 2025 | 136 |\n| 2026 | 124 |\n| 2027 | 114 |\n| 2028 and thereafter | 288 |\n| Total | 1,000 |\n| Less imputed interest | 115 |\n| Present value of net future minimum lease payments | 885 |\n| Less short-term operating lease liabilities | 144 |\n| Long-term operating lease liabilities | $ 741 |"
+        },
+        {
+          "document_id": "NVDA_FY2022_annual_report-1ee6fabb7560",
+          "pdf_page": 176,
+          "element_id": "NVDA_FY2022_annual_report-1ee6fabb7560:p176:e20",
+          "text": "Amortization expense associated with intangible assets for fiscal years 2022, 2021, and 2020 was $563 million, $612 million, and $25 million,  respectively. Future amortization expense related to the net carrying amount of intangible assets, excluding in-process research and development, as of January 30, 2022 is estimated to be $585 million in fiscal year 2023, $461 million in fiscal year 2024, $405 million in fiscal year 2025, $121 million in fiscal year 2026, $16 million in fiscal year 2027, and $121 million in fiscal year 2028 and thereafter."
+        },
+        {
+          "document_id": "NVDA_FY2023_annual_report-ffac862ed5ae",
+          "pdf_page": 139,
+          "element_id": "NVDA_FY2023_annual_report-ffac862ed5ae:p139:e9",
+          "text": "| Column 1 | Column 2 |\n| --- | --- |\n| 2024 | $ 220 |\n| 2025 | 198 |\n| 2026 | 180 |\n| 2027 | 166 |\n| 2028 | 144 |\n| 2029 and thereafter | 323 |\n| Total | 1,231 |\n| Less imputed interest | 153 |\n| Present value of net future minimum lease payments | 1,078 |\n| Less short-term operating lease liabilities | 176 |\n| Long-term operating lease liabilities | $ 902 |"
+        },
+        {
+          "document_id": "NVDA_FY2023_annual_report-ffac862ed5ae",
+          "pdf_page": 142,
+          "element_id": "NVDA_FY2023_annual_report-ffac862ed5ae:p142:e70",
+          "text": "Amortization expense associated with intangible assets for fiscal years 2023, 2022, and 2021 was $699 million, $563 million, and $612 million,  respectively. Future amortization expense related to the net carrying amount of intangible assets as of January 29, 2023 is estimated to be $602 million in fiscal year 2024, $541 million in fiscal year 2025, $247 million in fiscal year 2026, $142 million in fiscal year 2027, $35 million in fiscal year 2028, and $109 million in fiscal year 2029 and thereafter."
+        },
+        {
+          "document_id": "NVDA_FY2023_annual_report-ffac862ed5ae",
+          "pdf_page": 148,
+          "element_id": "NVDA_FY2023_annual_report-ffac862ed5ae:p148:e8",
+          "text": "Fiscal Year: 2024 2025 2026 2027 2028 2029 and thereafter Total"
+        },
+        {
+          "document_id": "NVDA_FY2024_annual_report-b5751f4bb240",
+          "pdf_page": 53,
+          "element_id": "NVDA_FY2024_annual_report-b5751f4bb240:p53:e7",
+          "text": "Non-employee directors can elect to defer settlement of RSUs upon vesting for tax planning purposes to the earlier of (i) a future year (no sooner than 2025 for the 2023 Program RSUs and 2023 Program Lora RSUs (as defined below), and no sooner than 2027 for the Initial Lora RSUs) or (ii) in connection with the director’s cessation of service or certain change in control events, in accordance with the rules under Section 409A of the Internal Revenue Code.  Messrs. Coxe, Jones, McCaffery, and Neal, and Dr. Shah elected to defer settlement of their 2023 Program RSUs, and Ms. Lora elected to defer settlement of her Initial Lora RSUs and 2023 Program Lora RSUs.  Directors do not receive dividends on unvested, or vested but deferred, RSUs."
+        },
+        {
+          "document_id": "NVDA_FY2024_annual_report-b5751f4bb240",
+          "pdf_page": 75,
+          "element_id": "NVDA_FY2024_annual_report-b5751f4bb240:p75:e2",
+          "text": "Represents the number of shares subject to the PSU that became eligible to vest, determined as of January 28, 2024, assuming achievement of Stretch Compensation Plan performance goals.  The PSU vested as to 25% of the shares on March 20, 2024, and vests as to 6.25% approximately every three months thereafter over the next three years such that the PSU will be fully vested on March 17, 2027."
+        },
+        {
+          "document_id": "NVDA_FY2024_annual_report-b5751f4bb240",
+          "pdf_page": 75,
+          "element_id": "NVDA_FY2024_annual_report-b5751f4bb240:p75:e14",
+          "text": "the RSU will be fully vested on March 17, 2027."
+        },
+        {
+          "document_id": "NVDA_FY2024_annual_report-b5751f4bb240",
+          "pdf_page": 147,
+          "element_id": "NVDA_FY2024_annual_report-b5751f4bb240:p147:e15",
+          "text": "| Column 1 | Column 2 |\n| --- | --- |\n| 2026 | 270 |\n| 2027 | 253 |\n| 2028 | 236 |\n| 2029 | 202 |\n| 2030 and thereafter | 288 |\n| Total | 1,539 |\n| Less imputed interest | 192 |\n| Present value of net future minimum lease payments | 1,347 |\n| Less short-term operating lease liabilities | 228 |\n| Long-term operating lease liabilities | $ 1,119 |"
+        },
+        {
+          "document_id": "NVDA_FY2024_annual_report-b5751f4bb240",
+          "pdf_page": 151,
+          "element_id": "NVDA_FY2024_annual_report-b5751f4bb240:p151:e28",
+          "text": "Fiscal Year: 2025 2026 2027 2028 2029 2030 and thereafter Total"
+        },
+        {
+          "document_id": "NVDA_FY2024_annual_report-b5751f4bb240",
+          "pdf_page": 160,
+          "element_id": "NVDA_FY2024_annual_report-b5751f4bb240:p160:e3",
+          "text": "Fiscal Year: 2025 2026 2027 2028 2029 and thereafter Total"
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 59,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p59:e71",
+          "text": "*  The CC is expected to certify achievement and payouts for MY PSUs granted in Fiscal 2025 by March 2027."
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 63,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p63:e3",
+          "text": "Determining Equity Award Amounts To determine the actual number of RSUs and target numbers of SY PSUs and MY PSUs awarded to our NEOs, the CC divided the value of the target equity they intended to deliver by the 30-calendar day trailing average closing price of our common stock ending on the last day of the calendar month prior to the date of grant.  They used this methodology instead of calculating based on the stock price on the grant date to smooth the effects of possible market volatility.  The CC understands that using a historical average stock price can cause the ASC 718 grant date value of an award, as required to be reported in the Summary Compensation Table and Grants of Plan-Based Awards Table, to be different than the target equity opportunity.  The CC considered various approaches to granting awards and determined the process described above is appropriate. The target number of SY PSUs would become eligible to vest if the Company achieved Fiscal 2025 Non-GAAP Operating Income at Base Compensation Plan.  If the Company achieved Fiscal 2025 Non-GAAP Operating Income at Stretch Compensation Plan or more, the maximum SY PSUs eligible to vest would be capped at 150% of Mr. Huang’s SY PSU target equity opportunity and at 200% for other NEOs.  If the Company achieved Fiscal 2025 Non-GAAP Operating Income at Threshold, the minimum SY PSUs eligible to vest would be 50% of each NEO’s SY PSU target equity opportunity. The target number of MY PSUs would become eligible to vest if the Company achieved TSR relative to the S&P 500 from the start of Fiscal 2025 to the end of Fiscal 2027, or the 3-Year Relative TSR, at Base Compensation Plan.  If the Company achieved 3-Year Relative TSR at Stretch Compensation Plan or more, the maximum MY PSUs eligible to vest would be capped at 150% of Mr. Huang’s MY PSU target equity opportunity and at 200% for other NEOs.  If the Company achieved 3-Year Relative TSR at Threshold, the minimum MY PSUs eligible to vest would be 25% of each NEO’s MY PSU target equity opportunity."
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 64,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p64:e54",
+          "text": "2027"
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 64,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p64:e72",
+          "text": "MY PSUs granted in Fiscal 2025 cover the Fiscal 2025 to Fiscal 2027 performance period.  MY PSUs covering the Fiscal 2023 to Fiscal 2025 performance period were granted in Fiscal 2023 and consist of the same performance goal structure and payout opportunities."
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 65,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p65:e29",
+          "text": "Achievement of goals for MY PSUs granted during Fiscal 2024 and Fiscal 2025 will be determined after the applicable performance periods conclude in January 2026 and January 2027, respectively. Fiscal 2025 Target Compensation Actions and Performance-Based Payouts"
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 72,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p72:e63",
+          "text": "The PSU was earned based on achievement of a performance goal for the 1-year period that ended on January 28, 2024. The PSU vested as to 25% of the shares on March 20, 2024, and vests as to 6.25% approximately every three months thereafter over the next three years such that the PSU will be fully vested on March 17, 2027."
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 73,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p73:e6",
+          "text": "Represents shares that could be earned upon achievement of Stretch Compensation Plan goals, based on our TSR relative to the S&P 500 from January 29, 2024 through January 31, 2027.  If the performance goal is achieved, 100% of the shares earned will vest on March 17, 2027.  If the Threshold performance goal is achieved, 47,720 shares will be earned by Mr. Huang, 11,970 shares will be earned by Ms. Kress, 11,620 shares will be earned by Mr. Puri, 10,760 shares will be earned by Ms. Shoquist, and 10,760 shares will be earned by Mr. Teter.  If the Base Compensation Plan performance goal is achieved, 190,900 shares will be earned by Mr. Huang, 47,890 shares will be earned by Ms. Kress, 46,510 shares will be earned by Mr. Puri, 43,040 shares will be earned by Ms. Shoquist, and 43,040 shares will be earned by Mr. Teter."
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 73,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p73:e12",
+          "text": "March 17, 2027, the approximate four year anniversary of the grant date."
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 74,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p74:e15",
+          "text": "The actual number of MY PSUs granted in Fiscal 2024 and Fiscal 2025 that will become eligible to vest will be determinable after January 25, 2026 and January 31, 2027, respectively, the ending dates of the applicable three-year measurement period for MY PSUs."
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 158,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p158:e3",
+          "text": "Fiscal Year: 2026 2027 2028 2029 2030 2031 and thereafter Total"
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 165,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p165:e3",
+          "text": "Fiscal Year: 2026 2027 2028 2029 2030 2031 and thereafter Total"
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 168,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p168:e17",
+          "text": "As of January  26, 2025, we had U.S. federal, state and foreign net operating loss carryforwards of $479  million, $332 million and $349 million, respectively. The federal and state carryforwards will begin to expire in fiscal years 2026 and 2027, respectively. The foreign net operating loss carryforwards of $349 million may be carried forward indefinitely. As of January 26, 2025, we had federal research tax credit carryforwards of $46 million, before the impact of uncertain tax positions, that will begin to expire in fiscal year 2026. We have state research tax credit carryforwards of $1.5 billion, before the impact of uncertain tax positions. $1.4 billion is attributable to the State of California and may be carried over indefinitely and $98  million is attributable to various other states and will begin to expire in fiscal year 2026. As of January 26, 2025, we had federal capital loss carryforwards of $1.3 billion that will begin to expire in fiscal year 2028."
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 173,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p173:e7",
+          "text": "2027"
+        },
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "pdf_page": 173,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p173:e9",
+          "text": "| Column 1 | Column 2 |\n| --- | --- |\n| 2027 | 331 |\n| 2028 | 337 |\n| 2029 | 301 |\n| 2030 | 226 |\n| 2031 and thereafter | 537 |\n| Total | 2,086 |\n| Less imputed interest | 279 |\n| Present value of net future minimum lease payments | 1,807 |\n| Less short-term operating lease liabilities | 288 |\n| Long-term operating lease liabilities | $ 1,519 |"
+        }
+      ],
+      "review_conclusion": "All 27 parsed elements mentioning 2027 in the five NVDA reports were inspected. Matches concern leases, amortization, compensation, tax credits, and scheduled future periods; no FY2027 revenue forecast was found in those checked elements. This is a targeted text audit, not an exhaustive semantic absence guarantee."
+    },
+    "incomplete_comparison": {
+      "query": "According to their FY2024 annual reports, which company reported a higher consolidated GAAP gross margin: Intel or AMD?",
+      "intel_chart_percentage": {
+        "document_id": "INTC_FY2024_annual_report-5b9ba57e8d60",
+        "source_file": "INTC_FY2024_annual_report.pdf",
+        "source_sha256": "5b9ba57e8d6025b2e78ba0e98933d006f1019dfb22f40dc3670826898a7c258d",
+        "parsed_directory": "data/processed/INTC/INTC_FY2024_annual_report",
+        "pdf_page": 32,
+        "element_id": "INTC_FY2024_annual_report-5b9ba57e8d60:p32:e18",
+        "text": "32.7%",
+        "bbox": [
+          201.0,
+          187.39,
+          223.66,
+          198.478
+        ]
+      },
+      "intel_chart_year": {
+        "document_id": "INTC_FY2024_annual_report-5b9ba57e8d60",
+        "source_file": "INTC_FY2024_annual_report.pdf",
+        "source_sha256": "5b9ba57e8d6025b2e78ba0e98933d006f1019dfb22f40dc3670826898a7c258d",
+        "parsed_directory": "data/processed/INTC/INTC_FY2024_annual_report",
+        "pdf_page": 32,
+        "element_id": "INTC_FY2024_annual_report-5b9ba57e8d60:p32:e19",
+        "text": "2024",
+        "bbox": [
+          202.494,
+          212.825,
+          222.587,
+          225.191
+        ]
+      },
+      "intel_chart_caption": {
+        "document_id": "INTC_FY2024_annual_report-5b9ba57e8d60",
+        "source_file": "INTC_FY2024_annual_report.pdf",
+        "source_sha256": "5b9ba57e8d6025b2e78ba0e98933d006f1019dfb22f40dc3670826898a7c258d",
+        "parsed_directory": "data/processed/INTC/INTC_FY2024_annual_report",
+        "pdf_page": 32,
+        "element_id": "INTC_FY2024_annual_report-5b9ba57e8d60:p32:e8",
+        "text": "(Percentages in chart indicate gross margin as a percentage of total revenue)",
+        "bbox": [
+          160.143,
+          87.275,
+          436.537,
+          99.641
+        ]
+      },
+      "intel_percentage": 32.7,
+      "amd_percentage": 49,
+      "amd_anchor": {
+        "document_id": "AMD_FY2024_annual_report-079208174889",
+        "source_file": "AMD_FY2024_annual_report.pdf",
+        "source_sha256": "079208174889130f5d6696d1199869b3e8f49d7a879473d040c069ffc9620491",
+        "parsed_directory": "data/processed/AMD/AMD_FY2024_annual_report",
+        "pdf_page": 51,
+        "table_id": "AMD_FY2024_annual_report-079208174889:p51:table1",
+        "structured_reliable": true,
+        "caption": "Comparison of Gross Margin, Expenses, Licensing Gain, Interest Expense, Other Income (expense) and Income Taxes\nThe following is a summary of certain Consolidated Statement of Operations data for 2024 and 2023:\nDecember 28, 2024\nDecember 30, 2023\n(In millions, except for percentages)",
+        "rows": [
+          {
+            "row_index": 4,
+            "cells": [
+              "Gross margin",
+              "49",
+              null,
+              "%",
+              "46",
+              null,
+              "%"
+            ],
+            "source_text": "Gross margin 49 % 46 %"
+          }
+        ],
+        "numeric_integrity": {
+          "passed": true,
+          "missing_from_cells": {},
+          "unexpected_in_cells": {}
+        }
+      },
+      "assessment": "AMD 49% exceeds Intel 32.7%; require both sources and matching period, GAAP basis, and consolidated scope. Intel p65 native statement supports ratio 17345 / 53101 = 32.6642%, rounding to 32.7%."
+    },
+    "numeric_parse_corruption_contained": {
+      "document_id": "INTC_FY2024_annual_report-5b9ba57e8d60",
+      "source_file": "INTC_FY2024_annual_report.pdf",
+      "source_sha256": "5b9ba57e8d6025b2e78ba0e98933d006f1019dfb22f40dc3670826898a7c258d",
+      "parsed_directory": "data/processed/INTC/INTC_FY2024_annual_report",
+      "pdf_page": 65,
+      "table_id": "INTC_FY2024_annual_report-5b9ba57e8d60:p65:table1",
+      "structured_reliable": false,
+      "accepted_rows": [],
+      "candidate_rows_debug_only": [
+        [
+          "YYeeaarrss EEnnddeedd ((IInn MMiilllliioonnss,, EExxcceepptt PPeerr SShhaarree AAmmoouunnttss)) DDeecc",
+          "2288,, 22002244 DD",
+          "eecc 3300,, 22002233 DD",
+          "eecc 3311,, 22002222"
+        ],
+        [
+          "NNeett rreevveennuuee i$•",
+          "5533,,110011 $$",
+          "5544,,222288 $$",
+          "6633,,005544"
+        ],
+        [
+          "CCoosstt ooff ssaalleess",
+          "3355,,775566",
+          "3322,,551177",
+          "3366,,118888"
+        ],
+        [
+          "GGrroossss mmaarrggiinn",
+          "1177,,334455",
+          "2211,,771111",
+          "2266,,886666"
+        ],
+        [
+          "RReesseeaarrcchh aanndd ddeevveellooppmmeenntt",
+          "1166,,554466",
+          "1166,,004466",
+          "1177,,552288"
+        ],
+        [
+          "MMaarrkkeettiinngg,, ggeenneerraall,, aanndd aaddmmiinniissttrraattiivvee",
+          "55,,550077",
+          "55,,663344",
+          "77,,000022"
+        ],
+        [
+          "RReessttrruuccttuurriinngg aanndd ootthheerr cchhaarrggeess",
+          "66,,997700",
+          "((6622))",
+          "22"
+        ],
+        [
+          "OOppeerraattiinngg eexxppeennsseess",
+          "2299,,002233",
+          "2211,,661188",
+          "2244,,553322"
+        ],
+        [
+          "OOppeerraattiinngg iinnccoommee ((lloossss))",
+          "((1111,,667788))",
+          "9933",
+          "22,,333344"
+        ],
+        [
+          "GGaaiinnss ((lloosssseess)) oonn eeqquuiittyy iinnvveessttmmeennttss,, nneett",
+          "224422",
+          "4400",
+          "44,,226688"
+        ],
+        [
+          "IInntteerreesstt aanndd ootthheerr,, nneett",
+          "222266",
+          "662299",
+          "11,,116666"
+        ],
+        [
+          "IInnccoommee ((lloossss)) bbeeffoorree ttaaxxeess",
+          "((1111,,221100))",
+          "776622",
+          "77,,776688"
+        ],
+        [
+          "PPrroovviissiioonn ffoorr ((bbeenneeffiitt ffrroomm)) ttaaxxeess",
+          "88,,002233",
+          "((991133))",
+          "((224499))"
+        ],
+        [
+          "NNeett iinnccoommee ((lloossss))",
+          "((1199,,223333))",
+          "11,,667755",
+          "88,,001177"
+        ],
+        [
+          "LLeessss:: nneett iinnccoommee ((lloossss)) aattttrriibbuuttaabbllee ttoo nnoonn--ccoonnttrroolllliinngg iinntteerreessttss",
+          "((447777))",
+          "((1144))",
+          "33"
+        ],
+        [
+          "NNeett iinnccoommee ((lloossss)) aattttrriibbuuttaabbllee ttoo IInntteell $$",
+          "((1188,,775566)) $$",
+          "11,,668899 $$",
+          "88,,001144"
+        ]
+      ],
+      "numeric_integrity": {
+        "passed": false,
+        "missing_from_cells": {
+          "28": 2,
+          "2024": 2,
+          "30": 2,
+          "2023": 2,
+          "31": 2,
+          "2022": 2,
+          "53,101": 2,
+          "54,228": 2,
+          "63,054": 2,
+          "35,756": 2,
+          "32,517": 2,
+          "36,188": 2,
+          "17,345": 2,
+          "21,711": 2,
+          "26,866": 2,
+          "16,546": 2,
+          "16,046": 2,
+          "17,528": 2,
+          "5,507": 2,
+          "5,634": 2,
+          "7,002": 2,
+          "6,970": 2,
+          "62": 2,
+          "2": 2,
+          "29,023": 2,
+          "21,618": 2,
+          "24,532": 2,
+          "11,678": 2,
+          "93": 2,
+          "2,334": 2,
+          "242": 2,
+          "40": 2,
+          "4,268": 2,
+          "226": 2,
+          "629": 2,
+          "1,166": 2,
+          "11,210": 2,
+          "762": 2,
+          "7,768": 2,
+          "8,023": 2,
+          "913": 2,
+          "249": 2,
+          "19,233": 2,
+          "1,675": 2,
+          "8,017": 2,
+          "477": 2,
+          "14": 2,
+          "3": 2,
+          "18,756": 2,
+          "1,689": 2,
+          "8,014": 2
+        },
+        "unexpected_in_cells": {
+          "2288": 1,
+          "22002244": 1,
+          "3300": 1,
+          "22002233": 1,
+          "3311": 1,
+          "22002222": 1,
+          "5533,,110011": 1,
+          "5544,,222288": 1,
+          "6633,,005544": 1,
+          "3355,,775566": 1,
+          "3322,,551177": 1,
+          "3366,,118888": 1,
+          "1177,,334455": 1,
+          "2211,,771111": 1,
+          "2266,,886666": 1,
+          "1166,,554466": 1,
+          "1166,,004466": 1,
+          "1177,,552288": 1,
+          "55,,550077": 1,
+          "55,,663344": 1,
+          "77,,000022": 1,
+          "66,,997700": 1,
+          "6622": 1,
+          "22": 1,
+          "2299,,002233": 1,
+          "2211,,661188": 1,
+          "2244,,553322": 1,
+          "1111,,667788": 1,
+          "9933": 1,
+          "22,,333344": 1,
+          "224422": 1,
+          "4400": 1,
+          "44,,226688": 1,
+          "222266": 1,
+          "662299": 1,
+          "11,,116666": 1,
+          "1111,,221100": 1,
+          "776622": 1,
+          "77,,776688": 1,
+          "88,,002233": 1,
+          "991133": 1,
+          "224499": 1,
+          "1199,,223333": 1,
+          "11,,667755": 1,
+          "88,,001177": 1,
+          "447777": 1,
+          "1144": 1,
+          "33": 1,
+          "1188,,775566": 1,
+          "11,,668899": 1,
+          "88,,001144": 1
+        }
+      },
+      "warnings": [
+        "Borderless table boundaries are inferred from repeated numeric alignment; review complex headers.",
+        "numeric_integrity_failed: using original source text; candidate_rows and candidate_cells are debug only."
+      ],
+      "source_text": "Years Ended (In Millions, Except Per Share Amounts)\tYears Ended (In Millions, Except Per Share Amounts)\tDec 28, 2024\tDec 28, 2024\tDec 30, 2023\tDec 30, 2023\tDec 31, 2022\tDec 31, 2022\nNet revenue\tNet revenue\ti•\t$\t53,101\t53,101\t$\t$\t54,228\t54,228\t$\t$\t63,054\t63,054\nCost of sales\tCost of sales\t35,756\t35,756\t32,517\t32,517\t36,188\t36,188\nGross margin\tGross margin\t17,345\t17,345\t21,711\t21,711\t26,866\t26,866\nResearch and development\tResearch and development\t16,546\t16,546\t16,046\t16,046\t17,528\t17,528\nMarketing, general, and administrative\tMarketing, general, and administrative\t5,507\t5,507\t5,634\t5,634\t7,002\t7,002\nRestructuring and other charges\tRestructuring and other charges\t6,970\t6,970\t(62)\t(62)\t2\t2\nOperating expenses\tOperating expenses\t29,023\t29,023\t21,618\t21,618\t24,532\t24,532\nOperating income (loss)\tOperating income (loss)\t(11,678)\t(11,678)\t93\t93\t2,334\t2,334\nGains (losses) on equity investments, net\tGains (losses) on equity investments, net\t242\t242\t40\t40\t4,268\t4,268\nInterest and other, net\tInterest and other, net\t226\t226\t629\t629\t1,166\t1,166\nIncome (loss) before taxes\tIncome (loss) before taxes\t(11,210)\t(11,210)\t762\t762\t7,768\t7,768\nProvision for (benefit from) taxes\tProvision for (benefit from) taxes\t8,023\t8,023\t(913)\t(913)\t(249)\t(249)\nNet income (loss)\tNet income (loss)\t(19,233)\t(19,233)\t1,675\t1,675\t8,017\t8,017\nLess: net income (loss) attributable to non-controlling interests\tLess: net income (loss) attributable to non-controlling interests\t(477)\t(477)\t(14)\t(14)\t3\t3\nNet income (loss) attributable to Intel\tNet income (loss) attributable to Intel\t$\t$\t(18,756) $\t(18,756) $\t1,689\t1,689\t$\t$\t8,014\t8,014",
+      "indexed_fallback_chunks": [
+        {
+          "chunk_id": "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c261:731fb30576f9",
+          "kind": "table_fallback",
+          "text": "Consolidated Statements of Operations\nConsolidated Statements of Operations\nYears Ended (In Millions, Except Per Share Amounts)\n\nYears Ended (In Millions, Except Per Share Amounts)\tYears Ended (In Millions, Except Per Share Amounts)\tDec 28, 2024\tDec 28, 2024\tDec 30, 2023\tDec 30, 2023\tDec 31, 2022\tDec 31, 2022\nNet revenue\tNet revenue\ti•\t$\t53,101\t53,101\t$\t$\t54,228\t54,228\t$\t$\t63,054\t63,054\nCost of sales\tCost of sales\t35,756\t35,756\t32,517\t32,517\t36,188\t36,188\nGross margin\tGross margin\t17,345\t17,345\t21,711\t21,711\t26,866\t26,866\nResearch and development\tResearch and development\t16,546\t16,546\t16,046\t16,046\t17,528\t17,528\nMarketing, general, and administrative\tMarketing, general, and administrative\t5,507\t5,507\t5,634\t5,634\t7,002\t7,002\nRestructuring and other charges\tRestructuring and other charges\t6,970\t6,970\t(62)\t(62)\t2\t2\nOperating expenses\tOperating expenses\t29,023\t29,023\t21,618\t21,618\t24,532\t24,532\nOperating income (loss)\tOperating income (loss)\t(11,678)\t(11,678)\t93\t93\t2,334\t2,334\nGains (losses) on equity investments, net\tGains (losses) on equity investments, net\t242\t242\t40\t40\t4,268\t4,268\nInterest and other, net\tInterest and other, net\t226\t226\t629\t629\t1,166\t1,166\nIncome (loss) before taxes\tIncome (loss) before taxes\t(11,210)\t(11,210)\t762\t762\t7,768\t7,768\nProvision for (benefit from) taxes\tProvision for (benefit from) taxes\t8,023\t8,023\t(913)\t(913)\t(249)\t(249)\nNet income (loss)\tNet income (loss)\t(19,233)\t(19,233)\t1,675\t1,675\t8,017\t8,017\nLess: net income (loss) attributable to non-controlling interests\tLess: net income (loss) attributable to non-controlling interests\t(477)\t(477)\t(14)\t(14)\t3\t3\nNet income (loss) attributable to Intel\tNet income (loss) attributable to Intel\t$\t$\t(18,756) $\t(18,756) $\t1,689\t1,689\t$\t$\t8,014\t8,014",
+          "table_ids": null,
+          "citations": null,
+          "source_spans": null
+        }
+      ],
+      "assessment": "Actual parsed candidate numeric corruption exists: duplicate overlaid character runs produce 5533,,110011. The existing numeric-integrity gate rejects all structured rows and indexes the original source as a fallback. This preservation was already implemented before this audit. The raw fallback still repeats intact tokens; do not treat it as a clean structured table or sum the duplicates."
+    }
+  }
+}

@@ -138,6 +138,152 @@ class GenerationTests(unittest.TestCase):
         self.assertEqual(result["answer"], "I'm not sure")
         encoder.encode_queries.assert_not_called()
 
+    def test_late_generator_is_discarded_before_verification(self):
+        class Clock:
+            value = 0.0
+            def __call__(self):
+                return self.value
+        clock = Clock()
+        class SlowModel(Model):
+            def complete_json(self, messages):
+                clock.value += 4
+                return super().complete_json(messages)
+        verifier = Model(VERDICT)
+        result = generate_answer("What was revenue?", CANDIDATES, threshold=6,
+                                 source_store=Source(), generator=SlowModel(DRAFT), verifier=verifier,
+                                 deadline_seconds=3, clock=clock)
+        self.assertEqual(result["reason"], "deadline_exceeded")
+        self.assertEqual(result["answer"], "I'm not sure")
+        self.assertFalse(verifier.calls)
+        self.assertFalse(result["audit"]["semantic_verifier_called"])
+        self.assertEqual(result["audit"]["generation_elapsed_ms"], 4000)
+        self.assertTrue(result["audit"]["generation_budget"]["cooperative_deadline"])
+
+    def test_slow_source_binding_never_starts_generation(self):
+        clock = Mock(side_effect=[0, 0, 0, 4, 4, 4, 4])
+        generator = Model(DRAFT)
+        result = generate_answer("What was revenue?", CANDIDATES, threshold=6,
+                                 source_store=Source(), generator=generator, verifier=Model(VERDICT),
+                                 deadline_seconds=3, clock=clock)
+        self.assertEqual(result["reason"], "deadline_exceeded")
+        self.assertFalse(generator.calls)
+        self.assertFalse(result["audit"]["generation_called"])
+
+    def test_default_timing_preserves_answer_and_records_all_stages(self):
+        result, *_ = self.run_answer()
+        stages = [row["stage"] for row in result["audit"]["stage_timings"]]
+        self.assertEqual(stages, ["source_binding", "generation", "reference_validation",
+                                  "semantic_verification", "verdict_validation", "rendering"])
+        self.assertGreaterEqual(result["audit"]["generation_elapsed_ms"], 0)
+        self.assertNotIn("generation_budget", result["audit"])
+
+    def test_invalid_deadlines_are_configuration_errors(self):
+        for value in (0, -1, True, float("inf"), float("nan")):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                self.run_answer(deadline_seconds=value)
+
+    def test_final_deadline_snapshot_agrees_with_answer_and_elapsed_time(self):
+        from report_search.answer_verification import render_verified_answer
+
+        class Clock:
+            value = 0.0
+            remaining = None
+
+            def __call__(self):
+                if self.remaining is not None:
+                    self.remaining -= 1
+                    if self.remaining <= 0:
+                        self.value = 3.1
+                return self.value
+
+        # Exercise expiry at the final snapshot, and between the old separate
+        # final check and snapshot. One snapshot must decide the public result.
+        for advance_after in (2, 3):
+            with self.subTest(advance_after=advance_after):
+                clock = Clock()
+
+                def render(*args):
+                    result = render_verified_answer(*args)
+                    clock.value = 2.9
+                    clock.remaining = advance_after
+                    return result
+
+                with patch("report_search.generation.render_verified_answer", side_effect=render):
+                    result, *_ = self.run_answer(deadline_seconds=3, clock=clock)
+                snapshot = result["audit"]["generation_budget"]
+                self.assertEqual(result["audit"]["generation_elapsed_ms"], snapshot["elapsed_ms"])
+                if snapshot["deadline_exceeded"]:
+                    self.assertEqual(result["status"], "abstain")
+                    self.assertEqual(result["reason"], "deadline_exceeded")
+                    self.assertEqual(result["citations"], [])
+                else:
+                    self.assertEqual(result["status"], "answer")
+                self.assertEqual(snapshot["deadline_exceeded"], advance_after == 2)
+
+    def test_late_verifier_and_rendering_never_release_verified_answer(self):
+        from report_search.answer_verification import render_verified_answer
+
+        class Clock:
+            value = 0.0
+
+            def __call__(self):
+                return self.value
+
+        for slow_stage in ("semantic_verification", "rendering"):
+            with self.subTest(stage=slow_stage):
+                clock = Clock()
+
+                class Verifier(Model):
+                    def complete_json(self, messages):
+                        if slow_stage == "semantic_verification":
+                            clock.value = 4.0
+                        return super().complete_json(messages)
+
+                def render(*args):
+                    result = render_verified_answer(*args)
+                    clock.value = 4.0
+                    return result
+
+                generator, verifier = Model(DRAFT), Verifier(VERDICT)
+                with patch("report_search.generation.render_verified_answer", side_effect=render):
+                    result = generate_answer("What was revenue?", CANDIDATES, threshold=6,
+                                             source_store=Source(), generator=generator, verifier=verifier,
+                                             deadline_seconds=3, clock=clock)
+                self.assertEqual(result["answer"], "I'm not sure")
+                self.assertEqual(result["reason"], "deadline_exceeded")
+                self.assertEqual(result["citations"], [])
+                self.assertFalse(result["semantic_supported"])
+                self.assertTrue(result["audit"]["generation_called"])
+                self.assertTrue(result["audit"]["semantic_verifier_called"])
+                last_stage = result["audit"]["stage_timings"][-1]
+                self.assertEqual(last_stage["stage"], slow_stage)
+                self.assertEqual(last_stage["status"], "deadline_exceeded")
+
+    def test_expiry_before_generator_preserves_call_flags(self):
+        class Clock:
+            value = 0.0
+
+            def __call__(self):
+                return self.value
+
+        clock = Clock()
+
+        class DelayedIdentity(Model):
+            @property
+            def identity(self):
+                clock.value = 4.0
+                return {"backend": "injected"}
+
+        generator, verifier = DelayedIdentity(DRAFT), Model(VERDICT)
+        result = generate_answer("What was revenue?", CANDIDATES, threshold=6,
+                                 source_store=Source(), generator=generator, verifier=verifier,
+                                 deadline_seconds=3, clock=clock)
+        self.assertEqual(result["reason"], "deadline_exceeded")
+        self.assertFalse(generator.calls or verifier.calls)
+        self.assertFalse(result["audit"]["generation_called"])
+        self.assertFalse(result["audit"]["semantic_verifier_called"])
+        self.assertEqual([stage["stage"] for stage in result["audit"]["stage_timings"]], ["source_binding"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -66,12 +66,15 @@ def main(argv=None):
     gate.add_argument("--gate-policy", type=Path, help="Opt-in diagnostic policy, checked against cached scoring configuration")
     parser.add_argument("--processed", type=Path, default=Path("data/processed"))
     parser.add_argument("--max-context-chars", type=int, default=100_000)
+    parser.add_argument("--deadline-seconds", type=float, help="Optional cooperative generation-layer budget; excludes retrieval")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
     if args.threshold is not None and not math.isfinite(args.threshold):
         parser.error("--threshold must be finite")
     if args.max_context_chars < 1:
         parser.error("--max-context-chars must be positive")
+    if args.deadline_seconds is not None and (not math.isfinite(args.deadline_seconds) or args.deadline_seconds <= 0):
+        parser.error("--deadline-seconds must be finite and positive")
     if args.input and args.gate_policy:
         parser.error("Cached --gate-policy requires --question-id; use an explicit --threshold for caller-supplied scores")
     if args.output:
@@ -92,7 +95,7 @@ def main(argv=None):
             threshold = load_gate_policy(args.gate_policy, binding)["threshold"]
         result = generate_answer(query, candidates, threshold=threshold,
                                  source_store=SourceEvidenceStore(args.processed),
-                                 max_context_chars=args.max_context_chars)
+                                 max_context_chars=args.max_context_chars, deadline_seconds=args.deadline_seconds)
         result["audit"]["threshold_source"] = "diagnostic_policy" if args.gate_policy else "explicit_or_unconfigured"
     except (ValueError, TypeError, KeyError, OSError, RuntimeError):
         result = {"status": "abstain", "answer": "I'm not sure", "citations": [],
