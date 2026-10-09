@@ -1,0 +1,133 @@
+{
+  "baseline_commit": "4e303c0691b115710c83f9e1ef3b0a959a436765",
+  "method": "Synthetic input and stdlib HTTPResponse decoding over in-memory wire bytes; no live model or provider requests.",
+  "results": [
+    {
+      "case": "unpaired_surrogate_query",
+      "before": {
+        "type": "UnicodeEncodeError",
+        "message": "'utf-8' codec can't encode character '\\ud800' in position 30: surrogates not allowed"
+      },
+      "after": {
+        "type": "returned",
+        "value": {
+          "status": "abstain",
+          "reason": "invalid_query",
+          "answer": "I'm not sure",
+          "source_calls": 0,
+          "generator_calls": 0,
+          "verifier_calls": 0
+        }
+      }
+    },
+    {
+      "case": "strict_json_unpaired_surrogate",
+      "before": {
+        "type": "returned",
+        "accepted_unpaired_surrogate": true,
+        "input_json_display": "{\"claim\":\"value\\ud800\"}"
+      },
+      "after": {
+        "type": "ValueError",
+        "message": "Invalid Unicode scalar value"
+      }
+    },
+    {
+      "case": "unpaired_surrogate_model_identity",
+      "before": {
+        "type": "UnicodeEncodeError",
+        "message": "'utf-8' codec can't encode character '\\ud800' in position 72: surrogates not allowed"
+      },
+      "after": {
+        "type": "ValueError",
+        "message": "API URL and model must contain valid Unicode"
+      }
+    },
+    {
+      "case": "content_length_with_chunked_transfer_encoding",
+      "before": {
+        "type": "returned",
+        "value": {
+          "status": "abstain",
+          "claims": []
+        }
+      },
+      "after": {
+        "type": "ModelError",
+        "message": "invalid_model_response_framing"
+      }
+    },
+    {
+      "case": "duplicate_transfer_encoding",
+      "before": {
+        "type": "returned",
+        "value": {
+          "status": "abstain",
+          "claims": []
+        }
+      },
+      "after": {
+        "type": "ModelError",
+        "message": "invalid_model_response_framing"
+      }
+    }
+  ],
+  "fault_families": [
+    "invalid_unicode_boundaries",
+    "ambiguous_http_response_framing"
+  ],
+  "probe_counts": {
+    "total": 5,
+    "invalid_unicode_boundaries": 3,
+    "ambiguous_http_response_framing": 2,
+    "interpretation": "Five boundary probes across two fault families, not five independent root causes."
+  },
+  "positive_controls": {
+    "valid_multilingual_and_decoded_surrogate_pair": {
+      "text": "\u8425\u6536 caf\u00e9 \ud83d\udcca",
+      "nested": [
+        {
+          "\u043a\u043b\u044e\u0447": "\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435"
+        }
+      ]
+    },
+    "complete_chunked_response": {
+      "status": "abstain",
+      "claims": []
+    },
+    "complete_content_length_response": {
+      "status": "abstain",
+      "claims": []
+    }
+  },
+  "targeted_tests": {
+    "client": 20,
+    "generation": 20,
+    "passed": 40,
+    "new_tests": 7
+  },
+  "source_fingerprints": {
+    "src/report_search/generation.py": {
+      "before_sha256": "295839541276e8ca23a93f28140c1a7d990960667314c1f37877e644833ca5d0",
+      "after_sha256": "9c7e757355ed05f22f5829f8162783a3510a81db1bf354f04ec486a96bbc28ec"
+    },
+    "src/report_search/llm_client.py": {
+      "before_sha256": "dc38a35fd054e7c9b224cae15a4d3f1f9f65c8b67b0346767bcf4c1c1de9c88a",
+      "after_sha256": "f1b0379a67efb1fdaa2437b431dd3184f1879c7f7949438447ad249dcb06bb9c"
+    },
+    "tests/test_generation.py": {
+      "before_sha256": "1734427573b0dc5245ddebe9ef73da089b1f9fe9289ec1627a66737754f1198a",
+      "after_sha256": "93aecab34cb7428647c619993ced55bc6ee68293fa620935b9f1da775bd5f801"
+    },
+    "tests/test_llm_client.py": {
+      "before_sha256": "8290b2a98eb37b16b4c6cafa244ce8e62c02e2a252ccc537a7ab619d5ce00f30",
+      "after_sha256": "263b58a1e92867c406052b85a9fa024c4a8bc6f97ec39b9e6bfd62f3bd37829b"
+    }
+  },
+  "limitations": [
+    "Injected model fixtures and HTTP wire bytes only; no live-provider calls or live model accuracy measurements.",
+    "Unpaired surrogate claim text was already rejected by validate_draft; the JSON-boundary fix does not demonstrate prior release of a malformed answer.",
+    "HTTP framing rejection prevents ambiguous decoding; this probe does not demonstrate a live transport exploit.",
+    "Historical experiment artifacts were not rewritten."
+  ]
+}

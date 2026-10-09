@@ -41,6 +41,21 @@ def strict_json(text: str) -> dict:
                        parse_float=finite_float)
     if not isinstance(value, dict):
         raise ValueError("Expected a JSON object")
+    # json.loads accepts escaped lone UTF-16 surrogates. Reject them before
+    # downstream UTF-8 fingerprints, requests, audit files or output encoding.
+    pending = [value]
+    while pending:
+        item = pending.pop()
+        if isinstance(item, str):
+            try:
+                item.encode("utf-8")
+            except UnicodeError:
+                raise ValueError("Invalid Unicode scalar value") from None
+        elif isinstance(item, dict):
+            pending.extend(item.keys())
+            pending.extend(item.values())
+        elif isinstance(item, list):
+            pending.extend(item)
     return value
 
 
@@ -58,6 +73,13 @@ def _read_response(response, limit):
     """
     getheader = getattr(response, "getheader", None)
     length = getheader("Content-Length") if callable(getheader) else None
+    transfer = getheader("Transfer-Encoding") if callable(getheader) else None
+    if transfer is not None:
+        # This client supports one chunked coding. urllib joins duplicate
+        # headers here, although HTTPResponse may have decoded only the first.
+        if (not isinstance(transfer, str) or transfer.strip().lower() != "chunked"
+                or length is not None):
+            raise ModelError("invalid_model_response_framing")
     expected = None
     if length is not None and not getattr(response, "chunked", False):
         if not isinstance(length, str) or not length.strip() or any(
@@ -91,6 +113,11 @@ class ModelConfig:
     def __post_init__(self):
         if not isinstance(self.base_url, str) or not isinstance(self.model, str) or not self.model.strip():
             raise ValueError("Set an explicit API base URL and model")
+        try:
+            self.base_url.encode("utf-8")
+            self.model.encode("utf-8")
+        except UnicodeError:
+            raise ValueError("API URL and model must contain valid Unicode") from None
         url = urlsplit(self.base_url)
         if (not url.hostname or url.username or url.password or url.query or url.fragment
                 or url.scheme not in {"https", "http"}):

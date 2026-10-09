@@ -135,6 +135,17 @@ class ClientTests(unittest.TestCase):
             with self.subTest(length=length[:10]), self.assertRaisesRegex(ModelError, "too_large"):
                 self.invoke_wire(b"Content-Length: " + length + b"\r\n", envelope())
 
+    def test_conflicting_and_duplicate_transfer_framing_is_rejected(self):
+        body = envelope()
+        chunk = f"{len(body):x}\r\n".encode() + body + b"\r\n0\r\n\r\n"
+        headers = (b"Content-Length: 1\r\nTransfer-Encoding: chunked\r\n",
+                   b"Transfer-Encoding: chunked\r\nTransfer-Encoding: gzip\r\n",
+                   b"Transfer-Encoding: chunked\r\nTransfer-Encoding: chunked\r\n",
+                   b"Transfer-Encoding: gzip, chunked\r\n")
+        for header in headers:
+            with self.subTest(header=header), self.assertRaisesRegex(ModelError, "^invalid_model_response_framing$"):
+                self.invoke_wire(header, chunk)
+
     def test_invalid_request_never_reaches_transport_or_exposes_input(self):
         circular = []
         circular.append(circular)
@@ -174,6 +185,30 @@ class ClientTests(unittest.TestCase):
             with self.assertRaisesRegex(ModelError, "^invalid_model_json$"):
                 self.invoke(response)
         self.assertEqual(strict_json('{"a":1e100}'), {"a": 1e100})
+
+    def test_json_rejects_lone_surrogates_in_keys_and_nested_values(self):
+        for data in (r'{"text":"\ud800"}', r'{"text":"\udfff"}',
+                     r'{"\ud800":"value"}', r'{"nested":[{"text":"x\udfff"}]}'):
+            with self.subTest(data=data), self.assertRaisesRegex(ValueError, "^Invalid Unicode scalar value$"):
+                strict_json(data)
+        valid = strict_json(r'{"text":"营收 café \ud83d\udcca","nested":[{"ключ":"значение"}]}')
+        self.assertEqual(valid, {"text": "营收 café 📊", "nested": [{"ключ": "значение"}]})
+
+    def test_provider_surrogates_fail_at_both_json_boundaries(self):
+        for body in (envelope(content=r'{"text":"\ud800"}'),
+                     envelope()[:-1] + b',"metadata":"\\ud800"}'):
+            with self.subTest(body=body), self.assertRaisesRegex(ModelError, "^invalid_model_json$"):
+                self.invoke(body)
+        result, _ = self.invoke(envelope(content=r'{"text":"营收 \ud83d\udcca"}'))
+        self.assertEqual(result, {"text": "营收 📊"})
+
+    def test_model_identity_must_be_utf8_encodable(self):
+        for url, model in (("https://provider.example/v1", "model\ud800"),
+                           ("https://provider.example/\udfff", "chosen-model")):
+            with self.subTest(model=repr(model)), self.assertRaisesRegex(ValueError, "^API URL and model must contain valid Unicode$"):
+                ModelConfig(url, model)
+        identity = ChatCompletionsClient(ModelConfig("https://provider.example/v1", "模型-📊")).identity
+        self.assertEqual(json.loads(json.dumps(identity, ensure_ascii=False).encode("utf-8"))["model"], "模型-📊")
 
 
 if __name__ == "__main__":

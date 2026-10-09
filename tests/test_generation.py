@@ -1,4 +1,5 @@
 import copy
+import json
 import unittest
 from unittest.mock import Mock, patch
 
@@ -283,6 +284,45 @@ class GenerationTests(unittest.TestCase):
         self.assertFalse(result["audit"]["generation_called"])
         self.assertFalse(result["audit"]["semantic_verifier_called"])
         self.assertEqual([stage["stage"] for stage in result["audit"]["stage_timings"]], ["source_binding"])
+
+    def test_unpaired_surrogate_query_stops_before_sources_or_retrieval(self):
+        for query in ("What was revenue?\ud800", "\udfff revenue"):
+            with self.subTest(query=repr(query)):
+                source, generator, verifier = Source(), Model(DRAFT), Model(VERDICT)
+                result = generate_answer(query, CANDIDATES, threshold=6, source_store=source,
+                                         generator=generator, verifier=verifier)
+                self.assertEqual(result["reason"], "invalid_query")
+                self.assertEqual(result["answer"], "I'm not sure")
+                self.assertEqual(source.calls, 0)
+                self.assertFalse(generator.calls or verifier.calls)
+                encoder, engine, reranker = Mock(), Mock(), Mock()
+                retrieved = answer_with_retrieval(query, encoder=encoder, retrieval_engine=engine,
+                                                 reranker=reranker, threshold=6)
+                self.assertEqual(retrieved["reason"], "invalid_query")
+                encoder.encode_queries.assert_not_called()
+                engine.vector.assert_not_called()
+                reranker.rank_candidates.assert_not_called()
+
+    def test_unencodable_source_context_fails_before_fingerprinting_or_model_call(self):
+        broken = copy.deepcopy(BUNDLE)
+        broken["evidence"]["E1"]["text"] += "\ud800"
+        with patch.object(Source, "build", return_value=broken):
+            result, _, generator, verifier = self.run_answer()
+        self.assertEqual(result["reason"], "source_verification_failed")
+        self.assertEqual(result["answer"], "I'm not sure")
+        self.assertNotIn("context_sha256", result["audit"])
+        self.assertFalse(generator.calls or verifier.calls)
+        json_ready = json.dumps(result, ensure_ascii=False).encode("utf-8")
+        self.assertTrue(json_ready)
+
+    def test_valid_multilingual_query_remains_unchanged(self):
+        query = "营收是多少？ Résumé 📊"
+        generator = Model(DRAFT)
+        result = generate_answer(query, CANDIDATES, threshold=6, source_store=Source(),
+                                 generator=generator, verifier=Model(VERDICT))
+        self.assertEqual(result["status"], "answer")
+        self.assertIn(query, generator.calls[0][1]["content"])
+        self.assertTrue(result["answer"].encode("utf-8"))
 
 
 if __name__ == "__main__":

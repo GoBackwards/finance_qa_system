@@ -54,6 +54,16 @@ def _json(value):
     return json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
 
 
+def _valid_query(query):
+    if not isinstance(query, str) or not query.strip() or len(query) > 10_000:
+        return False
+    try:
+        query.encode("utf-8")
+    except UnicodeError:
+        return False
+    return True
+
+
 def _abstain(reason, audit):
     return {"status": "abstain", "answer": "I'm not sure", "citations": [],
             "reference_verified": audit.get("reference_check_passed", False), "semantic_supported": False,
@@ -121,7 +131,7 @@ def _generate_answer(query, candidates, *, threshold=None, source_store=None,
              "prompt_sha256": hashlib.sha256((GENERATOR_SYSTEM + VERIFIER_SYSTEM).encode()).hexdigest(),
              "generation_called": False, "semantic_verifier_called": False,
              "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee"}
-    if not isinstance(query, str) or not query.strip() or len(query) > 10_000:
+    if not _valid_query(query):
         return _abstain("invalid_query", audit)
     if not isinstance(candidates, list) or len(candidates) > 5:
         return _abstain("expected_reranked_top5", audit)
@@ -136,13 +146,14 @@ def _generate_answer(query, candidates, *, threshold=None, source_store=None,
             return _abstain("source_verification_failed", audit)
         context = {"question": query, "source_evidence": bundle}
         serialized = _json(context)
+        context_bytes = serialized.encode("utf-8")
     except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError):
         return _abstain("source_verification_failed", audit)
     if (bundle.get("source_verified") is not True or not isinstance(bundle.get("evidence"), dict)
             or not bundle["evidence"]):
         return _abstain("source_verification_failed", audit)
     audit.update(context_characters=len(serialized), evidence_count=len(bundle["evidence"]),
-                 context_sha256=hashlib.sha256(serialized.encode()).hexdigest(), source_verified=True)
+                 context_sha256=hashlib.sha256(context_bytes).hexdigest(), source_verified=True)
     if len(serialized) > max_context_chars:
         return _abstain("context_budget_exceeded", audit)
     try:
@@ -201,7 +212,7 @@ def answer_with_retrieval(query, *, encoder, retrieval_engine, reranker, thresho
     reranking in memory-constrained applications. The source gate and both
     generation checks are always applied after retrieval.
     """
-    if (not isinstance(query, str) or not query.strip() or len(query) > 10_000
+    if (not _valid_query(query)
             or confidence_gate([], threshold).reason in {"unconfigured_threshold", "invalid_threshold"}):
         return generate_answer(query, [], threshold=threshold, **generation_options)
     try:
