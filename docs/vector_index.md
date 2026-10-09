@@ -108,6 +108,8 @@ Large PDFs, parsed text, embedding shards, and FAISS indexes are excluded from G
 
 ## Measured index run — 2026-10-08
 
+The newer [FAISS comparison](faiss_index_comparison.md) uses the 50-question test split of the expanded benchmark, adds Recall@3/5/10/20/50, and measures resident RAM in isolated processes. The table below preserves the earlier 40-question pilot; its index-file sizes are not resident-memory measurements.
+
 The full run produced **56,525 normalized float32 vectors of dimension 1,024 from 200 annual reports**, with zero truncated or skipped chunks. The actual longest input was 7,921 M3 tokens. All three persisted indexes contain the same vectors and original source mappings. The source and matrix hashes, model revision, settings, and measurements are saved in the versioned [result record](vector_index_results.json); full per-query judgments remain in the generated artifact directory.
 
 | Index | Size (MiB) | Build and validation (s) | Search median (ms) | Search p95 (ms) | Neighbor Recall@5 vs Flat | Gold-evidence Recall@5 |

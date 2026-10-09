@@ -112,6 +112,8 @@ The [dense embedding and FAISS stage](docs/vector_index.md) adds pinned BGE mode
 
 The [retrieval experiment](docs/retrieval_experiment.md) compares FAISS Flat, BM25, and normalized weighted score fusion on a [100-question benchmark](data/evaluation/retrieval_questions.json). It contains 40 factual, 30 comparative, and 30 summary questions with answers and page-grounded evidence. Development and test questions use different companies; hybrid weights are selected on development evidence recall before test scoring. Run `scripts/run_retrieval_experiment.py` with the existing chunks and dense index. See the [measured comparison](docs/retrieval_comparison.md). These agent-authored labels have been source-checked and still need independent human review.
 
+The [Recall@3/5/10/20/50 sweep](docs/recall_at_k_comparison.md) extends that experiment without changing its labels or candidate pool. The [FAISS index comparison](docs/faiss_index_comparison.md) measures fresh Flat/IVF/HNSW builds, single-query latency, resident RAM, and ANN neighbor Recall@10 against exact Flat. It also reports source-evidence recall separately. Run `scripts/compare_faiss_indexes.py` to reproduce the isolated index measurements.
+
 ## Validated corpus run — 2026-10-08
 
 - All 200 reports, 40 tickers, and 23,280 PDF pages processed; no document-level failures.

@@ -22,6 +22,7 @@ from report_search.retrieval import NORMALIZATION, RetrievalEngine, weighted_fus
 
 
 DEFAULT_ALPHAS = (0.0, 0.25, 0.5, 0.75, 1.0)
+DEFAULT_CUTOFFS = (3, 5, 10, 20, 50)
 METRICS = ("document_recall", "all_documents_hit", "evidence_recall", "all_evidence_hit", "context_tokens")
 
 
@@ -38,15 +39,37 @@ def write_json(path, value):
     os.replace(temporary, path)
 
 
-def evaluate_question(question, results, cutoffs=(5, 10)):
+def validate_cutoffs(cutoffs, *, require_five=False):
+    """Require explicit, distinct positive ranks and report them in rank order."""
+    cutoffs = tuple(cutoffs)
+    if not cutoffs or any(isinstance(k, bool) or not isinstance(k, int) or k < 1 for k in cutoffs):
+        raise ValueError("cutoffs must be nonempty positive integers")
+    if len(set(cutoffs)) != len(cutoffs):
+        raise ValueError("cutoffs must be unique")
+    if require_five and 5 not in cutoffs:
+        raise ValueError("Recall@5 is required for the unchanged development tuning objective")
+    return tuple(sorted(cutoffs))
+
+
+def _validate_configuration(cutoffs, candidate_k, alphas):
+    """Validate configuration before reading sources, encoding, or creating output."""
+    cutoffs = validate_cutoffs(cutoffs, require_five=True)
+    if isinstance(candidate_k, bool) or not isinstance(candidate_k, int) or candidate_k < max(cutoffs):
+        raise ValueError("candidate_k must be a positive integer covering every cutoff")
+    alphas = tuple(sorted(set(float(alpha) for alpha in alphas)))
+    if not alphas or any(not math.isfinite(alpha) or not 0 <= alpha <= 1 for alpha in alphas):
+        raise ValueError("alphas must be finite values in [0,1]")
+    return cutoffs, alphas
+
+
+def evaluate_question(question, results, cutoffs=DEFAULT_CUTOFFS):
     """Both recall denominators are independent of chunking and duplicate hits."""
+    cutoffs = validate_cutoffs(cutoffs)
     gold_documents = set(question["ground_truth_doc_ids"])
     if not gold_documents:
         raise ValueError("Questions need gold documents")
     metrics, judgments = {}, {}
     for k in cutoffs:
-        if isinstance(k, bool) or not isinstance(k, int) or k < 1:
-            raise ValueError("cutoffs must be positive integers")
         retrieved_documents = {row["document_id"] for row in results[:k]}
         found = len(gold_documents & retrieved_documents)
         evidence = judge_retrieval(question, results, top_k=k)
@@ -103,25 +126,21 @@ def paired_interval(first, second, key="evidence_recall_at_5", seed=20261008):
 
 
 def run_evaluation(engine, questions, query_vectors, output, *, alphas=DEFAULT_ALPHAS,
-                   candidate_k=100, cutoffs=(5, 10), provenance=None):
+                   candidate_k=100, cutoffs=DEFAULT_CUTOFFS, provenance=None):
     """Retrieve dev first, persist chosen weight, then evaluate the fixed test policy.
 
     Only question text/query vectors enter the engine. Labels enter this evaluator
     after retrieval. Results are streamed; complete corpus payloads stay on disk.
     """
-    output = Path(output)
-    output.mkdir(parents=True, exist_ok=True)
-    if 5 not in cutoffs or candidate_k < max(cutoffs):
-        raise ValueError("Recall@5 is required and candidate_k must cover every cutoff")
-    alphas = tuple(sorted(set(float(alpha) for alpha in alphas)))
-    if not alphas or any(not math.isfinite(alpha) or not 0 <= alpha <= 1 for alpha in alphas):
-        raise ValueError("alphas must be finite values in [0,1]")
+    cutoffs, alphas = _validate_configuration(cutoffs, candidate_k, alphas)
     if len(query_vectors) != len(questions):
         raise ValueError("One query vector is required per question")
     by_split = {split: [(i, q) for i, q in enumerate(questions) if q["split"] == split]
                 for split in ("dev", "test")}
     if not all(by_split.values()) or sum(map(len, by_split.values())) != len(questions):
         raise ValueError("Benchmark must contain nonempty dev and test splits only")
+    output = Path(output)
+    output.mkdir(parents=True, exist_ok=True)
     dev_tuning = {alpha: [] for alpha in alphas}
     reports = {split: {name: [] for name in ("vector", "bm25", "hybrid")} for split in by_split}
     selected = None
@@ -170,7 +189,7 @@ def run_evaluation(engine, questions, query_vectors, output, *, alphas=DEFAULT_A
                 write_json(output / "tuning.json", tuning)
                 print(f"Frozen development-selected vector weight: {selected}", flush=True)
     summary = {
-        "schema_version": 1, "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "schema_version": 2, "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "benchmark_provenance": provenance or {}, "corpus": engine.stats,
         "scope": "all indexed reports, no gold company/year filters or query decomposition",
         "candidate_k_per_channel": candidate_k, "cutoffs": list(cutoffs), "tuning": tuning,
@@ -204,26 +223,36 @@ def run_evaluation(engine, questions, query_vectors, output, *, alphas=DEFAULT_A
 
 def write_comparison(path, summary):
     alpha = summary["tuning"]["selected_alpha"]
+    cutoffs = validate_cutoffs(summary["cutoffs"])
     model = summary["benchmark_provenance"].get("query_manifest", {}).get("encoder", {}).get("model_id", "configured dense encoder")
     lines = ["# Retrieval comparison", "",
              f"All {summary['corpus']['document_count']} reports / {summary['corpus']['chunk_count']:,} chunks. "
              f"{model} + FAISS Flat, SQLite FTS5 BM25, and weighted score fusion (vector weight {alpha:g}).", "",
              "The hybrid weight was selected using development evidence Recall@5 and frozen before test evaluation.", "",
-             "## Test results", "",
-             "| Category | Approach | Questions | Document Recall@5 | Evidence Recall@5 | All evidence@5 | Evidence Recall@10 | Mean top-5 tokens |",
-             "|---|---|---:|---:|---:|---:|---:|---:|"]
-    for category in ("overall", "factual", "comparative", "summary"):
-        for name in ("vector", "bm25", "hybrid"):
-            report = summary["splits"]["test"][name]
-            item = report["overall"] if category == "overall" else report["by_category"][category]
-            if not item["question_count"]:
-                continue
-            m = item["metrics"]
-            recall10 = f"{m['evidence_recall_at_10']:.2%}" if "evidence_recall_at_10" in m else "n/a"
-            lines.append(f"| {category} | {name} | {item['question_count']} | {m['document_recall_at_5']:.2%} | "
-                         f"{m['evidence_recall_at_5']:.2%} | {m['all_evidence_hit_at_5']:.2%} | {recall10} | {m['context_tokens_at_5']:.0f} |")
-    lines += ["", "Document recall counts distinct gold reports found within the top five **chunks**. "
-              "Evidence recall requires the annotated source spans or complete table rows. Both are macro averages.", "",
+             "Each cutoff uses a prefix of the same ranking. Increasing k does not retune the hybrid weight or change its candidate pool.", ""]
+    for metric, title, label in (
+            ("evidence_recall", "Test evidence recall", "Recall"),
+            ("document_recall", "Test document recall", "Recall"),
+            ("all_evidence_hit", "Test complete evidence coverage", "All evidence"),
+            ("context_tokens", "Test retrieved context size", "Mean tokens")):
+        columns = [f"{label}@{k}" for k in cutoffs]
+        lines += [f"## {title}", "",
+                  "| Category | Approach | Questions | " + " | ".join(columns) + " |",
+                  "|---|---|---:|" + "---:|" * len(cutoffs)]
+        for category in ("overall", "factual", "comparative", "summary"):
+            for name in ("vector", "bm25", "hybrid"):
+                report = summary["splits"]["test"][name]
+                item = report["overall"] if category == "overall" else report["by_category"][category]
+                if not item["question_count"]:
+                    continue
+                values = [item["metrics"][f"{metric}_at_{k}"] for k in cutoffs]
+                formatted = [f"{value:.0f}" if metric == "context_tokens" else f"{value:.2%}" for value in values]
+                lines.append(f"| {category} | {name} | {item['question_count']} | " + " | ".join(formatted) + " |")
+        lines.append("")
+    lines += ["Document recall counts distinct gold reports found within the first k **chunks**. "
+              "Evidence recall requires the annotated source spans or complete table rows. Both are macro averages. "
+              "Complete evidence coverage is the fraction of questions whose required evidence is fully recovered. "
+              "Context size sums the retrieved chunks' cl100k_base token counts, including overlap.", "",
               "## Development-only weight selection", "",
               "| Vector weight | BM25 weight | Dev evidence Recall@5 |", "|---:|---:|---:|"]
     for row in summary["tuning"]["grid"]:
@@ -298,9 +327,17 @@ def main(argv=None):
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--threads", type=int, default=4)
     parser.add_argument("--candidate-k", type=int, default=100)
+    parser.add_argument("--cutoffs", type=int, nargs="+", default=list(DEFAULT_CUTOFFS),
+                        help="Unique positive chunk ranks; must include 5 for development tuning (default: 3 5 10 20 50)")
     parser.add_argument("--alphas", type=float, nargs="+", default=list(DEFAULT_ALPHAS))
     parser.add_argument("--encode-only", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
+    try:
+        args.cutoffs, args.alphas = _validate_configuration(args.cutoffs, args.candidate_k, args.alphas)
+        if args.threads < 1:
+            raise ValueError("threads must be a positive integer")
+    except ValueError as exc:
+        parser.error(str(exc))
     args.output.mkdir(parents=True, exist_ok=True)
     benchmark = json.loads(args.benchmark.read_text(encoding="utf-8"))
     questions = benchmark["questions"]
@@ -336,7 +373,7 @@ def main(argv=None):
         if engine.vector_manifest.get("configuration", {}).get("kind") != "flat":
             raise ValueError("This experiment requires an exact Flat index to isolate fusion from ANN approximation")
         result = run_evaluation(engine, questions, vectors, args.output, alphas=args.alphas,
-                                candidate_k=args.candidate_k, provenance=provenance)
+                                candidate_k=args.candidate_k, cutoffs=args.cutoffs, provenance=provenance)
     print(json.dumps({"selected_alpha": result["tuning"]["selected_alpha"], "test": result["splits"]["test"]}, indent=2))
     return 0
 

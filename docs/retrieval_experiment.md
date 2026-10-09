@@ -57,7 +57,7 @@ The development grid is `alpha = 0, 0.25, 0.5, 0.75, 1`. Select the highest **de
 
 ## Metrics and interpretation
 
-The [evaluator](../src/report_search/experiment.py) reports overall and per-category metrics at **5 and 10 retrieved chunks**, macro-averaged over questions:
+The [evaluator](../src/report_search/experiment.py) reports overall and per-category metrics at **3, 5, 10, 20 and 50 retrieved chunks**, macro-averaged over questions. Each cutoff is a prefix of the same ranking: candidate depth stays fixed at 100 per channel, and the same development-selected hybrid weight applies at every cutoff. The generated Markdown has separate tables for document recall, evidence recall, complete evidence coverage and context cost:
 
 - **Document Recall@k:** distinct gold reports represented among the first `k` chunks divided by the number of gold reports. This is not retrieval of `k` distinct documents. Five chunks from one report recover only half of a two-report comparison's required documents.
 - **Evidence Recall@k:** required canonical evidence units fully recovered divided by required units. Original prose intervals may be covered by the union of several retrieved chunks; a structured table unit requires its complete row. Fallback-table spans require matching original fallback text and source identity. Duplicate or overlapping hits do not increase credit.
@@ -78,6 +78,9 @@ Run from the repository root with the project's `.venv`, downloaded/parsed repor
 
 # Encode queries, build/reuse BM25, tune on development, then evaluate test.
 .\.venv\Scripts\python.exe scripts/run_retrieval_experiment.py --device cuda:0 --threads 4
+
+# An explicit cutoff sweep in a separate directory preserves earlier run records.
+.\.venv\Scripts\python.exe scripts/run_retrieval_experiment.py --cutoffs 3 5 10 20 50 --output data/experiments/retrieval_k_sweep
 ```
 
 Use `--device cpu` when CUDA is unavailable. Query embeddings are created in a separate process so model memory is released before index loading. Cached query vectors are reused only when the benchmark, query texts, encoder contract, corpus vectors and cached-vector hash match. A missing BM25 index or different chunk-source hash triggers a rebuild. Runtime validation rejects inconsistent corpus mappings or a non-Flat vector index.
@@ -95,9 +98,12 @@ The [runner](../scripts/run_retrieval_experiment.py) exposes these defaults:
 | `--output` | `data/experiments/retrieval` |
 | `--device`, `--threads` | `cuda:0`, `4` |
 | `--candidate-k`, `--alphas` | `100`, `0 0.25 0.5 0.75 1` |
+| `--cutoffs` | `3 5 10 20 50` |
 
-Use a separate output directory for a distinct experiment; rerunning in an existing output directory rewrites its evaluation records. The runner writes `benchmark_validation.json`, `query_vectors.npy`, `query_manifest.json`, `tuning.json`, `per_query.jsonl`, `comparison.json`, and `comparison.md`. Per-query records contain rankings, citation/evidence judgments and score breakdowns. Manifests and the comparison JSON record source/model/artifact hashes and implementation fingerprints. Large vectors, indexes and detailed run artifacts remain local rather than being committed.
+Cutoffs must be positive, unique integers and include 5, preserving the original development tuning objective. Candidate depth must be at least the largest cutoff. Invalid settings are rejected before source reads, model loading or output creation. To reproduce the earlier two-cutoff configuration, pass `--cutoffs 5 10`.
+
+Use a separate output directory for a distinct experiment; rerunning in an existing output directory rewrites its evaluation records. To reuse existing query embeddings in a new output directory, copy both `query_vectors.npy` and `query_manifest.json` there before running; the usual contract and checksum checks still apply. The runner writes `benchmark_validation.json`, `query_vectors.npy`, `query_manifest.json`, `tuning.json`, `per_query.jsonl`, `comparison.json`, and `comparison.md`. Per-query records contain rankings through the largest cutoff, citation/evidence judgments at each cutoff and score breakdowns. Manifests and the comparison JSON record source/model/artifact hashes and implementation fingerprints. Large vectors, indexes and detailed run artifacts remain local rather than being committed.
 
 ## Measured results
 
-The completed run is recorded in [retrieval_comparison.md](retrieval_comparison.md), with the compact machine-readable record in [retrieval_results.json](../data/evaluation/retrieval_results.json). The comparison includes category tradeoffs and uncertainty rather than assuming that hybrid retrieval wins. Full rankings and judgments are retained locally in `data/experiments/retrieval/per_query.jsonl` for error analysis.
+The initial @5/@10 run is recorded in [retrieval_comparison.md](retrieval_comparison.md), with the compact machine-readable record in [retrieval_results.json](../data/evaluation/retrieval_results.json). The expanded [Recall@3/5/10/20/50 comparison](recall_at_k_comparison.md) and [result record](../data/evaluation/recall_at_k_results.json) use the same benchmark, query vectors, candidate pool and development-selected weight. Full rankings and judgments for the sweep remain local in `data/experiments/retrieval_k_sweep/per_query.jsonl`. See the separate [FAISS comparison](faiss_index_comparison.md) for ANN approximation recall, latency, fresh build time and measured RAM.
