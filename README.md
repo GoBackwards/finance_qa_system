@@ -114,6 +114,8 @@ The [retrieval experiment](docs/retrieval_experiment.md) compares FAISS Flat, BM
 
 The [Recall@3/5/10/20/50 sweep](docs/recall_at_k_comparison.md) extends that experiment without changing its labels or candidate pool. The [FAISS index comparison](docs/faiss_index_comparison.md) measures fresh Flat/IVF/HNSW builds, single-query latency, resident RAM, and ANN neighbor Recall@10 against exact Flat. It also reports source-evidence recall separately. Run `scripts/compare_faiss_indexes.py` to reproduce the isolated index measurements.
 
+The [BGE reranker stage](docs/reranker.md) uses FlagEmbedding's pinned `bge-reranker-v2-m3` to select five passages from the unchanged vector Top 20. On the 50 frozen test questions, evidence Recall@5 increased from 37.33% to 48.00%, with 388.8 ms median added GPU scoring time per query. See the [measured comparison](docs/reranker_comparison.md) and [machine-readable results](data/evaluation/reranker_results.json). Run `scripts/run_reranker_experiment.py` to reproduce or resume scoring. Accuracy here measures source selection; generated-answer accuracy remains unevaluated. The current project suite passes 212 tests.
+
 ## Validated corpus run — 2026-10-08
 
 - All 200 reports, 40 tickers, and 23,280 PDF pages processed; no document-level failures.
