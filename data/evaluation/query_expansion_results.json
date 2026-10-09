@@ -1,0 +1,589 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-10-09T06:52:19.811945+00:00",
+  "experiment": "development-only candidate-pool ablation before reranking",
+  "split": "dev",
+  "question_count": 50,
+  "questions_with_lexical_hints": 26,
+  "test_questions_evaluated": 0,
+  "labels_sent_to_retrieval": false,
+  "candidate_limit": 20,
+  "per_lexical_query_limit": 20,
+  "maximum_lexical_queries": 3,
+  "scoring_models_run": [],
+  "generation_calls": 0,
+  "provenance": {
+    "benchmark_sha256": "6966685c46cbb18f5e6a2f6d83de50443e6820add217206586605c0bd05f3c7b",
+    "development_benchmark_sha256": "790f5efa7d8d1ec8ac19260201c9987b64cf3cd818b4ffbb11416d323f05d45e",
+    "candidate_manifest_sha256": "3c28360e851413bcd6268e4a71f77fd0bd95193d42534c1a585e2afa1d25a648",
+    "candidate_file_sha256": "d8c9adc2b58ea9e14eabd25dd1f5eb7df099e79ac039d994e420e04da416e204",
+    "chunks_sha256": "d9dc54b432956aec565f3ede839e0062ee90d2c7166f48eaf22e733f6da474c6",
+    "bm25_index_sha256": "adc566a2f212b370efb1394ba53a5ae31a7d33a8e943e8e5a224cb793e38feb8",
+    "inventory_sha256": "aedcbd99a900747fdcf01c778112d23bd7df8272f7455de68c9a2b03e49947e3",
+    "corpus": {
+      "chunks_sha256": "d9dc54b432956aec565f3ede839e0062ee90d2c7166f48eaf22e733f6da474c6",
+      "chunk_count": 56525,
+      "document_count": 200,
+      "document_ids": [
+        "ADBE_FY2021_annual_report-c8b1340273af",
+        "ADBE_FY2022_annual_report-ce8c716abac2",
+        "ADBE_FY2023_annual_report-2f027b253cd7",
+        "ADBE_FY2024_annual_report-5f79cfdc8a17",
+        "ADBE_FY2025_annual_report-0c0f9f38221a",
+        "ADI_FY2021_annual_report-ba7c82ec6d14",
+        "ADI_FY2022_annual_report-c6c307b23074",
+        "ADI_FY2023_annual_report-ea2afbb9dbfe",
+        "ADI_FY2024_annual_report-a8708cf84e3d",
+        "ADI_FY2025_annual_report-f6f63a9dc4c2",
+        "ADSK_FY2021_annual_report-7ba58717db63",
+        "ADSK_FY2022_annual_report-6434ce03f9a2",
+        "ADSK_FY2023_annual_report-1714b7cb4aac",
+        "ADSK_FY2024_annual_report-a2e27e1e54b3",
+        "ADSK_FY2025_annual_report-adad5a89684d",
+        "AMD_FY2021_annual_report-51c1fbfb4587",
+        "AMD_FY2022_annual_report-a3bd74088fae",
+        "AMD_FY2023_annual_report-4a2a8623b538",
+        "AMD_FY2024_annual_report-079208174889",
+        "AMD_FY2025_annual_report-b38e61bfeb17",
+        "AMZN_FY2021_annual_report-9d6f8429cb68",
+        "AMZN_FY2022_annual_report-03401abb4272",
+        "AMZN_FY2023_annual_report-3d822639c87e",
+        "AMZN_FY2024_annual_report-d6c8919af431",
+        "AMZN_FY2025_annual_report-63196177ef83",
+        "AVGO_FY2021_annual_report-5fa18e0dbcef",
+        "AVGO_FY2022_annual_report-f16ae901bf1e",
+        "AVGO_FY2023_annual_report-7243c658bb4e",
+        "AVGO_FY2024_annual_report-dae9bc9ca28c",
+        "AVGO_FY2025_annual_report-56e3343ddf27",
+        "CAT_FY2021_annual_report-6087bbd644ed",
+        "CAT_FY2022_annual_report-1505e0d94142",
+        "CAT_FY2023_annual_report-5b32036257b2",
+        "CAT_FY2024_annual_report-3a38651c7240",
+        "CAT_FY2025_annual_report-90479b5aa096",
+        "CDNS_FY2021_annual_report-5c804276a621",
+        "CDNS_FY2022_annual_report-ac4958a9ab7e",
+        "CDNS_FY2023_annual_report-2327cc77a832",
+        "CDNS_FY2024_annual_report-cffecb263e2b",
+        "CDNS_FY2025_annual_report-843918efd65e",
+        "CL_FY2021_annual_report-bff9d6028d83",
+        "CL_FY2022_annual_report-b757de426196",
+        "CL_FY2023_annual_report-10d62a709cec",
+        "CL_FY2024_annual_report-70a52aedee91",
+        "CL_FY2025_annual_report-851a934dad4f",
+        "CMI_FY2021_annual_report-112188274c71",
+        "CMI_FY2022_annual_report-1e59966218af",
+        "CMI_FY2023_annual_report-ca9741018359",
+        "CMI_FY2024_annual_report-3d9f7d9b5f84",
+        "CMI_FY2025_annual_report-4d50ab4b38f9",
+        "COST_FY2021_annual_report-edb34f96db9f",
+        "COST_FY2022_annual_report-833a9a96dce9",
+        "COST_FY2023_annual_report-002b2252df47",
+        "COST_FY2024_annual_report-bdeca9c1891f",
+        "COST_FY2025_annual_report-25449d39bb36",
+        "CRM_FY2021_annual_report-b9cdc802e93e",
+        "CRM_FY2022_annual_report-f420a24e6797",
+        "CRM_FY2023_annual_report-0fc02d923ac0",
+        "CRM_FY2024_annual_report-1c991a3f8828",
+        "CRM_FY2025_annual_report-90aaa33dc16d",
+        "DE_FY2021_annual_report-b4a06d6c834a",
+        "DE_FY2022_annual_report-7968bf19e470",
+        "DE_FY2023_annual_report-d9ed67ef85cf",
+        "DE_FY2024_annual_report-ef14ad6dbbe8",
+        "DE_FY2025_annual_report-1bba60fc5682",
+        "DOV_FY2021_annual_report-f9c950a456dc",
+        "DOV_FY2022_annual_report-5b5b757a2ac3",
+        "DOV_FY2023_annual_report-aa8bf20ed0d7",
+        "DOV_FY2024_annual_report-019ebbfb43b8",
+        "DOV_FY2025_annual_report-025374f9d804",
+        "EMR_FY2021_annual_report-b7257aa0e479",
+        "EMR_FY2022_annual_report-4f642271d951",
+        "EMR_FY2023_annual_report-98f3b48e943d",
+        "EMR_FY2024_annual_report-606deb166437",
+        "EMR_FY2025_annual_report-13ca4e7d1396",
+        "GIS_FY2021_annual_report-d53e994570fe",
+        "GIS_FY2022_annual_report-7a26bff5598d",
+        "GIS_FY2023_annual_report-48a68f2e6dae",
+        "GIS_FY2024_annual_report-8226c381ceca",
+        "GIS_FY2025_annual_report-b6c75e29b87f",
+        "HD_FY2021_annual_report-76dc449be9d5",
+        "HD_FY2022_annual_report-a7a9929fff37",
+        "HD_FY2023_annual_report-4c0b625e5568",
+        "HD_FY2024_annual_report-a291decad354",
+        "HD_FY2025_annual_report-e040696c63fc",
+        "INTC_FY2021_annual_report-705cb59d5a52",
+        "INTC_FY2022_annual_report-27d255c2147b",
+        "INTC_FY2023_annual_report-6288f19d1bd7",
+        "INTC_FY2024_annual_report-5b9ba57e8d60",
+        "INTC_FY2025_annual_report-4925fb2e0127",
+        "INTU_FY2021_annual_report-9d98dc7f0753",
+        "INTU_FY2022_annual_report-7c24926447bd",
+        "INTU_FY2023_annual_report-96e3c010327f",
+        "INTU_FY2024_annual_report-91421df147fe",
+        "INTU_FY2025_annual_report-0ee7ee96a2cb",
+        "ITW_FY2021_annual_report-d5479cacf6ca",
+        "ITW_FY2022_annual_report-833e878519bf",
+        "ITW_FY2023_annual_report-fb449530f9d5",
+        "ITW_FY2024_annual_report-858c18a39218",
+        "ITW_FY2025_annual_report-12b17e55684c",
+        "KHC_FY2021_annual_report-bfb63cf6981c",
+        "KHC_FY2022_annual_report-0d87f26308a5",
+        "KHC_FY2023_annual_report-f40e0161e718",
+        "KHC_FY2024_annual_report-2aa1a3aad4a8",
+        "KHC_FY2025_annual_report-de4d502d6ced",
+        "KMB_FY2021_annual_report-54d6473fbb6d",
+        "KMB_FY2022_annual_report-7bc881b4304e",
+        "KMB_FY2023_annual_report-b0732e361c81",
+        "KMB_FY2024_annual_report-cf76c4115ec1",
+        "KMB_FY2025_annual_report-3d0162fa530d",
+        "KO_FY2021_annual_report-46a7059b9da7",
+        "KO_FY2022_annual_report-9a4fe8724125",
+        "KO_FY2023_annual_report-ebc52f419a91",
+        "KO_FY2024_annual_report-9a208552a31a",
+        "KO_FY2025_annual_report-3cf15f041ac3",
+        "LOW_FY2021_annual_report-9b720138d2dd",
+        "LOW_FY2022_annual_report-1e32cdf14d1e",
+        "LOW_FY2023_annual_report-42cde5cff23e",
+        "LOW_FY2024_annual_report-cab85ba70148",
+        "LOW_FY2025_annual_report-4f5bdeecdf93",
+        "MDLZ_FY2021_annual_report-068eb2b09bf2",
+        "MDLZ_FY2022_annual_report-82aa2e60d211",
+        "MDLZ_FY2023_annual_report-b1c3e7772d8a",
+        "MDLZ_FY2024_annual_report-ed3fa5364352",
+        "MDLZ_FY2025_annual_report-55c98e69b325",
+        "MSFT_FY2021_annual_report-b54bca858992",
+        "MSFT_FY2022_annual_report-561d30b6cfcb",
+        "MSFT_FY2023_annual_report-5eba1f84118d",
+        "MSFT_FY2024_annual_report-979a3f819970",
+        "MSFT_FY2025_annual_report-e88c300dcc58",
+        "MU_FY2021_annual_report-fa661499c466",
+        "MU_FY2022_annual_report-b26295f9bd76",
+        "MU_FY2023_annual_report-84b298838ae4",
+        "MU_FY2024_annual_report-843455858d7a",
+        "MU_FY2025_annual_report-4b50d54e91da",
+        "NKE_FY2021_annual_report-73b54e5e0b1b",
+        "NKE_FY2022_annual_report-9e09976d451d",
+        "NKE_FY2023_annual_report-51f5a0fc6ede",
+        "NKE_FY2024_annual_report-ad45136466f5",
+        "NKE_FY2025_annual_report-7b1b8ae4da58",
+        "NOW_FY2021_annual_report-56e0be00ac7f",
+        "NOW_FY2022_annual_report-da1b43808336",
+        "NOW_FY2023_annual_report-5e5e72b9eb45",
+        "NOW_FY2024_annual_report-7022cf7db0d2",
+        "NOW_FY2025_annual_report-dd658d433110",
+        "NVDA_FY2021_annual_report-3771ab7b69a2",
+        "NVDA_FY2022_annual_report-1ee6fabb7560",
+        "NVDA_FY2023_annual_report-ffac862ed5ae",
+        "NVDA_FY2024_annual_report-b5751f4bb240",
+        "NVDA_FY2025_annual_report-757b344ab62b",
+        "ORCL_FY2021_annual_report-316d3e1a49ea",
+        "ORCL_FY2022_annual_report-a5c6400528b5",
+        "ORCL_FY2023_annual_report-18a24b7a4440",
+        "ORCL_FY2024_annual_report-70241530f323",
+        "ORCL_FY2025_annual_report-ba355951a779",
+        "PEP_FY2021_annual_report-9871aabb5020",
+        "PEP_FY2022_annual_report-43447c87ff96",
+        "PEP_FY2023_annual_report-0de484e5a954",
+        "PEP_FY2024_annual_report-2626c28e287a",
+        "PEP_FY2025_annual_report-da938d85e04c",
+        "PG_FY2021_annual_report-918459a9cb6a",
+        "PG_FY2022_annual_report-85e6170943b3",
+        "PG_FY2023_annual_report-d673c999882b",
+        "PG_FY2024_annual_report-9ce6fc2a1608",
+        "PG_FY2025_annual_report-748aa35da4a3",
+        "PH_FY2021_annual_report-ccd0bab6a62a",
+        "PH_FY2022_annual_report-6f0ac348b0cc",
+        "PH_FY2023_annual_report-a836fa51b820",
+        "PH_FY2024_annual_report-5defe0a7a7f3",
+        "PH_FY2025_annual_report-85061de3adad",
+        "QCOM_FY2021_annual_report-502fe00883bc",
+        "QCOM_FY2022_annual_report-35d94a33fb9d",
+        "QCOM_FY2023_annual_report-7d0bd533637e",
+        "QCOM_FY2024_annual_report-89851f1bb2a3",
+        "QCOM_FY2025_annual_report-90852abbb69e",
+        "ROK_FY2021_annual_report-9c37c8e8519a",
+        "ROK_FY2022_annual_report-b112fbad419f",
+        "ROK_FY2023_annual_report-d22c04614326",
+        "ROK_FY2024_annual_report-b4a8bb0b90cd",
+        "ROK_FY2025_annual_report-1b7d42e4f953",
+        "SBUX_FY2021_annual_report-11a435a69fa6",
+        "SBUX_FY2022_annual_report-e4f5f266b296",
+        "SBUX_FY2023_annual_report-a9494e6d7e0d",
+        "SBUX_FY2024_annual_report-3a4ed724de13",
+        "SBUX_FY2025_annual_report-dfab526cdc0e",
+        "TGT_FY2021_annual_report-1b628017c437",
+        "TGT_FY2022_annual_report-e839c5df4220",
+        "TGT_FY2023_annual_report-a13fe761b800",
+        "TGT_FY2024_annual_report-0ea59d72e596",
+        "TGT_FY2025_annual_report-ad0cd2a6e7c0",
+        "TXN_FY2021_annual_report-07d0f07b2d64",
+        "TXN_FY2022_annual_report-502168842d2b",
+        "TXN_FY2023_annual_report-c20ba7efbb8f",
+        "TXN_FY2024_annual_report-9fd9f3473d3f",
+        "TXN_FY2025_annual_report-727d32d4f516",
+        "WMT_FY2021_annual_report-fbab792d8b06",
+        "WMT_FY2022_annual_report-72182901d4ac",
+        "WMT_FY2023_annual_report-a18c2dbbd598",
+        "WMT_FY2024_annual_report-e00e572d6cf4",
+        "WMT_FY2025_annual_report-c730ff07b5b0"
+      ],
+      "dimension": 1024,
+      "vector_index_sha256": "fb375f7eb7dfaa0e2f583f4927b766d18fd0a39cb848b9cfd6d1b578ce58a75d",
+      "mapping_verified": true
+    },
+    "source_code_sha256": {
+      "scripts/compare_query_expansion.py": "f50b372924635034ba23da640743dc929acc62863d9d6396f9d5ccbfb9d95d7d",
+      "src/report_search/query_policy.py": "c0388cdcf47479326f8316ff39ce72b77d1ef01def64c6485e293ea37f7ffdbc",
+      "src/report_search/reliable_pipeline.py": "305739eb8b0da8a138a615955bfa64128a0f2f95214bf89a7c9b4aece6e769d7",
+      "src/report_search/experiment.py": "45d073eb744b48cf9e33b49f4b550ef08ad2a12c1489cfa8a497e1ea6f53e781",
+      "src/report_chunker/retrieval.py": "f50643975579186349cf8b53b762bdf569deb818c98867986aa65afd62cddc48"
+    }
+  },
+  "approaches": {
+    "original_vector20": {
+      "overall": {
+        "question_count": 50,
+        "metrics": {
+          "document_recall_at_5": 0.85,
+          "all_documents_hit_at_5": 0.72,
+          "evidence_recall_at_5": 0.38666666666666666,
+          "all_evidence_hit_at_5": 0.28,
+          "context_tokens_at_5": 1952.58,
+          "document_recall_at_20": 0.92,
+          "all_documents_hit_at_20": 0.84,
+          "evidence_recall_at_20": 0.7133333333333333,
+          "all_evidence_hit_at_20": 0.52,
+          "context_tokens_at_20": 7587.88
+        }
+      },
+      "by_category": {
+        "factual": {
+          "question_count": 20,
+          "metrics": {
+            "document_recall_at_5": 1.0,
+            "all_documents_hit_at_5": 1.0,
+            "evidence_recall_at_5": 0.5,
+            "all_evidence_hit_at_5": 0.5,
+            "context_tokens_at_5": 2058.3,
+            "document_recall_at_20": 1.0,
+            "all_documents_hit_at_20": 1.0,
+            "evidence_recall_at_20": 0.85,
+            "all_evidence_hit_at_20": 0.85,
+            "context_tokens_at_20": 7612.55
+          }
+        },
+        "comparative": {
+          "question_count": 15,
+          "metrics": {
+            "document_recall_at_5": 0.5666666666666667,
+            "all_documents_hit_at_5": 0.13333333333333333,
+            "evidence_recall_at_5": 0.2,
+            "all_evidence_hit_at_5": 0.06666666666666667,
+            "context_tokens_at_5": 1556.0666666666666,
+            "document_recall_at_20": 0.7333333333333333,
+            "all_documents_hit_at_20": 0.4666666666666667,
+            "evidence_recall_at_20": 0.5333333333333333,
+            "all_evidence_hit_at_20": 0.13333333333333333,
+            "context_tokens_at_20": 6236.133333333333
+          }
+        },
+        "summary": {
+          "question_count": 15,
+          "metrics": {
+            "document_recall_at_5": 0.9333333333333333,
+            "all_documents_hit_at_5": 0.9333333333333333,
+            "evidence_recall_at_5": 0.4222222222222222,
+            "all_evidence_hit_at_5": 0.2,
+            "context_tokens_at_5": 2208.133333333333,
+            "document_recall_at_20": 1.0,
+            "all_documents_hit_at_20": 1.0,
+            "evidence_recall_at_20": 0.711111111111111,
+            "all_evidence_hit_at_20": 0.4666666666666667,
+            "context_tokens_at_20": 8906.733333333334
+          }
+        }
+      }
+    },
+    "scoped_vector20": {
+      "overall": {
+        "question_count": 50,
+        "metrics": {
+          "document_recall_at_5": 0.89,
+          "all_documents_hit_at_5": 0.78,
+          "evidence_recall_at_5": 0.5233333333333333,
+          "all_evidence_hit_at_5": 0.38,
+          "context_tokens_at_5": 1967.9,
+          "document_recall_at_20": 0.92,
+          "all_documents_hit_at_20": 0.84,
+          "evidence_recall_at_20": 0.7133333333333333,
+          "all_evidence_hit_at_20": 0.52,
+          "context_tokens_at_20": 5290.38
+        }
+      },
+      "by_category": {
+        "factual": {
+          "question_count": 20,
+          "metrics": {
+            "document_recall_at_5": 1.0,
+            "all_documents_hit_at_5": 1.0,
+            "evidence_recall_at_5": 0.6,
+            "all_evidence_hit_at_5": 0.6,
+            "context_tokens_at_5": 2027.2,
+            "document_recall_at_20": 1.0,
+            "all_documents_hit_at_20": 1.0,
+            "evidence_recall_at_20": 0.85,
+            "all_evidence_hit_at_20": 0.85,
+            "context_tokens_at_20": 6879.3
+          }
+        },
+        "comparative": {
+          "question_count": 15,
+          "metrics": {
+            "document_recall_at_5": 0.6333333333333333,
+            "all_documents_hit_at_5": 0.26666666666666666,
+            "evidence_recall_at_5": 0.3,
+            "all_evidence_hit_at_5": 0.06666666666666667,
+            "context_tokens_at_5": 1674.0,
+            "document_recall_at_20": 0.7333333333333333,
+            "all_documents_hit_at_20": 0.4666666666666667,
+            "evidence_recall_at_20": 0.5333333333333333,
+            "all_evidence_hit_at_20": 0.13333333333333333,
+            "context_tokens_at_20": 4022.0666666666666
+          }
+        },
+        "summary": {
+          "question_count": 15,
+          "metrics": {
+            "document_recall_at_5": 1.0,
+            "all_documents_hit_at_5": 1.0,
+            "evidence_recall_at_5": 0.6444444444444444,
+            "all_evidence_hit_at_5": 0.4,
+            "context_tokens_at_5": 2182.733333333333,
+            "document_recall_at_20": 1.0,
+            "all_documents_hit_at_20": 1.0,
+            "evidence_recall_at_20": 0.711111111111111,
+            "all_evidence_hit_at_20": 0.4666666666666667,
+            "context_tokens_at_20": 4440.133333333333
+          }
+        }
+      }
+    },
+    "scoped_vector_bm25_original20": {
+      "overall": {
+        "question_count": 50,
+        "metrics": {
+          "document_recall_at_5": 0.95,
+          "all_documents_hit_at_5": 0.9,
+          "evidence_recall_at_5": 0.51,
+          "all_evidence_hit_at_5": 0.38,
+          "context_tokens_at_5": 1992.48,
+          "document_recall_at_20": 0.96,
+          "all_documents_hit_at_20": 0.92,
+          "evidence_recall_at_20": 0.7466666666666667,
+          "all_evidence_hit_at_20": 0.56,
+          "context_tokens_at_20": 5946.72
+        }
+      },
+      "by_category": {
+        "factual": {
+          "question_count": 20,
+          "metrics": {
+            "document_recall_at_5": 1.0,
+            "all_documents_hit_at_5": 1.0,
+            "evidence_recall_at_5": 0.65,
+            "all_evidence_hit_at_5": 0.65,
+            "context_tokens_at_5": 1903.05,
+            "document_recall_at_20": 1.0,
+            "all_documents_hit_at_20": 1.0,
+            "evidence_recall_at_20": 0.85,
+            "all_evidence_hit_at_20": 0.85,
+            "context_tokens_at_20": 6903.65
+          }
+        },
+        "comparative": {
+          "question_count": 15,
+          "metrics": {
+            "document_recall_at_5": 0.8333333333333334,
+            "all_documents_hit_at_5": 0.6666666666666666,
+            "evidence_recall_at_5": 0.23333333333333334,
+            "all_evidence_hit_at_5": 0.06666666666666667,
+            "context_tokens_at_5": 1768.4666666666667,
+            "document_recall_at_20": 0.8666666666666667,
+            "all_documents_hit_at_20": 0.7333333333333333,
+            "evidence_recall_at_20": 0.5333333333333333,
+            "all_evidence_hit_at_20": 0.13333333333333333,
+            "context_tokens_at_20": 5475.0
+          }
+        },
+        "summary": {
+          "question_count": 15,
+          "metrics": {
+            "document_recall_at_5": 1.0,
+            "all_documents_hit_at_5": 1.0,
+            "evidence_recall_at_5": 0.6,
+            "all_evidence_hit_at_5": 0.3333333333333333,
+            "context_tokens_at_5": 2335.733333333333,
+            "document_recall_at_20": 1.0,
+            "all_documents_hit_at_20": 1.0,
+            "evidence_recall_at_20": 0.8222222222222223,
+            "all_evidence_hit_at_20": 0.6,
+            "context_tokens_at_20": 5142.533333333334
+          }
+        }
+      }
+    },
+    "scoped_vector_bm25_hints20": {
+      "overall": {
+        "question_count": 50,
+        "metrics": {
+          "document_recall_at_5": 0.94,
+          "all_documents_hit_at_5": 0.88,
+          "evidence_recall_at_5": 0.49,
+          "all_evidence_hit_at_5": 0.36,
+          "context_tokens_at_5": 1964.62,
+          "document_recall_at_20": 0.97,
+          "all_documents_hit_at_20": 0.94,
+          "evidence_recall_at_20": 0.7266666666666667,
+          "all_evidence_hit_at_20": 0.54,
+          "context_tokens_at_20": 6017.08
+        }
+      },
+      "by_category": {
+        "factual": {
+          "question_count": 20,
+          "metrics": {
+            "document_recall_at_5": 1.0,
+            "all_documents_hit_at_5": 1.0,
+            "evidence_recall_at_5": 0.65,
+            "all_evidence_hit_at_5": 0.65,
+            "context_tokens_at_5": 1821.4,
+            "document_recall_at_20": 1.0,
+            "all_documents_hit_at_20": 1.0,
+            "evidence_recall_at_20": 0.8,
+            "all_evidence_hit_at_20": 0.8,
+            "context_tokens_at_20": 6824.4
+          }
+        },
+        "comparative": {
+          "question_count": 15,
+          "metrics": {
+            "document_recall_at_5": 0.8,
+            "all_documents_hit_at_5": 0.6,
+            "evidence_recall_at_5": 0.16666666666666666,
+            "all_evidence_hit_at_5": 0.0,
+            "context_tokens_at_5": 1780.7333333333333,
+            "document_recall_at_20": 0.9,
+            "all_documents_hit_at_20": 0.8,
+            "evidence_recall_at_20": 0.5333333333333333,
+            "all_evidence_hit_at_20": 0.13333333333333333,
+            "context_tokens_at_20": 5791.133333333333
+          }
+        },
+        "summary": {
+          "question_count": 15,
+          "metrics": {
+            "document_recall_at_5": 1.0,
+            "all_documents_hit_at_5": 1.0,
+            "evidence_recall_at_5": 0.6,
+            "all_evidence_hit_at_5": 0.3333333333333333,
+            "context_tokens_at_5": 2339.4666666666667,
+            "document_recall_at_20": 1.0,
+            "all_documents_hit_at_20": 1.0,
+            "evidence_recall_at_20": 0.8222222222222223,
+            "all_evidence_hit_at_20": 0.6,
+            "context_tokens_at_20": 5166.6
+          }
+        }
+      }
+    }
+  },
+  "paired_evidence_recall_at_20": {
+    "scope_minus_original_vector": {
+      "mean_delta_pp": 0.0,
+      "ci95_pp": [
+        0.0,
+        0.0
+      ],
+      "replicates": 10000,
+      "seed": 20261008,
+      "sampling_unit": "paired question; ignores within-company/template dependence",
+      "improved": 0,
+      "unchanged": 50,
+      "worsened": 0
+    },
+    "original_bm25_fusion_minus_scoped_vector": {
+      "mean_delta_pp": 3.3333333333333335,
+      "ci95_pp": [
+        -3.3333333333333335,
+        10.000000000000002
+      ],
+      "replicates": 10000,
+      "seed": 20261008,
+      "sampling_unit": "paired question; ignores within-company/template dependence",
+      "improved": 4,
+      "unchanged": 45,
+      "worsened": 1
+    },
+    "hints_minus_original_bm25_fusion": {
+      "mean_delta_pp": -2.0,
+      "ci95_pp": [
+        -7.000000000000001,
+        2.0
+      ],
+      "replicates": 10000,
+      "seed": 20261008,
+      "sampling_unit": "paired question; ignores within-company/template dependence",
+      "improved": 1,
+      "unchanged": 47,
+      "worsened": 2
+    },
+    "hints_minus_original_vector": {
+      "mean_delta_pp": 1.3333333333333335,
+      "ci95_pp": [
+        -7.000000000000001,
+        9.666666666666668
+      ],
+      "replicates": 10000,
+      "seed": 20261008,
+      "sampling_unit": "paired question; ignores within-company/template dependence",
+      "improved": 5,
+      "unchanged": 42,
+      "worsened": 3
+    }
+  },
+  "candidate_assembly_timing_ms": {
+    "scoped_vector20": {
+      "median": 0.9114999993471429,
+      "p95": 1.428009999654023,
+      "mean": 1.0262480001256336
+    },
+    "scoped_vector_bm25_original20": {
+      "median": 224.6589500009577,
+      "p95": 278.9745500007484,
+      "mean": 227.24707400033367
+    },
+    "scoped_vector_bm25_hints20": {
+      "median": 378.76754999706463,
+      "p95": 725.2408250022198,
+      "mean": 374.56128600024385
+    }
+  },
+  "timing_scope": "One sequential development pass with one read-only SQLite session; shared component times. Includes query planning, scope filtering, BM25 search and rank fusion as applicable. Excludes vector embedding/search, reranking, model loading, source binding, generation, judgments and file writes. Not independent trials or end-to-end latency.",
+  "metric_definitions": {
+    "evidence_recall_at_20": "Macro fraction of canonical annotated source units fully covered by the at-most-20 candidate pool, before reranking.",
+    "all_evidence_hit_at_20": "Fraction of questions whose complete annotated source units are covered by the candidate pool.",
+    "evidence_recall_at_5": "Prefix coverage in the candidate ranking before reranking; not the final cross-encoder Top5 or answer accuracy."
+  },
+  "limitations": [
+    "Development-only exploratory ablation; no frozen test question is evaluated or used to choose hints.",
+    "Every development query is evaluated under recovery variants, rather than only requests rejected by a confidence gate.",
+    "Hints and query-policy code are fixed before this run; no grid search or tuning is performed.",
+    "Filtering occurs after global Top20 retrieval, so scoped pools may contain fewer than 20 chunks.",
+    "Additional overlapping lexical queries can overweight a channel in RRF; gains are not presumed.",
+    "Non-exhaustive, agent-authored development labels await independent human review.",
+    "No reranking or generation is performed; candidate coverage does not establish final answer quality or hallucination reduction.",
+    "Bootstrap intervals sample paired questions and ignore company/template dependence.",
+    "Expansion remains opt-in and needs separate threshold calibration under its active policy."
+  ],
+  "per_query_artifact": "data/experiments/query_expansion/per_query.jsonl",
+  "per_query_sha256": "8c4c527ab50a08176329e74c2166bdb7deef79dad5ddf3aa142a09dcf12a4111"
+}

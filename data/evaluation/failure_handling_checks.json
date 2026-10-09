@@ -1,0 +1,622 @@
+{
+  "schema_version": 1,
+  "mode": "controlled_failure_regression",
+  "live_llm_evaluated": false,
+  "production_latency_measured": false,
+  "tests_run": 118,
+  "passed": true,
+  "failures": 0,
+  "errors": 0,
+  "cases": [
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_10k_and_shared_company_year_scope",
+      "passed": true,
+      "duration_ms": 2.123900001606671
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_apple_failure_is_missing_corpus_company",
+      "passed": true,
+      "duration_ms": 0.23940000028233044
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_common_word_ticker_not_inferred_without_symbol_marker",
+      "passed": true,
+      "duration_ms": 0.4840000001422595
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_comparison_needs_both_companies",
+      "passed": true,
+      "duration_ms": 0.11470000026747584
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_explicit_missing_older_report_is_distinct",
+      "passed": true,
+      "duration_ms": 0.12819999756175093
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_explicit_report_year_list_and_range",
+      "passed": true,
+      "duration_ms": 0.45529999988502823
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_explicit_unknown_ticker_is_a_known_inventory_gap",
+      "passed": true,
+      "duration_ms": 0.16459999824292026
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_forecast_intent_does_not_refuse_supported_company",
+      "passed": true,
+      "duration_ms": 0.11440000162110664
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_future_disclosure_in_existing_filing_retains_source_scope",
+      "passed": true,
+      "duration_ms": 0.18339999951422215
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_future_source_report_is_unavailable_even_for_forecast",
+      "passed": true,
+      "duration_ms": 0.1109000004362315
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_gross_margin_is_not_gross_profit_amount",
+      "passed": true,
+      "duration_ms": 0.21430000197142363
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_incidental_apple_mention_does_not_require_apple_filing",
+      "passed": true,
+      "duration_ms": 0.1247000000148546
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_inventory_is_dynamic_and_failed_rows_do_not_count",
+      "passed": true,
+      "duration_ms": 0.17759999900590628
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_missing_global_report_year_is_detected",
+      "passed": true,
+      "duration_ms": 0.10280000060447492
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_missing_report_is_not_hidden_by_shared_company_year_list",
+      "passed": true,
+      "duration_ms": 0.1266999970539473
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_negated_metric_is_not_a_lexical_hint",
+      "passed": true,
+      "duration_ms": 0.10870000187424012
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_no_input_mutation_and_deterministic_alias",
+      "passed": true,
+      "duration_ms": 0.252800000453135
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_non_gaap_is_not_silently_changed_to_gaap",
+      "passed": true,
+      "duration_ms": 0.13770000077784061
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_older_metric_may_appear_in_later_comparative_report",
+      "passed": true,
+      "duration_ms": 0.10800000018207356
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_operating_income_is_not_operating_cash_flow",
+      "passed": true,
+      "duration_ms": 0.18220000129076652
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_revenue_hints_preserve_original_basis_currency_and_period",
+      "passed": true,
+      "duration_ms": 0.14039999950909987
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_revenue_never_expands_to_income_or_profit",
+      "passed": true,
+      "duration_ms": 0.09240000144927762
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_separate_company_report_year_pairs_do_not_form_cross_product",
+      "passed": true,
+      "duration_ms": 0.10349999865866266
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_shared_company_and_year_lists_require_all_requested_reports",
+      "passed": true,
+      "duration_ms": 0.5844000006618444
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_target_common_word_and_exclusion",
+      "passed": true,
+      "duration_ms": 0.2821000016410835
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_tesla_forecast_failure_is_company_gap_not_future_year",
+      "passed": true,
+      "duration_ms": 0.2061000013782177
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_unknown_name_is_unspecified_not_a_guessed_company",
+      "passed": true,
+      "duration_ms": 0.13840000247000717
+    },
+    {
+      "test": "test_query_policy.QueryPolicyTests.test_validation_rejects_empty_question_and_malformed_inventory",
+      "passed": true,
+      "duration_ms": 0.10939999992842786
+    },
+    {
+      "test": "test_runtime_support.RequestBudgetTests.test_expired_stage_never_starts",
+      "passed": true,
+      "duration_ms": 0.05980000059935264
+    },
+    {
+      "test": "test_runtime_support.RequestBudgetTests.test_failed_stage_preserves_exception_and_records_sanitized_type",
+      "passed": true,
+      "duration_ms": 0.11669999730656855
+    },
+    {
+      "test": "test_runtime_support.RequestBudgetTests.test_invalid_budget_parameters_and_stage_names",
+      "passed": true,
+      "duration_ms": 0.0765999975556042
+    },
+    {
+      "test": "test_runtime_support.RequestBudgetTests.test_stage_can_overrun_but_no_later_stage_starts",
+      "passed": true,
+      "duration_ms": 0.030699997296324
+    },
+    {
+      "test": "test_runtime_support.RequestBudgetTests.test_stage_times_and_remaining_budget_are_measured",
+      "passed": true,
+      "duration_ms": 0.027900001441594213
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_all_binding_changes_invalidate_and_dict_order_does_not",
+      "passed": true,
+      "duration_ms": 0.36380000165081583
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_binding_and_query_validation",
+      "passed": true,
+      "duration_ms": 0.16830000095069408
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_byte_limit_evicts_and_oversized_write_keeps_existing",
+      "passed": true,
+      "duration_ms": 0.19640000027720816
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_clear_and_parameter_validation",
+      "passed": true,
+      "duration_ms": 0.09059999865712598
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_empty_failure_bad_scores_and_nonreranked_results_never_cached",
+      "passed": true,
+      "duration_ms": 0.6089999988034833
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_exact_query_identity_preserves_year_basis_and_whitespace",
+      "passed": true,
+      "duration_ms": 0.14149999697110616
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_expanded_reranked_results_preserve_rank_fusion_provenance",
+      "passed": true,
+      "duration_ms": 0.22279999757301994
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_lru_eviction_updates_on_reads",
+      "passed": true,
+      "duration_ms": 0.16870000035851263
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_replacing_key_updates_bytes_and_ttl_without_spurious_eviction",
+      "passed": true,
+      "duration_ms": 0.14070000179344788
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_ttl_is_from_write_and_reads_do_not_extend_expiry",
+      "passed": true,
+      "duration_ms": 0.07750000077066943
+    },
+    {
+      "test": "test_runtime_support.RetrievalCacheTests.test_values_are_isolated_from_writes_and_reads",
+      "passed": true,
+      "duration_ms": 0.07520000144722871
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_bare_metric_period_can_use_later_comparative_filing",
+      "passed": true,
+      "duration_ms": 1.154800000222167
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_bounded_fallback_retains_original_query_and_separate_threshold",
+      "passed": true,
+      "duration_ms": 1.3878999998269137
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_cache_reuses_only_retrieval_and_rechecks_sources_and_models",
+      "passed": true,
+      "duration_ms": 1.80720000207657
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_comparison_requires_all_explicit_report_years_without_company",
+      "passed": true,
+      "duration_ms": 0.9086000027309638
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_comparison_requires_both_companies_in_context",
+      "passed": true,
+      "duration_ms": 0.7628999992448371
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_conflicting_fusion_payloads_fail",
+      "passed": true,
+      "duration_ms": 0.040099999750964344
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_future_period_alone_does_not_trigger_corpus_refusal",
+      "passed": true,
+      "duration_ms": 0.9822000029089395
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_invented_reranker_chunk_refuses_before_source_or_generator",
+      "passed": true,
+      "duration_ms": 0.8355999998457264
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_late_generation_is_discarded_without_verifier_and_audit_is_truthful",
+      "passed": true,
+      "duration_ms": 0.7511000003432855
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_low_score_default_does_not_expand",
+      "passed": true,
+      "duration_ms": 0.600200000917539
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_missing_companies_refuse_before_model_or_retrieval",
+      "passed": true,
+      "duration_ms": 1.1082999990321696
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_oversized_query_refuses_before_embedding",
+      "passed": true,
+      "duration_ms": 0.49370000124326907
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_refusals_are_not_cached",
+      "passed": true,
+      "duration_ms": 0.912900002731476
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_slow_cache_write_cannot_release_late_answer",
+      "passed": true,
+      "duration_ms": 0.9016000003612135
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_success_has_stage_timings_and_preserves_question",
+      "passed": true,
+      "duration_ms": 0.8273999992525205
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_transient_errors_retry_once_and_auth_does_not_retry",
+      "passed": true,
+      "duration_ms": 3.4440999988873955
+    },
+    {
+      "test": "test_reliable_pipeline.ReliablePipelineTests.test_wrong_company_or_explicit_report_year_is_not_sent_to_generator",
+      "passed": true,
+      "duration_ms": 1.5370000000984874
+    },
+    {
+      "test": "test_reliable_cli.ReliableCLITests.test_absent_company_and_report_refuse_before_configuration",
+      "passed": true,
+      "duration_ms": 5.923799999436596
+    },
+    {
+      "test": "test_reliable_cli.ReliableCLITests.test_default_threshold_refuses_without_provider_or_models",
+      "passed": true,
+      "duration_ms": 4.144099999393802
+    },
+    {
+      "test": "test_reliable_cli.ReliableCLITests.test_empty_query_refuses_without_models",
+      "passed": true,
+      "duration_ms": 2.6347999992140103
+    },
+    {
+      "test": "test_reliable_cli.ReliableCLITests.test_expansion_requires_separate_threshold_and_invalid_options_reject",
+      "passed": true,
+      "duration_ms": 4.248900000675349
+    },
+    {
+      "test": "test_reliable_cli.ReliableCLITests.test_help_documents_session_and_startup",
+      "passed": true,
+      "duration_ms": 2.059899998130277
+    },
+    {
+      "test": "test_reliable_cli.ReliableCLITests.test_invalid_question_does_not_discard_other_session_questions",
+      "passed": true,
+      "duration_ms": 3.942699997423915
+    },
+    {
+      "test": "test_reliable_cli.ReliableCLITests.test_missing_provider_refuses_before_models",
+      "passed": true,
+      "duration_ms": 3.34379999912926
+    },
+    {
+      "test": "test_reliable_cli.ReliableCLITests.test_output_writes_new_json_and_preserves_existing_file",
+      "passed": true,
+      "duration_ms": 5.686000000423519
+    },
+    {
+      "test": "test_reliable_cli.ReliableCLITests.test_oversized_query_refuses_before_provider_or_model_startup",
+      "passed": true,
+      "duration_ms": 6.720699999277713
+    },
+    {
+      "test": "test_reliable_cli.ReliableCLITests.test_repeated_questions_share_one_pipeline",
+      "passed": true,
+      "duration_ms": 3.9776999983587302
+    },
+    {
+      "test": "test_generation.GenerationTests.test_existing_retrieval_stack_is_composed_with_all_answer_checks",
+      "passed": true,
+      "duration_ms": 0.5268000022624619
+    },
+    {
+      "test": "test_generation.GenerationTests.test_irrelevant_or_incomplete_answer_is_rejected",
+      "passed": true,
+      "duration_ms": 0.18980000095325522
+    },
+    {
+      "test": "test_generation.GenerationTests.test_low_or_unconfigured_confidence_never_reads_sources_or_calls_model",
+      "passed": true,
+      "duration_ms": 0.11300000187475234
+    },
+    {
+      "test": "test_generation.GenerationTests.test_malformed_source_store_fails_closed",
+      "passed": true,
+      "duration_ms": 0.4856000014115125
+    },
+    {
+      "test": "test_generation.GenerationTests.test_provider_errors_and_bad_verdict_fail_closed",
+      "passed": true,
+      "duration_ms": 0.29519999952754006
+    },
+    {
+      "test": "test_generation.GenerationTests.test_source_tampering_and_budget_fail_before_generation",
+      "passed": true,
+      "duration_ms": 0.13469999976223335
+    },
+    {
+      "test": "test_generation.GenerationTests.test_success_has_verified_inline_citation_and_source_trace",
+      "passed": true,
+      "duration_ms": 0.18760000239126384
+    },
+    {
+      "test": "test_generation.GenerationTests.test_unconfigured_live_pipeline_does_no_retrieval",
+      "passed": true,
+      "duration_ms": 0.06960000246181153
+    },
+    {
+      "test": "test_generation.GenerationTests.test_unknown_reference_does_not_reach_semantic_verifier",
+      "passed": true,
+      "duration_ms": 0.07449999975506216
+    },
+    {
+      "test": "test_generation.GenerationTests.test_valid_quote_does_not_allow_false_claim",
+      "passed": true,
+      "duration_ms": 0.12009999772999436
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_all_table_binding_kinds_render_original_locators",
+      "passed": true,
+      "duration_ms": 0.320099999953527
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_bounded_outputs_empty_claims_and_abstention_are_fail_closed",
+      "passed": true,
+      "duration_ms": 0.2117000003636349
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_bundle_requires_verified_source_and_valid_original_locators",
+      "passed": true,
+      "duration_ms": 0.23159999909694307
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_json_cannot_be_repaired_or_silently_accept_duplicate_keys",
+      "passed": true,
+      "duration_ms": 0.16490000052726828
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_markdown_html_urls_and_control_injection_cannot_create_active_markup",
+      "passed": true,
+      "duration_ms": 0.20330000188550912
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_model_cannot_supply_source_metadata_or_add_unverified_prose",
+      "passed": true,
+      "duration_ms": 0.03310000101919286
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_quote_matching_does_not_normalize_altered_evidence",
+      "passed": true,
+      "duration_ms": 0.2516999993531499
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_renderer_keeps_whole_source_paragraph_quote_and_original_location",
+      "passed": true,
+      "duration_ms": 0.11580000136746094
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_renderer_rechecks_both_gates_and_never_returns_failed_draft",
+      "passed": true,
+      "duration_ms": 0.0866999980644323
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_semantic_verifier_must_cover_every_claim_once",
+      "passed": true,
+      "duration_ms": 0.0790999984019436
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_shared_reference_is_reused_across_claims",
+      "passed": true,
+      "duration_ms": 0.15659999917261302
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_strict_reference_verification_preserves_source_and_input",
+      "passed": true,
+      "duration_ms": 0.08339999840245582
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_true_quote_cannot_bypass_semantic_rejection_of_false_claim",
+      "passed": true,
+      "duration_ms": 0.11240000094403513
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_uncited_claim_and_duplicate_citations_fail",
+      "passed": true,
+      "duration_ms": 0.08280000110971741
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_unknown_or_malicious_evidence_ids_are_rejected",
+      "passed": true,
+      "duration_ms": 0.13179999950807542
+    },
+    {
+      "test": "test_answer_verification.AnswerVerificationTests.test_verifier_wrong_types_extra_fields_and_missing_question_support_fail",
+      "passed": true,
+      "duration_ms": 0.08430000161752105
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_changed_chunk_text_citation_offsets_and_identity_are_rejected",
+      "passed": true,
+      "duration_ms": 216.53429999787477
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_duplicate_candidates_and_unknown_sources_are_rejected",
+      "passed": true,
+      "duration_ms": 38.77410000131931
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_failed_table_scan_page_remains_atomic",
+      "passed": true,
+      "duration_ms": 19.081200000073295
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_missing_table_record_preserves_original_placeholder",
+      "passed": true,
+      "duration_ms": 16.593399999692338
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_paragraph_offsets_and_metadata_are_original_and_detached",
+      "passed": true,
+      "duration_ms": 26.03159999853233
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_parsed_artifact_hash_change_invalidates_cache_and_fails",
+      "passed": true,
+      "duration_ms": 26.196800001343945
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_repeated_headers_are_deduplicated_without_splitting_rows",
+      "passed": true,
+      "duration_ms": 80.10640000065905
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_retrieval_citation_alias_is_checked_and_labels_are_not_forwarded",
+      "passed": true,
+      "duration_ms": 24.571799996920163
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_stateless_wrapper_and_empty_candidates",
+      "passed": true,
+      "duration_ms": 27.143100000103004
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_table_artifact_hash_and_incomplete_source_fail_closed",
+      "passed": true,
+      "duration_ms": 27.060199998231838
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_table_fallback_keeps_original_source_whole",
+      "passed": true,
+      "duration_ms": 17.72519999940414
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_table_row_and_caption_tampering_are_rejected",
+      "passed": true,
+      "duration_ms": 48.55160000079195
+    },
+    {
+      "test": "test_evidence_binding.EvidenceBindingTests.test_whole_table_rows_and_nearby_units_have_verified_ids",
+      "passed": true,
+      "duration_ms": 17.86079999874346
+    },
+    {
+      "test": "test_llm_client.ClientTests.test_endpoint_and_config_validation",
+      "passed": true,
+      "duration_ms": 0.15379999967990443
+    },
+    {
+      "test": "test_llm_client.ClientTests.test_environment_has_no_implicit_provider",
+      "passed": true,
+      "duration_ms": 0.7818000012775883
+    },
+    {
+      "test": "test_llm_client.ClientTests.test_json_rejects_duplicate_and_nonfinite_keys",
+      "passed": true,
+      "duration_ms": 0.04690000059781596
+    },
+    {
+      "test": "test_llm_client.ClientTests.test_legacy_compatible_token_parameter",
+      "passed": true,
+      "duration_ms": 0.4750000007334165
+    },
+    {
+      "test": "test_llm_client.ClientTests.test_network_error_does_not_expose_credentials_or_body",
+      "passed": true,
+      "duration_ms": 0.5044999998062849
+    },
+    {
+      "test": "test_llm_client.ClientTests.test_oversized_response",
+      "passed": true,
+      "duration_ms": 0.24389999816776253
+    },
+    {
+      "test": "test_llm_client.ClientTests.test_truncation_refusal_tools_and_malformed_json_fail",
+      "passed": true,
+      "duration_ms": 2.9529000021284446
+    },
+    {
+      "test": "test_llm_client.ClientTests.test_wire_format_and_explicit_limits",
+      "passed": true,
+      "duration_ms": 0.2888000017264858
+    }
+  ],
+  "implementation_sha256": {
+    "src/report_search/query_policy.py": "c0388cdcf47479326f8316ff39ce72b77d1ef01def64c6485e293ea37f7ffdbc",
+    "src/report_search/runtime_support.py": "aec76608257380189e14bd9986236df35a77eca30e0deaf803670e4be698ee72",
+    "src/report_search/reliable_pipeline.py": "305739eb8b0da8a138a615955bfa64128a0f2f95214bf89a7c9b4aece6e769d7",
+    "src/report_search/generation.py": "a0ca1ccce70ec8acbece82761edfd3a5776f7b7a9465e0a42ff82122e03eb57e",
+    "src/report_search/answer_verification.py": "ebbe660705bdd0185d136faf68606c4f3e47c4106078891910d8c1c4fda5a061",
+    "src/report_search/evidence_binding.py": "41bc91330e0e25e997a6888374d9cf71874c54863e293e39d310a88576b39e47",
+    "src/report_search/llm_client.py": "9f30251f2c12ff9d4c38017c945bc3f0ba4931fefc8f57edc09c7cf699f0a2c9",
+    "tests/test_query_policy.py": "f49e831fc515f2a6e325d6acbfd26157ff38f10e60709e92ca4823beffec4d47",
+    "tests/test_runtime_support.py": "6715498f0ef677c8f7e647878775f55e9e05c14da04526de6f594f31989b1b4f",
+    "tests/test_reliable_pipeline.py": "2c948d093ad0c350c6c371cbdad3228d65ac1be7acb5efe3c3d0e37d135ba202",
+    "tests/test_reliable_cli.py": "1d7037aa3538240f566b1382796b54a5dd5b098bf7cf71361549f6f7d5e4814d",
+    "tests/test_generation.py": "65a550ac1da5d12af45c6742d118a72947d7c5e19b4beb06e02346c6e1fc7b1b",
+    "tests/test_answer_verification.py": "1baacb736f4cf608b39008c0391b26615cd804795d54998d21e4d55cd0f1f1a5",
+    "tests/test_evidence_binding.py": "ace6907ad7109321eaec2505def050b5b7a795cc32941d1a206d0269e1e0a812",
+    "tests/test_llm_client.py": "f4b2e6723aefe2e68d867f7e0bad3577748739a970975d0cf11eb43cd0ae2d6f",
+    "scripts/answer_reliably.py": "0cdfe2cee8bbe8729b6a1034ef06a5baf563c35e2b7e20b22e41b3c6089020f3",
+    "scripts/run_failure_checks.py": "4b097b968e87dcbda57e25dff25e359e1634f6e0945977d869a5ce80db120bdc"
+  },
+  "limitation": "Controlled inputs/model verdicts check behavior, not hallucination rates or semantic verifier reliability. Case durations are test execution times, not serving latency."
+}

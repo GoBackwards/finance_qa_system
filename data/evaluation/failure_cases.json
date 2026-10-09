@@ -1,0 +1,1204 @@
+{
+  "schema_version": "1.0",
+  "catalog_id": "financial_qa_failure_cases_v1",
+  "created_at": "2026-10-08",
+  "provenance": {
+    "agent_authored": true,
+    "human_reviewed": false,
+    "status": "behavior_specifications_awaiting_human_review",
+    "measured": false,
+    "execution_results": null,
+    "benchmark_split": "development_sources_only",
+    "source_benchmark": "data/evaluation/retrieval_dev_questions.json",
+    "source_benchmark_sha256": "790f5efa7d8d1ec8ac19260201c9987b64cf3cd818b4ffbb11416d323f05d45e",
+    "limitations": [
+      "These are manually authored by an agent, not independently human-labeled examples.",
+      "Cases are behavior specifications and controlled test designs, not 30 measured retrieval failures or an LLM accuracy benchmark.",
+      "The existing dev-source anchors identify realistic context; they do not establish that the proposed query failed retrieval.",
+      "No live generation endpoint was used to label these outcomes. Semantic rejection relies on prescribed verdicts in controlled fixtures.",
+      "Future dates alone do not make a filing-based question unanswerable. F017 contains an actual supported future statement.",
+      "Apple and Tesla are absent from this corpus; their examples test scope handling rather than retrieval recall.",
+      "No production latency, hallucination reduction or universal synonym equivalence is claimed.",
+      "test_references identify related controlled mechanism tests, not an assertion that every complete catalog scenario has been executed."
+    ]
+  },
+  "public_abstention": "I'm not sure",
+  "case_count": 30,
+  "cases": [
+    {
+      "case_id": "F001",
+      "failure_type": "retrieval_miss",
+      "query": "What was NVIDIA's FY2025 revenue?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Original vector candidates score below an explicitly configured threshold. Enable the separately calibrated lexical fallback in this fixture.",
+      "expected": {
+        "outcome": "retrieve_then_verify",
+        "reason_category": "bounded_lexical_recovery",
+        "invariants": [
+          "Keep the original question unchanged for reranking, generation and verification.",
+          "Add bounded financial search hints such as net sales or total revenue without replacing the requested metric.",
+          "Preserve NVIDIA and FY2025 intent; a synonym match alone must not permit an answer.",
+          "If recovery still lacks support, return the abstention instead of inventing a value."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-001",
+          "document_ids": [
+            "NVDA_FY2025_annual_report-757b344ab62b"
+          ],
+          "evidence_ids": [
+            "NVDA_FY2025_annual_report-757b344ab62b:p146:table1:row:12"
+          ]
+        },
+        {
+          "benchmark_question_id": "dev-022",
+          "document_ids": [
+            "NVDA_FY2024_annual_report-b5751f4bb240",
+            "AMD_FY2024_annual_report-079208174889"
+          ],
+          "evidence_ids": [
+            "NVDA_FY2024_annual_report-b5751f4bb240:p137:table1:row:2",
+            "AMD_FY2024_annual_report-079208174889:p56:table1:row:0"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_query_policy.py",
+          "function": "test_revenue_hints_preserve_original_basis_currency_and_period",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_bounded_fallback_retains_original_query_and_separate_threshold",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F002",
+      "failure_type": "retrieval_miss",
+      "query": "What operating profit appears in Adobe's FY2023 annual report?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Vocabulary differs between the question and an operating income statement row; use a controlled low-confidence first pass.",
+      "expected": {
+        "outcome": "retrieve_then_verify",
+        "reason_category": "bounded_lexical_recovery",
+        "invariants": [
+          "Search operating income as a lexical hint.",
+          "Do not equate operating profit with net income or gross profit.",
+          "Preserve report scope and units; require source-bound citations."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-008",
+          "document_ids": [
+            "ADBE_FY2023_annual_report-2f027b253cd7"
+          ],
+          "evidence_ids": [
+            "ADBE_FY2023_annual_report-2f027b253cd7:p53:table1:row:16"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_query_policy.py",
+          "function": "test_operating_income_is_not_operating_cash_flow",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F003",
+      "failure_type": "corpus_scope",
+      "query": "What was Apple's gross profit margin in FY2024?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Apple/AAPL has no report in the verified current 40-company corpus. This is the user-provided irrelevant-retrieval example.",
+      "expected": {
+        "outcome": "abstain_before_generation",
+        "reason_category": "company_not_in_corpus",
+        "invariants": [
+          "Do not substitute another company or a paragraph about sales.",
+          "Do not invoke a generator to answer from outside knowledge."
+        ]
+      },
+      "source_anchors": [],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_query_policy.py",
+          "function": "test_apple_failure_is_missing_corpus_company",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_missing_companies_refuse_before_model_or_retrieval",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F004",
+      "failure_type": "corpus_scope",
+      "query": "What is Tesla's projected revenue for 2027?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Tesla/TSLA has no report in the verified current corpus. This is the user-provided hallucination example.",
+      "expected": {
+        "outcome": "abstain_before_generation",
+        "reason_category": "company_not_in_corpus",
+        "invariants": [
+          "Do not create a precise forecast.",
+          "Record missing corpus coverage separately from low retrieval score."
+        ]
+      },
+      "source_anchors": [],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_query_policy.py",
+          "function": "test_tesla_forecast_failure_is_company_gap_not_future_year",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_missing_companies_refuse_before_model_or_retrieval",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F005",
+      "failure_type": "irrelevant_retrieval",
+      "query": "According to Intel's FY2024 annual report, what was total revenue?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Candidates contain highly scored AMD chunks but no Intel chunks.",
+      "expected": {
+        "outcome": "abstain_before_generation",
+        "reason_category": "requested_source_missing",
+        "invariants": [
+          "Reject wrong-company candidates even when their raw reranker score is high.",
+          "Optional bounded recovery may run only under its enabled configuration."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-003",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p21:e14:chars:0:30"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_wrong_company_or_explicit_report_year_is_not_sent_to_generator",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F006",
+      "failure_type": "irrelevant_retrieval",
+      "query": "According to Intel's FY2024 annual report, what was total revenue?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Candidates contain Intel FY2023 or FY2025 reports; no candidate is from the explicitly requested FY2024 filing.",
+      "expected": {
+        "outcome": "abstain_before_generation",
+        "reason_category": "requested_source_missing",
+        "invariants": [
+          "Respect the explicit report-year constraint.",
+          "Do not silently replace the requested filing with another year."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-003",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p21:e14:chars:0:30"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_wrong_company_or_explicit_report_year_is_not_sent_to_generator",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F007",
+      "failure_type": "over_refusal",
+      "query": "What was NVIDIA's FY2024 consolidated revenue?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "A later NVIDIA annual report contains a valid comparative column for the requested FY2024 metric; the question does not require a particular filing year.",
+      "expected": {
+        "outcome": "eligible_for_generation",
+        "reason_category": "metric_period_not_report_year",
+        "invariants": [
+          "Do not turn every year mention into a hard filing-year filter.",
+          "The semantic review must still check the cited table column is FY2024."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-022",
+          "document_ids": [
+            "NVDA_FY2024_annual_report-b5751f4bb240",
+            "AMD_FY2024_annual_report-079208174889"
+          ],
+          "evidence_ids": [
+            "NVDA_FY2024_annual_report-b5751f4bb240:p137:table1:row:2",
+            "AMD_FY2024_annual_report-079208174889:p56:table1:row:0"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_query_policy.py",
+          "function": "test_older_metric_may_appear_in_later_comparative_report",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_bare_metric_period_can_use_later_comparative_filing",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F008",
+      "failure_type": "incomplete_evidence",
+      "query": "According to their FY2024 annual reports, which company reported a higher consolidated GAAP gross margin: Intel or AMD?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Only Intel evidence survives retrieval, or a proposed answer omits AMD.",
+      "expected": {
+        "outcome": "abstain",
+        "reason_category": "incomplete_comparison",
+        "invariants": [
+          "Require evidence for both named companies and the same metric and basis.",
+          "Do not answer one side of a comparison as if the whole question were answered."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-021",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60",
+            "AMD_FY2024_annual_report-079208174889"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p65:table1:source:0:398",
+            "AMD_FY2024_annual_report-079208174889:p51:table1:row:4"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_comparison_requires_both_companies_in_context",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_generation.py",
+          "function": "test_irrelevant_or_incomplete_answer_is_rejected",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F009",
+      "failure_type": "metric_confusion",
+      "query": "According to Intel's FY2024 annual report, what was its consolidated gross margin?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "A generator attaches a valid total-revenue quote to an unsupported gross-margin claim; the controlled verifier marks the claim unsupported.",
+      "expected": {
+        "outcome": "abstain_after_verification",
+        "reason_category": "unsupported_claim",
+        "invariants": [
+          "An exact quote and high retrieval score are insufficient evidence of entailment.",
+          "Do not calculate a margin in the current reported-values-only generation mode."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-003",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p21:e14:chars:0:30"
+          ]
+        },
+        {
+          "benchmark_question_id": "dev-021",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60",
+            "AMD_FY2024_annual_report-079208174889"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p65:table1:source:0:398",
+            "AMD_FY2024_annual_report-079208174889:p51:table1:row:4"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_query_policy.py",
+          "function": "test_gross_margin_is_not_gross_profit_amount",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_generation.py",
+          "function": "test_valid_quote_does_not_allow_false_claim",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F010",
+      "failure_type": "basis_confusion",
+      "query": "According to their FY2024 annual reports, which had the higher GAAP gross margin, Intel or AMD?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "One candidate is an adjusted/non-GAAP disclosure; the draft presents it as GAAP and the controlled verifier rejects it.",
+      "expected": {
+        "outcome": "abstain_after_verification",
+        "reason_category": "unsupported_claim",
+        "invariants": [
+          "Search hints must preserve GAAP versus adjusted/non-GAAP distinctions.",
+          "The full claim, including basis and denominator, needs supporting evidence."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-021",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60",
+            "AMD_FY2024_annual_report-079208174889"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p65:table1:source:0:398",
+            "AMD_FY2024_annual_report-079208174889:p51:table1:row:4"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_query_policy.py",
+          "function": "test_non_gaap_is_not_silently_changed_to_gaap",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_generation.py",
+          "function": "test_valid_quote_does_not_allow_false_claim",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F011",
+      "failure_type": "metric_confusion",
+      "query": "What was Costco's FY2023 total revenue, including membership fees?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "A draft uses only the net-sales subtotal; the controlled verifier reports that the requested metric is not answered.",
+      "expected": {
+        "outcome": "abstain_after_verification",
+        "reason_category": "question_not_answered",
+        "invariants": [
+          "Revenue and net sales may aid search but are not universally interchangeable financial values.",
+          "Preserve membership-fee inclusion and table headings."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-011",
+          "document_ids": [
+            "COST_FY2023_annual_report-002b2252df47"
+          ],
+          "evidence_ids": [
+            "COST_FY2023_annual_report-002b2252df47:p41:table1:row:2"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_generation.py",
+          "function": "test_irrelevant_or_incomplete_answer_is_rejected",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F012",
+      "failure_type": "empty_retrieval",
+      "query": "According to Intel's FY2024 annual report, what was total revenue?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Both configured retrieval paths return an empty candidate list.",
+      "expected": {
+        "outcome": "abstain_before_generation",
+        "reason_category": "empty_candidates",
+        "invariants": [
+          "Return the public abstention with no citations.",
+          "Do not call generation or semantic verification."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-003",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p21:e14:chars:0:30"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_generation.py",
+          "function": "test_low_or_unconfigured_confidence_never_reads_sources_or_calls_model",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F013",
+      "failure_type": "low_confidence",
+      "query": "What operating income appears in Adobe's FY2023 annual report?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Every valid raw reranker logit is below the explicitly configured threshold; recovery is disabled or exhausted.",
+      "expected": {
+        "outcome": "abstain_before_generation",
+        "reason_category": "below_threshold",
+        "invariants": [
+          "Never compare normalized hybrid/BM25/vector scores with the reranker-logit threshold.",
+          "Do not call the generator after the gate rejects."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-008",
+          "document_ids": [
+            "ADBE_FY2023_annual_report-2f027b253cd7"
+          ],
+          "evidence_ids": [
+            "ADBE_FY2023_annual_report-2f027b253cd7:p53:table1:row:16"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_generation.py",
+          "function": "test_low_or_unconfigured_confidence_never_reads_sources_or_calls_model",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_low_score_default_does_not_expand",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F014",
+      "failure_type": "invalid_confidence",
+      "query": "What operating income appears in Adobe's FY2023 annual report?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "One selected candidate has a missing, NaN, infinite or boolean reranker_score, even if another scores highly.",
+      "expected": {
+        "outcome": "abstain_before_generation",
+        "reason_category": "invalid_reranker_score",
+        "invariants": [
+          "Reject the entire invalid score set.",
+          "Do not substitute the generic score field."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-008",
+          "document_ids": [
+            "ADBE_FY2023_annual_report-2f027b253cd7"
+          ],
+          "evidence_ids": [
+            "ADBE_FY2023_annual_report-2f027b253cd7:p53:table1:row:16"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_generation.py",
+          "function": "test_low_or_unconfigured_confidence_never_reads_sources_or_calls_model",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F015",
+      "failure_type": "unsupported_forecast",
+      "query": "Based on NVIDIA's FY2025 annual report, what exact revenue will NVIDIA earn in 2027?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "The supplied evidence contains historical revenue only; a controlled draft invents a precise future value and the verifier rejects it.",
+      "expected": {
+        "outcome": "abstain_after_verification",
+        "reason_category": "unsupported_claim",
+        "invariants": [
+          "Historical data and a real citation do not support an invented forecast.",
+          "Do not treat every future-oriented question as impossible; judge its actual evidence."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-022",
+          "document_ids": [
+            "NVDA_FY2024_annual_report-b5751f4bb240",
+            "AMD_FY2024_annual_report-079208174889"
+          ],
+          "evidence_ids": [
+            "NVDA_FY2024_annual_report-b5751f4bb240:p137:table1:row:2",
+            "AMD_FY2024_annual_report-079208174889:p56:table1:row:0"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_query_policy.py",
+          "function": "test_forecast_intent_does_not_refuse_supported_company",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_generation.py",
+          "function": "test_valid_quote_does_not_allow_false_claim",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F016",
+      "failure_type": "partial_answer",
+      "query": "From Intel's FY2024 annual report, give its FY2024 total revenue and its exact FY2027 revenue forecast.",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "The supplied context supports only the historical value; the controlled draft answers that part and the verifier rejects missing essential coverage.",
+      "expected": {
+        "outcome": "abstain_after_verification",
+        "reason_category": "question_not_answered",
+        "invariants": [
+          "Do not publish the convenient supported part as a complete answer.",
+          "Do not infer a forecast from historical growth."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-003",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p21:e14:chars:0:30"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_generation.py",
+          "function": "test_irrelevant_or_incomplete_answer_is_rejected",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F017",
+      "failure_type": "over_refusal",
+      "query": "According to NVIDIA's FY2025 annual report, when is the CC expected to certify achievement and payouts for MY PSUs granted in Fiscal 2025?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Supply the actual FY2025 report paragraph that states an expected March 2027 certification date, plus prescribed supported draft and review.",
+      "expected": {
+        "outcome": "eligible_for_generation",
+        "reason_category": "supported_forward_statement",
+        "invariants": [
+          "Keep the statement as an expectation rather than a guaranteed event.",
+          "Do not reject merely because the supported answer refers to 2027.",
+          "Trace the citation to PDF page 59 and the exact source element."
+        ]
+      },
+      "source_anchors": [
+        {
+          "document_id": "NVDA_FY2025_annual_report-757b344ab62b",
+          "source_file": "NVDA_FY2025_annual_report.pdf",
+          "source_sha256": "757b344ab62ba282f6e44e0702e8ce5f190d88fb23b5e0a2beaf4cb277a395cc",
+          "pages_artifact_sha256": "b342b07f570a1dbfe2c3d8b10a1cef53cf9c55169d68ed4dd2c090b9c4e321aa",
+          "pdf_page": 59,
+          "element_id": "NVDA_FY2025_annual_report-757b344ab62b:p59:e71",
+          "quote": "*  The CC is expected to certify achievement and payouts for MY PSUs granted in Fiscal 2025 by March 2027.",
+          "verification": "Exact parsed paragraph, pages artifact checksum, raw PDF SHA256 and native text at 1-based PDF page 59 checked locally; no retrieval/model outcome measured."
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_query_policy.py",
+          "function": "test_future_disclosure_in_existing_filing_retains_source_scope",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_future_period_alone_does_not_trigger_corpus_refusal",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F018",
+      "failure_type": "invalid_citation",
+      "query": "According to Intel's FY2024 annual report, what was total revenue?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "The controlled generator uses E999, a fabricated page, or a quote absent from the cited canonical source entry.",
+      "expected": {
+        "outcome": "abstain_before_semantic_verification",
+        "reason_category": "reference_verification_failed",
+        "invariants": [
+          "Only the application may supply document/page metadata.",
+          "Return no unverified draft text or citations."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-003",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p21:e14:chars:0:30"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_answer_verification.py",
+          "function": "test_unknown_or_malicious_evidence_ids_are_rejected",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_answer_verification.py",
+          "function": "test_quote_matching_does_not_normalize_altered_evidence",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_answer_verification.py",
+          "function": "test_model_cannot_supply_source_metadata_or_add_unverified_prose",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F019",
+      "failure_type": "source_changed",
+      "query": "What total assets did NVIDIA report at the end of FY2025?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "After retrieval or a candidate-cache hit, a parsed source artifact changes without matching its checked metadata checksum.",
+      "expected": {
+        "outcome": "abstain_before_generation",
+        "reason_category": "source_verification_failed",
+        "invariants": [
+          "Reconstruct and verify canonical evidence on cache hits.",
+          "A cached ranking does not authorize reuse of an old answer or old source verification."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-001",
+          "document_ids": [
+            "NVDA_FY2025_annual_report-757b344ab62b"
+          ],
+          "evidence_ids": [
+            "NVDA_FY2025_annual_report-757b344ab62b:p146:table1:row:12"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_evidence_binding.py",
+          "function": "test_parsed_artifact_hash_change_invalidates_cache_and_fails",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_cache_reuses_only_retrieval_and_rechecks_sources_and_models",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F020",
+      "failure_type": "prompt_injection",
+      "query": "Summarize Intel's FY2024 manufacturing risks.",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "A synthetic retrieved passage contains instructions to ignore citations or emit unsupported numbers; prescribed draft/verdict fixtures exercise response validation.",
+      "expected": {
+        "outcome": "abstain_if_unsupported",
+        "reason_category": "untrusted_source_instructions",
+        "invariants": [
+          "Treat source text as data, not system instructions.",
+          "Apply the same source, quote and semantic checks; controlled fixtures do not establish real-model prompt-injection robustness."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-036",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p41:e35:chars:0:262",
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p45:e22:chars:0:212",
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p45:e30:chars:0:121"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_answer_verification.py",
+          "function": "test_markdown_html_urls_and_control_injection_cannot_create_active_markup",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_generation.py",
+          "function": "test_valid_quote_does_not_allow_false_claim",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F021",
+      "failure_type": "provider_rate_limit",
+      "query": "What operating income did Microsoft report in its FY2022 annual report?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "The controlled API returns one HTTP 429, then a valid response; retry delay and both answer stages fit the shared deadline.",
+      "expected": {
+        "outcome": "retry_then_verify",
+        "reason_category": "transient_provider_recovery",
+        "invariants": [
+          "Bound retries and waiting by the configured attempt limit and remaining request budget.",
+          "Verify the recovered response normally; never return a partial draft.",
+          "Record attempts and stage timings without credentials or raw provider error bodies."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-027",
+          "document_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb",
+            "ADBE_FY2022_annual_report-ce8c716abac2"
+          ],
+          "evidence_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb:p43:table1:row:2",
+            "ADBE_FY2022_annual_report-ce8c716abac2:p54:table1:row:16"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_transient_errors_retry_once_and_auth_does_not_retry",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F022",
+      "failure_type": "provider_rate_limit",
+      "query": "What operating income did Microsoft report in its FY2022 annual report?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "The controlled API continues returning HTTP 429 beyond its bounded retry allowance.",
+      "expected": {
+        "outcome": "abstain",
+        "reason_category": "provider_unavailable",
+        "invariants": [
+          "Stop after the configured attempt allowance.",
+          "Do not spin, lower evidence standards or bypass the verifier."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-027",
+          "document_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb",
+            "ADBE_FY2022_annual_report-ce8c716abac2"
+          ],
+          "evidence_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb:p43:table1:row:2",
+            "ADBE_FY2022_annual_report-ce8c716abac2:p54:table1:row:16"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_transient_errors_retry_once_and_auth_does_not_retry",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F023",
+      "failure_type": "provider_timeout",
+      "query": "What operating income did Microsoft report in its FY2022 annual report?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "The generator or verifier times out and cannot recover within the shared budget.",
+      "expected": {
+        "outcome": "abstain",
+        "reason_category": "provider_timeout_or_deadline",
+        "invariants": [
+          "Constrain each provider call by the remaining budget.",
+          "Do not expose an unverified generator draft when the verifier times out."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-027",
+          "document_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb",
+            "ADBE_FY2022_annual_report-ce8c716abac2"
+          ],
+          "evidence_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb:p43:table1:row:2",
+            "ADBE_FY2022_annual_report-ce8c716abac2:p54:table1:row:16"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_llm_client.py",
+          "function": "test_network_error_does_not_expose_credentials_or_body",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_late_generation_is_discarded_without_verifier_and_audit_is_truthful",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F024",
+      "failure_type": "deadline",
+      "query": "What operating income did Microsoft report in its FY2022 annual report?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "A controlled encoder or reranker advances the monotonic clock beyond the configured request budget.",
+      "expected": {
+        "outcome": "abstain",
+        "reason_category": "request_deadline_exceeded",
+        "invariants": [
+          "Stop before starting later work after a budget overrun.",
+          "Report the stage that exhausted the budget.",
+          "The deadline is cooperative: a synchronous local model/kernel is not preempted at exactly three seconds."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-027",
+          "document_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb",
+            "ADBE_FY2022_annual_report-ce8c716abac2"
+          ],
+          "evidence_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb:p43:table1:row:2",
+            "ADBE_FY2022_annual_report-ce8c716abac2:p54:table1:row:16"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_runtime_support.py",
+          "function": "test_stage_can_overrun_but_no_later_stage_starts",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_late_generation_is_discarded_without_verifier_and_audit_is_truthful",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F025",
+      "failure_type": "repeated_query_latency",
+      "query": "What operating income did Microsoft report in its FY2022 annual report?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "Repeat an identical request with the same corpus/model/query-policy binding while a bounded candidate-cache entry is valid.",
+      "expected": {
+        "outcome": "reuse_candidates_then_verify",
+        "reason_category": "valid_candidate_cache_hit",
+        "invariants": [
+          "Reuse ranking work where configured, not a finalized answer.",
+          "Always rebind source evidence and rerun the gate, generation and semantic verification.",
+          "Distinguish a cache hit from a measured end-to-end latency improvement."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-027",
+          "document_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb",
+            "ADBE_FY2022_annual_report-ce8c716abac2"
+          ],
+          "evidence_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb:p43:table1:row:2",
+            "ADBE_FY2022_annual_report-ce8c716abac2:p54:table1:row:16"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_cache_reuses_only_retrieval_and_rechecks_sources_and_models",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F026",
+      "failure_type": "corrupt_cache",
+      "query": "What operating income did Microsoft report in its FY2022 annual report?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "A controlled candidate-cache value is malformed, has a changed integrity digest or has inconsistent chunk identity.",
+      "expected": {
+        "outcome": "cache_miss_or_abstain",
+        "reason_category": "invalid_cache_entry",
+        "invariants": [
+          "Never trust or generate from corrupted cached candidates.",
+          "Recompute only within the remaining request budget; otherwise abstain."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-027",
+          "document_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb",
+            "ADBE_FY2022_annual_report-ce8c716abac2"
+          ],
+          "evidence_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb:p43:table1:row:2",
+            "ADBE_FY2022_annual_report-ce8c716abac2:p54:table1:row:16"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_runtime_support.py",
+          "function": "test_empty_failure_bad_scores_and_nonreranked_results_never_cached",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F027",
+      "failure_type": "stale_cache",
+      "query": "What operating income did Microsoft report in its FY2022 annual report?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "The same query is issued after the corpus, embedding/reranker model, query policy, threshold or retrieval configuration changes, or after TTL expiry.",
+      "expected": {
+        "outcome": "cache_miss",
+        "reason_category": "cache_identity_or_ttl_changed",
+        "invariants": [
+          "Do not reuse ranking entries under an incompatible binding.",
+          "Cache keys must not contain the API credential.",
+          "Do not silently reuse the old vector-only threshold after enabling lexical recovery."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-027",
+          "document_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb",
+            "ADBE_FY2022_annual_report-ce8c716abac2"
+          ],
+          "evidence_ids": [
+            "MSFT_FY2022_annual_report-561d30b6cfcb:p43:table1:row:2",
+            "ADBE_FY2022_annual_report-ce8c716abac2:p54:table1:row:16"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_runtime_support.py",
+          "function": "test_all_binding_changes_invalidate_and_dict_order_does_not",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_runtime_support.py",
+          "function": "test_ttl_is_from_write_and_reads_do_not_extend_expiry",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F028",
+      "failure_type": "reranker_failure",
+      "query": "According to Intel's FY2024 annual report, what was total revenue?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "The reranker raises an exception or returns candidates outside the retrieved pool.",
+      "expected": {
+        "outcome": "abstain_before_generation",
+        "reason_category": "reranker_failure",
+        "invariants": [
+          "Never send direct vector or BM25 scores into the reranker-logit confidence gate.",
+          "Do not publish an answer by silently skipping reranking."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-003",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p21:e14:chars:0:30"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_invented_reranker_chunk_refuses_before_source_or_generator",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F029",
+      "failure_type": "provider_configuration",
+      "query": "According to Intel's FY2024 annual report, what was total revenue?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "The controlled API returns a non-transient authentication or invalid-request status.",
+      "expected": {
+        "outcome": "abstain",
+        "reason_category": "non_retryable_provider_error",
+        "invariants": [
+          "Do not retry HTTP 400/401/403 as transient failures.",
+          "Sanitize the failure reason and never expose credentials or raw provider response bodies."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-003",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p21:e14:chars:0:30"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_transient_errors_retry_once_and_auth_does_not_retry",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    },
+    {
+      "case_id": "F030",
+      "failure_type": "provider_response",
+      "query": "According to Intel's FY2024 annual report, what was total revenue?",
+      "fixture_kind": "controlled_behavior_specification",
+      "measured": false,
+      "setup": "The controlled API returns malformed JSON, an incomplete response, a provider refusal or a tool call.",
+      "expected": {
+        "outcome": "abstain",
+        "reason_category": "invalid_or_incomplete_model_response",
+        "invariants": [
+          "Do not repair malformed output into an unsupported answer.",
+          "Do not retry schema/semantic failures as transport failures or bypass reference checks."
+        ]
+      },
+      "source_anchors": [
+        {
+          "benchmark_question_id": "dev-003",
+          "document_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60"
+          ],
+          "evidence_ids": [
+            "INTC_FY2024_annual_report-5b9ba57e8d60:p21:e14:chars:0:30"
+          ]
+        }
+      ],
+      "evaluation_scope": "Behavior specification; source anchors are context, not proof of a retrieval or model outcome.",
+      "test_references": [
+        {
+          "path": "tests/test_llm_client.py",
+          "function": "test_truncation_refusal_tools_and_malformed_json_fail",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        },
+        {
+          "path": "tests/test_reliable_pipeline.py",
+          "function": "test_transient_errors_retry_once_and_auth_does_not_retry",
+          "coverage": "Related controlled mechanism test; does not execute the complete source-grounded case or measure live model behavior."
+        }
+      ]
+    }
+  ]
+}
