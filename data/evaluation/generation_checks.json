@@ -1,0 +1,263 @@
+{
+  "schema_version": 1,
+  "mode": "offline_controlled_http_fixtures",
+  "live_llm_evaluated": false,
+  "answer_accuracy_measured": false,
+  "source_question_id": "test-001",
+  "case_count": 11,
+  "retrieval_query": "According to Broadcom's FY2021 annual report, how much net cash did operating activities provide during fiscal 2021, in millions of U.S. dollars?",
+  "fixture_query": "Quote the source paragraph beginning with: Operating Activities Cash provided by operating activities consisted of net inco",
+  "passed_count": 11,
+  "source_candidate_sha256": "d8c9adc2b58ea9e14eabd25dd1f5eb7df099e79ac039d994e420e04da416e204",
+  "limitation": "Prescribed drafts/verdicts test control flow and exact references, not semantic verifier quality or real-world hallucination rate.",
+  "cases": [
+    {
+      "case": "cited_answer_and_full_source_trace",
+      "passed": true,
+      "provider_calls": 2,
+      "status": "answer",
+      "reason": null,
+      "reference_verified": true,
+      "semantic_supported": true
+    },
+    {
+      "case": "true_quote_but_false_claim",
+      "passed": true,
+      "provider_calls": 2,
+      "status": "abstain",
+      "reason": "unsupported_claim",
+      "reference_verified": true,
+      "semantic_supported": false
+    },
+    {
+      "case": "invented_evidence_id",
+      "passed": true,
+      "provider_calls": 1,
+      "status": "abstain",
+      "reason": "unknown_evidence_id",
+      "reference_verified": false,
+      "semantic_supported": false
+    },
+    {
+      "case": "altered_quote",
+      "passed": true,
+      "provider_calls": 1,
+      "status": "abstain",
+      "reason": "quote_not_in_source",
+      "reference_verified": false,
+      "semantic_supported": false
+    },
+    {
+      "case": "question_not_fully_answered",
+      "passed": true,
+      "provider_calls": 2,
+      "status": "abstain",
+      "reason": "question_not_answered",
+      "reference_verified": true,
+      "semantic_supported": false
+    },
+    {
+      "case": "low_score_no_provider_call",
+      "passed": true,
+      "provider_calls": 0,
+      "status": "abstain",
+      "reason": "below_threshold",
+      "reference_verified": false,
+      "semantic_supported": false
+    },
+    {
+      "case": "unconfigured_gate_no_provider_call",
+      "passed": true,
+      "provider_calls": 0,
+      "status": "abstain",
+      "reason": "unconfigured_threshold",
+      "reference_verified": false,
+      "semantic_supported": false
+    },
+    {
+      "case": "empty_retrieval_no_provider_call",
+      "passed": true,
+      "provider_calls": 0,
+      "status": "abstain",
+      "reason": "empty_candidates",
+      "reference_verified": false,
+      "semantic_supported": false
+    },
+    {
+      "case": "provider_error",
+      "passed": true,
+      "provider_calls": 1,
+      "status": "abstain",
+      "reason": "model_http_503",
+      "reference_verified": false,
+      "semantic_supported": false
+    },
+    {
+      "case": "malformed_semantic_verdict",
+      "passed": true,
+      "provider_calls": 2,
+      "status": "abstain",
+      "reason": "incomplete_verifier_coverage",
+      "reference_verified": true,
+      "semantic_supported": false
+    },
+    {
+      "case": "truncated_model_response",
+      "passed": true,
+      "provider_calls": 1,
+      "status": "abstain",
+      "reason": "incomplete_model_response",
+      "reference_verified": false,
+      "semantic_supported": false
+    }
+  ],
+  "full_results_artifact": "data/experiments/generation_checks/results.json",
+  "full_results_sha256": "56ec8a894641df986b10c440651419de454268589d82b3d0b6898c5440cfd531",
+  "implementation_sha256": {
+    "src/report_search/generation.py": "a0ca1ccce70ec8acbece82761edfd3a5776f7b7a9465e0a42ff82122e03eb57e",
+    "src/report_search/llm_client.py": "9f30251f2c12ff9d4c38017c945bc3f0ba4931fefc8f57edc09c7cf699f0a2c9",
+    "src/report_search/answer_cli.py": "4ed6b8e3e0a005ff7cd8d9c1b7b38111c531e03c438fe9a5a313de7b8e2ead7e",
+    "src/report_search/answer_verification.py": "ebbe660705bdd0185d136faf68606c4f3e47c4106078891910d8c1c4fda5a061",
+    "src/report_search/evidence_binding.py": "41bc91330e0e25e997a6888374d9cf71874c54863e293e39d310a88576b39e47",
+    "src/report_search/confidence.py": "706489f5ddcc435bb121478c0344a228b8377518372bf81c7c0b8429de54d869",
+    "scripts/run_generation_checks.py": "264f563dfa6fbb61b00fa7796cf74263f2bc265e9e2b5f558ef2e43cb129ab44"
+  },
+  "source_binding_smoke": {
+    "runs": [
+      {
+        "question_id": "dev-001",
+        "split": "dev",
+        "category": "factual",
+        "chunks": 5,
+        "kinds": [
+          "prose",
+          "table"
+        ],
+        "evidence_units": 54,
+        "source_verified": true,
+        "seconds": 1.864
+      },
+      {
+        "question_id": "dev-003",
+        "split": "dev",
+        "category": "factual",
+        "chunks": 5,
+        "kinds": [
+          "prose",
+          "table_fallback"
+        ],
+        "evidence_units": 76,
+        "source_verified": true,
+        "seconds": 1.841
+      },
+      {
+        "question_id": "dev-015",
+        "split": "dev",
+        "category": "factual",
+        "chunks": 5,
+        "kinds": [
+          "page_fallback",
+          "prose",
+          "table"
+        ],
+        "evidence_units": 184,
+        "source_verified": true,
+        "seconds": 0.484
+      },
+      {
+        "question_id": "dev-021",
+        "split": "dev",
+        "category": "comparative",
+        "chunks": 5,
+        "kinds": [
+          "prose"
+        ],
+        "evidence_units": 104,
+        "source_verified": true,
+        "seconds": 1.484
+      },
+      {
+        "question_id": "dev-036",
+        "split": "dev",
+        "category": "summary",
+        "chunks": 5,
+        "kinds": [
+          "prose"
+        ],
+        "evidence_units": 53,
+        "source_verified": true,
+        "seconds": 2.31
+      },
+      {
+        "question_id": "test-001",
+        "split": "test",
+        "category": "factual",
+        "chunks": 5,
+        "kinds": [
+          "prose",
+          "table"
+        ],
+        "evidence_units": 48,
+        "source_verified": true,
+        "seconds": 0.926
+      },
+      {
+        "question_id": "test-021",
+        "split": "test",
+        "category": "comparative",
+        "chunks": 5,
+        "kinds": [
+          "prose",
+          "table"
+        ],
+        "evidence_units": 58,
+        "source_verified": true,
+        "seconds": 0.851
+      },
+      {
+        "question_id": "test-036",
+        "split": "test",
+        "category": "summary",
+        "chunks": 5,
+        "kinds": [
+          "prose"
+        ],
+        "evidence_units": 30,
+        "source_verified": true,
+        "seconds": 0.056
+      }
+    ],
+    "categories": [
+      [
+        "dev",
+        "comparative"
+      ],
+      [
+        "dev",
+        "factual"
+      ],
+      [
+        "dev",
+        "summary"
+      ],
+      [
+        "test",
+        "comparative"
+      ],
+      [
+        "test",
+        "factual"
+      ],
+      [
+        "test",
+        "summary"
+      ]
+    ],
+    "kinds": [
+      "page_fallback",
+      "prose",
+      "table",
+      "table_fallback"
+    ]
+  }
+}

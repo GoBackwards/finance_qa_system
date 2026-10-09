@@ -1,0 +1,1214 @@
+{
+  "schema_version": 1,
+  "experiment": "development-only raw reranker threshold diagnostic",
+  "created_at_utc": "2026-10-09T05:32:50.290168+00:00",
+  "calibration": {
+    "status": "diagnostic_threshold_selected",
+    "threshold": 6.359375,
+    "score_kind": "reranker_raw_logit",
+    "criterion": {
+      "target_observed_complete_evidence_precision": 0.9,
+      "minimum_accepted_dev_questions": 10,
+      "selection": "maximum development coverage satisfying both criteria; inclusive threshold; score ties stay together"
+    },
+    "selected_dev": {
+      "threshold": 6.359375,
+      "question_count": 50,
+      "accepted_count": 11,
+      "refused_count": 39,
+      "coverage": 0.22,
+      "complete_evidence_count": 10,
+      "incomplete_evidence_count": 1,
+      "accepted_complete_evidence_precision": 0.9090909090909091,
+      "accepted_incomplete_evidence_rate": 0.09090909090909091,
+      "accepted_complete_evidence_precision_wilson95": [
+        0.6226415635484043,
+        0.9837678271141151
+      ],
+      "total_complete_evidence_count": 20,
+      "retained_complete_evidence_fraction": 0.5,
+      "refused_complete_evidence_count": 10
+    },
+    "dev_tradeoff_grid": [
+      {
+        "threshold": 7.953125,
+        "question_count": 50,
+        "accepted_count": 1,
+        "refused_count": 49,
+        "coverage": 0.02,
+        "complete_evidence_count": 1,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": 1.0,
+        "accepted_incomplete_evidence_rate": 0.0,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.20654931437723745,
+          1.0
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.05,
+        "refused_complete_evidence_count": 19
+      },
+      {
+        "threshold": 7.89453125,
+        "question_count": 50,
+        "accepted_count": 2,
+        "refused_count": 48,
+        "coverage": 0.04,
+        "complete_evidence_count": 2,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": 1.0,
+        "accepted_incomplete_evidence_rate": 0.0,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.34238022750665303,
+          1.0
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.1,
+        "refused_complete_evidence_count": 18
+      },
+      {
+        "threshold": 7.671875,
+        "question_count": 50,
+        "accepted_count": 3,
+        "refused_count": 47,
+        "coverage": 0.06,
+        "complete_evidence_count": 3,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": 1.0,
+        "accepted_incomplete_evidence_rate": 0.0,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.4385029682449546,
+          1.0
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.15,
+        "refused_complete_evidence_count": 17
+      },
+      {
+        "threshold": 7.60546875,
+        "question_count": 50,
+        "accepted_count": 4,
+        "refused_count": 46,
+        "coverage": 0.08,
+        "complete_evidence_count": 4,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": 1.0,
+        "accepted_incomplete_evidence_rate": 0.0,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.5101091635454027,
+          1.0
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.2,
+        "refused_complete_evidence_count": 16
+      },
+      {
+        "threshold": 7.578125,
+        "question_count": 50,
+        "accepted_count": 5,
+        "refused_count": 45,
+        "coverage": 0.1,
+        "complete_evidence_count": 5,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": 1.0,
+        "accepted_incomplete_evidence_rate": 0.0,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.5655175352168251,
+          1.0
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.25,
+        "refused_complete_evidence_count": 15
+      },
+      {
+        "threshold": 7.234375,
+        "question_count": 50,
+        "accepted_count": 6,
+        "refused_count": 44,
+        "coverage": 0.12,
+        "complete_evidence_count": 6,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": 1.0,
+        "accepted_incomplete_evidence_rate": 0.0,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.6096657120978346,
+          1.0
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.3,
+        "refused_complete_evidence_count": 14
+      },
+      {
+        "threshold": 6.6171875,
+        "question_count": 50,
+        "accepted_count": 7,
+        "refused_count": 43,
+        "coverage": 0.14,
+        "complete_evidence_count": 7,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": 1.0,
+        "accepted_incomplete_evidence_rate": 0.0,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.6456695649333126,
+          1.0
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.35,
+        "refused_complete_evidence_count": 13
+      },
+      {
+        "threshold": 6.59375,
+        "question_count": 50,
+        "accepted_count": 8,
+        "refused_count": 42,
+        "coverage": 0.16,
+        "complete_evidence_count": 8,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": 1.0,
+        "accepted_incomplete_evidence_rate": 0.0,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.6755924351161198,
+          1.0
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.4,
+        "refused_complete_evidence_count": 12
+      },
+      {
+        "threshold": 6.4765625,
+        "question_count": 50,
+        "accepted_count": 9,
+        "refused_count": 41,
+        "coverage": 0.18,
+        "complete_evidence_count": 8,
+        "incomplete_evidence_count": 1,
+        "accepted_complete_evidence_precision": 0.8888888888888888,
+        "accepted_incomplete_evidence_rate": 0.1111111111111111,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.5650002944233439,
+          0.9801091123614551
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.4,
+        "refused_complete_evidence_count": 12
+      },
+      {
+        "threshold": 6.3984375,
+        "question_count": 50,
+        "accepted_count": 10,
+        "refused_count": 40,
+        "coverage": 0.2,
+        "complete_evidence_count": 9,
+        "incomplete_evidence_count": 1,
+        "accepted_complete_evidence_precision": 0.9,
+        "accepted_incomplete_evidence_rate": 0.1,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.5958499732047615,
+          0.9821237869049271
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.45,
+        "refused_complete_evidence_count": 11
+      },
+      {
+        "threshold": 6.359375,
+        "question_count": 50,
+        "accepted_count": 11,
+        "refused_count": 39,
+        "coverage": 0.22,
+        "complete_evidence_count": 10,
+        "incomplete_evidence_count": 1,
+        "accepted_complete_evidence_precision": 0.9090909090909091,
+        "accepted_incomplete_evidence_rate": 0.09090909090909091,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.6226415635484043,
+          0.9837678271141151
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.5,
+        "refused_complete_evidence_count": 10
+      },
+      {
+        "threshold": 6.0859375,
+        "question_count": 50,
+        "accepted_count": 12,
+        "refused_count": 38,
+        "coverage": 0.24,
+        "complete_evidence_count": 10,
+        "incomplete_evidence_count": 2,
+        "accepted_complete_evidence_precision": 0.8333333333333334,
+        "accepted_incomplete_evidence_rate": 0.16666666666666666,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.5519691377470266,
+          0.9530348578161463
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.5,
+        "refused_complete_evidence_count": 10
+      },
+      {
+        "threshold": 6.08203125,
+        "question_count": 50,
+        "accepted_count": 13,
+        "refused_count": 37,
+        "coverage": 0.26,
+        "complete_evidence_count": 10,
+        "incomplete_evidence_count": 3,
+        "accepted_complete_evidence_precision": 0.7692307692307693,
+        "accepted_incomplete_evidence_rate": 0.23076923076923078,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.49743624053272495,
+          0.9182047128150143
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.5,
+        "refused_complete_evidence_count": 10
+      },
+      {
+        "threshold": 6.01171875,
+        "question_count": 50,
+        "accepted_count": 14,
+        "refused_count": 36,
+        "coverage": 0.28,
+        "complete_evidence_count": 10,
+        "incomplete_evidence_count": 4,
+        "accepted_complete_evidence_precision": 0.7142857142857143,
+        "accepted_incomplete_evidence_rate": 0.2857142857142857,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.4535091567010681,
+          0.8827862135542308
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.5,
+        "refused_complete_evidence_count": 10
+      },
+      {
+        "threshold": 5.96875,
+        "question_count": 50,
+        "accepted_count": 15,
+        "refused_count": 35,
+        "coverage": 0.3,
+        "complete_evidence_count": 10,
+        "incomplete_evidence_count": 5,
+        "accepted_complete_evidence_precision": 0.6666666666666666,
+        "accepted_incomplete_evidence_rate": 0.3333333333333333,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.41713547738519774,
+          0.8482367556028526
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.5,
+        "refused_complete_evidence_count": 10
+      },
+      {
+        "threshold": 5.8125,
+        "question_count": 50,
+        "accepted_count": 16,
+        "refused_count": 34,
+        "coverage": 0.32,
+        "complete_evidence_count": 11,
+        "incomplete_evidence_count": 5,
+        "accepted_complete_evidence_precision": 0.6875,
+        "accepted_incomplete_evidence_rate": 0.3125,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.44404355834740666,
+          0.8583535614521796
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.55,
+        "refused_complete_evidence_count": 9
+      },
+      {
+        "threshold": 5.5546875,
+        "question_count": 50,
+        "accepted_count": 17,
+        "refused_count": 33,
+        "coverage": 0.34,
+        "complete_evidence_count": 11,
+        "incomplete_evidence_count": 6,
+        "accepted_complete_evidence_precision": 0.6470588235294118,
+        "accepted_incomplete_evidence_rate": 0.35294117647058826,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.41300363485218694,
+          0.8269027960275627
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.55,
+        "refused_complete_evidence_count": 9
+      },
+      {
+        "threshold": 5.3828125,
+        "question_count": 50,
+        "accepted_count": 18,
+        "refused_count": 32,
+        "coverage": 0.36,
+        "complete_evidence_count": 12,
+        "incomplete_evidence_count": 6,
+        "accepted_complete_evidence_precision": 0.6666666666666666,
+        "accepted_incomplete_evidence_rate": 0.3333333333333333,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.43749467295945105,
+          0.837212252491663
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.6,
+        "refused_complete_evidence_count": 8
+      },
+      {
+        "threshold": 5.328125,
+        "question_count": 50,
+        "accepted_count": 19,
+        "refused_count": 31,
+        "coverage": 0.38,
+        "complete_evidence_count": 13,
+        "incomplete_evidence_count": 6,
+        "accepted_complete_evidence_precision": 0.6842105263157895,
+        "accepted_incomplete_evidence_rate": 0.3157894736842105,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.46010407675327475,
+          0.8463562091220773
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.65,
+        "refused_complete_evidence_count": 7
+      },
+      {
+        "threshold": 5.27734375,
+        "question_count": 50,
+        "accepted_count": 20,
+        "refused_count": 30,
+        "coverage": 0.4,
+        "complete_evidence_count": 14,
+        "incomplete_evidence_count": 6,
+        "accepted_complete_evidence_precision": 0.7,
+        "accepted_incomplete_evidence_rate": 0.3,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.4810271816464765,
+          0.8545227551323956
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.7,
+        "refused_complete_evidence_count": 6
+      },
+      {
+        "threshold": 5.15234375,
+        "question_count": 50,
+        "accepted_count": 21,
+        "refused_count": 29,
+        "coverage": 0.42,
+        "complete_evidence_count": 14,
+        "incomplete_evidence_count": 7,
+        "accepted_complete_evidence_precision": 0.6666666666666666,
+        "accepted_incomplete_evidence_rate": 0.3333333333333333,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.4537345197425524,
+          0.8280524739491653
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.7,
+        "refused_complete_evidence_count": 6
+      },
+      {
+        "threshold": 5.01171875,
+        "question_count": 50,
+        "accepted_count": 22,
+        "refused_count": 28,
+        "coverage": 0.44,
+        "complete_evidence_count": 14,
+        "incomplete_evidence_count": 8,
+        "accepted_complete_evidence_precision": 0.6363636363636364,
+        "accepted_incomplete_evidence_rate": 0.36363636363636365,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.42951708090131013,
+          0.8026679532963387
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.7,
+        "refused_complete_evidence_count": 6
+      },
+      {
+        "threshold": 4.96484375,
+        "question_count": 50,
+        "accepted_count": 23,
+        "refused_count": 27,
+        "coverage": 0.46,
+        "complete_evidence_count": 14,
+        "incomplete_evidence_count": 9,
+        "accepted_complete_evidence_precision": 0.6086956521739131,
+        "accepted_incomplete_evidence_rate": 0.391304347826087,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.4078552239138171,
+          0.7784237720752205
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.7,
+        "refused_complete_evidence_count": 6
+      },
+      {
+        "threshold": 4.8203125,
+        "question_count": 50,
+        "accepted_count": 24,
+        "refused_count": 26,
+        "coverage": 0.48,
+        "complete_evidence_count": 14,
+        "incomplete_evidence_count": 10,
+        "accepted_complete_evidence_precision": 0.5833333333333334,
+        "accepted_incomplete_evidence_rate": 0.4166666666666667,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.3883466586522876,
+          0.7553239739018824
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.7,
+        "refused_complete_evidence_count": 6
+      },
+      {
+        "threshold": 4.66796875,
+        "question_count": 50,
+        "accepted_count": 25,
+        "refused_count": 25,
+        "coverage": 0.5,
+        "complete_evidence_count": 14,
+        "incomplete_evidence_count": 11,
+        "accepted_complete_evidence_precision": 0.56,
+        "accepted_incomplete_evidence_rate": 0.44,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.3706733186979878,
+          0.7333436111893266
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.7,
+        "refused_complete_evidence_count": 6
+      },
+      {
+        "threshold": 4.47265625,
+        "question_count": 50,
+        "accepted_count": 26,
+        "refused_count": 24,
+        "coverage": 0.52,
+        "complete_evidence_count": 14,
+        "incomplete_evidence_count": 12,
+        "accepted_complete_evidence_precision": 0.5384615384615384,
+        "accepted_incomplete_evidence_rate": 0.46153846153846156,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.35457938746858797,
+          0.7124414646960878
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.7,
+        "refused_complete_evidence_count": 6
+      },
+      {
+        "threshold": 4.453125,
+        "question_count": 50,
+        "accepted_count": 27,
+        "refused_count": 23,
+        "coverage": 0.54,
+        "complete_evidence_count": 15,
+        "incomplete_evidence_count": 12,
+        "accepted_complete_evidence_precision": 0.5555555555555556,
+        "accepted_incomplete_evidence_rate": 0.4444444444444444,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.3731302451322448,
+          0.72414141822977
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.75,
+        "refused_complete_evidence_count": 5
+      },
+      {
+        "threshold": 4.3671875,
+        "question_count": 50,
+        "accepted_count": 28,
+        "refused_count": 22,
+        "coverage": 0.56,
+        "complete_evidence_count": 15,
+        "incomplete_evidence_count": 13,
+        "accepted_complete_evidence_precision": 0.5357142857142857,
+        "accepted_incomplete_evidence_rate": 0.4642857142857143,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.358126892344679,
+          0.7046843001720462
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.75,
+        "refused_complete_evidence_count": 5
+      },
+      {
+        "threshold": 4.15625,
+        "question_count": 50,
+        "accepted_count": 29,
+        "refused_count": 21,
+        "coverage": 0.58,
+        "complete_evidence_count": 16,
+        "incomplete_evidence_count": 13,
+        "accepted_complete_evidence_precision": 0.5517241379310345,
+        "accepted_incomplete_evidence_rate": 0.4482758620689655,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.37547963210970914,
+          0.7158683197696281
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.8,
+        "refused_complete_evidence_count": 4
+      },
+      {
+        "threshold": 3.953125,
+        "question_count": 50,
+        "accepted_count": 30,
+        "refused_count": 20,
+        "coverage": 0.6,
+        "complete_evidence_count": 17,
+        "incomplete_evidence_count": 13,
+        "accepted_complete_evidence_precision": 0.5666666666666667,
+        "accepted_incomplete_evidence_rate": 0.43333333333333335,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.3919730700081361,
+          0.7262251442353347
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.85,
+        "refused_complete_evidence_count": 3
+      },
+      {
+        "threshold": 3.900390625,
+        "question_count": 50,
+        "accepted_count": 31,
+        "refused_count": 19,
+        "coverage": 0.62,
+        "complete_evidence_count": 17,
+        "incomplete_evidence_count": 14,
+        "accepted_complete_evidence_precision": 0.5483870967741935,
+        "accepted_incomplete_evidence_rate": 0.45161290322580644,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.37772167637354503,
+          0.7083826401947998
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.85,
+        "refused_complete_evidence_count": 3
+      },
+      {
+        "threshold": 3.896484375,
+        "question_count": 50,
+        "accepted_count": 32,
+        "refused_count": 18,
+        "coverage": 0.64,
+        "complete_evidence_count": 18,
+        "incomplete_evidence_count": 14,
+        "accepted_complete_evidence_precision": 0.5625,
+        "accepted_incomplete_evidence_rate": 0.4375,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.3932559113685198,
+          0.7183466888495963
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.9,
+        "refused_complete_evidence_count": 2
+      },
+      {
+        "threshold": 3.826171875,
+        "question_count": 50,
+        "accepted_count": 33,
+        "refused_count": 17,
+        "coverage": 0.66,
+        "complete_evidence_count": 18,
+        "incomplete_evidence_count": 15,
+        "accepted_complete_evidence_precision": 0.5454545454545454,
+        "accepted_incomplete_evidence_rate": 0.45454545454545453,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.37985938536217456,
+          0.7015706148612388
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.9,
+        "refused_complete_evidence_count": 2
+      },
+      {
+        "threshold": 3.748046875,
+        "question_count": 50,
+        "accepted_count": 34,
+        "refused_count": 16,
+        "coverage": 0.68,
+        "complete_evidence_count": 18,
+        "incomplete_evidence_count": 16,
+        "accepted_complete_evidence_precision": 0.5294117647058824,
+        "accepted_incomplete_evidence_rate": 0.47058823529411764,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.3673671298006892,
+          0.6854849552491152
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.9,
+        "refused_complete_evidence_count": 2
+      },
+      {
+        "threshold": 3.55078125,
+        "question_count": 50,
+        "accepted_count": 35,
+        "refused_count": 15,
+        "coverage": 0.7,
+        "complete_evidence_count": 18,
+        "incomplete_evidence_count": 17,
+        "accepted_complete_evidence_precision": 0.5142857142857142,
+        "accepted_incomplete_evidence_rate": 0.4857142857142857,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.35568804595868564,
+          0.6700576399749026
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.9,
+        "refused_complete_evidence_count": 2
+      },
+      {
+        "threshold": 3.35546875,
+        "question_count": 50,
+        "accepted_count": 36,
+        "refused_count": 14,
+        "coverage": 0.72,
+        "complete_evidence_count": 19,
+        "incomplete_evidence_count": 17,
+        "accepted_complete_evidence_precision": 0.5277777777777778,
+        "accepted_incomplete_evidence_rate": 0.4722222222222222,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.37005938022987594,
+          0.6801395848482095
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.95,
+        "refused_complete_evidence_count": 1
+      },
+      {
+        "threshold": 3.0078125,
+        "question_count": 50,
+        "accepted_count": 37,
+        "refused_count": 13,
+        "coverage": 0.74,
+        "complete_evidence_count": 19,
+        "incomplete_evidence_count": 18,
+        "accepted_complete_evidence_precision": 0.5135135135135135,
+        "accepted_incomplete_evidence_rate": 0.4864864864864865,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.358948966656188,
+          0.6655359569698336
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.95,
+        "refused_complete_evidence_count": 1
+      },
+      {
+        "threshold": 2.8125,
+        "question_count": 50,
+        "accepted_count": 38,
+        "refused_count": 12,
+        "coverage": 0.76,
+        "complete_evidence_count": 19,
+        "incomplete_evidence_count": 19,
+        "accepted_complete_evidence_precision": 0.5,
+        "accepted_incomplete_evidence_rate": 0.5,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.34849928364395105,
+          0.6515007163560489
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 0.95,
+        "refused_complete_evidence_count": 1
+      },
+      {
+        "threshold": 2.708984375,
+        "question_count": 50,
+        "accepted_count": 39,
+        "refused_count": 11,
+        "coverage": 0.78,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 19,
+        "accepted_complete_evidence_precision": 0.5128205128205128,
+        "accepted_incomplete_evidence_rate": 0.48717948717948717,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.36199362884457964,
+          0.6613482467013799
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 2.58203125,
+        "question_count": 50,
+        "accepted_count": 40,
+        "refused_count": 10,
+        "coverage": 0.8,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 20,
+        "accepted_complete_evidence_precision": 0.5,
+        "accepted_incomplete_evidence_rate": 0.5,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.35199526933465386,
+          0.6480047306653461
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 2.5703125,
+        "question_count": 50,
+        "accepted_count": 41,
+        "refused_count": 9,
+        "coverage": 0.82,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 21,
+        "accepted_complete_evidence_precision": 0.4878048780487805,
+        "accepted_incomplete_evidence_rate": 0.5121951219512195,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.34254429554432664,
+          0.6351549134845619
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 2.548828125,
+        "question_count": 50,
+        "accepted_count": 42,
+        "refused_count": 8,
+        "coverage": 0.84,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 22,
+        "accepted_complete_evidence_precision": 0.47619047619047616,
+        "accepted_incomplete_evidence_rate": 0.5238095238095238,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.3335960123070547,
+          0.6227753586865502
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 1.7939453125,
+        "question_count": 50,
+        "accepted_count": 43,
+        "refused_count": 7,
+        "coverage": 0.86,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 23,
+        "accepted_complete_evidence_precision": 0.46511627906976744,
+        "accepted_incomplete_evidence_rate": 0.5348837209302325,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.32511057704121815,
+          0.6108435952768602
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 1.6669921875,
+        "question_count": 50,
+        "accepted_count": 44,
+        "refused_count": 6,
+        "coverage": 0.88,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 24,
+        "accepted_complete_evidence_precision": 0.45454545454545453,
+        "accepted_incomplete_evidence_rate": 0.5454545454545454,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.31705234142220895,
+          0.5993381680103802
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 1.576171875,
+        "question_count": 50,
+        "accepted_count": 45,
+        "refused_count": 5,
+        "coverage": 0.9,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 25,
+        "accepted_complete_evidence_precision": 0.4444444444444444,
+        "accepted_incomplete_evidence_rate": 0.5555555555555556,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.30938930034997586,
+          0.5882386550647896
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 1.287109375,
+        "question_count": 50,
+        "accepted_count": 46,
+        "refused_count": 4,
+        "coverage": 0.92,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 26,
+        "accepted_complete_evidence_precision": 0.43478260869565216,
+        "accepted_incomplete_evidence_rate": 0.5652173913043478,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.3020926277801995,
+          0.5775256630570501
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 1.146484375,
+        "question_count": 50,
+        "accepted_count": 47,
+        "refused_count": 3,
+        "coverage": 0.94,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 27,
+        "accepted_complete_evidence_precision": 0.425531914893617,
+        "accepted_incomplete_evidence_rate": 0.574468085106383,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.2951362834367996,
+          0.5671808065450721
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 1.1416015625,
+        "question_count": 50,
+        "accepted_count": 48,
+        "refused_count": 2,
+        "coverage": 0.96,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 28,
+        "accepted_complete_evidence_precision": 0.4166666666666667,
+        "accepted_incomplete_evidence_rate": 0.5833333333333334,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.2884966777841157,
+          0.5571866771602373
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 0.89013671875,
+        "question_count": 50,
+        "accepted_count": 49,
+        "refused_count": 1,
+        "coverage": 0.98,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 29,
+        "accepted_complete_evidence_precision": 0.40816326530612246,
+        "accepted_incomplete_evidence_rate": 0.5918367346938775,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.28215238520386865,
+          0.5475268060815286
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      },
+      {
+        "threshold": 0.607421875,
+        "question_count": 50,
+        "accepted_count": 50,
+        "refused_count": 0,
+        "coverage": 1.0,
+        "complete_evidence_count": 20,
+        "incomplete_evidence_count": 30,
+        "accepted_complete_evidence_precision": 0.4,
+        "accepted_incomplete_evidence_rate": 0.6,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.27608389730256544,
+          0.5381856225241064
+        ],
+        "total_complete_evidence_count": 20,
+        "retained_complete_evidence_fraction": 1.0,
+        "refused_complete_evidence_count": 0
+      }
+    ],
+    "selection_split": "dev",
+    "production_certified": false
+  },
+  "policy": {
+    "schema_version": 1,
+    "status": "diagnostic_threshold_selected",
+    "threshold": 6.359375,
+    "score_kind": "reranker_raw_logit",
+    "selection_split": "dev",
+    "production_certified": false,
+    "criterion": {
+      "target_observed_complete_evidence_precision": 0.9,
+      "minimum_accepted_dev_questions": 10,
+      "selection": "maximum development coverage satisfying both criteria; inclusive threshold; score ties stay together"
+    },
+    "binding": {
+      "reranker": {
+        "model_id": "BAAI/bge-reranker-v2-m3",
+        "model_revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+        "snapshot_revision": "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
+        "model_weights_file": "model.safetensors",
+        "model_weights_sha256": "d9e3e081faff1eefb84019509b2f5558fd74c1a05a2c7db22f74174fcedb5286",
+        "weight_verification": "sha256_checked_before_model_load",
+        "implementation_sha256": "4254da428344b19f410c7f01e13b52fdd8836c66f60663cfd9ae809a0d2914e1",
+        "max_tokens": 8192,
+        "query_max_length": 8192,
+        "special_tokens_included": true,
+        "truncation_policy": "reject_complete_pair",
+        "inference_precision": "float16",
+        "inference_backend": "FlagReranker_with_bounded_cuda_oom_retry",
+        "score_type": "raw_logit",
+        "normalized": false,
+        "query_instruction": "",
+        "passage_instruction": "",
+        "document_rendering": "company-ticker-fiscal-year-v1",
+        "tokenizer_class": "XLMRobertaTokenizerFast",
+        "tokenizer_files_sha256": {
+          "config.json": "13dcd6c31d9fec9d1d8e158702072f62d7fa7d312a64b9fe057bec9a08cfe41a",
+          "tokenizer.json": "69564b696052886ed0ac63fa393e928384e0f8caada38c1f4864a9bfbf379c15",
+          "tokenizer_config.json": "7e4c1cc848840aeccdd763458c18dd525eb0f795c992e00ebe9c28554e7db2d4",
+          "special_tokens_map.json": "8c785abebea9ae3257b61681b4e6fd8365ceafde980c21970d001e834cf10835",
+          "sentencepiece.bpe.model": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865"
+        },
+        "tokenizer_config_sha256": "08ad1f157b127063769b8c4ccdc34b990fb61c601ad67e785cfdb35ed5324dcf"
+      },
+      "chunks_sha256": "d9dc54b432956aec565f3ede839e0062ee90d2c7166f48eaf22e733f6da474c6",
+      "chunk_strategy": "table_preserving_s512_o50",
+      "candidate_depth": 20,
+      "selected_depth": 5,
+      "score_statistic": "maximum_selected_reranker_score",
+      "vector_retrieval": {
+        "index": "FlatIP",
+        "encoder": {
+          "model_id": "BAAI/bge-m3",
+          "model_revision": "5617a9f61b028005a4858fdac845db406aefb181",
+          "dimension": 1024,
+          "max_tokens": 8192,
+          "device": "cuda:0",
+          "batch_size": 8,
+          "implementation_sha256": "0b68b9ef1d3f076b33a69f83c2d42e6d235ccb256712459df003da6f79ba341d",
+          "pooling": "cls",
+          "normalized": true,
+          "output_dtype": "float32",
+          "inference_precision": "float16",
+          "query_instruction": "",
+          "document_rendering": "company-ticker-fiscal-year-v1",
+          "tokenizer_class": "XLMRobertaTokenizerFast",
+          "tokenizer_files_sha256": {
+            "config.json": "26159e7ad065073448460117eb24b7a4572f6f4e78eadff65dc0a11c052449fa",
+            "tokenizer.json": "21106b6d7dab2952c1d496fb21d5dc9db75c28ed361a05f5020bbba27810dd08",
+            "tokenizer_config.json": "a62b2b6784f990259fddef5f16388693a8043be4f69179e6a5257eeb3f9abac4",
+            "special_tokens_map.json": "8c785abebea9ae3257b61681b4e6fd8365ceafde980c21970d001e834cf10835",
+            "sentencepiece.bpe.model": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865"
+          },
+          "tokenizer_config_sha256": "99396e245981add65951f68a1af85f73ec86b91ac38a60019a3671ea3773531b",
+          "special_tokens_included": true,
+          "packages": {
+            "FlagEmbedding": "1.3.5",
+            "transformers": "4.51.3",
+            "torch": "2.7.1+cu128",
+            "tokenizers": "0.21.4",
+            "numpy": "2.5.3"
+          }
+        },
+        "corpus_vectors_file_sha256": "2f74ac9edf39229d2b37945f7046c429c2cdcc5ba03eda3e67094ea6dca2f050",
+        "corpus_embedding_manifest_sha256": "01338107b3ab26c3792d9774f21d6327f5c20434da5b7df41dc42fcbd6ef8252"
+      }
+    }
+  },
+  "test": {
+    "threshold": 6.359375,
+    "question_count": 50,
+    "accepted_count": 15,
+    "refused_count": 35,
+    "coverage": 0.3,
+    "complete_evidence_count": 11,
+    "incomplete_evidence_count": 4,
+    "accepted_complete_evidence_precision": 0.7333333333333333,
+    "accepted_incomplete_evidence_rate": 0.26666666666666666,
+    "accepted_complete_evidence_precision_wilson95": [
+      0.4804956594401943,
+      0.8910254667430761
+    ],
+    "total_complete_evidence_count": 18,
+    "retained_complete_evidence_fraction": 0.6111111111111112,
+    "refused_complete_evidence_count": 7
+  },
+  "baseline_no_gate": {
+    "dev": {
+      "threshold": 0.607421875,
+      "question_count": 50,
+      "accepted_count": 50,
+      "refused_count": 0,
+      "coverage": 1.0,
+      "complete_evidence_count": 20,
+      "incomplete_evidence_count": 30,
+      "accepted_complete_evidence_precision": 0.4,
+      "accepted_incomplete_evidence_rate": 0.6,
+      "accepted_complete_evidence_precision_wilson95": [
+        0.27608389730256544,
+        0.5381856225241064
+      ],
+      "total_complete_evidence_count": 20,
+      "retained_complete_evidence_fraction": 1.0,
+      "refused_complete_evidence_count": 0
+    },
+    "test": {
+      "threshold": 1.0,
+      "question_count": 50,
+      "accepted_count": 50,
+      "refused_count": 0,
+      "coverage": 1.0,
+      "complete_evidence_count": 18,
+      "incomplete_evidence_count": 32,
+      "accepted_complete_evidence_precision": 0.36,
+      "accepted_incomplete_evidence_rate": 0.64,
+      "accepted_complete_evidence_precision_wilson95": [
+        0.24138749651846741,
+        0.49858983123887307
+      ],
+      "total_complete_evidence_count": 18,
+      "retained_complete_evidence_fraction": 1.0,
+      "refused_complete_evidence_count": 0
+    }
+  },
+  "by_category": {
+    "dev": {
+      "factual": {
+        "threshold": 6.359375,
+        "question_count": 20,
+        "accepted_count": 11,
+        "refused_count": 9,
+        "coverage": 0.55,
+        "complete_evidence_count": 10,
+        "incomplete_evidence_count": 1,
+        "accepted_complete_evidence_precision": 0.9090909090909091,
+        "accepted_incomplete_evidence_rate": 0.09090909090909091,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.6226415635484043,
+          0.9837678271141151
+        ],
+        "total_complete_evidence_count": 15,
+        "retained_complete_evidence_fraction": 0.6666666666666666,
+        "refused_complete_evidence_count": 5
+      },
+      "comparative": {
+        "threshold": 6.359375,
+        "question_count": 15,
+        "accepted_count": 0,
+        "refused_count": 15,
+        "coverage": 0.0,
+        "complete_evidence_count": 0,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": null,
+        "accepted_incomplete_evidence_rate": null,
+        "accepted_complete_evidence_precision_wilson95": null,
+        "total_complete_evidence_count": 1,
+        "retained_complete_evidence_fraction": 0.0,
+        "refused_complete_evidence_count": 1
+      },
+      "summary": {
+        "threshold": 6.359375,
+        "question_count": 15,
+        "accepted_count": 0,
+        "refused_count": 15,
+        "coverage": 0.0,
+        "complete_evidence_count": 0,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": null,
+        "accepted_incomplete_evidence_rate": null,
+        "accepted_complete_evidence_precision_wilson95": null,
+        "total_complete_evidence_count": 4,
+        "retained_complete_evidence_fraction": 0.0,
+        "refused_complete_evidence_count": 4
+      }
+    },
+    "test": {
+      "factual": {
+        "threshold": 6.359375,
+        "question_count": 20,
+        "accepted_count": 15,
+        "refused_count": 5,
+        "coverage": 0.75,
+        "complete_evidence_count": 11,
+        "incomplete_evidence_count": 4,
+        "accepted_complete_evidence_precision": 0.7333333333333333,
+        "accepted_incomplete_evidence_rate": 0.26666666666666666,
+        "accepted_complete_evidence_precision_wilson95": [
+          0.4804956594401943,
+          0.8910254667430761
+        ],
+        "total_complete_evidence_count": 15,
+        "retained_complete_evidence_fraction": 0.7333333333333333,
+        "refused_complete_evidence_count": 4
+      },
+      "comparative": {
+        "threshold": 6.359375,
+        "question_count": 15,
+        "accepted_count": 0,
+        "refused_count": 15,
+        "coverage": 0.0,
+        "complete_evidence_count": 0,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": null,
+        "accepted_incomplete_evidence_rate": null,
+        "accepted_complete_evidence_precision_wilson95": null,
+        "total_complete_evidence_count": 2,
+        "retained_complete_evidence_fraction": 0.0,
+        "refused_complete_evidence_count": 2
+      },
+      "summary": {
+        "threshold": 6.359375,
+        "question_count": 15,
+        "accepted_count": 0,
+        "refused_count": 15,
+        "coverage": 0.0,
+        "complete_evidence_count": 0,
+        "incomplete_evidence_count": 0,
+        "accepted_complete_evidence_precision": null,
+        "accepted_incomplete_evidence_rate": null,
+        "accepted_complete_evidence_precision_wilson95": null,
+        "total_complete_evidence_count": 1,
+        "retained_complete_evidence_fraction": 0.0,
+        "refused_complete_evidence_count": 1
+      }
+    }
+  },
+  "limitations": [
+    "Raw reranker logits are not calibrated correctness probabilities.",
+    "Complete Top-5 annotated evidence is a retrieval proxy, not generated-answer correctness or semantic support.",
+    "Gold evidence is non-exhaustive and awaits human semantic review; valid unjudged sources receive no credit.",
+    "There are no curated unanswerable or out-of-domain questions; this experiment cannot measure hallucination or OOD refusal rates.",
+    "The target uses observed development precision, not a confidence-bound guarantee; adaptive threshold selection and company/template dependence weaken interval interpretation.",
+    "Wilson 95% intervals are descriptive binomial intervals; small samples and correlated questions limit their interpretation.",
+    "The diagnostic policy is not installed as a production default; an unconfigured application must refuse."
+  ],
+  "metric_definitions": {
+    "coverage": "Fraction of questions whose maximum selected raw logit reaches the frozen threshold.",
+    "accepted_complete_evidence_precision": "Fraction of accepted questions with all annotated source units in the selected Top 5; not answer accuracy.",
+    "accepted_incomplete_evidence_rate": "Accepted questions missing any annotated unit divided by accepted questions; not hallucination rate.",
+    "retained_complete_evidence_fraction": "Complete-evidence questions accepted divided by all complete-evidence questions before gating.",
+    "confidence_intervals": "Descriptive Wilson 95% binomial interval; no adjustment for threshold selection or correlated questions."
+  },
+  "provenance": {
+    "benchmark_sha256": "6966685c46cbb18f5e6a2f6d83de50443e6820add217206586605c0bd05f3c7b",
+    "source_reranker_run": "data/experiments/reranker",
+    "reranker_comparison_sha256": "434939479fd4b2f3fe2b709485a8ab0191dfcbd0e7b8c728819668582d4d4e7f",
+    "source_artifact_sha256": {
+      "per_query.jsonl": "7247ca22ddfa6bd22f3a2767328bcd34867ae49beda470da3fa955cc040f43b5",
+      "scores.jsonl": "000edb30a0d24acec2033bf7885a714d8fa0cdfb4782229ed732940ca8bd59a6",
+      "candidates.jsonl": "d8c9adc2b58ea9e14eabd25dd1f5eb7df099e79ac039d994e420e04da416e204"
+    },
+    "candidate_count": 2000,
+    "source_validation": "Prior source-validated frozen labels; Top-5 complete evidence recomputed against unchanged source atoms",
+    "inputs_to_gate": "maximum raw reranker logit only; no answer text, gold report IDs, evidence labels or category as runtime features"
+  },
+  "implementation_sha256": {
+    "scripts/calibrate_generation_gate.py": "e223cbf2826ca913ff498d849a0ea9efaae599cbcef2d442f516a8e0b1d72092",
+    "src/report_search/confidence.py": "706489f5ddcc435bb121478c0344a228b8377518372bf81c7c0b8429de54d869"
+  }
+}
