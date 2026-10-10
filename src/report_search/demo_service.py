@@ -22,7 +22,8 @@ import time
 from report_search.generation import generate_answer
 from report_search.llm_client import ChatCompletionsClient, ModelConfig, ModelError
 from report_search.decomposition import retrieve_decomposed
-from report_search.scoped_retrieval import document_index, merge_pools, plan_pools, select_candidates
+from report_search.scoped_retrieval import (context_extras, document_index, merge_pools, plan_pools,
+                                            select_candidates)
 
 
 class DemoError(RuntimeError):
@@ -277,6 +278,17 @@ class DemoService:
                     "pools": [{key: pool[key] for key in ("ticker", "fiscal_years", "top_k", "purpose")} for pool in pools],
                     **trace}
             timings["reranking_ms"] = (time.perf_counter() - stage_started) * 1000
+            if pools:
+                # Appended after the Top-5 and scored, so the confidence gate still sees every passage.
+                stage, stage_started = "context_extras", time.perf_counter()
+                extras = context_extras(query, scope, pools, partial["selected"], components.retrieval_engine, vector)
+                if extras:
+                    scored = components.reranker.rank_candidates(query, extras, top_k=len(extras))
+                    first = len(partial["selected"]) + 1
+                    partial["selected"] += [dict(chunk, rank=rank) for rank, chunk in enumerate(scored, first)]
+                    partial["retrieval_trace"]["context_extras"] = [
+                        {"chunk_id": chunk["chunk_id"], "reason": chunk["context_reason"]} for chunk in scored]
+                timings["context_extras_ms"] = (time.perf_counter() - stage_started) * 1000
             timings["total_ms"] = (time.perf_counter() - started) * 1000
             partial["_signature"] = self._signature(partial)
             return deepcopy(partial)

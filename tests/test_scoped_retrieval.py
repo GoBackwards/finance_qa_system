@@ -1,6 +1,7 @@
 import unittest
 
-from report_search.scoped_retrieval import document_index, merge_pools, near_duplicate, plan_pools, select_candidates
+from report_search.scoped_retrieval import (MAX_EXTRAS, context_extras, document_index, merge_pools, near_duplicate,
+                                            plan_pools, select_candidates, summary_themes)
 
 
 INVENTORY = [{"ticker": ticker, "fiscal_year": year, "relative_path": f"raw/{ticker}/{ticker}_FY{year}_annual_report.pdf",
@@ -119,6 +120,83 @@ class ReviewFixTests(unittest.TestCase):
         self.assertTrue(near_duplicate(fy21, dict(fy21, document_id="b")))
         self.assertFalse(near_duplicate(fy21, dict(fy21, document_id="b", ticker="PEP")))
 
+
+
+class FakeEngine:
+    """Chunks per company in vector order; neighbours by list position within a company."""
+
+    def __init__(self, chunks, lexical=None):
+        self.chunks, self.lexical, self.calls = chunks, lexical or {}, []
+
+    def vector(self, vector, top_k, document_ids):
+        rows = [dict(c, rank=r) for r, c in enumerate(
+            (c for c in self.chunks if c["document_id"] in document_ids), 1)][:top_k]
+        self.calls.append(("vector", top_k, tuple(document_ids)))
+        return rows
+
+    def bm25_report(self, question, top_k, *, ticker, fiscal_year):
+        self.calls.append(("bm25", question, ticker, fiscal_year))
+        return [dict(c, score=-1.0) for c in self.lexical.get(question, [])][:top_k]
+
+    def neighbour(self, chunk_id, offset):
+        index = next(i for i, c in enumerate(self.chunks) if c["chunk_id"] == chunk_id)
+        other = index + offset
+        if 0 <= other < len(self.chunks) and self.chunks[other]["document_id"] == self.chunks[index]["document_id"]:
+            return self.chunks[other]
+        return None
+
+
+def piece(chunk_id, document="KO-2022", kind="prose", rows=None, table_id=None, pages=(1,), ticker="KO"):
+    return {"chunk_id": chunk_id, "document_id": document, "ticker": ticker, "company": "Coca-Cola",
+            "kind": kind, "rows": rows or [], "table_id": table_id, "source_pages": list(pages)}
+
+
+POOL = {"ticker": "KO", "fiscal_years": [2022], "document_ids": ["KO-2022"], "top_k": 20, "purpose": "scope"}
+
+
+class ContextExtrasTests(unittest.TestCase):
+    def test_summary_themes_follow_the_enumeration(self):
+        self.assertEqual(summary_themes("Summarize three risks: new process technology, supplier capacity, and "
+                                        "qualifying alternative suppliers."),
+                         ["new process technology", "supplier capacity", "qualifying alternative suppliers"])
+        self.assertEqual(summary_themes("Using X's report, summarize risks from cybersecurity breaches, third-party "
+                                        "outages and loss of vendor access."),
+                         ["cybersecurity breaches", "third-party outages", "loss of vendor access"])
+
+    def test_metric_question_adds_the_best_matching_table_per_company(self):
+        chunks = [piece("k1"), piece("k2", kind="table", rows=[["Total assets", "9"]], pages=(9,)),
+                  piece("k3", kind="table", rows=[["Operating income", "5"], ["Net operating revenues", "43"]]),
+                  piece("k4", kind="table", rows=[["Operating income", "5"]])]
+        extras = context_extras("What was Coca-Cola's operating income and revenue in FY2022?", {}, [POOL],
+                                [chunks[0]], FakeEngine(chunks), None)
+        self.assertEqual([(e["chunk_id"], e["context_reason"]) for e in extras], [("k3", "row_label_table")])
+
+    def test_summary_question_adds_one_lexical_hit_per_theme_for_one_company_only(self):
+        hits = {"input inflation": [piece("h1")], "data security": [piece("h2")], "sole-source suppliers": [piece("h0")]}
+        question = "Summarize its risks concerning input inflation, data security and sole-source suppliers."
+        selected = [piece("h0")]
+        extras = context_extras(question, {}, [POOL], selected, FakeEngine(selected, hits), None)
+        self.assertEqual([(e["chunk_id"], e["context_reason"]) for e in extras],
+                         [("h1", "summary_theme"), ("h2", "summary_theme")])  # h0 is already selected
+        two = [POOL, dict(POOL, ticker="PEP", document_ids=["PEP-2022"])]
+        self.assertEqual(context_extras(question, {}, two, selected, FakeEngine(selected, hits), None), [])
+
+    def test_selected_tables_get_their_continuation_and_titles_get_the_following_table(self):
+        chunks = [piece("t0", kind="table", table_id="T1"), piece("t1", kind="table", table_id="T1"),
+                  piece("t2", kind="table", table_id="T2"), piece("title", pages=(4,)),
+                  piece("stmt", kind="table", table_id="T3", pages=(5,)), piece("far", pages=(9,)),
+                  piece("late", kind="table", table_id="T4", pages=(12,))]
+        engine = FakeEngine(chunks)
+        extras = context_extras("Summarize the statement.", {}, [], [chunks[1], chunks[3], chunks[5]], engine, None)
+        self.assertEqual([(e["chunk_id"], e["context_reason"]) for e in extras],
+                         [("t0", "same_table"), ("stmt", "title_table")])  # t2 is another table; 'late' is 3 pages on
+
+    def test_extras_are_capped_and_never_repeat_selected_passages(self):
+        chunks = [piece(f"t{i}", kind="table", table_id="T") for i in range(30)]
+        selected = chunks[1:30:2]
+        extras = context_extras("Summarize.", {}, [], selected, FakeEngine(chunks), None)
+        self.assertEqual(len(extras), MAX_EXTRAS)
+        self.assertFalse({e["chunk_id"] for e in extras} & {c["chunk_id"] for c in selected})
 
 if __name__ == "__main__":
     unittest.main()

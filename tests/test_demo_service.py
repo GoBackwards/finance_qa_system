@@ -180,8 +180,10 @@ class DemoServiceTests(unittest.TestCase):
                 return frozenset({"unknown:Apple"}) if "Apple" in text else frozenset()
 
         def chunk(ticker, number):
+            # Chunk 12 is a margin table below the pool depth: only the context-extras search finds it.
+            kind = {"kind": "table", "rows": [["Operating margin", "12.0"]]} if number == 12 else {"kind": "prose"}
             return {"chunk_id": f"{ticker}{number}", "document_id": f"{ticker}-2022", "ticker": ticker,
-                    "fiscal_year": 2022, "text": f"{ticker} passage {number}", "rank": number, "score": 0.5}
+                    "fiscal_year": 2022, "text": f"{ticker} passage {number}", "rank": number, "score": 0.5, **kind}
 
         class Engine:
             stats = {}
@@ -189,6 +191,12 @@ class DemoServiceTests(unittest.TestCase):
             def vector(self, vector, top_k, document_ids=None):
                 calls["vector"].append((top_k, tuple(document_ids or ())))
                 return [chunk(document_ids[0].split("-")[0], number) for number in range(1, top_k + 1)]
+
+            def neighbour(self, chunk_id, offset):
+                return None
+
+            def bm25_report(self, question, top_k, *, ticker, fiscal_year):
+                return []
 
             def close(self):
                 pass
@@ -217,10 +225,16 @@ class DemoServiceTests(unittest.TestCase):
 
         with DemoService(".", worker_factory=factory) as service:
             search = service.search("coke vs pepsi 2022 operating margin?")
-            self.assertEqual(calls["vector"], [(10, ("KO-2022",)), (10, ("PEP-2022",))])
-            self.assertEqual(calls["rerank"], [20])
-            self.assertEqual(len(search["selected"]), 5)
-            self.assertEqual(sum(row["ticker"] == "KO" for row in search["selected"]), 2)
+            self.assertEqual(calls["vector"], [(10, ("KO-2022",)), (10, ("PEP-2022",)),
+                                               (20, ("KO-2022",)), (20, ("PEP-2022",))])
+            self.assertEqual(calls["rerank"], [20, 2])  # the pool, then the two context extras
+            self.assertEqual(len(search["selected"]), 7)
+            self.assertEqual(sum(row["ticker"] == "KO" for row in search["selected"][:5]), 2)
+            extras = search["selected"][5:]
+            self.assertEqual(sorted(row["chunk_id"] for row in extras), ["KO12", "PEP12"])
+            self.assertEqual([row["rank"] for row in extras], [6, 7])
+            self.assertTrue(all("reranker_score" in row for row in extras))
+            self.assertEqual({row["reason"] for row in search["retrieval_trace"]["context_extras"]}, {"row_label_table"})
             self.assertEqual(search["retrieval_trace"]["quota"], {"KO": 2, "PEP": 2})
             self.assertEqual(search["scope"]["tickers"], ["KO", "PEP"])
             tampered = copy.deepcopy(search)

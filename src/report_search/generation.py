@@ -66,6 +66,7 @@ Comparisons need both sides. Summaries must cover the requested topics. Missing/
 Use no external facts. You may disagree with the generator. When uncertain, mark unsupported.
 """
 MAX_QUALITY_FLAGS = 4
+MAX_PASSAGES = 13  # reranked Top-5 plus at most 8 context extras (scoped_retrieval.MAX_EXTRAS)
 
 
 def _json(value):
@@ -298,7 +299,7 @@ def _reference_checks(draft, bundle, company_resolver):
 def _generate_answer(query, candidates, *, threshold=None, source_store=None,
                      generator=None, verifier=None, max_context_chars=100_000, run_stage,
                      scope=None, company_resolver=None):
-    """Generate from reranked Top5, or abstain before returning unsupported text.
+    """Generate from the selected passages, or abstain before returning unsupported text.
 
     ``generator`` and ``verifier`` implement complete_json(messages). By default
     both use explicit FINANCE_QA_* configuration, in separate stateless calls.
@@ -313,8 +314,8 @@ def _generate_answer(query, candidates, *, threshold=None, source_store=None,
              "verification_scope": "exact source references plus model-assessed claim support; not a correctness guarantee"}
     if not _valid_query(query):
         return _abstain("invalid_query", audit)
-    if not isinstance(candidates, list) or len(candidates) > 5:
-        return _abstain("expected_reranked_top5", audit)
+    if not isinstance(candidates, list) or len(candidates) > MAX_PASSAGES:
+        return _abstain("too_many_passages", audit)
     gate = confidence_gate(candidates, threshold)
     audit["confidence_gate"] = gate.to_dict()
     if not gate.allowed:

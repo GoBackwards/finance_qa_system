@@ -172,6 +172,28 @@ class RetrievalEngineTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "payload identity"):
                 engine.vector(self.query, 1)
 
+    def test_neighbours_stay_in_their_document_and_bm25_report_filters_company_and_year(self):
+        records = [("p1", "Revenue table", "docA", "ACME", 2024), ("p2", "Revenue continued", "docA", "ACME", 2024),
+                   ("q1", "Revenue elsewhere", "docB", "BETA", 2023)]
+        self.chunks.write_text("".join(json.dumps({
+            "chunk_id": chunk_id, "document_id": document, "text": body, "ticker": ticker, "fiscal_year": year,
+            "company": ticker.title(), "kind": "prose", "token_count": 2,
+            "evidence": [{"citation": {"document_id": document, "pdf_page": 1, "sha256": "hash", "bbox": [0, 0, 1, 1]}}]})
+            + "\n" for chunk_id, body, document, ticker, year in records), encoding="utf-8")
+        self.bm25_index.unlink()
+        build_index(self.chunks, self.bm25_index)
+        build_faiss_index(np.array([[1, 0], [1, 0], [0, 1]], dtype=np.float32), self.vector_index, chunks_path=self.chunks)
+        with self.engine() as engine:
+            self.assertEqual(engine.neighbour("p1", 1)["chunk_id"], "p2")
+            self.assertEqual(engine.neighbour("p2", -1)["chunk_id"], "p1")
+            self.assertIsNone(engine.neighbour("p2", 1))  # next chunk belongs to another document
+            self.assertIsNone(engine.neighbour("p1", -1))
+            with self.assertRaises(ValueError):
+                engine.neighbour("missing", 1)
+            hits = engine.bm25_report("revenue", 5, ticker="ACME", fiscal_year=2024)
+            self.assertEqual({hit["chunk_id"] for hit in hits}, {"p1", "p2"})
+            self.assertEqual(engine.bm25_report("revenue", 5, ticker="BETA", fiscal_year=2024), [])
+
     def test_invalid_queries_limits_and_closed_session(self):
         with self.engine() as engine:
             for query in [np.array([0, 0]), np.array([1, 1]), np.array([1, 0, 0]),

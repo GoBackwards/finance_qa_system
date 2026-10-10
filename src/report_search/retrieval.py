@@ -170,7 +170,7 @@ class RetrievalEngine:
         mapping = load_chunk_mapping(self.vector_index_path, verify_source=False)
         self._mapping = [(entry["chunk_id"], entry["document_id"]) for entry in mapping]
         del mapping
-        self._chunk_ids = {chunk_id for chunk_id, _ in self._mapping}
+        self._chunk_ids = {chunk_id: vector_id for vector_id, (chunk_id, _) in enumerate(self._mapping)}
         if len(self._chunk_ids) != len(self._mapping):
             raise ValueError("Vector mapping contains duplicate chunk IDs")
         rows_by_document: dict[str, list[int]] = {}
@@ -287,6 +287,28 @@ class RetrievalEngine:
             chunk.update(retrieval_approach="bm25", citations=_citations(chunk),
                          score_breakdown={"vector_raw_score": None, "bm25_raw_score": chunk["score"]})
         return results
+
+    def bm25_report(self, question: str, top_k: int, *, ticker: str, fiscal_year: int) -> list[dict]:
+        """Lexical search restricted to one company's report for one fiscal year."""
+        self._require_open()
+        results = _search(self.connection, question, top_k, ticker, fiscal_year)
+        for chunk in results:
+            chunk.update(retrieval_approach="bm25", citations=_citations(chunk),
+                         score_breakdown={"vector_raw_score": None, "bm25_raw_score": chunk["score"]})
+        return results
+
+    def neighbour(self, chunk_id: str, offset: int) -> dict | None:
+        """The chunk ``offset`` positions away in the same document, or None at a document edge."""
+        self._require_open()
+        if chunk_id not in self._chunk_ids:
+            raise ValueError("chunk_id is not in this verified corpus")
+        origin = self._chunk_ids[chunk_id]
+        vector_id = origin + offset
+        if not 0 <= vector_id < len(self._mapping) or self._mapping[vector_id][1] != self._mapping[origin][1]:
+            return None
+        chunk = self._payload(*self._mapping[vector_id])
+        chunk.update(vector_id=vector_id, citations=_citations(chunk))
+        return chunk
 
     def hybrid(self, question: str, query_vector: np.ndarray, top_k: int = 5,
                candidate_k: int = 100, alpha: float = 0.5, *,

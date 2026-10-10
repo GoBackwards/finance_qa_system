@@ -13,6 +13,8 @@ import math
 from pathlib import Path
 import re
 
+from report_chunker.retrieval import query_terms
+
 
 SELECTION_VERSION = "scoped-balanced-top5-v2"
 POOL_DEPTH = 20
@@ -22,6 +24,18 @@ LATEST_RESERVED = 2
 DUPLICATE_JACCARD = 0.8
 _WORD = re.compile(r"[a-z0-9]+(?:[.,][0-9]+)*")
 _FIGURE = re.compile(r"[0-9][0-9,]*(?:\.[0-9]+)?")
+
+# Passages appended after the reranked Top-5 (see context_extras).
+CONTEXT_VERSION = "context-extras-v1"
+TABLE_SLOT_DEPTH = 20
+MAX_EXTRAS = 8
+_TABLE_KINDS = frozenset({"table", "table_fallback"})
+_SUMMARY = re.compile(r"\bsummar(?:y|ies|i[sz]e|i[sz]ing)\b", re.I)
+_NOT_TERMS = frozenset(
+    "report reported reports annual based according using use fy higher lower larger smaller compare compared "
+    "company companies fiscal year years which million millions billion billions amount value consolidated total "
+    "between".split())
+_THEME_CUE = re.compile(r"(?i)\b(?:concerning|related to|surrounding|associated with|about|from|of|to|on)\b\s*:?\s*")
 
 
 def document_index(inventory: Iterable[Mapping]) -> dict[str, dict[int, str]]:
@@ -174,3 +188,88 @@ def select_candidates(reranked: list[dict], scope: Mapping, top_k: int = 5) -> t
         item["rank"] = rank
         selected.append(item)
     return selected, trace
+
+
+def _label_terms(question: str, names: Iterable[str]) -> list[str]:
+    """Question words that could name a table row: no company names, years or comparison words."""
+    drop = set(_NOT_TERMS) | {word for name in names for word in query_terms(str(name))}
+    return [word for word in query_terms(question) if word not in drop and not re.fullmatch(r"(?:fy)?\d{2,4}", word)]
+
+
+def _label_overlap(chunk: Mapping, terms: list[str]) -> float:
+    labels = {word for row in chunk.get("rows") or () if row and row[0] for word in query_terms(str(row[0]))}
+    return sum(term in labels for term in terms) / len(terms) if terms else 0.0
+
+
+def summary_themes(question: str) -> list[str]:
+    """Themes a summary question enumerates, e.g. "risks from A, B and C" -> [A, B, C]."""
+    sentences = [part for part in re.split(r"(?<=[.?!])\s+", question.strip()) if part]
+    sentence = max(sentences, key=lambda part: part.count(","), default="").strip().rstrip(".?")
+    if ":" in sentence:
+        parts = re.split(r",\s*(?:and\s+|or\s+)?|\s+and\s+", sentence.rsplit(":", 1)[1])
+    else:
+        segments = re.split(r",\s*", sentence)
+        last = segments[-1]
+        parts = [last[4:]] if last.lower().startswith("and ") else re.split(r"\s+and\s+", last, maxsplit=1)
+        for segment in reversed(segments[:-1]):
+            if len(parts) >= 3:
+                break
+            parts.insert(0, segment)
+        cues = list(_THEME_CUE.finditer(parts[0]))
+        if cues:
+            parts[0] = parts[0][cues[-1].end():]
+    return [part.strip() for part in parts if part.strip()]
+
+
+def context_extras(question: str, scope: Mapping, pools: list[Mapping], selected: list[Mapping],
+                   engine, query_vector) -> list[dict]:
+    """Passages appended after the reranked Top-5 that the reranker tends to drop.
+
+    The diagnosis of the 100-question benchmark found most lost evidence was
+    retrieved but outranked: statement tables lose to prose that repeats the
+    question's words, one blended summary query loses whole themes, and a
+    table's continuation or a statement title sits in the next chunk. Using
+    only the question and the retrieved passages, this adds per company the
+    table whose row labels best match the question (non-summary questions),
+    one lexical hit per enumerated theme (single-company summary questions),
+    and the continuation of a selected table or the table that follows a
+    selected title. The Top-5 is unchanged; at most MAX_EXTRAS are added.
+    """
+    chosen = {chunk["chunk_id"] for chunk in selected}
+    extras = []
+
+    def add(chunk, reason):
+        if chunk is not None and chunk["chunk_id"] not in chosen and len(extras) < MAX_EXTRAS:
+            chosen.add(chunk["chunk_id"])
+            extras.append(dict(chunk, context_reason=reason))
+
+    scoped = [pool for pool in pools if pool.get("purpose") == "scope"]
+    if _SUMMARY.search(question):
+        if len(scoped) == 1:
+            pool = scoped[0]
+            for theme in summary_themes(question):
+                hits = [hit for year in pool["fiscal_years"]
+                        for hit in engine.bm25_report(theme, 1, ticker=pool["ticker"], fiscal_year=year)]
+                if hits:
+                    add(min(hits, key=lambda hit: (hit["score"], hit["chunk_id"])), "summary_theme")
+    else:
+        for pool in scoped:
+            ranked = engine.vector(query_vector, top_k=TABLE_SLOT_DEPTH, document_ids=pool["document_ids"])
+            terms = _label_terms(question, {pool["ticker"], *(chunk.get("company", "") for chunk in ranked)})
+            tables = [chunk for chunk in ranked if chunk.get("kind") in _TABLE_KINDS
+                      and chunk["chunk_id"] not in chosen and _label_overlap(chunk, terms) > 0]
+            if tables:
+                add(max(tables, key=lambda chunk: (_label_overlap(chunk, terms), -chunk["rank"])), "row_label_table")
+    for chunk in selected:
+        if chunk.get("table_id"):
+            for offset in (-1, 1):
+                neighbour = engine.neighbour(chunk["chunk_id"], offset)
+                if neighbour is not None and neighbour.get("table_id") == chunk["table_id"]:
+                    add(neighbour, "same_table")
+        elif chunk.get("kind") not in _TABLE_KINDS:
+            following = engine.neighbour(chunk["chunk_id"], 1)
+            pages = set(chunk.get("source_pages") or ())
+            if (following is not None and following.get("kind") in _TABLE_KINDS
+                    and any(page in pages or page - 1 in pages for page in following.get("source_pages") or ())):
+                add(following, "title_table")
+    return extras
