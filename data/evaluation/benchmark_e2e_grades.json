@@ -1,0 +1,1912 @@
+{
+ "provenance": {
+  "method": "One grader agent per 10 questions graded both systems' live answers side by side against the gold answer, gold answer points and gold evidence; an independent skeptic agent re-checked every grade and could change it.",
+  "systems": {
+   "baseline_head": "commit 6b61b5e: vector Top20 -> rerank Top5 -> prompt v1",
+   "current": "working tree after the live bad-case fixes, prompt v2.1"
+  },
+  "human_reviewed": false
+ },
+ "grades": [
+  {
+   "question_id": "dev-001",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $111,601 million total assets at FY2025 end, citing balance-sheet row p146 (Total assets | $ 111,601 | $ 65,728; first column is Jan 26, 2025)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $111,601 million at end of FY2025, citing the p146 balance-sheet row in two chunk formats."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: gold row p146 shows 111,601 in the Jan 26, 2025 column. Both answers use the right column and unit. No changes."
+  },
+  {
+   "question_id": "dev-002",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Gives $3.0 billion (MD&A p53 rounding) and $3,041 million for the year ended December 28, 2024 (cash-flow statement p60). The two are consistent and correct."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $3,041 million, citing the p60 cash-flow row and the p52 liquidity summary (3,041 vs 1,667 for 2023)."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: the 3,041 in the p60 row is the first (2024) column. Baseline's 'year ended December 28, 2024' is the correct AMD FY2024 end date. No errors found."
+  },
+  {
+   "question_id": "dev-003",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator produced the correct $53.1B, citing net revenue of $53,101M on the p65 income statement. Its quote rendered the source glyph 'i•' as 'i�', so the exact quote check failed (quote_not_in_source) and the system abstained."
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 0,
+    "contains_error": true,
+    "note": "Answers 'total Intel Products revenue' of $48.9B. That is a segment subtotal (48,949), not total revenue of $53.1B ($53,101M; document.md lines 2573/4279 and 9316/11556). This is the wrong scope for the question. Scoped Top-5 (p25, p25, p80, p25-26, p28) dropped the p65 income-statement passage, and the verifier passed the off-target claim as answering the question."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed against INTC_FY2024 document.md: 2024 revenue was $53.1B, and net revenue in the income statement and segment reconciliation is 53,101. The current sentence is literally true about Intel Products, but it is given as the answer to 'total revenue', so it is materially misleading. 'wrong' is correct. Preferring baseline is reasonable because an abstention is safer than a misleading answer."
+  },
+  {
+   "question_id": "dev-004",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$51,040 million, citing balance-sheet row p58 (first column is September 24, 2023)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Identical to baseline: $51,040 million, p58."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: the p58 balance-sheet header shows September 24, 2023 then September 25, 2022, so 51,040 is the FY2023 column. No changes."
+  },
+  {
+   "question_id": "dev-005",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$9.65 GAAP diluted EPS for FY2022, citing the GAAP row of the p48 GAAP/non-GAAP reconciliation."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$9.65 for FY ended June 30, 2022, with four consistent citations (p48, p43, p69, p57 income statement)."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: 9.65 is the GAAP diluted EPS. The adjusted non-GAAP figure is different, and neither answer confuses the two. The period (June 30, 2022) is correct."
+  },
+  {
+   "question_id": "dev-006",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with quote_not_in_source. The generator had $40,479M, but its quote ('Total revenues |  | $ | 40,479 ...') did not match the source chunk text exactly."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $40,479 million for FY ended May 31, 2021, citing the p46 MD&A row and the p108 segment reconciliation total. It does not use the 40,481 operating-segment subtotal."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: 40,479 is total revenues in the 2021 column. The p108 table also shows 40,481 for operating segments, and current correctly avoided that figure. The calendar-year scope note did not cause any period error. No changes."
+  },
+  {
+   "question_id": "dev-007",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$6,197 million FY2025 net income, citing p70 (first column is fiscal 2025)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$6,197 million for FY ended January 31, 2025, the correct period end. Cites p70 and the p72 cash-flow statement."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: the p70 header orders 2025, 2024, 2023, so 6,197 is FY2025. No errors."
+  },
+  {
+   "question_id": "dev-008",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$6,650 million operating income, citing the p53 income statement (first column is December 1, 2023)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$6,650 million for FY ended December 1, 2023, the correct Adobe FY2023 end. Cites p53."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: the p53 header orders December 1, 2023, then 2022 and 2021, so 6,650 is FY2023. No changes."
+  },
+  {
+   "question_id": "dev-009",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$420,549 million at Dec 31, 2021. It correctly takes the second column, because the p49 table orders 2020 then 2021."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Identical to baseline: $420,549 million, p49."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked the column order: the p49 header reads 'December 31, 2020 2021', and the cash row (42,122 then 36,220) matches Amazon's 2020 and 2021 values. So 420,549 is the 2021 figure, and neither system took the 321,195 (2020) value."
+  },
+  {
+   "question_id": "dev-010",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$24.2 billion for fiscal 2022, an acceptable rounding of $24,181 million, citing the MD&A sentence on p44."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Exact $24,181 million for fiscal 2022, citing the p59 cash-flow statement, p40 and the p44 MD&A sentence."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: the p44 chunk shows columns in 2021/2022/2020 order, but the MD&A sentence clearly ties $24.2B to fiscal 2022. Rows p40 and p59 list 2022 first, at 24,181. Neither answer took 36,074 (FY2021)."
+  },
+  {
+   "question_id": "dev-011",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $242.29 billion for FY2023 total revenue including membership fees (= $242,290M, the first value column), cited p41."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $242,290 million. The extra detail, membership fees of $4,580 million, is also the correct FY2023 column on p41."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked both answers against gold row 242,290 | 226,954 | 195,929; both use the FY2023 column. The membership-fee row 4,580 | 4,224 | 3,877 confirms current's extra figure. No errors."
+  },
+  {
+   "question_id": "dev-012",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "GAAP diluted EPS of $8.86 for FY2024, cited from the p33 table (first column)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Diluted EPS of $8.86 for FY2024, cited p6 (gold row), p33 and p32 prose ('per share were $8.86')."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Gold is $8.86 (p6 five-year table, first column). Both answers give the right value and period. The p32 quote is a fragment, but its value is consistent. No errors."
+  },
+  {
+   "question_id": "dev-013",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$13,107 million, cited from the p63 income statement row."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$13,107 million, cited from the p67 shareowners' equity statement and the p63 income statement; both show 2025 first."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that the p67 passage is the Consolidated Statements of Shareowners' Equity with a 2025/2024/2023 header, and that 13,107 is in the 2025 column. Both answers are correct."
+  },
+  {
+   "question_id": "dev-014",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with context_budget_exceeded, even though the PEP FY2021 p72 income statement was in its Top-5."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$7,618 million, cited from the p72 'Net Income Attributable to PepsiCo' row (first column = 2021)."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that the baseline Top-5 includes PEP 2021 p72. The current answer matches the gold value and period exactly."
+  },
+  {
+   "question_id": "dev-015",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with context_budget_exceeded, even though p49 and p29 (both showing $80,187) were in its Top-5."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$80,187 million for the fiscal year ended June 30, 2022, cited from the p49 statement of earnings (80,187 | 76,118 | 70,950)."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that the baseline Top-5 contains PG 2022 p29 and p49. The FY end date of June 30, 2022 is correct for P&G. The current answer is correct."
+  },
+  {
+   "question_id": "dev-016",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$2,300 million, stated three times. Citations: p41 prose, the p41 GAAP reconciliation row and the p76 income statement row. The second claim calls the p41 non-GAAP reconciliation table 'the consolidated statement of income', a minor mislabel, but the value is the same and correct."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$2,300 million for 2023, cited from the p41 MD&A prose rather than the p76 statement itself. The value is identical to the gold."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Both answers have the correct value and period. The baseline mislabels its second source (a reconciliation table, not the income statement) and repeats itself, but neither issue is a material factual error."
+  },
+  {
+   "question_id": "dev-017",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with context_budget_exceeded, although the p57 balance sheet was in its Top-5."
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 0,
+    "contains_error": true,
+    "note": "Answered $87,476 million, which is the Dec 31, 2023 value. The FY2024 value is $87,764 million. The extracted header reads '2023 2024', but the first value column is the current year. Verified in document.md: the CAT FY2023 report shows 'Total assets | $ 87,476 | $ 81,943' (2023 first), and the CAT FY2025 report shows '$ 98,585 | $ 87,764' (2024 = 87,764). The gold is correct. The cited quote contains both numbers, and the verifier and grounding accepted the wrong column."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Independently confirmed the column order from the adjacent-year reports in data/processed/CAT. Also, the p49 supplemental data lists 'Consolidated 2024 2023 ... 87,764' with 2024 first. Current is a confidently wrong period, and an abstention is preferable to that."
+  },
+  {
+   "question_id": "dev-018",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with context_budget_exceeded, even though p39 and p52 (both showing $7,459) were in its Top-5."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$7,459 million for FY2025, cited p39 (header 2025/2024/2023, 7,459 first) and the p52 cash flow statement."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that the p39 passage header reads '2025 2024 2023' with 7,459 | 9,231 | 8,589, which matches the gold. The current answer is correct."
+  },
+  {
+   "question_id": "dev-019",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with context_budget_exceeded."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$24,021 million for FY2021, cited from the p61 income statement and the p32 table (24,021 | 19,811 | 23,571)."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "The value and period match the gold. No errors."
+  },
+  {
+   "question_id": "dev-020",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with context_budget_exceeded."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$3,790 million for FY2022, cited from the p49 income statement, the p26 MD&A table and the p25 prose ('$3.8 billion')."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "The value and period match the gold (3,790 | 3,477 | 2,882). The p25 rounded prose is consistent with it. No errors."
+  },
+  {
+   "question_id": "dev-021",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "AMD 49% is correct. Intel is given as 42.6%. Intel's chart (p31-32) lists 40.0%, 42.6% and 32.7% in jumbled order. 42.6% is FY2022 (26,866/63,054). FY2024 is 32.7% (17,345/53,101), and FY2023 is 40.0%. The answer only places the numbers side by side and never names the higher company, so the verdict point is not credited. The verifier also accepted the wrong-year figure. Gold checked against the INTC p65 table."
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "AMD 49% is correct. Intel is given as 51%. That figure comes from the p25 Intel Products segment table (CCG/DCAI/NEX total, 25,131/48,949) and is not the consolidated 32.7%. The answer then explicitly reverses the verdict and says Intel was higher. The verifier wrongly called the segment figure consolidated."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed both errors. Baseline's 42.6% matches 26,866/63,054=0.4261 (FY2022). The gold 32.7% matches 17,345/53,101=0.3266. Current's 51% is the Intel Products segment total. Baseline is less wrong because its implied direction is right, while current states a reversed verdict."
+  },
+  {
+   "question_id": "dev-022",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained even though its Top-5 held the NVDA p137 income statement (Revenue $60,922) and the p165 segment table. No AMD passage was in the Top-5."
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "NVIDIA's FY2024 revenue is given as $29,760M, which is FY2024 net income (p141 'Net income ... 29,760'). The correct revenue is $60,922M. AMD's $25,800M (converted from '$25.8 billion') is an acceptable rounding of $25,785M. The answer never names the higher company. The verifier passed the mislabeled figure."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. NVDA 29,760 is the net income row, not revenue. AMD $25.8B to $25,800M is counted as a rounding match. An abstention is preferred over a materially wrong figure."
+  },
+  {
+   "question_id": "dev-023",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "QCOM $7,232M, AMD $854M, Qualcomm larger. All correct (cites AMD p58 / QCOM p60 comprehensive income statements)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "QCOM $7,232M, AMD $854M, Qualcomm larger. All correct, with full-row citations."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. Both values match the gold rows, and the fiscal-year columns are correct (FY2023 is the first column)."
+  },
+  {
+   "question_id": "dev-024",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The Top-5 held only NVDA passages and no Qualcomm evidence, so the generator abstained."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "NVDA $72,880M, QCOM $5,541M, NVIDIA higher. All correct. Scoped retrieval brought in the QCOM FY2025 p60 passage, and the FY2025 column was used correctly."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. The values match gold. The QCOM row's first column (Sept 28, 2025) is 5,541, and the NVDA row's first column is 72,880."
+  },
+  {
+   "question_id": "dev-025",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The Top-5 held only Oracle passages (one of them FY2025) and no Microsoft evidence, so the generator abstained."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Released 'I'm not sure'. The first attempt used MSFT's pro forma $247,442M (p69) and an unsupported Oracle $50,566M, and was rejected with claim_number_not_in_evidence. The retry admitted the Oracle figure was missing, giving claim_admits_missing_evidence. Neither the MSFT p48 statement row nor the ORCL p47 total-revenue row was effectively available."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that both are false abstentions. Note that the gate correctly blocked current's first attempt, which held wrong numbers (pro forma MSFT revenue and a fabricated Oracle figure)."
+  },
+  {
+   "question_id": "dev-026",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The Top-5 held only Adobe passages (including ADBE p54 net income $5,428) and no Salesforce evidence, so the generator abstained."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "CRM $208M, ADBE $5,428M, Adobe higher. All correct. The ADBE citation is the p54 comprehensive income statement, not gold's p53, but the value matches."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. The values and verdict match gold."
+  },
+  {
+   "question_id": "dev-027",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Rejected with missing_or_excess_citations. The generator found Adobe's $6,098M but had no Microsoft evidence, because the Top-5 was Adobe-only. It emitted an uncited 'cannot compare' claim."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Released 'I'm not sure'. The MSFT p94 segment table gave $83,383M, and the generator cited it. The ADBE p54 income statement with operating income of $6,098M was missing from the compact Top-5. The first attempt had an uncited claim (invalid_claim_schema). The retry claimed MSFT was higher without an Adobe figure and was rejected with claim_entity_not_in_evidence."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "I agree with both outcomes. I corrected the first grader's diagnosis for current: Microsoft's figure was retrieved (p94 Total $83,383). The missing evidence was Adobe's operating income, since balancing displaced the ADBE p54 statement passage that baseline had."
+  },
+  {
+   "question_id": "dev-028",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The Top-5 held only Walmart passages (including p43 total revenues of $648,125) and no Amazon evidence, so the generator abstained."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Released 'I'm not sure'. Amazon's $637,959M was available (AMZN p79 'Consolidated' row). The WMT p43 total-revenues passage was displaced from the Top-5. The first attempt summed segment net sales to $641.2B (not total revenues) and failed calculation_operand_not_in_source. The retry abstained."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "I agree with both outcomes. I corrected the first grader's note: AMZN p79 did contain total net sales of $637,959. The missing evidence was Walmart's total revenues (p43), which baseline had but current's balanced Top-5 dropped."
+  },
+  {
+   "question_id": "dev-029",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The Top-5 held only Costco passages (including p41-42 net income attributable to Costco of $6,292), so the generator abstained."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained. COST $6,292 was present (p41-42), but the TGT passages were a shareholder-return graph (p26-27) and an income tax note (p60-61). Target's net earnings row (p45, $4,138) was missing."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "I agree with both outcomes. I refined the diagnosis: only Target's net earnings were missing, because Costco's attributable net income was in the current Top-5."
+  },
+  {
+   "question_id": "dev-030",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "AMZN $24,879M (p47, FY2021 column) is correct. TGT $8.9 billion is an acceptable rounding of $8,946M (the question does not require millions). Amazon higher is correct."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained. Amazon's figure was available as $24.9B (MD&A p34-35), but the compact Top-5/context had no Target operating income passage. Baseline's larger context included the TGT p26 '$8.9 billion' sentence. This is a regression from baseline."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "I agree with both outcomes. I corrected the diagnosis: the missing evidence was Target's operating income, not Amazon's (current Top-5 had AMZN p34-35, which states $24.9B for 2021)."
+  },
+  {
+   "question_id": "dev-031",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "KO FY2024 $47,061M and PEP FY2024 $91,854M, with PepsiCo higher. Both are cited to the gold table rows (KO p64, PEP p73)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Same figures and verdict as gold, citing KO p64 and PEP p73."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked both answers against the gold rows. Values, period (FY2024 column) and verdict are all correct. No errors."
+  },
+  {
+   "question_id": "dev-032",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained, although CL $2,300 was in its Top-5."
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "P&G $14.7B is a correct rounding of FY2023 $14,653M (the P&G p29 text says it decreased $89M to $14.7B). CL $2,300M is the correct FY2023 As-Reported GAAP figure. The answer never says which company is higher, so the comparative verdict point is missing."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed both numbers by value and period. Without an explicit verdict, the third point cannot be credited under the comparative rule. I found no wrong statements."
+  },
+  {
+   "question_id": "dev-033",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained. Its Top-5 held only Colgate passages (CL FY2022 p76 operating profit 2,893) and no Coca-Cola figure."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Final abstain (claim_entity_not_in_evidence) after the retry. The generator found KO $10,909M but said Colgate gave no GAAP operating profit figure. The CL $2,893 row exists in the corpus (p38/p76/p121) but was not in the current Top-5, whose CL passages were p120 segment notes and p53 cash flow. This was a retrieval miss, not evidence the model ignored. The retry's unsupported 'Coca-Cola higher' verdict was correctly blocked."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Both outcomes agree. I corrected the current note: the Colgate $2,893 figure was not in the current system's retrieved Top-5, so the failure is a retrieval miss rather than the generator overlooking context it had."
+  },
+  {
+   "question_id": "dev-034",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source) even though the draft figures ($64.809B CAT, $51.716B DE) were correct."
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "CAT $64,809M is correct and the verdict (Caterpillar larger) is right. Deere is given as $61,251M, but that is the FY2023 column. The FY2024 total is $51,716M, verified in DE_FY2024 document.md ('Total | 51,716 | 61,251 | 52,577'; the p40 supplemental data also puts 61,251 under 2023). The bare citation quote '61,251' hides the wrong-period error, and the verifier missed it."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Independently confirmed in the source that 61,251 is Deere's FY2023 total. A wrong-period number makes the answer wrong even though the direction happens to be right. An abstention is preferable to a released wrong figure."
+  },
+  {
+   "question_id": "dev-035",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Final abstain (invalid_calculation_schema after retry). Both drafts gave a wrong ITW figure ($2,669M; the operand 2,680 is actually corporate identifiable assets), while the gold FY2022 net income is $3,034M. They were blocked, so nothing wrong was released."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that both systems released only 'I'm not sure'. The blocked drafts contained a wrong ITW number, so the abstention avoided a wrong release, but it is still a false abstention."
+  },
+  {
+   "question_id": "dev-036",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source)."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source) after 2 attempts."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Both statuses are abstain with the answer 'I'm not sure'. No content was released."
+  },
+  {
+   "question_id": "dev-037",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (missing_or_excess_citations)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "All three topics are covered. Underestimating demand: cannot increase production in time, losing revenue and market share. Overestimating: unused inventory, commitments that cannot be reduced, price reductions, write-downs, cancellation penalties and impairments. Long lead times: purchase orders placed ahead of lead times, and prepaid capacity agreements that raise costs. The lead-time point is thin: it omits explicit premiums and deposits and that capacity may still be insufficient. It also paraphrases 'non-cancellable and non-returnable' as 'non-cancellable, prepaid'. Both are non-material. The extra demand-factor list (including government lockdowns and data center capacity) and the Taiwan/China text are verified in the NVDA FY2025 document.md p108-109."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Checked the extra details against the NVDA FY2025 source; they are supported. The lead-time point is borderline thin but carries its core (advance commitments and raised costs), so I keep correct, 3/3."
+  },
+  {
+   "question_id": "dev-038",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source)."
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "The purchase-order basis with no minimum quantities is correct. Switching manufacturers (delayed introductions, lower yields, poorer performance) is correct, though it omits that replacement supply may not be timely. The supply-shortage section lists suppliers prioritizing others, raising prices, demanding prepayments, cutting deliveries and facility disruptions, all supported by AMD FY2024 p24. It misses the gold consequence: forced allocation among AMD customers, damaged relationships and lost sales. The GF wafer agreement detail is accurate."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Verified each statement against the cited AMD FY2024 p24 text; none is wrong. The supply-shortage gold point's core consequence is absent, so 2/3 and partially_correct is right."
+  },
+  {
+   "question_id": "dev-039",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "partially_correct",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "The customer/licensee and premium-handset concentration point is correct. The own-chips paragraph is generic, cites the FY2025 report, and names Xiaomi, which does not appear in the QCOM FY2023 report (minor wrong-period detail). It omits Apple's acquisition of Intel's modem assets and the expected substitution, so the gold point is not credited. The third paragraph covers US/China trade restrictions, which do appear in FY2023, instead of China's outbound-fund payment controls, so that point is missing. Two of three citations are FY2025 pages for an FY2023 question."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (deadline_exceeded) because the generator call failed with model_unavailable after 45s, an infrastructure failure."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Checked QCOM_FY2023 document.md. Samsung's own-IC development (line ~275) and nearly identical US/China political-actions text (line ~279) are present in FY2023, so the only period-leaked fact is Xiaomi as an example (it appears only from FY2024/FY2025). I treat that as a non-material error: contains_error stays true, and the outcome stays partially_correct rather than wrong. This is borderline."
+  },
+  {
+   "question_id": "dev-040",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Scale: may not establish market share sufficient for scale, amid competitors and changing user choice. Infrastructure: costs to build and maintain cloud infrastructure reduce operating margins. Reliability: reliability expectations, data security and compliance. All three match gold, and the scale and margin quotes are verified at MSFT FY2022 document.md (p24). The phrase 'hybrid and edge infrastructure' comes from an FY2021 citation and does not appear in FY2022. This is a non-material period slip, since FY2022 p29 supports datacenter spending and the FY2022 risk text references intelligent edge and Azure IoT Edge."
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Only the reliability/data security/compliance point matches gold. Competitive scale is recast as Microsoft's three economies-of-scale benefits (a FY2022 p4 business description) rather than the competitive and market-share demand. Infrastructure economics is described as investing in high-performance computing and misses that infrastructure costs reduce operating margins. The statements are accurate FY2022 quotes, but two topics miss the asked-for content."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that the FY2022 source supports the baseline's key claims; the FY2021-only phrase is minor. The current answer contains no factually false statement, but it addresses only one gold point."
+  },
+  {
+   "question_id": "dev-041",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source)."
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "P1 is covered: cloud and SaaS prevalence may hurt pricing of cloud and license offerings (p21). P2 is covered loosely: ratable recognition over subscription terms and the resulting revenue volatility. The 'deterioration not immediately observable' consequence is left out, though the cited p21 quote contains it. P3 is missing: the answer cites the generic 'difficulty transitioning customers to new or acquired product lines' bullet (p21) instead of failing to backfill license, hardware and support demand. The sentence 'Oracle considers customer transitioning from legacy to cloud products a key element of its corporate strategy' is not in the source. The report calls providing deployment choice and flexibility an important element of strategy. This is a loose paraphrase, not a material error."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "I re-checked against ORCL_FY2021 document.md. The 'legacy to cloud corporate strategy' wording is unsupported but immaterial, because the source says choice and flexibility is an important element of strategy (lines 213 and 644). P2 counts only on the ratable-recognition half; scoring it 1 instead of 2 would also be defensible. The outcome stays partially_correct either way."
+  },
+  {
+   "question_id": "dev-042",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "P1: a breach brings reputational harm, legal exposure and negative financial impact, grounded in the p21 risk heading. Loss of confidence, sales, business disruption and insurance premiums are not listed, but the core is there. P2 is fully covered: credits, penalties, warranty claims, subscription terminations, attrition and revenue loss (p23). P3 is fully covered: vendor hardware, software, data and cloud platforms, including LLMs, may become unavailable or costly, raising expenses and delaying service (p23). Extra detail on mitigation, sabotage and geopolitical supply disruption is grounded in CRM FY2025 (lines 909 and 925)."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "I verified the extra claims (mitigation language, natural disasters and sabotage, geopolitical supply-chain power disruption) in CRM_FY2025 document.md. All citations are FY2025 and none is wrong. P1 is credited with some leniency."
+  },
+  {
+   "question_id": "dev-043",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "P1: competitors may adopt more aggressive pricing (p24). It merges this with the separate sentence on downward pricing and margin pressure, a mild conflation. P2: unauthorized copying is answered with the valid FY2023 p30 counterfeit-copying risk rather than the gold p18 technology-copying passage. It omits that policing is difficult. P3: reliance on third-party providers and technologies can cause service interruptions. It omits the expense increase and renewal terms. No material errors."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "I confirmed that the p30 counterfeit quote exists in ADBE_FY2023 and that the gold p18 policing passage is at line 641. Crediting P2 with a different but on-topic copying risk is lenient but reasonable, since the question asks about unauthorized-copying risk generally. I found no wrong statements."
+  },
+  {
+   "question_id": "dev-044",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source)."
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "P1 is covered: understocking hurts revenue and growth, and overstocking leads to markdowns and lower profitability. Write-offs and commitment costs are omitted. P3 is covered: costly to establish and promote internationally, with no assurance of sustained profitability. Limited operating experience and first-mover advantage are omitted. P2 is not covered: the answer describes peak-period strain (staffing, delivery partners, website interruptions), not demand-forecast or network-optimization failures causing excess or insufficient capacity, higher costs and impairments. The extra international risk list, including China and India, is accurate."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Every cited AMZN FY2021 quote supports the answer text. P2 is indeed missing. I found no errors."
+  },
+  {
+   "question_id": "dev-045",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "P1: omni-channel and eCommerce or technology investments may fail and hurt market position, sales and performance. It omits offsetting slower store openings and slightly blurs the source's split between short-term costs and longer-term benefits. P2: strong competition, with newer or smaller businesses better able to innovate. It omits well-funded entrants and attributes 'competitive pressures' to the smaller businesses. P3 is fully covered: reputational, financial and liability risk from controversial, counterfeit, pirated, stolen or non-compliant marketplace goods, plus unsettled marketplace law. All citations are FY2022."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "The short-term vs. longer-term blur and the well-funded vs. smaller-entrant blur are minor paraphrase issues, not material errors. All content is grounded in the WMT FY2022 p17, p18 and p20 quotes."
+  },
+  {
+   "question_id": "dev-046",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "P1: high volume and rapid turnover enable profitable operation at significantly lower gross margins. P2: direct buying and depot cross-docking create freight and handling efficiencies versus multi-step distribution. P3: no-frills floor plans designed for economy in space, handling and inventory control. It omits that controlled entrances and exits plus membership keep shrinkage low. The 147,000 sq ft average is correct. All citations are FY2023."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_period_not_in_evidence after retry; the first attempt failed claim_number_not_in_evidence). Both generator drafts were substantively correct, including shrinkage, but appended 'fiscal year 2023' or 'fiscal year ended September 3, 2023' phrasing that period grounding rejected."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "The baseline's P3 credit is lenient: the shrinkage half is missing, but the store-design economy half is there. That matches how partial coverage is treated in the other items. The baseline has no errors."
+  },
+  {
+   "question_id": "dev-047",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "P1: scarcer or lower-quality water can mean higher costs, capacity constraints and reputational damage (p27). P2: food demand, lower productivity, biodiversity loss and sourcing regulation can limit or raise the cost of commodities (p28). P3: extreme weather can impair production, disrupt supply chains and affect demand (p28). One claim cites KO FY2024 p16, but the same sentence is in KO_FY2025 document.md (line 293), so only the citation year is off. 'Climate change causes...' slightly overstates the source's 'ongoing concern that ... is causing', which is not material."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source on both attempts)."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "I confirmed that the adverse-weather supply sentence is at line 293 of KO FY2025 and the natural-disaster-frequency sentence is at line 387. The FY2024 citation is a provenance flaw, not a content error."
+  },
+  {
+   "question_id": "dev-048",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "partially_correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Only P3 is covered: open-market price fluctuation and higher-than-anticipated 2021 commodity, packaging and transport costs that may continue. P1 is missing: nothing on large retailers' purchasing power or smaller customers' ability to pay or order. P2 is missing: 'supplier capacity constraints' is not the limited or sole-supplier and seasonal-shortage risk. The opening sentence frames generic supply-chain risks as covering retailer consolidation. That is a misleading lumped framing with no specific false fact. The verifier wrongly accepted it as 'implied'."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (invalid_citation_schema after retry; the first attempt failed invalid_claim_schema). The first draft also claimed retailer consolidation was not detailed, but it is at PEP FY2021 p28."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "The baseline's framing sentence is borderline. It attributes supply-disruption risks to 'retailer consolidation' via a lumped list. I agree it is not a material factual error because each listed risk is real, but a stricter reading could mark it wrong. points_supported=1 is correct."
+  },
+  {
+   "question_id": "dev-049",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source), even though the generator draft was usable."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "P1: a downgrade brings higher borrowing costs and hurts liquidity, competitive position and capital-market and commercial-paper access. P2: exchange controls limit conversion and remittance, and devaluation diminishes fund value. P3: covenant breach can bring acceleration, redemption, termination of unused commitments, refusal of credit and rating changes. The covenant details (minimum net worth, liens, Cat Financial leverage and interest coverage ratios, support agreement) are accurate. All citations are FY2024. Succeeded on the second attempt."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "I checked every statement against the CAT FY2024 p23-24 quotes and found no errors."
+  },
+  {
+   "question_id": "dev-050",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source). The discarded draft covered commodity prices and supply chain."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (incomplete_model_response; the generator returned null)."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Both systems released 'I'm not sure', which is a false abstention because the question is answerable."
+  },
+  {
+   "question_id": "test-001",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $13,764 million for fiscal 2021, cited to AVGO FY2021 p56 (cash flow statement) and p47 (MD&A). The source document.md has the same row."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $13,764 million for fiscal 2021, with the same p56 and p47 FY2021 citations."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked AVGO_FY2021 document.md: 'Net cash provided by operating activities | $ | 13,764 | ...' The FY2021 column is right and neither answer has any extra wrong claim."
+  },
+  {
+   "question_id": "test-002",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $20,028 million for the year ended Dec 31, 2022, cited to TXN FY2022 p28."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $20,028 million for the year ended Dec 31, 2022, cited to TXN FY2022 p28."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Source row 'Revenue | $ 20,028 | $ 18,344 | $ 14,461' confirms the 2022 column. The baseline Top-5 had FY2023/FY2024 pages but its answer used the right one."
+  },
+  {
+   "question_id": "test-003",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $15,540 million for the FY ended Aug 31, 2023. One citation comes from the MU FY2025 report (p64, row 37,378 | 25,111 | 15,540). Its third column is fiscal 2023, so it still supports the value, though it is not from the report the question names. The other citation is FY2023 p57."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $15,540 million. All three citations come from the FY2023 report: p57 income statement, p46 MD&A and p88."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Source MU_FY2023 document.md has 'Revenue | $ | 15,540 | $ | 30,758 | $ | 27,705'. Agree that the baseline's cross-year citation does not make it wrong, because that column really is FY2023."
+  },
+  {
+   "question_id": "test-004",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Gives about 24,000 employees, about 13,000 of them in engineering, as of Nov 2, 2024, cited to ADI FY2024 p13."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Gives the same 24,000 total and 13,000 engineering figures as of Nov 2, 2024, cited to ADI FY2024 p13."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed against ADI_FY2024 document.md. Both answers match the gold sentence."
+  },
+  {
+   "question_id": "test-005",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Released 'I'm not sure' with reason quote_not_in_source. The generator had produced the correct $6,207 million from E1 (INTU FY2025 p63, rank 1 in Top-5), but the exact quote check rejected it."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $6,207 million for the twelve months ended July 31, 2025, cited to p63 (cash flow statement), the p49 summary table and the p49 statement of $6.2 billion."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Source row 'Net cash provided by operating activities | 6,207 | 4,884 | 5,046' confirms the gold. Grading goes by the released answer, so the baseline is a false abstention."
+  },
+  {
+   "question_id": "test-006",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Gives 16,881 full-time employees, 9,341 in the US and 7,540 internationally, as of Dec 31, 2021, cited to NOW FY2021 p15. FY2022/2023/2024 workforce pages were also in its Top-5, but the answer used the right year."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Gives the same 16,881 / 9,341 / 7,540 split, cited to NOW FY2021 p15."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed against NOW_FY2021 document.md ('we employed 16,881 people on a full-time basis...')."
+  },
+  {
+   "question_id": "test-007",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $4,386.4 million for the FY ended Jan 31, 2022, cited to ADSK FY2022 p67."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $4,386.4 million for the FY ended Jan 31, 2022, cited to ADSK FY2022 p52, p53 (x2) and p67. One p53 quote carries mis-parsed column headers (Jan 31, 2021/2020), but the released value is right."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Source row 'Total net revenue | 4,386.4 | ... | 3,790.4 | ... | 3,274.3' confirms the gold. Neither answer has an error."
+  },
+  {
+   "question_id": "test-008",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained. Its Top-5 was all financial statements (CDNS FY2023 p54/p57/p55 plus FY2025 p77) and missed the human-capital page p10 (about 11,200 employees)."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained. Retrieval was scoped to CDNS FY2023 but its Top-5 were financial-statement pages 53-57 and missed p10."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "The CDNS_FY2023 document.md contains 'approximately 11,200 employees', so the question is answerable and both abstentions are false abstentions."
+  },
+  {
+   "question_id": "test-009",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $19,810 million for fiscal 2024, cited to HD FY2024 p50. An FY2025 cash flow page was in its Top-5 but was not used."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States $19,810 million for fiscal 2024, cited to HD FY2024 p50."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed against HD_FY2024 document.md ('Net cash provided by operating activities | 19,810 | 21,172 | 14,615')."
+  },
+  {
+   "question_id": "test-010",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Gives 1,759 stores averaging about 112,000 sq ft of retail selling space plus about 32,000 sq ft of outdoor garden-center space, cited to LOW FY2025 p14."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Gives the same 1,759 / 112,000 / 32,000 figures, cited to LOW FY2025 p14. Calling the 112,000 figure 'indoor' retail selling space is a fair paraphrase that matches the question's wording."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed against LOW_FY2025 document.md ('Our 1,759 Lowe's-branded...'). Agree with the first pass."
+  },
+  {
+   "question_id": "test-011",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with reason unsupported_claim. Its Top-5 held NKE FY2022 to FY2025 employee passages plus an FY2021 revenue table, but not the FY2021 p8 employee sentence. The discarded draft gave a wrong figure (42,293/44,498) and the verifier rejected it, so nothing wrong was released."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "States approximately 73,300 employees worldwide on May 31, 2021, including retail and part-time employees. Cites NKE FY2021 p8, and the sentence matches document.md line 356 verbatim. Scoped retrieval ranked the p8 passage first."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed against NKE FY2021 document.md line 356. The baseline's wrong draft (42,293/44,498, plus an FY2022 citation) was blocked by the verifier, so the release is a clean false abstention."
+  },
+  {
+   "question_id": "test-012",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$32,250.3 million for the fiscal year ended Oct 2, 2022, cited to the SBUX FY2022 p31 MD&A row ('Total net revenues | $ 32,250.3 | $ 29,060.6 11.0 %', source line 559). This is the same value as the gold income-statement row on p45."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Same answer and p31 citation as the baseline: $32,250.3 million."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: the value is the FY2022 column (Oct 2, 2022), not FY2021 ($29,060.6). Both systems are identical."
+  },
+  {
+   "question_id": "test-013",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with context_budget_exceeded before any generator call, even though the KMB FY2023 p5-6 passage ranked first (score 9.47)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Approximately 41,000 employees in consolidated operations at Dec 31, 2023, with approximately 55% directly involved in manufacturing and distribution. Cites KMB FY2023 p5, and the sentence matches source line 176."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed against KMB FY2023 line 176. Both requested facts (41,000 and 55%) are stated correctly. The baseline Top-5 also held the KMB FY2021 45,000 passage, but nothing was released."
+  },
+  {
+   "question_id": "test-014",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$4,910 million for 2024, cited to the MDLZ FY2024 p76 cash-flow statement (source line 2611) and the p58 MD&A table. The value comes from the 2024 column."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Same $4,910 million with the same p76 and p58 citations."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: $4,910 million is the 2024 column (2023 = 4,714). Both systems are identical."
+  },
+  {
+   "question_id": "test-015",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained. Its Top-5 held the GIS FY2023 p7 employee passage (34,000, May 28, 2023) but not the FY2025 p7 passage (source line 207: 33,000 employees, 13,000 production, 20,000 non-production)."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Released 'I'm not sure' after 2 attempts. Attempt 1 invented 35,000/16,000/19,000 with a made-up quote, and quote_not_in_source rejected it. Attempt 2 abstained. The scoped Top-5 was all GIS FY2025 (p87, p18, p18-19, p16-17, p44) and missed the p7 human-capital passage. Nothing wrong was released."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that both releases are abstentions. The current system's first attempt invented figures (35,000/16,000/19,000) and the quote check blocked them. That attempt is worth flagging as a near-miss, but it does not change the released grade."
+  },
+  {
+   "question_id": "test-016",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Approximately 36,000 employees globally, phrased 'in 2021' and cited to KHC FY2021 p10. Source line 373 confirms the date is Dec 25, 2021, so the period is right."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Approximately 36,000 employees globally, cited to KHC FY2021 p10. The first attempt failed on invalid_quote and the retry fixed the quote."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed against KHC FY2021 line 373. Saying 'in 2021' instead of 'December 25, 2021' is not a period error. It is not the FY2022 37,000 figure."
+  },
+  {
+   "question_id": "test-017",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Approximately 85,500 employees at Sep 30, 2022, cited to EMR FY2022 p24. Matches the gold and source line 1529."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Same answer and citation as the baseline."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed against EMR FY2022 line 1529. Both systems are identical."
+  },
+  {
+   "question_id": "test-018",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$19,065,194 thousand for the year ended June 30, 2023, cited to the PH FY2023 p50 income statement (2023 column). Matches the gold."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Same $19,065,194 thousand with the same p50 citation."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed against PH FY2023 line 1584: the value is the 2023 column, in thousands as asked. Both systems are identical."
+  },
+  {
+   "question_id": "test-019",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with quote_not_in_source. The discarded draft gave the wrong-year figure, $9,058.0 million (the FY2023 value), but it was not released. The p28 and p33 Top-5 passages both showed $8,264.2."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "$8,264.2 million for the FY ended Sep 30, 2024. Cites the p28 organic-sales reconciliation row, where 8,264.2 is the 2024 reported-sales column (source line 1261). This is the same value as the gold row 'Total sales (d)' on p20 (source line 950)."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that $8,264.2 million is the FY2024 total in multiple places (lines 950, 1261, 1465, 3646). The baseline's wrong draft ($9,058.0, the FY2023 value) was blocked, so its release is a clean false abstention."
+  },
+  {
+   "question_id": "test-020",
+   "points_total": 1,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Approximately 24,000 employees worldwide as of Dec 31, 2025, cited to DOV FY2025 p17. Matches the gold and source line 514."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Same correct statement and p17 citation. A redundant second sentence cites p8, 'currently employs approximately 24,000 people worldwide' (source line 320, FY2025 report). It is consistent and not an error."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that the p8 quote exists in the DOV FY2025 report at line 320 and matches the same count. The extra sentence is redundant but not wrong."
+  },
+  {
+   "question_id": "test-021",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Both figures and year-ends are right: Broadcom $35,819M for the year ended Oct 29, 2023, and TXN $17,519M for the year ended Dec 31, 2023. It never says which company is higher, so the comparison verdict (point 3) is missing. Nothing it states is wrong."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained ('I'm not sure'). The AVGO income-statement revenue row was not in its Top-5."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked against the digest's gold evidence (AVGO p53 Total net revenue 35,819; TXN p29 Revenue 17,519). The baseline's figures and dates are correct and its answer has no verdict, so 2 of 3 points. Current is a plain generator abstention."
+  },
+  {
+   "question_id": "test-022",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained. The Top-5 held only MU passages, with no TXN evidence."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with claim_admits_missing_evidence. The draft had MU $30,758M right but said TXN revenue was not in its sources. The TXN passages it retrieved were from the stock-performance graph (p146), not revenue."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: both systems released 'I'm not sure'. Current's Top-5 TXN passages are the five-year total shareholder return graph only."
+  },
+  {
+   "question_id": "test-023",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "partially_correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Gives only Micron: $37,378M for the year ended Aug 28, 2025, which is correct. It leaves out the Broadcom amount ($63,887M) and year-end (Nov 2, 2025) and gives no comparison verdict. Nothing it states is wrong."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with claim_admits_missing_evidence. The draft said Broadcom's FY2025 revenue amount was not in its sources; the AVGO income statement was not retrieved (only a pension table and a comprehensive-income header)."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed the MU FY2025 figure and date against the gold evidence (Revenue $37,378, Aug 28, 2025). The baseline is a correct but incomplete one-company answer. Current abstained."
+  },
+  {
+   "question_id": "test-024",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained. The Top-5 held only NOW passages."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with claim_period_not_in_evidence after a retry. Both drafts were correct (INTU $4,884M for the twelve months ended Jul 31, 2024; NOW $4,267M for the year ended Dec 31, 2024; different year-ends), but grounding rejected them. Nothing was released."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: both systems released only an abstention. Current's rejected draft matched the gold, so this is a false rejection by the deterministic grounding check."
+  },
+  {
+   "question_id": "test-025",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained. The Top-5 held only CDNS passages (statement headers, no revenue row)."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained: the first attempt failed with quote_not_in_source, the retry with claim_period_not_in_evidence. The unreleased draft was wrong anyway. ADSK $3,274.3M is the FY2020 column (FY2021 = $3,790.4M). CDNS $2,974,115K appears nowhere in the source, where total revenue is $2,988,244K. So abstaining avoided a wrong answer."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Checked the source: ADSK document.md has net revenue $3,790.4 | $3,274.3 | $2,569.8, and CDNS document.md has Total revenue 2,988,244 with no 2,974,115 anywhere. One small correction to the first pass: current's first-attempt reason was quote_not_in_source, and the final reason was claim_period_not_in_evidence. The grades are unchanged."
+  },
+  {
+   "question_id": "test-026",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with quote_not_in_source. The draft had a wrong Autodesk figure ($8,038M of 'total segment revenue' from a non-ADSK table) and said the ADSK year-end was not stated, so abstaining blocked an error."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with claim_period_not_in_evidence after a retry. The draft was correct (INTU $14,368M for the year ended Jul 31, 2023; ADSK $5,005M for the year ended Jan 31, 2023), but grounding rejected it."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: neither system released an answer. Current's rejected draft matched the gold; the baseline's rejected draft did not."
+  },
+  {
+   "question_id": "test-027",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "Home Depot is right: $21,172M for the year ended Jan 28, 2024. The Lowe's amount, $8,140M, is right, but it gives the fiscal year-end as February 3, 2024. LOW document.md says February 2, 2024 (Feb 3, 2023 was the end of FY2022). That is a wrong year-end date, which the question asks for explicitly. There is also no explicit verdict. I judged it better than abstaining because both amounts are correct and the error is one day."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with verifier_reason_contradicts_verdict. The draft had a worse error (Lowe's year ended Feb 3, 2023, the wrong year), so abstaining blocked it, but nothing was released."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Verified in the sources. LOW_FY2023 document.md says 'For the fiscal year ended February 2, 2024' and lists FY2022 as ended Feb 3, 2023. HD_FY2023 says Jan 28, 2024. The baseline's Feb 3, 2024 is wrong, so 'wrong' with 1 point (HD) stands. Calling the baseline better is a judgement call: the date is one day off, and both amounts and the implied direction are right. I accept it, but note that a strictly abstention-preferring policy would rate them the same or favor current."
+  },
+  {
+   "question_id": "test-028",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "Starbucks is right: $37,184.4M for the year ended Sep 28, 2025. Nike is wrong: it gives $51,362M as FY2025 revenue, but that is the FY2024 column. NKE_FY2025 document.md shows FY2025 = $46,309M. The year-end, May 31, 2025, is right. No explicit verdict."
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "Same error as the baseline: Nike FY2025 revenue given as $51,362M (the FY2024 column; the correct figure is $46,309M), even though the $46,309M passage was in its Top-5. Starbucks $37,184.4M for the year ended Sep 28, 2025 is right. No explicit verdict, and one citation quote is just '$'."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Verified: NKE_FY2025 document.md line 2309 reads 'Revenues | $ 46,309 | $ 51,362 | $ 51,217', so 51,362 is FY2024. Both systems released the same wrong Nike figure. Only the Starbucks point is supported."
+  },
+  {
+   "question_id": "test-029",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained. The Top-5 held only NKE passages, with no HD net sales."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained. HD passages were retrieved (the notes header and the comprehensive-income header), but not the net-sales row."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: both systems released 'I'm not sure'."
+  },
+  {
+   "question_id": "test-030",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "Kimberly-Clark is right: $19,440M for the year ended Dec 31, 2021. Mondelez revenue is given as $28,323M, but that is MDLZ total equity on the balance sheet (document.md line 3918, 'TOTAL EQUITY 28,323'). The correct revenue is $28,720M. The same Dec 31 year-end is right. No explicit verdict. A core number taken from the wrong metric is material."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained with quote_not_in_source after a retry. The draft was correct (KMB $19,440M; MDLZ $28,720M; both years end Dec 31) but failed the quote check. Abstaining is still preferable to the baseline's wrong Mondelez figure."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Verified: MDLZ_FY2021 document.md line 3918 reads 'TOTAL EQUITY 28,323', and net revenues are $28,720 at lines 2019 and 2564. The baseline released a material number error, so current's abstention is better."
+  },
+  {
+   "question_id": "test-031",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source). The generator draft had given General Mills $4,462M, which is actually KHC's FY2025 operating cash flow column (E51), so the quote check blocked a wrong answer."
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "GIS $3,303M for fiscal 2024 (from MD&A, consistent with the $3,302.6M in the cash-flow statement) and KHC $4,184M for the fiscal year ended Dec 28, 2024 are both correct. It gives no comparison verdict (Kraft Heinz higher), does not state GIS's May 26, 2024 year-end and does not explain the year-end difference, so point 3 is missing. Nothing it states is wrong."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "I re-checked both values against the gold evidence rows (GIS 3,302.6; KHC 4,184), and the periods are right. Leaving out the verdict correctly withholds point 3. Point 1 is credited on value plus 'fiscal 2024' even though the May 26 date is not given, which is acceptable. No changes."
+  },
+  {
+   "question_id": "test-032",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained even though MDLZ net revenues of $31,496M (p73 and p40 rows) were in its Top-5. No GIS passage was retrieved."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The first attempt claimed MDLZ revenue of $28,718M, backed by a bogus sum of comprehensive-earnings fragments. The calculation check rejected it (calculation_result_mismatch). The retry abstained. GIS net sales of $18,992.8M (p43) were in the Top-5, but the MDLZ Top-5 chunks were only header fragments without the $31,496M revenue row."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "I agree with both outcomes. One correction to the note: current's Top-5 did NOT contain the MDLZ $31,496M row (its MDLZ chunks were p73-74/p74-75/p128-129 header fragments). Only the GIS row was present, so the first grader's claim that both were retrieved is overstated. The grades are unchanged."
+  },
+  {
+   "question_id": "test-033",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "PH $19,850M for the fiscal year ended June 30, 2025 is correct (point 2). Emerson's revenue is given as $21,775M, but that is Parker-Hannifin's retained-earnings balance at June 30, 2025 (PH p45 equity statement, cited as a PH page). The correct EMR figure is $18,016M. The numbers therefore imply Emerson is higher, which reverses the comparison. The year-end dates (June 30 vs Sept 30) are correct."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "EMR $18,016M (FY ended Sept 30, 2025; p39, 2025 column), PH $19,850M (FY ended June 30, 2025), Parker-Hannifin stated as higher, and the year-ends are distinguished. All match the gold."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "I verified that EMR's 18,016 is the 2025 column (the columns run 2023/2024/2025). PH 19,850 is FY2025 (p41 and p72 segment total). The baseline's 21,775 is clearly a PH equity-statement number misattributed to Emerson. No changes."
+  },
+  {
+   "question_id": "test-034",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained. The Top-5 held only ROK passages (FY2021 equity/statement headers plus one FY2022 chunk) and no sales row. Dover was not retrieved."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained. Scoped retrieval returned ROK and DOV pages, but neither revenue row (ROK $6,997.4M, DOV $7,907,081K) was in the Top-5."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "I confirmed both are released abstentions and that no revenue row was present in either Top-5. No changes."
+  },
+  {
+   "question_id": "test-035",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Released abstention (verifier unsupported_claim). The generator draft was badly wrong: ROK $8,411.8M (a retained-earnings balance) and PH $21,775M from FY2025. The verifier caught it."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Released abstention (claim_admits_missing_evidence). The draft had the correct ROK $7,760.4M for FY ended Sept 30, 2022, but said PH's FY2022 revenue was not in the sources. PH's Top-5 chunks were the FY2022 cash-flow and equity statements, not the $15,861,608K net-sales row."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "I agree. Both released answers are 'I'm not sure', and the drafts are not graded. No changes."
+  },
+  {
+   "question_id": "test-036",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained."
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 0,
+    "contains_error": true,
+    "note": "No theme matches the gold content. (1) Foundry: only generic 'reliance on ... third-party wafer fabricators' from the notes' concentration paragraph. There is no TSMC ~90% share and no risk of TSMC prioritizing others or cutting deliveries. (2) Demand forecasting: cites the excess/obsolete inventory accounting policy and the MD&A demand-factor list, not the risk of manufacturing on nonbinding forecasts with carrying and obsolescence costs. (3) Cybersecurity: presents a product-portfolio description ('infrastructure and security software ... designed to secure') as a disclosure that 'acknowledges cybersecurity risks inherent in their operations'. That is an unsupported conclusion, and the actual cyber-attack risk factor is omitted."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "I re-checked every claim against the gold evidence (p17 TSMC, p23 nonbinding forecasts, p25 cyber-attacks). None of the gold points is stated. The cyber claim is an unsupported inference passed off as a risk disclosure, so 'wrong' with contains_error=true stands. Even without that claim, an answer with 0 gold points could not be partially_correct. I agree the abstention is preferable to a misleading summary."
+  },
+  {
+   "question_id": "test-037",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained due to invalid_model_json (generator output unparseable)."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The first attempt produced accurate trade-barrier and competition claims, but an empty calculation object caused invalid_calculation_schema. Its cyber claim also described the risk-management frameworks rather than the incident risks. The retry returned invalid JSON, so it released an abstention."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "I confirmed both released abstentions. No changes."
+  },
+  {
+   "question_id": "test-038",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source). The draft had reasonable capacity-commitment and CAC claims, but one cited quote was elided with '...'."
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Point 2 is correct: with no firm capacity, quantity or pricing commitments, suppliers may allocate capacity to other customers and supply may not be available when needed or at reasonable prices. Point 3 is correct: the May 2023 CAC decision barred critical information infrastructure operators in China from buying Micron products, hurting revenue, and further actions could affect revenue inside or outside China. Point 1 (limited or sole source, unable to qualify new suppliers in time) is missing; the 'specialized suppliers' label is attached to the capacity content, and the supplier-insolvency line is not point 1. The rare-earth China export material is accurate to the source and fits the China-restrictions theme."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "I checked every statement against the cited p28/p23 text and found no misstatements. The phrase 'following a May 2023 cybersecurity review' slightly compresses 'following the May 2023 decision of its cybersecurity review', which is not material. The 2-point count is right. No changes."
+  },
+  {
+   "question_id": "test-039",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Point 1 is correct: free offerings may diminish revenue and profitability and harm acquisition and retention. Point 3 is credited in generic form: competition for and retention of key talent, needing skilled employees to operate and grow, with no California/India detail. Point 2 is missing: the answer describes Intuit's own data-security exposure, not incidents at critical vendors, developers or partners, even though that passage (p23-24) was in its Top-5."
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Essentially the same as the baseline. The free-competitor point is correct. The talent point is generic ('competition for and retention of key talent', no California/India, no growth link) and credited leniently. The paragraph labelled 'third-party data security' describes Intuit's own systems, plus customer-system and open-source vulnerabilities, so the vendor/developer/partner incident point is missing. The mislabel does not misstate any source fact, so it is not counted as a material error."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "I verified the free-offering and security quotes against the p20/p22-23 text. The talent credit is lenient for both systems (current is slightly weaker, with no growth link), but they are at the same level, so 'same' holds. No changes."
+  },
+  {
+   "question_id": "test-040",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source). The draft contained correct partner, third-party cyber and talent content but cited an elided quote ('...') for E11."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Covers all three themes accurately. Partners: insufficient qualified implementation partners to meet customer demand, and partner failures can harm sales, operating results and growth. It omits the secondary clause that training and certification programs may not be effective. Third-party cyber: reliance on third-party providers and public cloud, rising supply-chain attacks, and no guarantee providers are uncompromised. This point is fully correct. Talent: losing key or qualified employees and difficulty attracting and retaining needed staff raise costs. This is generic (no specialized-talent competition or revenue-growth link) but captures the core risk. No errors."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "I checked every cited quote against the FY2023 text (p19, p22, p24-25) and all are FY2023 NOW content. 'Correct' is at the lenient edge: points 1 and 3 are credited on their core risk while secondary qualifiers are missing (training program effectiveness; specialized talent and revenue growth). I keep the grade because each requested topic is covered with the headline disclosed risk and there are no misstatements, which matches the leniency applied to the generic talent points in test-039. A stricter reading would make this partially_correct with 1-2 points."
+  },
+  {
+   "question_id": "test-041",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (context_budget_exceeded). Its Top-5 mixed in the ADSK FY2022 and FY2025 reports."
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "Renewal theme: says renewal rates are unpredictable and affect future revenue, which loosely matches P1 but leaves out that customers have no obligation to renew. Cyber theme: incidents compromise offerings, services and data, plus service disruptions, which partly matches P2 but leaves out that future attacks may be material. The key-personnel theme is an unsupported inference. It cites a business-model and investment passage and says this 'implies reliance on skilled personnel', yet the FY2024 report has an explicit key-personnel risk on p29. The verifier still passed it."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked against the digest. Every cited quote is FY2024 p18-19. The personnel claim is a real unsupported conclusion, so 'wrong' stands. Counting P1 and P2 is lenient because both are partial matches, but it is consistent with how the other summaries in this batch are graded."
+  },
+  {
+   "question_id": "test-042",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "The customer-trends theme is filled with the shrink/theft/store-safety risk. That is not about customer trends, and it is cited from the HD FY2024 report. FY2025 line ~270 has near-identical wording, so the content exists in FY2025, but the theme is still misattributed and P1 (responding to customer preferences while managing inventory) is missing. The technology-infrastructure theme (third-party systems, disruption, financial-system and reputation harm) matches P2. The breach theme (controls may not prevent breaches; costs, litigation, regulatory action, lost sales, reputation) matches P3; both use FY2025 citations."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (incomplete_model_response after a quote_not_in_source retry), even though the first generator attempt had a correct FY2025 customer-trends claim."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that the shrink passage appears in both HD FY2024 and FY2025, so the main error is the misattributed theme plus the cross-year citation. 'Wrong' fits the misattribution policy also applied in test-041 and test-043. Points for P2 and P3 verified."
+  },
+  {
+   "question_id": "test-043",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source)."
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "The consumer-preference theme is misattributed: it presents adverse publicity and brand-image damage as the consumer-preference-shift risk and misses the lead-time and missed-trend inventory risk (P1). The climate theme covers climate change raising the frequency and severity of extreme weather, which is verified in the FY2024 document at line 485, but not water or raw-material availability or the regulatory angle; the core of P2 counts. The pandemic theme fully matches P3 (supply chain, factory cancellation costs, store closures, retail traffic, discretionary spending). The volatile tax rate is also verified in FY2024. All citations are from NKE FY2024."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Checked the NKE FY2024 document.md. The 'frequency and severity' sentence and the pandemic-driven 'volatile effective tax rate' are both present. The misattributed consumer-preference theme justifies 'wrong'. P2 credit is lenient, since only one of its three elements is covered."
+  },
+  {
+   "question_id": "test-044",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "Commodity hedging matches P3 (does not fully hedge; hedges may not protect against specific raw-material increases), from FY2023 p42. The tastes theme uses the new-markets passage (tastes differ by market, so sales may miss expectations), which loosely supports P1. The food-safety theme is an unsupported conclusion: it takes an R&D bullet ('world-class and uncompromising food safety') and says it reflects 'the importance of food-safety confidence as a risk'. It never states the consumer-confidence or adverse-attention risk (P2). That bullet is cited from KHC FY2025, but the same bullet also appears in FY2021-FY2025, FY2023 included, so the cross-year problem is citation provenance only. The verdict rests on the unsupported inference."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (invalid_quote on both attempts)."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "I agree with the outcomes, with one correction to the first note. The first grader said the food-safety claim 'wrongly takes a different fiscal year', but grep shows the 'uncompromising food safety' bullet in the KHC FY2023 document as well. The fiscal-year problem is therefore only the citation, and the content is not wrong-period. 'Wrong' still holds because of the unsupported risk inference, which is consistent with test-041. P1 credit is generous (a new-markets passage) but defensible."
+  },
+  {
+   "question_id": "test-045",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "The input-inflation theme comes from KMB FY2024 ('net input costs inflationary in 2025'); grep finds this text only in FY2024, so it is the wrong period. The data-security theme comes from KMB FY2023 (system-upgrade risk, 'cease to be supported' appears only in FY2023-FY2025, not FY2022). It is also the wrong period and misses the gold breach, reputation, lost-revenue and penalties content. Only the sole-source supplier theme (FY2022 p13, including the satisfactory-purchase-terms risk and timely financial reporting) is correct (P3)."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "All content is from FY2022. Input costs rising without matching selling-price increases matches P1. The IT/cyber theme (breaches and cyberattacks disrupt operations; legal liability, regulatory penalties and remediation costs) matches P2, though it leaves out reputation and lost revenue. The sole-source and single-source supplier risk limiting supply and disrupting production matches the core of P3, but thinly: it leaves out outsourced manufacturers or timely reporting and purchase terms."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Verified by grep that the baseline's inflation text exists only in KMB FY2024 and the ERP/upgrade text is absent from FY2022, so both are true wrong-period errors. The current answer's P3 coverage is thin, but it meets the 'all requested topics covered' standard for summaries."
+  },
+  {
+   "question_id": "test-046",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "partially_correct",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "Commodity-price volatility raising or lowering costs and hurting profitability, plus supply constraints, covers the core of P1. Most citations are from the MDLZ FY2025 report, and it adds 'import duties and tariffs' and 'restrictions on cross-border data transfers', which do not appear verbatim in the FY2023 document.md. FY2023 does have substantively close content: hedging cannot fully protect, tariffs on key commodities like cocoa in the international-risk list, 'compliance with ... data privacy laws', and the p22 cross-border data-transfer laws risk. The price-elasticity and private-label content is also in FY2023 (line 538). I therefore treated these as minor citation/period errors. The consumer-demand theme describes price-driven volume loss rather than gold P2 (changing tastes and channels). The data-regulation theme misses P3's jurisdictional-conflict point."
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source on both attempts), although retrieval was correctly scoped to FY2023."
+   },
+   "better": "baseline_head",
+   "verifier_agrees": true,
+   "verifier_notes": "I considered upgrading the baseline to 'wrong' for the FY2025-only phrases. However, FY2023 discloses tariffs on key commodities and cross-border data-transfer privacy laws in substance, so the errors are minor and partially_correct holds. This matches the treatment of test-047's minor wrong-year detail."
+  },
+  {
+   "question_id": "test-047",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": true,
+    "note": "P1 is fully stated (raw-material, packaging, energy and transport costs; not fully hedged; reduced margins), and verified at FY2024 line 275. P2 (anticipating tastes and purchasing behaviors; decreased demand) is stated, but it is cited from GIS FY2025 and includes '(including effects of weight loss drugs)'. That parenthetical is FY2025-only; FY2024 mentions only 'weight loss trends' in its forward-looking statements, so it is a minor wrong-period detail. P3 is stated: war, labor shortages, strikes and import/export restrictions, plus single location or supplier."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "All citations are from FY2024. P1: commodity volatility from external factors and incomplete hedging affect earnings and margins. P2 is less direct than gold: not introducing innovative products in response to changing consumer demands hurts revenue, share and profitability, plus supported tangential safety and private-label points. P3: single plant or supplier, third-party failures, war, labor shortages, strikes."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Verified by grep: the FY2024 risk factor has no 'weight loss drugs' (only 'weight loss trends' in its forward-looking statements), and FY2024 line 275 contains the full commodity and hedging text. The baseline's error is a minor parenthetical, so 'correct' with contains_error=true is consistent. 'Same' is reasonable."
+  },
+  {
+   "question_id": "test-048",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "All three themes come from the right EMR FY2021 passages (p25-26). It covers raw-material shortages and price increases affecting costs and competitive position; failure to attract, develop and retain key employees affecting human-capital goals and results; and IT disruption from upgrades, outages, cyberattacks and employee error."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "All three themes are correct from FY2021. The IT theme focuses on cyber threats and breach consequences and leaves out upgrades and outages, but the core of P3 (cyberattacks and breaches disrupt operations) is there."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Both answers' cited quotes are verbatim from the FY2021 gold-evidence passages. No errors found."
+  },
+  {
+   "question_id": "test-049",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source). Its Top-5 mixed in the PH FY2025 and FY2022 reports."
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Raw-material availability and price fluctuations harming results covers the core of P1, but it leaves out tariffs and the delay in passing costs to customers. IT reliance (including third-party access), cyberattacks and failures harming results matches P2; remote work and generative AI are verified in FY2024 line 529. Hurricanes, flooding, wildfires, high heat and water scarcity threatening locations and supply chains matches P3. The added climate-regulation and climate-goal details are supported (FY2024 p13, line 569)."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "Checked PH FY2024 document.md: the generative AI and remote-work vulnerability sentence and the carbon-neutral-goal and reputation text are present. P1 is thin, but under the summary standard 'correct' is consistent with test-045."
+  },
+  {
+   "question_id": "test-050",
+   "points_total": 3,
+   "baseline_head": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained."
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "The input-cost theme uses the FY2022 MD&A (material cost inflation, mainly steel; logistics cost increases; supply shortages), which loosely supports P1 but does not tie it to operating profits. The supplier-concentration theme misses P2 and says the 'provided text' did not specify single or limited-source suppliers. That is literally true of what it retrieved, but the FY2022 report discloses the risk on p24, so the hedge can mislead a user. The FX theme (43% non-US revenue; foreign-currency receipts, payments and intercompany transactions; translation into US dollars affecting results, financial position and cash flows) matches P3."
+   },
+   "better": "current",
+   "verifier_agrees": true,
+   "verifier_notes": "This one is borderline. The single/limited-source sentence reads to a user as if the report lacks the disclosure, which the FY2022 p24 text contradicts. Because it is explicitly scoped to 'the provided text', I treat it as a partial abstention on P2 rather than a false claim, so partially_correct with contains_error=false is kept. The 43% figure and the hedging-policy details match the cited FY2022 text."
+  }
+ ]
+}

@@ -1,0 +1,2188 @@
+{
+ "schema_version": 1,
+ "experiment": "comparison decomposition ablation (retrieval only)",
+ "created_at_utc": "2026-10-10T06:08:54.873342+00:00",
+ "benchmark": {
+  "path": "data/evaluation/retrieval_questions.json",
+  "category": "comparative",
+  "sha256": "6966685c46cbb18f5e6a2f6d83de50443e6820add217206586605c0bd05f3c7b",
+  "question_count": 30
+ },
+ "configuration": {
+  "decomposition_version": "comparison-decomposition-v1",
+  "decomposer_model": "gpt-4.1-mini-2025-04-14",
+  "top_k": 5,
+  "device": "cuda:0",
+  "selection": "round-robin across sub-questions (decomposed) vs balanced scoped Top5"
+ },
+ "policy": "Designed on the live bad-case pool; no setting tuned on these labels; dev and test both reported.",
+ "summary": {
+  "all": {
+   "question_count": 30,
+   "scoped": {
+    "evidence_recall_at_5": 0.31666666666666665,
+    "all_evidence_hit_at_5": 0.13333333333333333,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1.0,
+    "pool_evidence_recall": 0.8,
+    "pool_size": 20.0
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5333333333333333,
+    "all_evidence_hit_at_5": 0.3333333333333333,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1.0,
+    "pool_evidence_recall": 0.75,
+    "pool_size": 20.0
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.45,
+    "all_evidence_hit_at_5": 0.23333333333333334,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1.0,
+    "pool_evidence_recall": 0.9333333333333333,
+    "pool_size": 27.1
+   },
+   "decomposed_rule_minus_scoped_evidence_recall_at_5": {
+    "mean_delta_pp": 21.666666666666668,
+    "ci95_pp": [
+     8.333333333333332,
+     35.0
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 13,
+    "unchanged": 15,
+    "worsened": 2
+   },
+   "decomposed_rule_minus_scoped_all_evidence_hit_at_5": {
+    "mean_delta_pp": 20.0,
+    "ci95_pp": [
+     3.3333333333333335,
+     36.666666666666664
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 7,
+    "unchanged": 22,
+    "worsened": 1
+   },
+   "decomposed_llm_minus_scoped_evidence_recall_at_5": {
+    "mean_delta_pp": 13.333333333333334,
+    "ci95_pp": [
+     -1.6666666666666667,
+     28.333333333333332
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 13,
+    "unchanged": 12,
+    "worsened": 5
+   },
+   "decomposed_llm_minus_scoped_all_evidence_hit_at_5": {
+    "mean_delta_pp": 10.0,
+    "ci95_pp": [
+     -6.666666666666667,
+     26.666666666666668
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 5,
+    "unchanged": 23,
+    "worsened": 2
+   },
+   "llm_plan_sources": {
+    "model": 30,
+    "rule": 0
+   }
+  },
+  "dev": {
+   "question_count": 15,
+   "scoped": {
+    "evidence_recall_at_5": 0.3,
+    "all_evidence_hit_at_5": 0.13333333333333333,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1.0,
+    "pool_evidence_recall": 0.8333333333333334,
+    "pool_size": 20.0
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0.3333333333333333,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1.0,
+    "pool_evidence_recall": 0.8,
+    "pool_size": 20.0
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5666666666666667,
+    "all_evidence_hit_at_5": 0.26666666666666666,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1.0,
+    "pool_evidence_recall": 0.9666666666666667,
+    "pool_size": 20.0
+   },
+   "decomposed_rule_minus_scoped_evidence_recall_at_5": {
+    "mean_delta_pp": 20.0,
+    "ci95_pp": [
+     0.0,
+     40.0
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 5,
+    "unchanged": 9,
+    "worsened": 1
+   },
+   "decomposed_rule_minus_scoped_all_evidence_hit_at_5": {
+    "mean_delta_pp": 20.0,
+    "ci95_pp": [
+     0.0,
+     40.0
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 3,
+    "unchanged": 12,
+    "worsened": 0
+   },
+   "decomposed_llm_minus_scoped_evidence_recall_at_5": {
+    "mean_delta_pp": 26.666666666666668,
+    "ci95_pp": [
+     13.333333333333334,
+     43.333333333333336
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 7,
+    "unchanged": 8,
+    "worsened": 0
+   },
+   "decomposed_llm_minus_scoped_all_evidence_hit_at_5": {
+    "mean_delta_pp": 13.333333333333334,
+    "ci95_pp": [
+     0.0,
+     33.33333333333333
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 2,
+    "unchanged": 13,
+    "worsened": 0
+   },
+   "llm_plan_sources": {
+    "model": 15,
+    "rule": 0
+   }
+  },
+  "test": {
+   "question_count": 15,
+   "scoped": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0.13333333333333333,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1.0,
+    "pool_evidence_recall": 0.7666666666666667,
+    "pool_size": 20.0
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5666666666666667,
+    "all_evidence_hit_at_5": 0.3333333333333333,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1.0,
+    "pool_evidence_recall": 0.7,
+    "pool_size": 20.0
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0.2,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1.0,
+    "pool_evidence_recall": 0.9,
+    "pool_size": 34.2
+   },
+   "decomposed_rule_minus_scoped_evidence_recall_at_5": {
+    "mean_delta_pp": 23.333333333333332,
+    "ci95_pp": [
+     6.666666666666667,
+     36.666666666666664
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 8,
+    "unchanged": 6,
+    "worsened": 1
+   },
+   "decomposed_rule_minus_scoped_all_evidence_hit_at_5": {
+    "mean_delta_pp": 20.0,
+    "ci95_pp": [
+     -6.666666666666667,
+     46.666666666666664
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 4,
+    "unchanged": 10,
+    "worsened": 1
+   },
+   "decomposed_llm_minus_scoped_evidence_recall_at_5": {
+    "mean_delta_pp": 0.0,
+    "ci95_pp": [
+     -23.333333333333332,
+     23.333333333333332
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 6,
+    "unchanged": 4,
+    "worsened": 5
+   },
+   "decomposed_llm_minus_scoped_all_evidence_hit_at_5": {
+    "mean_delta_pp": 6.666666666666667,
+    "ci95_pp": [
+     -20.0,
+     33.33333333333333
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence",
+    "improved": 3,
+    "unchanged": 10,
+    "worsened": 2
+   },
+   "llm_plan_sources": {
+    "model": 15,
+    "rule": 0
+   }
+  }
+ },
+ "per_question": [
+  {
+   "question_id": "dev-021",
+   "split": "dev",
+   "scope_tickers": [
+    "INTC",
+    "AMD"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "INTC",
+      "question": "Intel: According to their FY2024 annual reports, which company reported a higher consolidated GAAP gross margin as a percentage of revenue: Intel ?"
+     },
+     {
+      "ticker": "AMD",
+      "question": "Advanced Micro Devices: According to their FY2024 annual reports, which company reported a higher consolidated GAAP gross margin as a percentage of revenue: or AMD?"
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "INTC",
+      "question": "What consolidated GAAP gross margin as a percentage of revenue did Intel report in its FY2024 annual report?"
+     },
+     {
+      "ticker": "AMD",
+      "question": "What consolidated GAAP gross margin as a percentage of revenue did Advanced Micro Devices report in its FY2024 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-022",
+   "split": "dev",
+   "scope_tickers": [
+    "NVDA",
+    "AMD"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "NVDA",
+      "question": "NVIDIA: Using their FY2024 annual reports, which company had higher consolidated revenue, NVIDIA ? Give both figures in USD millions."
+     },
+     {
+      "ticker": "AMD",
+      "question": "Advanced Micro Devices: Using their FY2024 annual reports, which company had higher consolidated revenue, or AMD? Give both figures in USD millions."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "NVDA",
+      "question": "What consolidated revenue in USD millions did NVIDIA report in its FY2024 annual report?"
+     },
+     {
+      "ticker": "AMD",
+      "question": "What consolidated revenue in USD millions did Advanced Micro Devices report in its FY2024 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-023",
+   "split": "dev",
+   "scope_tickers": [
+    "QCOM",
+    "AMD"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "QCOM",
+      "question": "Qualcomm: Which was larger in FY2023: Qualcomm's consolidated net income or 's consolidated net income? Use each company's FY2023 annual report and USD millions."
+     },
+     {
+      "ticker": "AMD",
+      "question": "Advanced Micro Devices: Which was larger in FY2023: 's consolidated net income or AMD's consolidated net income? Use each company's FY2023 annual report and USD millions."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "QCOM",
+      "question": "What consolidated net income did Qualcomm report in its FY2023 annual report in USD millions?"
+     },
+     {
+      "ticker": "AMD",
+      "question": "What consolidated net income did Advanced Micro Devices report in its FY2023 annual report in USD millions?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-024",
+   "split": "dev",
+   "scope_tickers": [
+    "NVDA",
+    "QCOM"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "NVDA",
+      "question": "NVIDIA: Compare NVIDIA and using their FY2025 annual reports: which had higher consolidated GAAP net income, and what were the amounts?"
+     },
+     {
+      "ticker": "QCOM",
+      "question": "Qualcomm: Compare and Qualcomm using their FY2025 annual reports: which had higher consolidated GAAP net income, and what were the amounts?"
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "NVDA",
+      "question": "What consolidated GAAP net income did NVIDIA report in its FY2025 annual report?"
+     },
+     {
+      "ticker": "QCOM",
+      "question": "What consolidated GAAP net income did Qualcomm report in its FY2025 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-025",
+   "split": "dev",
+   "scope_tickers": [
+    "MSFT",
+    "ORCL"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "MSFT",
+      "question": "Microsoft: For the fiscal years labeled FY2024 in their annual reports, did Microsoft or report more consolidated revenue? State the reported-currency amounts in USD millions."
+     },
+     {
+      "ticker": "ORCL",
+      "question": "Oracle: For the fiscal years labeled FY2024 in their annual reports, did or Oracle report more consolidated revenue? State the reported-currency amounts in USD millions."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "MSFT",
+      "question": "What consolidated revenue in USD millions did Microsoft report in its FY2024 annual report?"
+     },
+     {
+      "ticker": "ORCL",
+      "question": "What consolidated revenue in USD millions did Oracle report in its FY2024 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-026",
+   "split": "dev",
+   "scope_tickers": [
+    "CRM",
+    "ADBE"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "CRM",
+      "question": "Salesforce: According to their FY2023 annual reports, was Salesforce's or 's consolidated GAAP net income higher?"
+     },
+     {
+      "ticker": "ADBE",
+      "question": "Adobe: According to their FY2023 annual reports, was 's or Adobe's consolidated GAAP net income higher?"
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "CRM",
+      "question": "What consolidated GAAP net income did Salesforce report in its FY2023 annual report?"
+     },
+     {
+      "ticker": "ADBE",
+      "question": "What consolidated GAAP net income did Adobe report in its FY2023 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-027",
+   "split": "dev",
+   "scope_tickers": [
+    "MSFT",
+    "ADBE"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "MSFT",
+      "question": "Microsoft: Which company reported higher consolidated operating income in its FY2022 annual report, Microsoft ? Give both GAAP amounts in USD millions."
+     },
+     {
+      "ticker": "ADBE",
+      "question": "Adobe: Which company reported higher consolidated operating income in its FY2022 annual report, or Adobe? Give both GAAP amounts in USD millions."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "MSFT",
+      "question": "What consolidated operating income did Microsoft report under GAAP in its FY2022 annual report, in USD millions?"
+     },
+     {
+      "ticker": "ADBE",
+      "question": "What consolidated operating income did Adobe report under GAAP in its FY2022 annual report, in USD millions?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-028",
+   "split": "dev",
+   "scope_tickers": [
+    "WMT",
+    "AMZN"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "WMT",
+      "question": "Walmart: Compare the consolidated top lines in Walmart's FY2024 and 's FY2024 annual reports: was Walmart's total revenue or 's total net sales larger?"
+     },
+     {
+      "ticker": "AMZN",
+      "question": "Amazon: Compare the consolidated top lines in 's FY2024 and Amazon's FY2024 annual reports: was 's total revenue or Amazon's total net sales larger?"
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "WMT",
+      "question": "What consolidated total revenue did Walmart report in its FY2024 annual report?"
+     },
+     {
+      "ticker": "AMZN",
+      "question": "What consolidated total net sales did Amazon report in its FY2024 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-029",
+   "split": "dev",
+   "scope_tickers": [
+    "COST",
+    "TGT"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "COST",
+      "question": "Costco: Using their FY2023 annual reports, which company earned more net income attributable to its shareholders: Costco ? Give the reported USD millions."
+     },
+     {
+      "ticker": "TGT",
+      "question": "Target: Using their FY2023 annual reports, which company earned more net income attributable to its shareholders: or Target? Give the reported USD millions."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "COST",
+      "question": "What net income attributable to shareholders in USD millions did Costco report in its FY2023 annual report?"
+     },
+     {
+      "ticker": "TGT",
+      "question": "What net income attributable to shareholders in USD millions did Target report in its FY2023 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-030",
+   "split": "dev",
+   "scope_tickers": [
+    "AMZN",
+    "TGT"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "AMZN",
+      "question": "Amazon: According to their FY2021 annual reports, did Amazon or report higher consolidated GAAP operating income?"
+     },
+     {
+      "ticker": "TGT",
+      "question": "Target: According to their FY2021 annual reports, did or Target report higher consolidated GAAP operating income?"
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "AMZN",
+      "question": "What consolidated GAAP operating income did Amazon report in its FY2021 annual report?"
+     },
+     {
+      "ticker": "TGT",
+      "question": "What consolidated GAAP operating income did Target report in its FY2021 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-031",
+   "split": "dev",
+   "scope_tickers": [
+    "KO",
+    "PEP"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "KO",
+      "question": "Coca-Cola: From their FY2024 annual reports, which had the higher consolidated revenue: Coca-Cola's net operating revenues or 's net revenue?"
+     },
+     {
+      "ticker": "PEP",
+      "question": "PepsiCo: From their FY2024 annual reports, which had the higher consolidated revenue: 's net operating revenues or PepsiCo's net revenue?"
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "KO",
+      "question": "What consolidated net operating revenues did Coca-Cola report in its FY2024 annual report?"
+     },
+     {
+      "ticker": "PEP",
+      "question": "What consolidated net revenue did PepsiCo report in its FY2024 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-032",
+   "split": "dev",
+   "scope_tickers": [
+    "PG",
+    "CL"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "PG",
+      "question": "Procter & Gamble: In their FY2023 annual reports, did Procter & Gamble or report higher net earnings attributable to the parent company?"
+     },
+     {
+      "ticker": "CL",
+      "question": "Colgate-Palmolive: In their FY2023 annual reports, did or Colgate-Palmolive report higher net earnings attributable to the parent company?"
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "PG",
+      "question": "What net earnings attributable to the parent company did Procter & Gamble report in its FY2023 annual report?"
+     },
+     {
+      "ticker": "CL",
+      "question": "What net earnings attributable to the parent company did Colgate-Palmolive report in its FY2023 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-033",
+   "split": "dev",
+   "scope_tickers": [
+    "KO",
+    "CL"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "KO",
+      "question": "Coca-Cola: Which company reported higher consolidated GAAP operating income or profit in FY2022, Coca-Cola ? Exclude adjusted non-GAAP figures."
+     },
+     {
+      "ticker": "CL",
+      "question": "Colgate-Palmolive: Which company reported higher consolidated GAAP operating income or profit in FY2022, or Colgate-Palmolive? Exclude adjusted non-GAAP figures."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "KO",
+      "question": "What consolidated GAAP operating income did Coca-Cola report in its FY2022 annual report?"
+     },
+     {
+      "ticker": "CL",
+      "question": "What consolidated GAAP operating income did Colgate-Palmolive report in its FY2022 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-034",
+   "split": "dev",
+   "scope_tickers": [
+    "CAT",
+    "DE"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "CAT",
+      "question": "Caterpillar: Compare the FY2024 annual-report consolidated top-line totals for Caterpillar : which was larger, Caterpillar's total sales and revenues or 's total net sales and revenues?"
+     },
+     {
+      "ticker": "DE",
+      "question": "Deere & Company: Compare the FY2024 annual-report consolidated top-line totals for and Deere: which was larger, 's total sales and revenues or Deere's total net sales and revenues?"
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "CAT",
+      "question": "What consolidated total sales and revenues did Caterpillar report in its FY2024 annual report?"
+     },
+     {
+      "ticker": "DE",
+      "question": "What consolidated total net sales and revenues did Deere & Company report in its FY2024 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "dev-035",
+   "split": "dev",
+   "scope_tickers": [
+    "CMI",
+    "ITW"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "CMI",
+      "question": "Cummins: Based on their FY2022 annual reports, which was higher: net income attributable to Cummins or ' consolidated net income?"
+     },
+     {
+      "ticker": "ITW",
+      "question": "Illinois Tool Works: Based on their FY2022 annual reports, which was higher: net income attributable to or Illinois Tool Works' consolidated net income?"
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "CMI",
+      "question": "What net income attributable to shareholders did Cummins report in its FY2022 annual report?"
+     },
+     {
+      "ticker": "ITW",
+      "question": "What consolidated net income did Illinois Tool Works report in its FY2022 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-021",
+   "split": "test",
+   "scope_tickers": [
+    "AVGO",
+    "TXN"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "AVGO",
+      "question": "Broadcom: Using their FY2023 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Broadcom ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "TXN",
+      "question": "Texas Instruments: Using their FY2023 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Texas Instruments? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 31
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "AVGO",
+      "question": "What consolidated revenue in U.S. dollars did Broadcom report in its FY2023 annual report?"
+     },
+     {
+      "ticker": "AVGO",
+      "question": "What was the fiscal year-end date for Broadcom's FY2023 annual report?"
+     },
+     {
+      "ticker": "TXN",
+      "question": "What consolidated revenue in U.S. dollars did Texas Instruments report in its FY2023 annual report?"
+     },
+     {
+      "ticker": "TXN",
+      "question": "What was the fiscal year-end date for Texas Instruments' FY2023 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-022",
+   "split": "test",
+   "scope_tickers": [
+    "MU",
+    "TXN"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "MU",
+      "question": "Micron Technology: Using their FY2022 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Micron Technology ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "TXN",
+      "question": "Texas Instruments: Using their FY2022 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Texas Instruments? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 37
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "MU",
+      "question": "What consolidated revenue in U.S. dollars did Micron Technology report in its FY2022 annual report?"
+     },
+     {
+      "ticker": "MU",
+      "question": "What was the fiscal year-end date for Micron Technology's FY2022 annual report?"
+     },
+     {
+      "ticker": "TXN",
+      "question": "What consolidated revenue in U.S. dollars did Texas Instruments report in its FY2022 annual report?"
+     },
+     {
+      "ticker": "TXN",
+      "question": "What was the fiscal year-end date for Texas Instruments' FY2022 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-023",
+   "split": "test",
+   "scope_tickers": [
+    "AVGO",
+    "MU"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "AVGO",
+      "question": "Broadcom: Using their FY2025 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Broadcom ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "MU",
+      "question": "Micron Technology: Using their FY2025 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Micron Technology? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 34
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "AVGO",
+      "question": "What consolidated revenue did Broadcom report in its FY2025 annual report in U.S. dollars?"
+     },
+     {
+      "ticker": "AVGO",
+      "question": "What is the fiscal year-end date reported in Broadcom's FY2025 annual report?"
+     },
+     {
+      "ticker": "MU",
+      "question": "What consolidated revenue did Micron Technology report in its FY2025 annual report in U.S. dollars?"
+     },
+     {
+      "ticker": "MU",
+      "question": "What is the fiscal year-end date reported in Micron Technology's FY2025 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-024",
+   "split": "test",
+   "scope_tickers": [
+    "INTU",
+    "NOW"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "INTU",
+      "question": "Intuit: Using their FY2024 annual reports and their respective fiscal years, which company reported higher net cash provided by operating activities: Intuit ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "NOW",
+      "question": "ServiceNow: Using their FY2024 annual reports and their respective fiscal years, which company reported higher net cash provided by operating activities: or ServiceNow? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 34
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "INTU",
+      "question": "What was the net cash provided by operating activities reported by Intuit in its FY2024 annual report, in U.S. dollars?"
+     },
+     {
+      "ticker": "INTU",
+      "question": "What was the fiscal year-end date for Intuit's FY2024 annual report?"
+     },
+     {
+      "ticker": "NOW",
+      "question": "What was the net cash provided by operating activities reported by ServiceNow in its FY2024 annual report, in U.S. dollars?"
+     },
+     {
+      "ticker": "NOW",
+      "question": "What was the fiscal year-end date for ServiceNow's FY2024 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-025",
+   "split": "test",
+   "scope_tickers": [
+    "ADSK",
+    "CDNS"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "ADSK",
+      "question": "Autodesk: Using their FY2021 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Autodesk ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "CDNS",
+      "question": "Cadence Design Systems: Using their FY2021 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Cadence Design Systems? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 37
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "ADSK",
+      "question": "What consolidated revenue did Autodesk report in its FY2021 annual report in U.S. dollars?"
+     },
+     {
+      "ticker": "ADSK",
+      "question": "What is the fiscal year-end date reported in Autodesk's FY2021 annual report?"
+     },
+     {
+      "ticker": "CDNS",
+      "question": "What consolidated revenue did Cadence Design Systems report in its FY2021 annual report in U.S. dollars?"
+     },
+     {
+      "ticker": "CDNS",
+      "question": "What is the fiscal year-end date reported in Cadence Design Systems' FY2021 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-026",
+   "split": "test",
+   "scope_tickers": [
+    "INTU",
+    "ADSK"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "INTU",
+      "question": "Intuit: Using their FY2023 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Intuit ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "ADSK",
+      "question": "Autodesk: Using their FY2023 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Autodesk? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 33
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "INTU",
+      "question": "What consolidated revenue in U.S. dollars did Intuit report in its FY2023 annual report?"
+     },
+     {
+      "ticker": "INTU",
+      "question": "What is the fiscal year-end date reported for Intuit's FY2023 annual report?"
+     },
+     {
+      "ticker": "ADSK",
+      "question": "What consolidated revenue in U.S. dollars did Autodesk report in its FY2023 annual report?"
+     },
+     {
+      "ticker": "ADSK",
+      "question": "What is the fiscal year-end date reported for Autodesk's FY2023 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-027",
+   "split": "test",
+   "scope_tickers": [
+    "HD",
+    "LOW"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "HD",
+      "question": "Home Depot: Using their FY2023 annual reports and their respective fiscal years, which company reported higher net cash provided by operating activities: Home Depot ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "LOW",
+      "question": "Lowe's: Using their FY2023 annual reports and their respective fiscal years, which company reported higher net cash provided by operating activities: or Lowe's? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 38
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "HD",
+      "question": "What net cash provided by operating activities did Home Depot report in its FY2023 annual report, in U.S. dollars?"
+     },
+     {
+      "ticker": "HD",
+      "question": "What is the fiscal year-end date for Home Depot's FY2023 annual report?"
+     },
+     {
+      "ticker": "LOW",
+      "question": "What net cash provided by operating activities did Lowe's report in its FY2023 annual report, in U.S. dollars?"
+     },
+     {
+      "ticker": "LOW",
+      "question": "What is the fiscal year-end date for Lowe's FY2023 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-028",
+   "split": "test",
+   "scope_tickers": [
+    "NKE",
+    "SBUX"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "NKE",
+      "question": "Nike: Using their FY2025 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Nike ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "SBUX",
+      "question": "Starbucks: Using their FY2025 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Starbucks? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 34
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "NKE",
+      "question": "What consolidated revenue in U.S. dollars did Nike report in its FY2025 annual report?"
+     },
+     {
+      "ticker": "NKE",
+      "question": "What is the fiscal year-end date for Nike's FY2025 annual report?"
+     },
+     {
+      "ticker": "SBUX",
+      "question": "What consolidated revenue in U.S. dollars did Starbucks report in its FY2025 annual report?"
+     },
+     {
+      "ticker": "SBUX",
+      "question": "What is the fiscal year-end date for Starbucks' FY2025 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-029",
+   "split": "test",
+   "scope_tickers": [
+    "HD",
+    "NKE"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "HD",
+      "question": "Home Depot: Using their FY2022 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Home Depot ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "NKE",
+      "question": "Nike: Using their FY2022 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Nike? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 35
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "HD",
+      "question": "What consolidated revenue in U.S. dollars did Home Depot report in its FY2022 annual report?"
+     },
+     {
+      "ticker": "HD",
+      "question": "What is the fiscal year-end date for Home Depot's FY2022 annual report?"
+     },
+     {
+      "ticker": "NKE",
+      "question": "What consolidated revenue in U.S. dollars did Nike report in its FY2022 annual report?"
+     },
+     {
+      "ticker": "NKE",
+      "question": "What is the fiscal year-end date for Nike's FY2022 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-030",
+   "split": "test",
+   "scope_tickers": [
+    "KMB",
+    "MDLZ"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "KMB",
+      "question": "Kimberly-Clark: Using their FY2021 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Kimberly-Clark ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "MDLZ",
+      "question": "Mondelez International: Using their FY2021 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Mondelez International? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 38
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "KMB",
+      "question": "What consolidated revenue did Kimberly-Clark report in its FY2021 annual report, expressed in U.S. dollars?"
+     },
+     {
+      "ticker": "KMB",
+      "question": "What fiscal year-end date is reported by Kimberly-Clark in its FY2021 annual report?"
+     },
+     {
+      "ticker": "MDLZ",
+      "question": "What consolidated revenue did Mondelez International report in its FY2021 annual report, expressed in U.S. dollars?"
+     },
+     {
+      "ticker": "MDLZ",
+      "question": "What fiscal year-end date is reported by Mondelez International in its FY2021 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-031",
+   "split": "test",
+   "scope_tickers": [
+    "GIS",
+    "KHC"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "GIS",
+      "question": "General Mills: Using their FY2024 annual reports and their respective fiscal years, which company reported higher net cash provided by operating activities: General Mills ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "KHC",
+      "question": "Kraft Heinz: Using their FY2024 annual reports and their respective fiscal years, which company reported higher net cash provided by operating activities: or Kraft Heinz? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "GIS",
+      "question": "What net cash provided by operating activities did General Mills report in its FY2024 annual report, and what was its fiscal year-end date?"
+     },
+     {
+      "ticker": "KHC",
+      "question": "What net cash provided by operating activities did Kraft Heinz report in its FY2024 annual report, and what was its fiscal year-end date?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-032",
+   "split": "test",
+   "scope_tickers": [
+    "MDLZ",
+    "GIS"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "MDLZ",
+      "question": "Mondelez International: Using their FY2022 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Mondelez International ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "GIS",
+      "question": "General Mills: Using their FY2022 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or General Mills? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 36
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "MDLZ",
+      "question": "What consolidated revenue in U.S. dollars did Mondelez International report in its FY2022 annual report?"
+     },
+     {
+      "ticker": "MDLZ",
+      "question": "What was the fiscal year-end date for Mondelez International's FY2022 annual report?"
+     },
+     {
+      "ticker": "GIS",
+      "question": "What consolidated revenue in U.S. dollars did General Mills report in its FY2022 annual report?"
+     },
+     {
+      "ticker": "GIS",
+      "question": "What was the fiscal year-end date for General Mills' FY2022 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-033",
+   "split": "test",
+   "scope_tickers": [
+    "EMR",
+    "PH"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "EMR",
+      "question": "Emerson Electric: Using their FY2025 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Emerson Electric ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "PH",
+      "question": "Parker-Hannifin: Using their FY2025 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Parker-Hannifin? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 36
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "EMR",
+      "question": "What consolidated revenue in U.S. dollars did Emerson Electric report in its FY2025 annual report?"
+     },
+     {
+      "ticker": "EMR",
+      "question": "What is the fiscal year-end date reported by Emerson Electric in its FY2025 annual report?"
+     },
+     {
+      "ticker": "PH",
+      "question": "What consolidated revenue in U.S. dollars did Parker-Hannifin report in its FY2025 annual report?"
+     },
+     {
+      "ticker": "PH",
+      "question": "What is the fiscal year-end date reported by Parker-Hannifin in its FY2025 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-034",
+   "split": "test",
+   "scope_tickers": [
+    "ROK",
+    "DOV"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "ROK",
+      "question": "Rockwell Automation: Using their FY2021 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Rockwell Automation ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "DOV",
+      "question": "Dover: Using their FY2021 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Dover? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 35
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "ROK",
+      "question": "What consolidated revenue in U.S. dollars did Rockwell Automation report in its FY2021 annual report?"
+     },
+     {
+      "ticker": "ROK",
+      "question": "What was the fiscal year-end date for Rockwell Automation in its FY2021 annual report?"
+     },
+     {
+      "ticker": "DOV",
+      "question": "What consolidated revenue in U.S. dollars did Dover report in its FY2021 annual report?"
+     },
+     {
+      "ticker": "DOV",
+      "question": "What was the fiscal year-end date for Dover in its FY2021 annual report?"
+     }
+    ]
+   }
+  },
+  {
+   "question_id": "test-035",
+   "split": "test",
+   "scope_tickers": [
+    "PH",
+    "ROK"
+   ],
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "decomposed_rule_plan": {
+    "source": "rule",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "PH",
+      "question": "Parker-Hannifin: Using their FY2022 annual reports and their respective fiscal years, which company reported higher consolidated revenue: Parker-Hannifin ? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     },
+     {
+      "ticker": "ROK",
+      "question": "Rockwell Automation: Using their FY2022 annual reports and their respective fiscal years, which company reported higher consolidated revenue: or Rockwell Automation? Give both reported amounts in U.S. dollars and identify any difference in fiscal year-end dates."
+     }
+    ]
+   },
+   "decomposed_llm": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "all_documents_hit_at_5": 1,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 35
+   },
+   "decomposed_llm_plan": {
+    "source": "model",
+    "rejected": null,
+    "subquestions": [
+     {
+      "ticker": "PH",
+      "question": "What consolidated revenue did Parker-Hannifin report in its FY2022 annual report in U.S. dollars?"
+     },
+     {
+      "ticker": "PH",
+      "question": "What was the fiscal year-end date for Parker-Hannifin's FY2022 annual report?"
+     },
+     {
+      "ticker": "ROK",
+      "question": "What consolidated revenue did Rockwell Automation report in its FY2022 annual report in U.S. dollars?"
+     },
+     {
+      "ticker": "ROK",
+      "question": "What was the fiscal year-end date for Rockwell Automation's FY2022 annual report?"
+     }
+    ]
+   }
+  }
+ ],
+ "limitations": [
+  "Agent-authored, non-exhaustive gold evidence; source-selection metrics only.",
+  "One decomposition sample per question from a stochastic model."
+ ]
+}

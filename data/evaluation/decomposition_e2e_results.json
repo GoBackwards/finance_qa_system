@@ -1,0 +1,3304 @@
+{
+ "schema_version": 1,
+ "experiment": "end-to-end answers to the comparative benchmark questions: scoped vs decomposed retrieval",
+ "created_at_utc": "2026-10-10T08:08:30.509400+00:00",
+ "benchmark": "data/evaluation/retrieval_questions.json, comparative category (15 dev, 15 test)",
+ "systems": {
+  "current": {
+   "settings": {
+    "threshold": -1000000.0,
+    "deadline_seconds": 30.0,
+    "generator_model": "gpt-4.1-mini-2025-04-14",
+    "verifier_model": "gpt-4.1-mini-2025-04-14",
+    "prompt_version": "evidence-bound-claims-v2.1"
+   },
+   "released_answers": 11,
+   "abstain_reasons": {
+    "generator_abstained": 7,
+    "claim_admits_missing_evidence": 4,
+    "claim_period_not_in_evidence": 3,
+    "claim_entity_not_in_evidence": 2,
+    "invalid_calculation_schema": 1,
+    "verifier_reason_contradicts_verdict": 1,
+    "quote_not_in_source": 1
+   },
+   "median_timings_ms": {
+    "query_embedding_ms": 56.6,
+    "query_scope_ms": 1.3,
+    "reranking_ms": 435.1,
+    "total_ms": 541.7,
+    "vector_search_ms": 13.6,
+    "end_to_end_wall_ms": 4668.8,
+    "warm_requests": 30
+   }
+  },
+  "decomposed_rule": {
+   "settings": {
+    "threshold": -1000000.0,
+    "deadline_seconds": 30.0,
+    "generator_model": "gpt-4.1-mini-2025-04-14",
+    "verifier_model": "gpt-4.1-mini-2025-04-14",
+    "prompt_version": "evidence-bound-claims-v2.1",
+    "decompose": "rule"
+   },
+   "released_answers": 18,
+   "abstain_reasons": {
+    "claim_admits_missing_evidence": 4,
+    "generator_abstained": 2,
+    "invalid_calculation_schema": 2,
+    "unsupported_claim": 1,
+    "claim_entity_not_in_evidence": 1,
+    "claim_period_not_in_evidence": 1,
+    "verifier_reason_contradicts_verdict": 1
+   },
+   "median_timings_ms": {
+    "decomposition_ms": 1.0,
+    "query_embedding_ms": 135.9,
+    "query_scope_ms": 1.2,
+    "reranking_ms": 414.3,
+    "total_ms": 540.0,
+    "vector_search_ms": 11.5,
+    "end_to_end_wall_ms": 4414.5,
+    "warm_requests": 29
+   }
+  },
+  "decomposed_model": {
+   "settings": {
+    "threshold": -1000000.0,
+    "deadline_seconds": 30.0,
+    "generator_model": "gpt-4.1-mini-2025-04-14",
+    "verifier_model": "gpt-4.1-mini-2025-04-14",
+    "prompt_version": "evidence-bound-claims-v2.1",
+    "decompose": "model"
+   },
+   "released_answers": 19,
+   "abstain_reasons": {
+    "generator_abstained": 4,
+    "unsupported_claim": 2,
+    "claim_period_not_in_evidence": 2,
+    "missing_or_excess_citations": 1,
+    "invalid_model_json": 1,
+    "claim_admits_missing_evidence": 1
+   },
+   "median_timings_ms": {
+    "decomposition_ms": 962.2,
+    "query_embedding_ms": 137.1,
+    "query_scope_ms": 1.2,
+    "reranking_ms": 492.5,
+    "total_ms": 1623.8,
+    "vector_search_ms": 17.2,
+    "end_to_end_wall_ms": 5466.5,
+    "warm_requests": 29
+   }
+  },
+  "current_v22": {
+   "settings": {
+    "threshold": -1000000.0,
+    "deadline_seconds": 30.0,
+    "generator_model": "gpt-4.1-mini-2025-04-14",
+    "verifier_model": "gpt-4.1-mini-2025-04-14",
+    "prompt_version": "evidence-bound-claims-v2.2",
+    "decompose": null
+   },
+   "released_answers": 12,
+   "abstain_reasons": {
+    "generator_abstained": 10,
+    "claim_period_not_in_evidence": 4,
+    "claim_admits_missing_evidence": 2,
+    "unsupported_claim": 1,
+    "claim_entity_not_in_evidence": 1
+   },
+   "median_timings_ms": {
+    "query_embedding_ms": 120.3,
+    "query_scope_ms": 1.3,
+    "reranking_ms": 463.1,
+    "total_ms": 591.3,
+    "vector_search_ms": 16.2,
+    "end_to_end_wall_ms": 4893.0,
+    "warm_requests": 29
+   }
+  },
+  "decomposed_rule_v22": {
+   "settings": {
+    "threshold": -1000000.0,
+    "deadline_seconds": 30.0,
+    "generator_model": "gpt-4.1-mini-2025-04-14",
+    "verifier_model": "gpt-4.1-mini-2025-04-14",
+    "prompt_version": "evidence-bound-claims-v2.2",
+    "decompose": "rule"
+   },
+   "released_answers": 20,
+   "abstain_reasons": {
+    "claim_admits_missing_evidence": 5,
+    "invalid_claim_schema": 1,
+    "claim_entity_not_in_evidence": 1,
+    "generator_abstained": 1,
+    "quote_not_in_source": 1,
+    "claim_period_not_in_evidence": 1
+   },
+   "median_timings_ms": {
+    "decomposition_ms": 1.1,
+    "query_embedding_ms": 166.7,
+    "query_scope_ms": 1.2,
+    "reranking_ms": 425.2,
+    "total_ms": 572.9,
+    "vector_search_ms": 13.9,
+    "end_to_end_wall_ms": 5244.3,
+    "warm_requests": 29
+   }
+  },
+  "decomposed_model_v22": {
+   "settings": {
+    "threshold": -1000000.0,
+    "deadline_seconds": 30.0,
+    "generator_model": "gpt-4.1-mini-2025-04-14",
+    "verifier_model": "gpt-4.1-mini-2025-04-14",
+    "prompt_version": "evidence-bound-claims-v2.2",
+    "decompose": "model"
+   },
+   "released_answers": 19,
+   "abstain_reasons": {
+    "generator_abstained": 4,
+    "unsupported_claim": 2,
+    "claim_period_not_in_evidence": 2,
+    "claim_entity_not_in_evidence": 1,
+    "claim_admits_missing_evidence": 1,
+    "quote_not_in_source": 1
+   },
+   "median_timings_ms": {
+    "decomposition_ms": 913.9,
+    "query_embedding_ms": 175.3,
+    "query_scope_ms": 1.3,
+    "reranking_ms": 463.6,
+    "total_ms": 1519.3,
+    "vector_search_ms": 18.3,
+    "end_to_end_wall_ms": 6267.2,
+    "warm_requests": 29
+   }
+  }
+ },
+ "grading": {
+  "method": "Blind side-by-side grading: per question the three systems were shown as system_A/B/C in a seeded random order with the decomposition trace removed; one grader agent per 10 questions graded all three against the gold answer, gold answer points and gold evidence, and an independent skeptic agent re-checked every grade and could change it. Labels were mapped back afterwards (blind_labels). A second identical blind pass graded the three prompt-v2.2 systems (*_v22; labels in blind_labels_v22, verdicts in best_v22).",
+  "systems": {
+   "current": "scoped pools -> rerank -> balanced Top5 (Table A10 current)",
+   "decomposed_rule": "per-company sub-questions from the deterministic rewrite, each searched and reranked in its company",
+   "decomposed_model": "per-company sub-questions from a validated gpt-4.1-mini plan (prompt comparison-decomposition-v2)",
+   "current_v22": "current with generator prompt evidence-bound-claims-v2.2 (explicit comparison result)",
+   "decomposed_rule_v22": "decomposed_rule with prompt v2.2",
+   "decomposed_model_v22": "decomposed_model with prompt v2.2"
+  },
+  "human_reviewed": false
+ },
+ "summary": {
+  "all": {
+   "current": {
+    "question_count": 30,
+    "correct": 5,
+    "partially_correct": 2,
+    "wrong": 4,
+    "false_abstention": 19,
+    "accuracy": 0.16666666666666666,
+    "correct_or_partial_rate": 0.23333333333333334,
+    "answered_rate": 0.36666666666666664,
+    "answers_with_error": 4,
+    "answer_point_coverage": 0.26666666666666666,
+    "precision_of_released_answers": 0.45454545454545453,
+    "evidence_recall_at_5": 0.31666666666666665,
+    "all_evidence_hit_at_5": 0.13333333333333333
+   },
+   "decomposed_rule": {
+    "question_count": 30,
+    "correct": 4,
+    "partially_correct": 12,
+    "wrong": 2,
+    "false_abstention": 12,
+    "accuracy": 0.13333333333333333,
+    "correct_or_partial_rate": 0.5333333333333333,
+    "answered_rate": 0.6,
+    "answers_with_error": 2,
+    "answer_point_coverage": 0.43333333333333335,
+    "precision_of_released_answers": 0.2222222222222222,
+    "evidence_recall_at_5": 0.5333333333333333,
+    "all_evidence_hit_at_5": 0.3333333333333333
+   },
+   "decomposed_model": {
+    "question_count": 30,
+    "correct": 7,
+    "partially_correct": 9,
+    "wrong": 3,
+    "false_abstention": 11,
+    "accuracy": 0.23333333333333334,
+    "correct_or_partial_rate": 0.5333333333333333,
+    "answered_rate": 0.6333333333333333,
+    "answers_with_error": 3,
+    "answer_point_coverage": 0.4777777777777778,
+    "precision_of_released_answers": 0.3684210526315789,
+    "evidence_recall_at_5": 0.5333333333333333,
+    "all_evidence_hit_at_5": 0.3
+   },
+   "current_v22": {
+    "question_count": 30,
+    "correct": 6,
+    "partially_correct": 2,
+    "wrong": 4,
+    "false_abstention": 18,
+    "accuracy": 0.2,
+    "correct_or_partial_rate": 0.26666666666666666,
+    "answered_rate": 0.4,
+    "answers_with_error": 4,
+    "answer_point_coverage": 0.3111111111111111,
+    "precision_of_released_answers": 0.5,
+    "evidence_recall_at_5": 0.31666666666666665,
+    "all_evidence_hit_at_5": 0.13333333333333333
+   },
+   "decomposed_rule_v22": {
+    "question_count": 30,
+    "correct": 8,
+    "partially_correct": 8,
+    "wrong": 4,
+    "false_abstention": 10,
+    "accuracy": 0.26666666666666666,
+    "correct_or_partial_rate": 0.5333333333333333,
+    "answered_rate": 0.6666666666666666,
+    "answers_with_error": 4,
+    "answer_point_coverage": 0.4888888888888889,
+    "precision_of_released_answers": 0.4,
+    "evidence_recall_at_5": 0.5333333333333333,
+    "all_evidence_hit_at_5": 0.3333333333333333
+   },
+   "decomposed_model_v22": {
+    "question_count": 30,
+    "correct": 9,
+    "partially_correct": 8,
+    "wrong": 2,
+    "false_abstention": 11,
+    "accuracy": 0.3,
+    "correct_or_partial_rate": 0.5666666666666667,
+    "answered_rate": 0.6333333333333333,
+    "answers_with_error": 2,
+    "answer_point_coverage": 0.5222222222222223,
+    "precision_of_released_answers": 0.47368421052631576,
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0.23333333333333334
+   },
+   "paired_accuracy_decomposed_rule_minus_current": {
+    "mean_delta_pp": -3.3333333333333335,
+    "ci95_pp": [
+     -16.666666666666664,
+     10.0
+    ],
+    "improved": 2,
+    "unchanged": 25,
+    "worsened": 3,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_rule_minus_current": {
+    "mean_delta_pp": 30.0,
+    "ci95_pp": [
+     10.0,
+     50.0
+    ],
+    "improved": 11,
+    "unchanged": 17,
+    "worsened": 2,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_decomposed_model_minus_current": {
+    "mean_delta_pp": 6.666666666666667,
+    "ci95_pp": [
+     -10.0,
+     26.666666666666668
+    ],
+    "improved": 5,
+    "unchanged": 22,
+    "worsened": 3,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_model_minus_current": {
+    "mean_delta_pp": 30.0,
+    "ci95_pp": [
+     10.0,
+     50.0
+    ],
+    "improved": 11,
+    "unchanged": 17,
+    "worsened": 2,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_current_v22_minus_current": {
+    "mean_delta_pp": 3.3333333333333335,
+    "ci95_pp": [
+     0.0,
+     10.0
+    ],
+    "improved": 1,
+    "unchanged": 29,
+    "worsened": 0,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_current_v22_minus_current": {
+    "mean_delta_pp": 3.3333333333333335,
+    "ci95_pp": [
+     0.0,
+     10.0
+    ],
+    "improved": 1,
+    "unchanged": 29,
+    "worsened": 0,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_decomposed_rule_v22_minus_current": {
+    "mean_delta_pp": 10.0,
+    "ci95_pp": [
+     -3.3333333333333335,
+     23.416666666665453
+    ],
+    "improved": 4,
+    "unchanged": 25,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_rule_v22_minus_current": {
+    "mean_delta_pp": 30.0,
+    "ci95_pp": [
+     10.0,
+     50.0
+    ],
+    "improved": 11,
+    "unchanged": 17,
+    "worsened": 2,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_decomposed_model_v22_minus_current": {
+    "mean_delta_pp": 13.333333333333334,
+    "ci95_pp": [
+     -3.3333333333333335,
+     30.0
+    ],
+    "improved": 6,
+    "unchanged": 22,
+    "worsened": 2,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_model_v22_minus_current": {
+    "mean_delta_pp": 33.33333333333333,
+    "ci95_pp": [
+     10.0,
+     56.666666666666664
+    ],
+    "improved": 13,
+    "unchanged": 14,
+    "worsened": 3,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "best": {
+    "decomposed_model": 11,
+    "tie": 12,
+    "current": 2,
+    "decomposed_rule": 5
+   },
+   "best_v22": {
+    "decomposed_model_v22": 11,
+    "tie": 13,
+    "decomposed_rule_v22": 3,
+    "current_v22": 3
+   }
+  },
+  "dev": {
+   "current": {
+    "question_count": 15,
+    "correct": 4,
+    "partially_correct": 1,
+    "wrong": 3,
+    "false_abstention": 7,
+    "accuracy": 0.26666666666666666,
+    "correct_or_partial_rate": 0.3333333333333333,
+    "answered_rate": 0.5333333333333333,
+    "answers_with_error": 3,
+    "answer_point_coverage": 0.4,
+    "precision_of_released_answers": 0.5,
+    "evidence_recall_at_5": 0.3,
+    "all_evidence_hit_at_5": 0.13333333333333333
+   },
+   "decomposed_rule": {
+    "question_count": 15,
+    "correct": 4,
+    "partially_correct": 5,
+    "wrong": 1,
+    "false_abstention": 5,
+    "accuracy": 0.26666666666666666,
+    "correct_or_partial_rate": 0.6,
+    "answered_rate": 0.6666666666666666,
+    "answers_with_error": 1,
+    "answer_point_coverage": 0.5111111111111111,
+    "precision_of_released_answers": 0.4,
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0.3333333333333333
+   },
+   "decomposed_model": {
+    "question_count": 15,
+    "correct": 7,
+    "partially_correct": 2,
+    "wrong": 1,
+    "false_abstention": 5,
+    "accuracy": 0.4666666666666667,
+    "correct_or_partial_rate": 0.6,
+    "answered_rate": 0.6666666666666666,
+    "answers_with_error": 1,
+    "answer_point_coverage": 0.6,
+    "precision_of_released_answers": 0.7,
+    "evidence_recall_at_5": 0.6,
+    "all_evidence_hit_at_5": 0.26666666666666666
+   },
+   "current_v22": {
+    "question_count": 15,
+    "correct": 5,
+    "partially_correct": 0,
+    "wrong": 3,
+    "false_abstention": 7,
+    "accuracy": 0.3333333333333333,
+    "correct_or_partial_rate": 0.3333333333333333,
+    "answered_rate": 0.5333333333333333,
+    "answers_with_error": 3,
+    "answer_point_coverage": 0.4444444444444444,
+    "precision_of_released_answers": 0.625,
+    "evidence_recall_at_5": 0.3,
+    "all_evidence_hit_at_5": 0.13333333333333333
+   },
+   "decomposed_rule_v22": {
+    "question_count": 15,
+    "correct": 8,
+    "partially_correct": 3,
+    "wrong": 2,
+    "false_abstention": 2,
+    "accuracy": 0.5333333333333333,
+    "correct_or_partial_rate": 0.7333333333333333,
+    "answered_rate": 0.8666666666666667,
+    "answers_with_error": 2,
+    "answer_point_coverage": 0.7111111111111111,
+    "precision_of_released_answers": 0.6153846153846154,
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0.3333333333333333
+   },
+   "decomposed_model_v22": {
+    "question_count": 15,
+    "correct": 7,
+    "partially_correct": 3,
+    "wrong": 1,
+    "false_abstention": 4,
+    "accuracy": 0.4666666666666667,
+    "correct_or_partial_rate": 0.6666666666666666,
+    "answered_rate": 0.7333333333333333,
+    "answers_with_error": 1,
+    "answer_point_coverage": 0.6444444444444445,
+    "precision_of_released_answers": 0.6363636363636364,
+    "evidence_recall_at_5": 0.6,
+    "all_evidence_hit_at_5": 0.26666666666666666
+   },
+   "paired_accuracy_decomposed_rule_minus_current": {
+    "mean_delta_pp": 0.0,
+    "ci95_pp": [
+     -26.666666666666668,
+     26.666666666666668
+    ],
+    "improved": 2,
+    "unchanged": 11,
+    "worsened": 2,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_rule_minus_current": {
+    "mean_delta_pp": 26.666666666666668,
+    "ci95_pp": [
+     0.0,
+     53.333333333333336
+    ],
+    "improved": 5,
+    "unchanged": 9,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_decomposed_model_minus_current": {
+    "mean_delta_pp": 20.0,
+    "ci95_pp": [
+     -13.333333333333334,
+     53.333333333333336
+    ],
+    "improved": 5,
+    "unchanged": 8,
+    "worsened": 2,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_model_minus_current": {
+    "mean_delta_pp": 26.666666666666668,
+    "ci95_pp": [
+     0.0,
+     53.333333333333336
+    ],
+    "improved": 5,
+    "unchanged": 9,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_current_v22_minus_current": {
+    "mean_delta_pp": 6.666666666666667,
+    "ci95_pp": [
+     0.0,
+     20.0
+    ],
+    "improved": 1,
+    "unchanged": 14,
+    "worsened": 0,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_current_v22_minus_current": {
+    "mean_delta_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "improved": 0,
+    "unchanged": 15,
+    "worsened": 0,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_decomposed_rule_v22_minus_current": {
+    "mean_delta_pp": 26.666666666666668,
+    "ci95_pp": [
+     6.666666666666667,
+     46.666666666666664
+    ],
+    "improved": 4,
+    "unchanged": 11,
+    "worsened": 0,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_rule_v22_minus_current": {
+    "mean_delta_pp": 40.0,
+    "ci95_pp": [
+     13.333333333333334,
+     66.66666666666666
+    ],
+    "improved": 6,
+    "unchanged": 9,
+    "worsened": 0,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_decomposed_model_v22_minus_current": {
+    "mean_delta_pp": 20.0,
+    "ci95_pp": [
+     -6.666666666666667,
+     46.666666666666664
+    ],
+    "improved": 4,
+    "unchanged": 10,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_model_v22_minus_current": {
+    "mean_delta_pp": 33.33333333333333,
+    "ci95_pp": [
+     0.0,
+     60.0
+    ],
+    "improved": 6,
+    "unchanged": 8,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "best": {
+    "decomposed_model": 6,
+    "tie": 6,
+    "current": 1,
+    "decomposed_rule": 2
+   },
+   "best_v22": {
+    "decomposed_model_v22": 5,
+    "tie": 8,
+    "decomposed_rule_v22": 2
+   }
+  },
+  "test": {
+   "current": {
+    "question_count": 15,
+    "correct": 1,
+    "partially_correct": 1,
+    "wrong": 1,
+    "false_abstention": 12,
+    "accuracy": 0.06666666666666667,
+    "correct_or_partial_rate": 0.13333333333333333,
+    "answered_rate": 0.2,
+    "answers_with_error": 1,
+    "answer_point_coverage": 0.13333333333333333,
+    "precision_of_released_answers": 0.3333333333333333,
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0.13333333333333333
+   },
+   "decomposed_rule": {
+    "question_count": 15,
+    "correct": 0,
+    "partially_correct": 7,
+    "wrong": 1,
+    "false_abstention": 7,
+    "accuracy": 0.0,
+    "correct_or_partial_rate": 0.4666666666666667,
+    "answered_rate": 0.5333333333333333,
+    "answers_with_error": 1,
+    "answer_point_coverage": 0.35555555555555557,
+    "precision_of_released_answers": 0.0,
+    "evidence_recall_at_5": 0.5666666666666667,
+    "all_evidence_hit_at_5": 0.3333333333333333
+   },
+   "decomposed_model": {
+    "question_count": 15,
+    "correct": 0,
+    "partially_correct": 7,
+    "wrong": 2,
+    "false_abstention": 6,
+    "accuracy": 0.0,
+    "correct_or_partial_rate": 0.4666666666666667,
+    "answered_rate": 0.6,
+    "answers_with_error": 2,
+    "answer_point_coverage": 0.35555555555555557,
+    "precision_of_released_answers": 0.0,
+    "evidence_recall_at_5": 0.4666666666666667,
+    "all_evidence_hit_at_5": 0.3333333333333333
+   },
+   "current_v22": {
+    "question_count": 15,
+    "correct": 1,
+    "partially_correct": 2,
+    "wrong": 1,
+    "false_abstention": 11,
+    "accuracy": 0.06666666666666667,
+    "correct_or_partial_rate": 0.2,
+    "answered_rate": 0.26666666666666666,
+    "answers_with_error": 1,
+    "answer_point_coverage": 0.17777777777777778,
+    "precision_of_released_answers": 0.25,
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0.13333333333333333
+   },
+   "decomposed_rule_v22": {
+    "question_count": 15,
+    "correct": 0,
+    "partially_correct": 5,
+    "wrong": 2,
+    "false_abstention": 8,
+    "accuracy": 0.0,
+    "correct_or_partial_rate": 0.3333333333333333,
+    "answered_rate": 0.4666666666666667,
+    "answers_with_error": 2,
+    "answer_point_coverage": 0.26666666666666666,
+    "precision_of_released_answers": 0.0,
+    "evidence_recall_at_5": 0.5666666666666667,
+    "all_evidence_hit_at_5": 0.3333333333333333
+   },
+   "decomposed_model_v22": {
+    "question_count": 15,
+    "correct": 2,
+    "partially_correct": 5,
+    "wrong": 1,
+    "false_abstention": 7,
+    "accuracy": 0.13333333333333333,
+    "correct_or_partial_rate": 0.4666666666666667,
+    "answered_rate": 0.5333333333333333,
+    "answers_with_error": 1,
+    "answer_point_coverage": 0.4,
+    "precision_of_released_answers": 0.25,
+    "evidence_recall_at_5": 0.4,
+    "all_evidence_hit_at_5": 0.2
+   },
+   "paired_accuracy_decomposed_rule_minus_current": {
+    "mean_delta_pp": -6.666666666666667,
+    "ci95_pp": [
+     -20.0,
+     0.0
+    ],
+    "improved": 0,
+    "unchanged": 14,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_rule_minus_current": {
+    "mean_delta_pp": 33.33333333333333,
+    "ci95_pp": [
+     0.0,
+     60.0
+    ],
+    "improved": 6,
+    "unchanged": 8,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_decomposed_model_minus_current": {
+    "mean_delta_pp": -6.666666666666667,
+    "ci95_pp": [
+     -20.0,
+     0.0
+    ],
+    "improved": 0,
+    "unchanged": 14,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_model_minus_current": {
+    "mean_delta_pp": 33.33333333333333,
+    "ci95_pp": [
+     0.0,
+     60.0
+    ],
+    "improved": 6,
+    "unchanged": 8,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_current_v22_minus_current": {
+    "mean_delta_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "improved": 0,
+    "unchanged": 15,
+    "worsened": 0,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_current_v22_minus_current": {
+    "mean_delta_pp": 6.666666666666667,
+    "ci95_pp": [
+     0.0,
+     20.0
+    ],
+    "improved": 1,
+    "unchanged": 14,
+    "worsened": 0,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_decomposed_rule_v22_minus_current": {
+    "mean_delta_pp": -6.666666666666667,
+    "ci95_pp": [
+     -20.0,
+     0.0
+    ],
+    "improved": 0,
+    "unchanged": 14,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_rule_v22_minus_current": {
+    "mean_delta_pp": 20.0,
+    "ci95_pp": [
+     -13.333333333333334,
+     53.333333333333336
+    ],
+    "improved": 5,
+    "unchanged": 8,
+    "worsened": 2,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_accuracy_decomposed_model_v22_minus_current": {
+    "mean_delta_pp": 6.666666666666667,
+    "ci95_pp": [
+     -13.333333333333334,
+     26.666666666666668
+    ],
+    "improved": 2,
+    "unchanged": 12,
+    "worsened": 1,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "paired_correct_or_partial_decomposed_model_v22_minus_current": {
+    "mean_delta_pp": 33.33333333333333,
+    "ci95_pp": [
+     0.0,
+     66.66666666666666
+    ],
+    "improved": 7,
+    "unchanged": 6,
+    "worsened": 2,
+    "replicates": 10000,
+    "seed": 20261008
+   },
+   "best": {
+    "decomposed_model": 5,
+    "tie": 6,
+    "decomposed_rule": 3,
+    "current": 1
+   },
+   "best_v22": {
+    "decomposed_model_v22": 6,
+    "tie": 5,
+    "decomposed_rule_v22": 1,
+    "current_v22": 3
+   }
+  }
+ },
+ "per_question": [
+  {
+   "question_id": "dev-021",
+   "points_total": 3,
+   "decomposed_rule": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "AMD 49% is correct. Intel's 51% is the FY2024 Total gross margin % for the Intel Products segments (p25 segment table: 25,131/48,949), not the consolidated figure (17,345/53,101 = 32.7%). There is no explicit verdict, and the numbers imply Intel was higher, which is wrong.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "AMD 49% is correct. Intel's 51% is the Intel Products segment subtotal (p25), not the consolidated margin. The verdict that Intel was higher is reversed.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "AMD 49% and the verdict (AMD higher) are correct. Intel's 40.0% comes from the p32 chart and is the FY2023 consolidated margin ($21.7B/$54.2B). The chart gives FY2024 as 32.7%, so the period is wrong.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "current",
+    "system_C": "decomposed_model"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Checked INTC FY2024 document.md. The p25 segment table shows Intel Products Total GM% of 51% for FY2024. The p32 consolidated chart lists 40.0% / 42.6% / 32.7%; $21.7B on $54.2B gives about 40.0%, which is FY2023. The FY2024 consolidated figure is 32.7%. All three systems are wrong. C is best because its comparison direction is right.",
+   "current_v22": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "AMD 49% is correct. Intel is given as 51%, which is the Intel Products segment-total gross margin % (p25: CCG 52%, DCAI 47%, NEX 58%, Total 51%), not the consolidated ~32.7%. Its verdict that Intel was higher is reversed.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "AMD 49% and the verdict that AMD was higher are both correct. Intel is given as 40.0%, cited from p32. That figure is Intel's FY2023 consolidated gross margin % (21,711/54,228) from the p32 gross-margin chart, so it is the wrong fiscal-year column; the FY2024 figure is 32.7%.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "AMD 49% is correct. Intel is given as 51%, the Intel Products segment subtotal from p25, not the consolidated 32.7%. It states no comparison verdict, though the figures imply Intel was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I agree with the outcomes, points and best pick. I corrected one thing in system_B's note. Intel FY2024 document.md p32 (line 4337) shows 40.0% in the gross-margin chart, where it is FY2023 gross margin as a % of revenue (2022 42.6%, 2023 40.0%, 2024 32.7%). The 40.0% R&D+MG&A ratio is on p33, but B cited p32, so the error is a wrong fiscal-year column. B is still wrong. Gold 32.7% (17,345/53,101) is confirmed.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-022",
+   "points_total": 3,
+   "decomposed_model": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "NVIDIA $60,922M, AMD $25,785M and the verdict (NVIDIA higher) are all correct and cited.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "NVIDIA's $29,760M is FY2024 net income (it appears in the Net income rows of NVDA FY2024 document.md), not revenue. AMD's $25,800M is an acceptable rounding of $25.8B. No comparison verdict is given.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both figures are correct, and the answer says NVIDIA had the higher revenue.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_model",
+    "system_B": "current",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed in NVDA FY2024 document.md that 29,760 is net income. A and C are tied as correct.",
+   "current_v22": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "NVIDIA revenue is given as $29,760M, which is NVIDIA's FY2024 net income (it matches the prior-year column of the FY2025 net income row), not revenue ($60,922M). AMD's $25.8B (~$25,785M) is acceptable rounding, and the verdict that NVIDIA was higher has the right direction.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Both figures are correct ($60,922M and $25,785M), but it never says which company was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Both figures are correct, but there is no explicit statement of which company was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "Confirmed: 29,760 is NVDA FY2024 net income. B and C list the figures without a verdict, so they tie as partially correct with no error.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-023",
+   "points_total": 3,
+   "decomposed_model": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Both net income figures are correct ($7,232M and $854M), but it never explicitly states which was larger.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both figures and the verdict (Qualcomm larger) are correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both figures and the verdict (Qualcomm larger) are correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_model",
+    "system_B": "current",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "The AMD citation is p58 rather than gold's p57, but the row and the 854 value are the same, so this is not an error. B and C are tied.",
+   "decomposed_model_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "QCOM $7,232M and AMD $854M are correct, and it correctly says Qualcomm was larger.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both figures and the verdict are correct. The fiscal year-end dates it adds (Sep 24, 2023 and Dec 30, 2023) are also correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both figures and the verdict that Qualcomm was larger are correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "decomposed_model_v22",
+    "system_B": "current_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "All three match gold. The AMD citation on p58 instead of p57 is immaterial.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-024",
+   "points_total": 3,
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (unsupported_claim).",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (unsupported_claim).",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "NVIDIA $72,880M, Qualcomm $5,541M and the verdict (NVIDIA higher) are all correct and cited to the gold rows.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best": "current",
+   "blind_labels": {
+    "system_A": "decomposed_model",
+    "system_B": "decomposed_rule",
+    "system_C": "current"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "No changes.",
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (unsupported_claim).",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "NVDA $72,880M and QCOM $5,541M are correct, with the verdict that NVIDIA was higher. The year-end dates it adds (Jan 26, 2025 and Sep 28, 2025) are correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "current_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both figures and the verdict are correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "decomposed_model_v22",
+    "system_B": "decomposed_rule_v22",
+    "system_C": "current_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "Confirmed. B and C tie.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-025",
+   "points_total": 3,
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_entity_not_in_evidence) after a retry.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (unsupported_claim).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence) after a retry.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "decomposed_model",
+    "system_C": "current"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "All three systems abstained.",
+   "decomposed_model_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "MSFT $245,122M and ORCL $52,961M are correct, as are the year-end dates (Jun 30, 2024 and May 31, 2024), but it never says which company reported more.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 1,
+    "contains_error": false,
+    "note": "Gives only Microsoft's $245,122M. Oracle's figure and the verdict are missing.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "decomposed_model_v22",
+    "system_B": "current_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "Confirmed. A lacks a verdict, so it is partially correct.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-026",
+   "points_total": 3,
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Salesforce $208M, Adobe $5,428M and the verdict (Adobe higher) are all correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "All three points are correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "All three points are correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_model",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "The Adobe citation is p54 rather than gold's p53, but the Net income row and value are the same. No error.",
+   "decomposed_rule_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "CRM $208M and ADBE $5,428M are correct, and it correctly says Adobe was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both figures and the verdict that Adobe was higher are correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both figures and the verdict that Adobe was higher are correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "current_v22",
+    "system_C": "decomposed_model_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "Confirmed. The ADBE citation on p54 instead of p53 is immaterial.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-027",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_entity_not_in_evidence) after a retry.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Microsoft $83,383M (income statement, p57) and Adobe $6,098M are correct, but it never states which was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (generator_abstained).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_model",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "No changes.",
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (invalid_claim_schema).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "MSFT $83,383M and ADBE $6,098M are correct, and it correctly says Microsoft was higher. The MSFT figure is cited from the p94 segment total, which equals consolidated operating income.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_rule_v22",
+    "system_C": "decomposed_model_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "Confirmed. C's segment-total citation gives the same value as consolidated operating income.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-028",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (generator_abstained) after a calculation-operand failure.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Walmart $648,125M and Amazon $637,959M are correct, and the verdict (Walmart larger) is correct. Amazon's figure is cited from the Consolidated row of the p79 net sales table.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Both figures are correct, but it never states which was larger.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_model",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed in AMZN FY2024 document.md that the 'Consolidated | 513,983 | 574,785 | 637,959' row sits under the Net Sales table.",
+   "decomposed_rule_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "WMT $648,125M and AMZN $637,959M are correct, and it correctly says Walmart was larger. The fiscal year-end dates (Jan 31, 2024 and Dec 31, 2024) are also correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both figures and the verdict that Walmart was larger are correct. 'Same fiscal year' is loose wording (both are labeled FY2024 but cover different periods), not a material error.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "current_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "Confirmed. B's citation of the Amazon segment 'Consolidated' row equals total net sales.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-029",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (generator_abstained).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (missing_or_excess_citations) after a retry.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Costco $6,292M and Target $4,138M are correct. The Costco value is cited from the 'net income including noncontrolling interests' line, but noncontrolling interest was zero in FY2023, so it equals the attributable figure (confirmed in document.md). There is no explicit verdict that Costco was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_rule",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_model",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Checked COST FY2023 document.md. Net income attributable to noncontrolling interests is '—' for FY2023, and Net income attributable to Costco is 6,292. The value is correct.",
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (unsupported_claim).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (unsupported_claim).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Costco $6,292M and Target $4,138M are correct, but it never says which company earned more. Its Costco citation is the 'including NCI' line, but FY2023 NCI was nil, so the attributable value is the same.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_rule_v22",
+   "blind_labels_v22": {
+    "system_A": "decomposed_model_v22",
+    "system_B": "current_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "Checked the Costco FY2023 document: noncontrolling interests were '—' for FY2023, so 6,292 is also the figure attributable to Costco. With no verdict, C is partially correct.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-030",
+   "points_total": 3,
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (invalid_calculation_schema) after a retry.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (generator_abstained).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (generator_abstained).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "current",
+    "system_C": "decomposed_model"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "All three systems abstained.",
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_entity_not_in_evidence).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "current_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "All three abstained.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-031",
+   "points_total": 3,
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "KO FY2024 net operating revenues $47,061M and PEP FY2024 net revenue $91,854M, both from the FY2024 columns. It states that PepsiCo was higher, which matches the gold.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Both FY2024 figures are correct, but the answer never says which company was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_model": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both figures are correct and it explicitly concludes that PepsiCo's net revenue was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_rule",
+    "system_C": "decomposed_model"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "I re-checked the citations against the gold rows (KO p64, PEP p73), and every value comes from the 2024 column. A and C are both fully correct, so the best is a tie.",
+   "decomposed_rule_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "KO FY2024 net operating revenues $47,061M and PEP net revenue $91,854M, both cited from the income statements; says PepsiCo was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Same correct values and the same verdict (PepsiCo higher).",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "current_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Correct values and an explicit second claim that PepsiCo's $91,854M exceeded KO's $47,061M.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "current_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "Checked against the gold rows (KO p64 47,061; PEP p73 91,854). All three systems give the FY2024 column and a correct direction. No disagreement.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-032",
+   "points_total": 3,
+   "decomposed_model": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "PG $14,653M and CL $2,300M, both FY2023 attributable figures, and it says P&G was higher. It cites the p29 MD&A table rather than p47, but the value is the same.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "PG $14.7B (acceptable rounding of $14,653M) and CL $2,300M (from the p41 GAAP reconciliation row) are correct, but there is no comparison verdict.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "PG $14.7B and CL $2,300M are correct, but it never says which company was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "decomposed_model",
+    "system_B": "current",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. Only A states the verdict. B and C give correct values but no direction.",
+   "decomposed_model_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "P&G $14,653M (exact, MD&A table), CL $2,300M, P&G higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "P&G $14.7B is an acceptable rounding of $14,653M. CL $2,300M comes from the MD&A sentence. P&G higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "P&G $14.7B (rounded). CL $2,300M is cited from the 'As Reported GAAP' reconciliation row, where 2,300 is net income attributable to CL, so the basis is right. P&G higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "decomposed_model_v22",
+    "system_B": "decomposed_rule_v22",
+    "system_C": "current_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "All three are correct. The rounding to $14.7B is fine under the rubric. A gets 'best' only because it gives the exact attributable figure. The CL GAAP reconciliation row in C does carry the attributable net income of $2,300M, so it is not a basis error.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-033",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_entity_not_in_evidence). Its drafts wrongly claimed that Colgate's GAAP operating profit was missing from the sources.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "KO operating income $10,909M and CL operating profit $2,893M, and it says Coca-Cola was higher. The extra net income figures are correct per the source: KO attributable $9,542M (KO FY2022 doc line 1310) and CL $1,967M including NCI. They use mixed bases, but the direction holds on either basis (CL attributable is $1,785M).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Both GAAP operating figures and the extra net income figures are correct, but it never says which company was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_model",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "I checked the CL FY2022 source: GAAP operating profit is $2,893M (line 1082) and attributable net income is $1,785M. The KO FY2022 source shows operating income of $10,909M (line 1301). B's mixed-basis net income comparison is not a material error because it is extra and its direction is right either way.",
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained, although the top-5 included KO's MD&A sentence 'Operating income was $10,909 million in 2022'.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "KO GAAP operating income $10,909M (MD&A), CL operating profit $2,893M (income statement p76), KO higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Same correct values, cited from both income statements; KO higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_rule_v22",
+    "system_C": "decomposed_model_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I checked A's top-5: the KO p50-51 operating income passage is there, so this is a genuine false abstention. B and C use GAAP figures, not non-GAAP, as the question requires.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-034",
+   "points_total": 3,
+   "decomposed_model": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "CAT $64,809M and DE $51,716M (consolidated total, FY2024 column), and it says Caterpillar was larger. It does not list Deere's components, but the total and label match the gold.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (invalid_calculation_schema). Its draft had used Deere's $44,759M net sales subtotal, which would have been wrong.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "Gives Deere's FY2024 total as $61,251M, which is the FY2023 column. The DE FY2024 source row is 'Total | 51,716 | 61,251 | 52,577' (line 2918), and the p40 statement lists 51,716 for 2024 before 61,251. CAT $64,809M and the 'Caterpillar larger' verdict are correct, but the wrong-period figure is a material error.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "decomposed_model",
+    "system_B": "decomposed_rule",
+    "system_C": "current"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "I confirmed in the DE FY2024 document.md that 61,251 is FY2023 and 51,716 is FY2024. C's points_supported of 2 (CAT value plus direction) is right, but its outcome is wrong.",
+   "current_v22": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "CAT $64,809M is correct and the direction (CAT larger) is right. Deere is given as $57,059M, which is Equipment Operations FY2023 total net sales and revenues (55,565+636+858) from the garbled supplemental consolidating table on p40. That is the wrong segment and the wrong year, not the FY2024 consolidated $51,716M.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "Same Deere error as A: $57,059M (Equipment Ops FY2023) instead of the FY2024 consolidated $51,716M. The CAT value and the direction are correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Correct CAT $64,809M and Deere $51,716M from the income statements, but it never says which was larger ('while' only juxtaposes the two).",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_rule_v22",
+    "system_C": "decomposed_model_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I checked DE_FY2024 document.md. 57,059 appears only in the p40 supplemental consolidating table. Equipment Ops 2024 sums to 44,759+596+1,006=46,361 and 2023 to 55,565+636+858=57,059, so 57,059 is the Equipment Ops FY2023 total: wrong basis and wrong period. The consolidated FY2024 total is 51,716 (p45). A and B stay wrong. Counting the CAT-larger verdict as a supported point is generous because it rests on a wrong comparator, but the direction is true, so I kept 2.",
+   "split": "dev"
+  },
+  {
+   "question_id": "dev-035",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (invalid_calculation_schema). Its draft used an ITW segment-total figure ($2,669M/$2,680M) instead of consolidated net income of $3,034M.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "CMI attributable $2,151M and ITW net income $3,034M, and it says ITW was higher. Matches the gold and the source (ITW FY2022 doc line 2154; CMI line 3451).",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (invalid_model_json) with no generator output.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_rule",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_rule",
+    "system_C": "decomposed_model"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Gold values are confirmed in both source documents. Only B answered, and it is fully correct.",
+   "decomposed_rule_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Cummins attributable NI $2,151M, ITW NI $3,034M (p49), ITW higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Released abstention (claim_entity_not_in_evidence). Before the gate fired, the generator had labelled Cummins' consolidated NI ($2,183M) as ITW's. The ITW income statement was not in the top-5.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained after a citation-repair retry. ITW net income was not in the top-5.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_rule_v22",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "current_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I confirmed the B and C top-5 contain only ITW MD&A and segment passages, not the p49 income statement. B's unreleased draft would have been wrong ($2,183M is CMI consolidated NI), but only the released output is graded.",
+   "split": "dev"
+  },
+  {
+   "question_id": "test-021",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained, with no claims.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence). Its draft found Broadcom's $35,819M but not TI's revenue.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "AVGO $35,819M (FY ended Oct 29, 2023) and TXN $17,519M (FY ended Dec 31, 2023) are correct, and it identifies the year-end difference. It never says Broadcom was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_rule",
+    "system_C": "decomposed_model"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. C has both values and dates right but no comparison verdict, so P3 is unsupported.",
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence); its draft said the TI revenue amount was missing.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Broadcom $35,819M, FYE Oct 29 2023. TI $17.52B, rendered as $17,520M (rounding-level difference from $17,519M), FYE Dec 31 2023. Says Broadcom was higher and identifies the different year-ends.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "B's $17,520M is a conversion of the MD&A '$17.52 billion' and is within rounding of 17,519. It gives the verdict and both year-ends, so it is correct. A and C are abstentions.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-022",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence). It did not find TI's FY2022 revenue.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "MU $30,758M (FY ended Sep 1, 2022) and TXN $20,028M (Dec 31, 2022) are correct, and it explains Micron's 52/53-week year ending near Aug 31. It never says Micron was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Both amounts and FY2022 end dates are correct. 'Micron's fiscal year ends on September 1' is imprecise as a general rule but right for FY2022, so it is not material. There is no verdict on which was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_model",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Both answering systems are partially correct with 2 points. B's fiscal-year explanation is more precise, but the outcomes are equal.",
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Correct MU $30,758M (FYE Sep 1 2022) and TI $20,028M (FYE Dec 31 2022) with the year-end difference, but it never says which was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Same correct amounts and dates as B; no comparison verdict.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_rule_v22",
+    "system_C": "decomposed_model_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "The question explicitly asks which company was higher. Neither B nor C answers that, so both are partially correct with 2 points.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-023",
+   "points_total": 3,
+   "decomposed_model": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "AVGO $63,887M (FY ended Nov 2, 2025) and MU $37,378M (Aug 28, 2025) are correct, and it explains both fiscal-year conventions. It never says Broadcom was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Both amounts and year-end dates are correct and it flags the difference. It never says Broadcom was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence). Broadcom's FY2025 revenue was not in its passages.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_model",
+    "system_B": "decomposed_rule",
+    "system_C": "current"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. A and B have the same partial outcome and neither gives a comparison verdict.",
+   "decomposed_rule_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Correct AVGO $63,887M (FYE Nov 2 2025) and MU $37,378M (FYE Aug 28 2025); does not say which was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_period_not_in_evidence). The AVGO income statement revenue row was not in its top-5.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Same correct amounts and year-end dates; no comparison verdict.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "current_v22",
+    "system_C": "decomposed_model_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I confirmed neither A nor C states that Broadcom was higher.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-024",
+   "points_total": 3,
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained after two attempts (claim_period_not_in_evidence), although its drafts had both values and both year-end dates correct.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained after two attempts (claim_period_not_in_evidence), although its drafts had the correct values.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "INTU $4,884M (FY ended Jul 31, 2024) and NOW $4,267M (Dec 31, 2024) are correct, and it notes the different year-ends. It cites NOW p57 rather than p66, with the same value. It never says Intuit was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_rule",
+   "blind_labels": {
+    "system_A": "decomposed_model",
+    "system_B": "current",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. Only C answered, and it lacks the comparison verdict.",
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_period_not_in_evidence), although NOW $4,267M and INTU $4,884M were both in the top-5.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_period_not_in_evidence); both figures were also in its top-5.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Correct NOW $4,267M (FYE Dec 31 2024) and INTU $4,884M (FYE Jul 31 2024) with the year-end difference, but it does not say that Intuit was higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_rule_v22",
+   "blind_labels_v22": {
+    "system_A": "decomposed_model_v22",
+    "system_B": "current_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I checked the top-5 for A and B: both operating cash flow figures and both year-end headers were retrieved, so both abstentions are false. C has no verdict, so it is partially correct.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-025",
+   "points_total": 3,
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained. Its first draft had an unsupported Cadence figure ($2,713,800K) instead of the correct $2,988,244K.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained. Its drafts had wrong figures: Autodesk $3,274.3M is the FY2020 column, and Cadence $2,974,115K does not appear in the CDNS FY2021 source.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence). It had Autodesk's $3,790.4M but not Cadence's revenue.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "current",
+    "system_C": "decomposed_model"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "I verified the gold in the sources: CDNS FY2021 total revenue is 2,988,244 (line 1655), with no 2,974,115 anywhere in the doc, and ADSK FY2021 total net revenue is 3,790.4 (line 6715). All three systems abstained.",
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence); the CDNS revenue row was not in its top-5.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained after a schema retry. Its unreleased first draft was wrong on both figures (ADSK $3,274.3M is FY2020; CDNS $2,927.4M does not match $2,988,244K).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence).",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "decomposed_model_v22",
+    "system_B": "current_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "All three released 'I'm not sure'. B's unreleased draft would have been wrong, but only the released output is graded.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-026",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_period_not_in_evidence) although the Intuit p57 income statement was in its Top-5.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Correct: Intuit $14,368M (FYE Jul 31, 2023) and Autodesk $5,005M (FYE Jan 31, 2023), with the year-end difference. It never states which company is higher, so P3 is missing.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Same as B: both amounts and fiscal year-ends are correct, but there is no explicit verdict that Intuit is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_model",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Rechecked against gold evidence (INTU p57 14,368; ADSK p153 5,005). B and C contain no errors, but neither states the comparison verdict, so P3 is unsupported.",
+   "decomposed_rule_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Both amounts are right: Intuit $14,368M for the fiscal year ended July 31, 2023 and Autodesk $5,005M for the fiscal year ended January 31, 2023. It identifies the year-end difference but never says which company is higher, so the verdict point is missing.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_period_not_in_evidence) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Intuit $14,368M (FY ended July 31, 2023) and Autodesk $5,005M (FY ended January 31, 2023) are right. It explicitly says Intuit is higher for their respective FY2023 periods and gives both year-end dates. The Intuit p96 revenue-disaggregation total matches the consolidated total.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "current_v22",
+    "system_C": "decomposed_model_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I re-checked all three systems. A has no comparison verdict; C's verdict and figures match the gold.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-027",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (verifier_reason_contradicts_verdict). The draft had also given Lowe's FYE wrongly as Feb 3, 2023.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "Amounts are right (HD $21,172M; Lowe's $8.1B, which is 8,140M rounded) and so is the verdict that Home Depot is higher. Both fiscal year-end dates are wrong: Lowe's 'Feb 3, 2023' should be Feb 2, 2024, and HD 'Jan 29, 2023' should be Jan 28, 2024. Those are the prior years' FYEs, and the question asks for the dates. Only P3 is fully supported.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained. The drafts had used the prior-year columns (Lowe's 8,589 and HD 14,615), so they would have been wrong anyway.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_model",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed the B citations: the Lowe's p35 quote gives $8.1B for fiscal 2023, and the HD p6 quote it cites ('Fiscal year ended January 29, 2023') is the FY2022 period. Wrong dates on a requested item make B wrong. B is still marked best because both core amounts and the verdict are right.",
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_entity_not_in_evidence) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "The Home Depot figure of $21,172M is right. Lowe's $8,589M is the prior-year column; FY2023 is $8,140M, which B's own citation shows. Both year-end dates are wrong: Lowe's Feb 3, 2023 should be Feb 2, 2024, and HD Jan 28, 2023 should be Jan 28, 2024. No comparison verdict.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "Both fiscal-2023 amounts are right: HD $21,172M and Lowe's $8,140M. The year-end dates it gives (Lowe's Feb 3, 2023 with 53 weeks; HD Jan 29, 2023 with 52 weeks) belong to FY2022. The source shows HD FY2023 ended Jan 28, 2024 (document.md line 63) and Lowe's FY2023 ended Feb 2, 2024 (line 225). That is a wrong period on the explicit year-end sub-question. No verdict.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_rule_v22",
+    "system_C": "decomposed_model_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I confirmed the FY2023 year-end dates in the HD and LOW sources. Amount points are counted when the amount and its fiscal-2023 label are right, even though the separate year-end sentence is wrong; that error is reflected in outcome=wrong. C is the least wrong: both amounts are right and only the dates are wrong.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-028",
+   "points_total": 3,
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained. The drafts used Nike $51,362M (the FY2024 column) and either a made-up Starbucks figure ($44,522M) or a claim that revenue was missing.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "Nike revenue is given as $51,362M for the FYE May 31, 2025. That is the FY2024 column; FY2025 is $46,309M. Starbucks $37,184.4M (FYE Sep 28, 2025) is correct. There is no verdict.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Correct: Nike $46,309M (FYE May 31, 2025), Starbucks $37,184.4M (FYE Sep 28, 2025), and the FYE difference. It does not state that Nike is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "current",
+    "system_C": "decomposed_model"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Gold row 'Revenues | $46,309 | $51,362 | $51,217' runs 2025/2024/2023, so B used the wrong fiscal-year column.",
+   "decomposed_model_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Nike $46,309M (FY ended May 31, 2025) and Starbucks $37,184.4M (FY ended Sept 28, 2025) are right, and the year-end difference is explained. It never says that Nike is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "Gives Nike FY2025 revenue as $51,362M. That is the FY2024 column; FY2025 is $46,309M (NKE FY2025 document.md lines 840 and 2309). The Starbucks figure of $37,184.4M for FY2025 is right, with the year-end given only as the Sunday closest to Sept 30. No verdict.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "decomposed_model_v22",
+    "system_B": "decomposed_rule_v22",
+    "system_C": "current_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I confirmed the Nike column order (2025 | 2024 | 2023) in the source, so C's $51,362M is the wrong fiscal year.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-029",
+   "points_total": 3,
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_period_not_in_evidence). The drafts had HD's FYE wrong as Jan 29, 2022.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "HD $157,403M for fiscal 2022 and Nike $46,710M (FYE May 31, 2022) are both right. HD's FY is described as ending on the Sunday nearest Jan 31, which the source confirms (FY2022 ended Jan 29, 2023), but the exact date is not stated. It does not say that Home Depot is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_rule",
+   "blind_labels": {
+    "system_A": "decomposed_model",
+    "system_B": "current",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Checked HD_FY2022 document.md: the fiscal year is a 52- or 53-week period 'ending on the Sunday nearest to January 31st', so C's description is accurate. P1 is counted, which is slightly lenient because the exact Jan 29, 2023 date is not given.",
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Nike $46,710M (FY ended May 31, 2022) and Home Depot $157,403M (FY2022 ended Jan 29, 2023) are right, with both exact year-end dates. It never states that Home Depot is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Nike $46,710M (FY ended May 31, 2022) and Home Depot $157,403M (fiscal 2022) are right. For Home Depot it gives only the year-end rule (Sunday nearest Jan 31), not Jan 29, 2023. The wrong Jan 30, 2022 date in its draft was not released. No verdict.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I confirmed HD FY2022 ended Jan 29, 2023. Neither answering system states a verdict. B is more precise on the year-end date.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-030",
+   "points_total": 3,
+   "decomposed_model": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "KMB $19.4B (rounded from 19,440M) and MDLZ $28,720M, both FYE Dec 31, 2021, with the same year-end correctly noted. There is no explicit verdict that Mondelez is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Exact figures: KMB $19,440M and MDLZ $28,720M, with the same Dec 31, 2021 year-end. No explicit verdict that Mondelez is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source) even though both of its drafts had the correct figures.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_rule",
+   "blind_labels": {
+    "system_A": "decomposed_model",
+    "system_B": "decomposed_rule",
+    "system_C": "current"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "A and B earn the same grade, since rounding is acceptable under the rubric. B is preferred only because its figures are exact; a tie would also be defensible.",
+   "current_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Kimberly-Clark $19,440M and Mondelez $28,720M are right, both for the FY ended Dec 31, 2021, and it correctly notes the year-ends are the same. It never says Mondelez is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "current_v22",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "Agreed. A's amounts and dates are right; it gives no verdict.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-031",
+   "points_total": 3,
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence). The draft had both amounts but said the GIS FYE was not stated.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "current": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "GIS $3,303M for fiscal 2024 (rounded from 3,302.6) and KHC $4,184M (FYE Dec 28, 2024) are correct. It omits the GIS FYE date (May 26, 2024), so the year-end difference is not identified, and there is no verdict that Kraft Heinz is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_model": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "GIS $3,302.6M for fiscal 2024 and KHC $4,184M (FYE Dec 28, 2024) are exact. It omits the GIS May 26, 2024 FYE and gives no verdict that Kraft Heinz is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "current",
+    "system_C": "decomposed_model"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "P1 is counted on the amount and the correct fiscal-2024 label even though the May 26 date is missing (lenient, but consistent with test-029). B and C differ only in rounding.",
+   "current_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "General Mills $3,303M for fiscal 2024 (MD&A rounding of $3,302.6M) and Kraft Heinz $4,184M for the FY ended Dec 28, 2024 are right. It says the GIS year-end is unspecified in the report, but the report gives May 26, 2024 on its cover, so the year-end difference is not identified. No statement that Kraft Heinz is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_period_not_in_evidence) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "best_v22": "current_v22",
+   "blind_labels_v22": {
+    "system_A": "current_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "decomposed_rule_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I confirmed May 26, 2024 in GIS FY2024 document.md line 23. Saying the date is unspecified is untrue of the report. I treat it as an omission and hedge rather than a wrong number, period or basis, so contains_error stays false; it is borderline.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-032",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained. The first draft summed three unrelated MDLZ figures (4,366+3,119+2,394) as revenue and cited $28,718M.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "MDLZ $31,496M (FYE Dec 31, 2022) is correct, and GIS $19.0B (rounded from 18,992.8M) is right. But the GIS FYE is stated as May 30, 2022 when the source says May 29, 2022, and nothing cites the date. No verdict that Mondelez is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence) even though the draft had both correct amounts.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "decomposed_model",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_model",
+    "system_C": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Checked GIS_FY2022 document.md: it repeatedly says 'As of May 29, 2022', and 'May 30, 2022' never appears. A wrong year-end date on a requested item counts as wrong, the same standard used for test-027 B.",
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "Mondelez $31,496M (FY ended Dec 31, 2022) and General Mills $18,992.8M (fiscal 2022) are right. It gives no GIS year-end (May 29, 2022), does not identify the year-end difference, and does not state that Mondelez is higher.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_period_not_in_evidence) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "decomposed_model_v22",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "current_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "Agreed. B's released answer dropped the May 29, 2022 date that was in its draft. Both amounts are right.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-033",
+   "points_total": 3,
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "points_supported": 2,
+    "contains_error": false,
+    "note": "PH $19,850M (FYE Jun 30, 2025) and EMR $18,016M (FYE Sep 30, 2025) are correct, and it correctly notes PH has the earlier year-end. It does not say which company has higher revenue.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "current": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Both amounts and both FYEs are correct, and it explicitly states Parker-Hannifin is higher for their respective fiscal years.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "current",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "current",
+    "system_C": "decomposed_model"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Checked EMR_FY2025 document.md: the columns run 2023/2024/2025, and the MD&A says 'Net sales for 2025 were $18.0 billion', so 18,016 is FY2025. The 18,091 figure is a geographic total, not consolidated net sales.",
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_period_not_in_evidence) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 1.0,
+     "all_evidence_hit_at_5": 1
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "correct",
+    "points_supported": 3,
+    "contains_error": false,
+    "note": "Emerson $18,016M (FY ended Sept 30, 2025) and Parker-Hannifin $19,850M (FY ended June 30, 2025) are right. It explicitly states that Parker-Hannifin is higher and gives both year-end dates.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "current_v22",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "current_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I confirmed the Emerson columns are ascending (2023 | 2024 | 2025: 15,165 | 17,492 | 18,016, with +15% and +3% growth; EMR document.md line 775), so $18,016M is FY2025.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-034",
+   "points_total": 3,
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence). The draft had Dover's $7,907,081K correct but could not find ROK's revenue.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_model",
+    "system_B": "decomposed_rule",
+    "system_C": "current"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "All three systems abstained. Confirmed in model_calls.",
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "current_v22",
+    "system_C": "decomposed_model_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "All three abstained, so this is a tie.",
+   "split": "test"
+  },
+  {
+   "question_id": "test-035",
+   "points_total": 3,
+   "current": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence). The draft had ROK $7,760.4M correct but said PH's figure was missing.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_rule": {
+    "outcome": "wrong",
+    "points_supported": 2,
+    "contains_error": true,
+    "note": "PH $15,861,608K (FYE Jun 30, 2022) is correct, and the PH-higher verdict points the right way. But ROK revenue is given as $8,411.8M, which is the retained-earnings balance at Sep 30, 2022 in the equity statement; ROK's FY2022 revenue is $7,760.4M. That is a material number error.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "The generator abstained.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "current",
+    "system_B": "decomposed_rule",
+    "system_C": "decomposed_model"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "P1 and P3 are counted for B. Best is a tie here, while B was best in test-027 and test-032, because in those cases only dates were wrong; here a core revenue figure is wrong, which makes the answer no more useful than an abstention.",
+   "decomposed_rule_v22": {
+    "outcome": "wrong",
+    "points_supported": 1,
+    "contains_error": true,
+    "note": "Parker-Hannifin $15,861,608 thousand for the FY ended June 30, 2022 is right. Rockwell's '$8,411.8 million net sales' is wrong: $8,411.8M is the Sept 30, 2022 retained-earnings balance (ROK FY2022 document.md lines 1560 and 1809). FY2022 total sales were $7,760.4M (line 988), so the basis is wrong. The year-end contrast (June 30 vs Sept 30) is right. No explicit verdict.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.5,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "decomposed_model_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Generator abstained on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "current_v22": {
+    "outcome": "false_abstention",
+    "points_supported": 0,
+    "contains_error": false,
+    "note": "Abstained (generator_abstained after the first attempt) on an answerable question.",
+    "retrieval": {
+     "evidence_recall_at_5": 0.0,
+     "all_evidence_hit_at_5": 0
+    }
+   },
+   "best_v22": "tie",
+   "blind_labels_v22": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "decomposed_model_v22",
+    "system_C": "current_v22"
+   },
+   "verifier_agrees_v22": true,
+   "verifier_notes_v22": "I confirmed $8,411.8M is retained earnings. A has a material wrong-basis error on a core figure, so I do not rank it above the two abstentions; tie stands.",
+   "split": "test"
+  }
+ ],
+ "limitations": [
+  "Grades are agent-authored and adversarially re-checked; no independent human review.",
+  "30 questions from 3 comparison templates; one live run per system, so gpt-4.1-mini sampling adds noise.",
+  "The rule decomposition was fixed before any benchmark run; the model prompt v2 was revised after seeing test retrieval results, so decomposed_model test numbers are not held-out evidence.",
+  "Generator prompt v2.2 (explicit comparison result) was written after the v2.1 grades of these same questions showed missing verdicts, so the v2.2 rows are not held-out evidence.",
+  "Each prompt version was graded in its own blind pass; comparisons across passes include grader variance."
+ ]
+}

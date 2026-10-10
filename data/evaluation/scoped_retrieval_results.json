@@ -1,0 +1,6600 @@
+{
+ "schema_version": 1,
+ "experiment": "global vs scoped retrieval on the frozen benchmark",
+ "created_at_utc": "2026-10-09T23:24:38.608031+00:00",
+ "benchmark": {
+  "path": "data/evaluation/retrieval_questions.json",
+  "sha256": "6966685c46cbb18f5e6a2f6d83de50443e6820add217206586605c0bd05f3c7b",
+  "question_count": 100
+ },
+ "configuration": {
+  "device": "cuda:0",
+  "scope_version": "query-scope-v1",
+  "selection_version": "scoped-balanced-top5-v2",
+  "global_pool": 20,
+  "scoped_pool": "20 split across resolved companies (>=6 each, <=30 total)",
+  "top_k": 5,
+  "reranker_score": "raw logit, same pinned reranker for both paths"
+ },
+ "policy": "Scoping uses only the question text and the corpus inventory; no labels; no tuning on dev or test.",
+ "setup_seconds": 16.511817000005976,
+ "summary": {
+  "dev": {
+   "question_count": 50,
+   "global": {
+    "evidence_recall_at_5": 0.5733333333333334,
+    "all_evidence_hit_at_5": 0.4,
+    "document_recall_at_5": 0.9,
+    "context_tokens_at_5": 2118.22,
+    "pool_evidence_recall": 0.7133333333333333,
+    "pool_size": 20.0
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.6366666666666666,
+    "all_evidence_hit_at_5": 0.5,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2159.74,
+    "pool_evidence_recall": 0.9033333333333333,
+    "pool_size": 20.0
+   },
+   "scope_resolved_companies": 50,
+   "scope_matches_gold_companies": 50,
+   "paired_evidence_recall_at_5_scoped_minus_global": {
+    "mean_delta_pp": 6.333333333333332,
+    "ci95_pp": [
+     -3.000000000000001,
+     16.0
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence"
+   },
+   "evidence_recall_at_5_improved_unchanged_worsened": [
+    11,
+    34,
+    5
+   ],
+   "paired_all_evidence_hit_at_5_scoped_minus_global": {
+    "mean_delta_pp": 10.0,
+    "ci95_pp": [
+     0.0,
+     20.0
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence"
+   },
+   "all_evidence_hit_at_5_improved_unchanged_worsened": [
+    6,
+    43,
+    1
+   ],
+   "by_category": {
+    "factual": {
+     "question_count": 20,
+     "global": {
+      "evidence_recall_at_5": 0.75,
+      "all_evidence_hit_at_5": 0.75,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2093.75,
+      "pool_evidence_recall": 0.85,
+      "pool_size": 20.0
+     },
+     "scoped": {
+      "evidence_recall_at_5": 0.8,
+      "all_evidence_hit_at_5": 0.8,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2098.4,
+      "pool_evidence_recall": 0.95,
+      "pool_size": 20.0
+     }
+    },
+    "comparative": {
+     "question_count": 15,
+     "global": {
+      "evidence_recall_at_5": 0.3333333333333333,
+      "all_evidence_hit_at_5": 0.06666666666666667,
+      "document_recall_at_5": 0.6666666666666666,
+      "context_tokens_at_5": 1833.6,
+      "pool_evidence_recall": 0.5333333333333333,
+      "pool_size": 20.0
+     },
+     "scoped": {
+      "evidence_recall_at_5": 0.3,
+      "all_evidence_hit_at_5": 0.13333333333333333,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 1955.6,
+      "pool_evidence_recall": 0.8333333333333334,
+      "pool_size": 20.0
+     }
+    },
+    "summary": {
+     "question_count": 15,
+     "global": {
+      "evidence_recall_at_5": 0.5777777777777777,
+      "all_evidence_hit_at_5": 0.26666666666666666,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2435.4666666666667,
+      "pool_evidence_recall": 0.711111111111111,
+      "pool_size": 20.0
+     },
+     "scoped": {
+      "evidence_recall_at_5": 0.7555555555555556,
+      "all_evidence_hit_at_5": 0.4666666666666667,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2445.6666666666665,
+      "pool_evidence_recall": 0.9111111111111111,
+      "pool_size": 20.0
+     }
+    }
+   }
+  },
+  "test": {
+   "question_count": 50,
+   "global": {
+    "evidence_recall_at_5": 0.48,
+    "all_evidence_hit_at_5": 0.36,
+    "document_recall_at_5": 0.9,
+    "context_tokens_at_5": 2030.6,
+    "pool_evidence_recall": 0.6,
+    "pool_size": 20.0
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5133333333333333,
+    "all_evidence_hit_at_5": 0.38,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2070.4,
+    "pool_evidence_recall": 0.7366666666666667,
+    "pool_size": 20.0
+   },
+   "scope_resolved_companies": 50,
+   "scope_matches_gold_companies": 50,
+   "paired_evidence_recall_at_5_scoped_minus_global": {
+    "mean_delta_pp": 3.3333333333333335,
+    "ci95_pp": [
+     -4.0,
+     10.666666666666666
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence"
+   },
+   "evidence_recall_at_5_improved_unchanged_worsened": [
+    7,
+    40,
+    3
+   ],
+   "paired_all_evidence_hit_at_5_scoped_minus_global": {
+    "mean_delta_pp": 2.0,
+    "ci95_pp": [
+     -6.0,
+     10.0
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence"
+   },
+   "all_evidence_hit_at_5_improved_unchanged_worsened": [
+    3,
+    45,
+    2
+   ],
+   "by_category": {
+    "factual": {
+     "question_count": 20,
+     "global": {
+      "evidence_recall_at_5": 0.75,
+      "all_evidence_hit_at_5": 0.75,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2125.9,
+      "pool_evidence_recall": 0.8,
+      "pool_size": 20.0
+     },
+     "scoped": {
+      "evidence_recall_at_5": 0.8,
+      "all_evidence_hit_at_5": 0.8,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2098.2,
+      "pool_evidence_recall": 0.85,
+      "pool_size": 20.0
+     }
+    },
+    "comparative": {
+     "question_count": 15,
+     "global": {
+      "evidence_recall_at_5": 0.3333333333333333,
+      "all_evidence_hit_at_5": 0.13333333333333333,
+      "document_recall_at_5": 0.6666666666666666,
+      "context_tokens_at_5": 1497.3333333333333,
+      "pool_evidence_recall": 0.5333333333333333,
+      "pool_size": 20.0
+     },
+     "scoped": {
+      "evidence_recall_at_5": 0.3333333333333333,
+      "all_evidence_hit_at_5": 0.13333333333333333,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 1688.8666666666666,
+      "pool_evidence_recall": 0.7666666666666667,
+      "pool_size": 20.0
+     }
+    },
+    "summary": {
+     "question_count": 15,
+     "global": {
+      "evidence_recall_at_5": 0.26666666666666666,
+      "all_evidence_hit_at_5": 0.06666666666666667,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2436.8,
+      "pool_evidence_recall": 0.4,
+      "pool_size": 20.0
+     },
+     "scoped": {
+      "evidence_recall_at_5": 0.31111111111111106,
+      "all_evidence_hit_at_5": 0.06666666666666667,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2414.866666666667,
+      "pool_evidence_recall": 0.5555555555555556,
+      "pool_size": 20.0
+     }
+    }
+   }
+  },
+  "all": {
+   "question_count": 100,
+   "global": {
+    "evidence_recall_at_5": 0.5266666666666666,
+    "all_evidence_hit_at_5": 0.38,
+    "document_recall_at_5": 0.9,
+    "context_tokens_at_5": 2074.41,
+    "pool_evidence_recall": 0.6566666666666667,
+    "pool_size": 20.0
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.575,
+    "all_evidence_hit_at_5": 0.44,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2115.07,
+    "pool_evidence_recall": 0.82,
+    "pool_size": 20.0
+   },
+   "scope_resolved_companies": 100,
+   "scope_matches_gold_companies": 100,
+   "paired_evidence_recall_at_5_scoped_minus_global": {
+    "mean_delta_pp": 4.833333333333333,
+    "ci95_pp": [
+     -1.1666666666666667,
+     10.833333333333332
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence"
+   },
+   "evidence_recall_at_5_improved_unchanged_worsened": [
+    18,
+    74,
+    8
+   ],
+   "paired_all_evidence_hit_at_5_scoped_minus_global": {
+    "mean_delta_pp": 6.0,
+    "ci95_pp": [
+     -1.0,
+     13.0
+    ],
+    "replicates": 10000,
+    "seed": 20261008,
+    "sampling_unit": "paired question; ignores within-company/template dependence"
+   },
+   "all_evidence_hit_at_5_improved_unchanged_worsened": [
+    9,
+    88,
+    3
+   ],
+   "by_category": {
+    "factual": {
+     "question_count": 40,
+     "global": {
+      "evidence_recall_at_5": 0.75,
+      "all_evidence_hit_at_5": 0.75,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2109.825,
+      "pool_evidence_recall": 0.825,
+      "pool_size": 20.0
+     },
+     "scoped": {
+      "evidence_recall_at_5": 0.8,
+      "all_evidence_hit_at_5": 0.8,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2098.3,
+      "pool_evidence_recall": 0.9,
+      "pool_size": 20.0
+     }
+    },
+    "comparative": {
+     "question_count": 30,
+     "global": {
+      "evidence_recall_at_5": 0.3333333333333333,
+      "all_evidence_hit_at_5": 0.1,
+      "document_recall_at_5": 0.6666666666666666,
+      "context_tokens_at_5": 1665.4666666666667,
+      "pool_evidence_recall": 0.5333333333333333,
+      "pool_size": 20.0
+     },
+     "scoped": {
+      "evidence_recall_at_5": 0.31666666666666665,
+      "all_evidence_hit_at_5": 0.13333333333333333,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 1822.2333333333333,
+      "pool_evidence_recall": 0.8,
+      "pool_size": 20.0
+     }
+    },
+    "summary": {
+     "question_count": 30,
+     "global": {
+      "evidence_recall_at_5": 0.4222222222222222,
+      "all_evidence_hit_at_5": 0.16666666666666666,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2436.133333333333,
+      "pool_evidence_recall": 0.5555555555555556,
+      "pool_size": 20.0
+     },
+     "scoped": {
+      "evidence_recall_at_5": 0.5333333333333333,
+      "all_evidence_hit_at_5": 0.26666666666666666,
+      "document_recall_at_5": 1.0,
+      "context_tokens_at_5": 2430.266666666667,
+      "pool_evidence_recall": 0.7333333333333333,
+      "pool_size": 20.0
+     }
+    }
+   }
+  }
+ },
+ "per_question": [
+  {
+   "question_id": "dev-001",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "NVDA"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "NVDA": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "NVDA"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 849,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1071,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c347:19ba500f8dba",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c296:89b906e2b224",
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c336:749ec68e9dee",
+    "NVDA_FY2022_annual_report-1ee6fabb7560:table_preserving_s512_o50:c315:93a6e9766f8e",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c295:8f166ad88bc4"
+   ],
+   "scoped_top5": [
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c298:c53658b36ae1",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c347:19ba500f8dba",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c296:89b906e2b224",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c328:92658c46b1be",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c295:8f166ad88bc4"
+   ]
+  },
+  {
+   "question_id": "dev-002",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "AMD"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "AMD": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AMD"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2295,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2247,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c102:9e8e43838316",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c121:294923a1b373",
+    "AMD_FY2025_annual_report-b38e61bfeb17:table_preserving_s512_o50:c106:b7346d658c08",
+    "AMD_FY2025_annual_report-b38e61bfeb17:table_preserving_s512_o50:c124:b736402e5f1f",
+    "AMD_FY2025_annual_report-b38e61bfeb17:table_preserving_s512_o50:c104:c0789054d11d"
+   ],
+   "scoped_top5": [
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c102:9e8e43838316",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c121:294923a1b373",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c100:79d8b17cbf7e",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c120:994cf8e8c6d5",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c103:4520eaed50f3"
+   ]
+  },
+  {
+   "question_id": "dev-003",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "INTC"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "INTC": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "INTC"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2978,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2820,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c85:909e9fb56b1f",
+    "INTC_FY2025_annual_report-4925fb2e0127:table_preserving_s512_o50:c114:5522de919e80",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c84:38e595674bb4",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c331:41acddcc02ae",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c261:731fb30576f9"
+   ],
+   "scoped_top5": [
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c85:909e9fb56b1f",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c84:38e595674bb4",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c331:41acddcc02ae",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c86:3eac6f855b87",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c100:8928959b3cad"
+   ]
+  },
+  {
+   "question_id": "dev-004",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "QCOM"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "QCOM": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "QCOM"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1733,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1733,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c227:33d0fb2b15c3",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c238:94c53c1ede72",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c195:5dc45dc81e4d",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c163:630184188ab8",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c149:c03081e2fb4c"
+   ],
+   "scoped_top5": [
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c227:33d0fb2b15c3",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c238:94c53c1ede72",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c195:5dc45dc81e4d",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c163:630184188ab8",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c149:c03081e2fb4c"
+   ]
+  },
+  {
+   "question_id": "dev-005",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "MSFT"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "MSFT": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "MSFT"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1915,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1747,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c84:428697a20eb4",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c74:c1d5f5c5d257",
+    "MSFT_FY2023_annual_report-5eba1f84118d:table_preserving_s512_o50:c64:88f46c2d6cb7",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c73:cb5f53db6aee",
+    "MSFT_FY2023_annual_report-5eba1f84118d:table_preserving_s512_o50:c54:6657142ae9eb"
+   ],
+   "scoped_top5": [
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c84:428697a20eb4",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c74:c1d5f5c5d257",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c73:cb5f53db6aee",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c125:d8944dec7d6c",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c99:057963c55c2f"
+   ]
+  },
+  {
+   "question_id": "dev-006",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "ORCL"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ORCL": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ORCL"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1959,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1979,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c83:09013f9d42b3",
+    "ORCL_FY2022_annual_report-a5c6400528b5:table_preserving_s512_o50:c81:1bbc2ea9c5e4",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c86:c1aa44816a75",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c85:dd58d0b803f8",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c281:fc661682b59b"
+   ],
+   "scoped_top5": [
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c83:09013f9d42b3",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c86:c1aa44816a75",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c224:d2542166dfc5",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c85:dd58d0b803f8",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c280:37e118683d16"
+   ]
+  },
+  {
+   "question_id": "dev-007",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "CRM"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "CRM": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CRM"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1801,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1790,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c151:d43c41664ac5",
+    "CRM_FY2022_annual_report-f420a24e6797:table_preserving_s512_o50:c153:d5d4246017a1",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c185:46e724a53940",
+    "CRM_FY2024_annual_report-1c991a3f8828:table_preserving_s512_o50:c162:34099f0be30b",
+    "CRM_FY2023_annual_report-0fc02d923ac0:table_preserving_s512_o50:c163:1082c11a3d07"
+   ],
+   "scoped_top5": [
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c151:d43c41664ac5",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c158:20dce3b3c2ad",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c185:46e724a53940",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c121:366378850550",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c156:2de495fbb218"
+   ]
+  },
+  {
+   "question_id": "dev-008",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "ADBE"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ADBE": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ADBE"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2383,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2051,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c126:66f86b7de93a",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c132:83806a9d0a00",
+    "ADBE_FY2025_annual_report-0c0f9f38221a:table_preserving_s512_o50:c125:0002da709e2a",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c123:6ad21a68ff88",
+    "ADBE_FY2025_annual_report-0c0f9f38221a:table_preserving_s512_o50:c116:0e449fcbbbec"
+   ],
+   "scoped_top5": [
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c126:66f86b7de93a",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c132:83806a9d0a00",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c123:6ad21a68ff88",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c188:f0e52bbf2944",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c81:164282bc2253"
+   ]
+  },
+  {
+   "question_id": "dev-009",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "AMZN"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "AMZN": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AMZN"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1027,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 881,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c95:c1ea7a2b45ff",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c94:22c8946c8ada",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c177:8e324ec5530d",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c181:d5ce1bc165a6",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c131:a26f4c5c3a40"
+   ],
+   "scoped_top5": [
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c95:c1ea7a2b45ff",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c94:22c8946c8ada",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c177:8e324ec5530d",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c124:ebf20a26fca7",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c181:d5ce1bc165a6"
+   ]
+  },
+  {
+   "question_id": "dev-010",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "WMT"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "WMT": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "WMT"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2231,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2214,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c110:7bdb4d73fd87",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c150:a81da1142b54",
+    "WMT_FY2024_annual_report-e00e572d6cf4:table_preserving_s512_o50:c153:ebe4b775833c",
+    "WMT_FY2023_annual_report-a18c2dbbd598:table_preserving_s512_o50:c150:c9ab699c62b5",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c95:5d7069486d8a"
+   ],
+   "scoped_top5": [
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c110:7bdb4d73fd87",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c9:dab5ea45a8f3",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c109:a0975ed53b5e",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c150:a81da1142b54",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c95:5d7069486d8a"
+   ]
+  },
+  {
+   "question_id": "dev-011",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "COST"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "COST": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "COST"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2409,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2441,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c1:af73a760fb0a",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c70:53be2729072b",
+    "COST_FY2025_annual_report-25449d39bb36:table_preserving_s512_o50:c84:cfb69d3a4a68",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c49:834394b47a76",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c54:452dab29f035"
+   ],
+   "scoped_top5": [
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c1:af73a760fb0a",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c70:53be2729072b",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c101:0fd579a7ad01",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c49:834394b47a76",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c54:452dab29f035"
+   ]
+  },
+  {
+   "question_id": "dev-012",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "TGT"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "TGT": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "TGT"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1533,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1784,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "TGT_FY2025_annual_report-ad0cd2a6e7c0:table_preserving_s512_o50:c53:57594ca83558",
+    "TGT_FY2024_annual_report-0ea59d72e596:table_preserving_s512_o50:c108:3f9c4e6b20b6",
+    "TGT_FY2024_annual_report-0ea59d72e596:table_preserving_s512_o50:c1:d4baa6eaa549",
+    "TGT_FY2024_annual_report-0ea59d72e596:table_preserving_s512_o50:c58:59323919da93",
+    "TGT_FY2024_annual_report-0ea59d72e596:table_preserving_s512_o50:c57:daab7c394e54"
+   ],
+   "scoped_top5": [
+    "TGT_FY2024_annual_report-0ea59d72e596:table_preserving_s512_o50:c108:3f9c4e6b20b6",
+    "TGT_FY2024_annual_report-0ea59d72e596:table_preserving_s512_o50:c6:aed03dd373c0",
+    "TGT_FY2024_annual_report-0ea59d72e596:table_preserving_s512_o50:c1:d4baa6eaa549",
+    "TGT_FY2024_annual_report-0ea59d72e596:table_preserving_s512_o50:c58:59323919da93",
+    "TGT_FY2024_annual_report-0ea59d72e596:table_preserving_s512_o50:c57:daab7c394e54"
+   ]
+  },
+  {
+   "question_id": "dev-013",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "KO"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "KO": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "KO"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2142,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1954,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c169:000aa1849572",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c232:a9b892ff64f2",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c159:2b2a200b78d6",
+    "KO_FY2024_annual_report-9a208552a31a:table_preserving_s512_o50:c174:fa86f854c66e",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c156:ba5286d8f2c2"
+   ],
+   "scoped_top5": [
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c169:000aa1849572",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c232:a9b892ff64f2",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c159:2b2a200b78d6",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c156:ba5286d8f2c2",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c314:84dffc150031"
+   ]
+  },
+  {
+   "question_id": "dev-014",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "PEP"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "PEP": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "PEP"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1843,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1453,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c103:f94e854afc45",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c128:e8a9d4d7bc52",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c116:19682d372dca",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c98:2d8ddf0655d3",
+    "PEP_FY2022_annual_report-43447c87ff96:table_preserving_s512_o50:c110:d07d8093459a"
+   ],
+   "scoped_top5": [
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c103:f94e854afc45",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c128:e8a9d4d7bc52",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c116:19682d372dca",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c98:2d8ddf0655d3",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c130:3853b9a6bbaa"
+   ]
+  },
+  {
+   "question_id": "dev-015",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "PG"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "PG": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "PG"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2227,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2739,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "PG_FY2022_annual_report-85e6170943b3:table_preserving_s512_o50:c70:6192753696cd",
+    "PG_FY2022_annual_report-85e6170943b3:table_preserving_s512_o50:c121:c093ab9a313a",
+    "PG_FY2022_annual_report-85e6170943b3:table_preserving_s512_o50:c140:c748fcdf53e7",
+    "PG_FY2022_annual_report-85e6170943b3:table_preserving_s512_o50:c58:876c4e63f6e6",
+    "PG_FY2022_annual_report-85e6170943b3:table_preserving_s512_o50:c163:69f21a6ea498"
+   ],
+   "scoped_top5": [
+    "PG_FY2022_annual_report-85e6170943b3:table_preserving_s512_o50:c59:237ce406af91",
+    "PG_FY2022_annual_report-85e6170943b3:table_preserving_s512_o50:c90:2538662ab678",
+    "PG_FY2022_annual_report-85e6170943b3:table_preserving_s512_o50:c70:6192753696cd",
+    "PG_FY2022_annual_report-85e6170943b3:table_preserving_s512_o50:c121:c093ab9a313a",
+    "PG_FY2022_annual_report-85e6170943b3:table_preserving_s512_o50:c140:c748fcdf53e7"
+   ]
+  },
+  {
+   "question_id": "dev-016",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "CL"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "CL": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CL"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1869,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1981,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c82:c3b0adeda35c",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c83:9d916cbf6aee",
+    "CL_FY2024_annual_report-70a52aedee91:table_preserving_s512_o50:c83:75d9f94f6636",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c150:3723851bb907",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c152:c7adf6d1da13"
+   ],
+   "scoped_top5": [
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c82:c3b0adeda35c",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c83:9d916cbf6aee",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c150:3723851bb907",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c152:c7adf6d1da13",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c149:b3067a4db8ea"
+   ]
+  },
+  {
+   "question_id": "dev-017",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "CAT"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "CAT": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CAT"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2734,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 3084,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c86:b3759fa1d691",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c305:78e2a76781c7",
+    "CAT_FY2025_annual_report-90479b5aa096:table_preserving_s512_o50:c303:f0eab98c542d",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c134:0072ba8151b9",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c121:fbe86f28685c"
+   ],
+   "scoped_top5": [
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c86:b3759fa1d691",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c305:78e2a76781c7",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c134:0072ba8151b9",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c121:fbe86f28685c",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c273:1ac30d99ecc4"
+   ]
+  },
+  {
+   "question_id": "dev-018",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "DE"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "DE": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "DE"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 3592,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 3605,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c78:1ef2916472e2",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c107:6abbab6411a8",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c92:dc198ebc5b18",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c109:50725e551371",
+    "DE_FY2023_annual_report-d9ed67ef85cf:table_preserving_s512_o50:c97:021901bc2749"
+   ],
+   "scoped_top5": [
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c78:1ef2916472e2",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c107:6abbab6411a8",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c92:dc198ebc5b18",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c109:50725e551371",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c108:bc65fa395b3b"
+   ]
+  },
+  {
+   "question_id": "dev-019",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "CMI"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "CMI": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CMI"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2079,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2522,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CMI_FY2021_annual_report-112188274c71:table_preserving_s512_o50:c62:40e21d201213",
+    "CMI_FY2021_annual_report-112188274c71:table_preserving_s512_o50:c143:9e5d7374f8e0",
+    "CMI_FY2021_annual_report-112188274c71:table_preserving_s512_o50:c65:751a4a9518cc",
+    "CMI_FY2023_annual_report-ca9741018359:table_preserving_s512_o50:c268:8410b137bfd0",
+    "CMI_FY2021_annual_report-112188274c71:table_preserving_s512_o50:c144:25a31d78001a"
+   ],
+   "scoped_top5": [
+    "CMI_FY2021_annual_report-112188274c71:table_preserving_s512_o50:c62:40e21d201213",
+    "CMI_FY2021_annual_report-112188274c71:table_preserving_s512_o50:c143:9e5d7374f8e0",
+    "CMI_FY2021_annual_report-112188274c71:table_preserving_s512_o50:c65:751a4a9518cc",
+    "CMI_FY2021_annual_report-112188274c71:table_preserving_s512_o50:c333:c47311a72047",
+    "CMI_FY2021_annual_report-112188274c71:table_preserving_s512_o50:c58:d69a69072b32"
+   ]
+  },
+  {
+   "question_id": "dev-020",
+   "split": "dev",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "ITW"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ITW": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ITW"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2276,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1872,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c44:b455ef15446e",
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c227:4d41ff341821",
+    "ITW_FY2023_annual_report-fb449530f9d5:table_preserving_s512_o50:c233:d29de80f8dc5",
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c118:a2b07259ae9d",
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c54:3999bac51fe5"
+   ],
+   "scoped_top5": [
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c44:b455ef15446e",
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c227:4d41ff341821",
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c118:a2b07259ae9d",
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c54:3999bac51fe5",
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c45:bb893a70a559"
+   ]
+  },
+  {
+   "question_id": "dev-021",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "INTC",
+     "AMD"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "INTC": [
+      2024
+     ],
+     "AMD": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AMD",
+    "INTC"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2478,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2883,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "INTC": 2,
+     "AMD": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c97:7497403255d1",
+    "AMD_FY2025_annual_report-b38e61bfeb17:table_preserving_s512_o50:c101:214e84a499f4",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c110:87e0c2d8b8ee",
+    "INTC_FY2023_annual_report-6288f19d1bd7:table_preserving_s512_o50:c15:045bfe36f4e2",
+    "AMD_FY2025_annual_report-b38e61bfeb17:table_preserving_s512_o50:c88:3ab05787ed09"
+   ],
+   "scoped_top5": [
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c97:7497403255d1",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c86:0bed2a3e0133",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c110:87e0c2d8b8ee",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c96:8155c7507321",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c84:38e595674bb4"
+   ]
+  },
+  {
+   "question_id": "dev-022",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "NVDA",
+     "AMD"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "NVDA": [
+      2024
+     ],
+     "AMD": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AMD",
+    "NVDA"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1438,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1671,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "NVDA": 2,
+     "AMD": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c292:bb22d5673d64",
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c333:56a626634984",
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c289:a7977600216c",
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c278:933f5acb3011",
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c366:64ea4a77163b"
+   ],
+   "scoped_top5": [
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c292:bb22d5673d64",
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c333:56a626634984",
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c289:a7977600216c",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c94:6363565144fc",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c85:14355c7ad45e"
+   ]
+  },
+  {
+   "question_id": "dev-023",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "QCOM",
+     "AMD"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "QCOM": [
+      2023
+     ],
+     "AMD": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AMD",
+    "QCOM"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1488,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1982,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "QCOM": 2,
+     "AMD": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "AMD_FY2023_annual_report-4a2a8623b538:table_preserving_s512_o50:c117:2e781fa3315a",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c157:b8be6f6bbeef",
+    "AMD_FY2025_annual_report-b38e61bfeb17:table_preserving_s512_o50:c115:2fa6a25523b2",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c34:7d2e97d7b28d",
+    "QCOM_FY2025_annual_report-90852abbb69e:table_preserving_s512_o50:c156:5e1b67f7824d"
+   ],
+   "scoped_top5": [
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c155:c60787d84728",
+    "AMD_FY2023_annual_report-4a2a8623b538:table_preserving_s512_o50:c117:2e781fa3315a",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c157:b8be6f6bbeef",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c34:7d2e97d7b28d",
+    "AMD_FY2023_annual_report-4a2a8623b538:table_preserving_s512_o50:c114:ffe5ffe4b435"
+   ]
+  },
+  {
+   "question_id": "dev-024",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "NVDA",
+     "QCOM"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "NVDA": [
+      2025
+     ],
+     "QCOM": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "NVDA",
+    "QCOM"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1980,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1849,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "NVDA": 2,
+     "QCOM": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c256:e697006027da",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c292:1ec2c5e16536",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c294:b0f43cb72d6c",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c377:95f590d15d89",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c261:90d19792b133"
+   ],
+   "scoped_top5": [
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c256:e697006027da",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c292:1ec2c5e16536",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c294:b0f43cb72d6c",
+    "QCOM_FY2025_annual_report-90852abbb69e:table_preserving_s512_o50:c102:6f82226b0962",
+    "QCOM_FY2025_annual_report-90852abbb69e:table_preserving_s512_o50:c156:5e1b67f7824d"
+   ]
+  },
+  {
+   "question_id": "dev-025",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "MSFT",
+     "ORCL"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "MSFT": [
+      2024
+     ],
+     "ORCL": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "MSFT",
+    "ORCL"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1698,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1359,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "MSFT": 2,
+     "ORCL": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ORCL_FY2025_annual_report-ba355951a779:table_preserving_s512_o50:c82:713087e9273f",
+    "ORCL_FY2024_annual_report-70241530f323:table_preserving_s512_o50:c87:e1ab7a406179",
+    "ORCL_FY2024_annual_report-70241530f323:table_preserving_s512_o50:c92:0d55a0e1a1c0",
+    "ORCL_FY2024_annual_report-70241530f323:table_preserving_s512_o50:c161:843a9f2e1368",
+    "ORCL_FY2024_annual_report-70241530f323:table_preserving_s512_o50:c89:59254df1e1a0"
+   ],
+   "scoped_top5": [
+    "MSFT_FY2024_annual_report-979a3f819970:table_preserving_s512_o50:c45:cfe6cabbbd9a",
+    "ORCL_FY2024_annual_report-70241530f323:table_preserving_s512_o50:c87:e1ab7a406179",
+    "ORCL_FY2024_annual_report-70241530f323:table_preserving_s512_o50:c92:0d55a0e1a1c0",
+    "ORCL_FY2024_annual_report-70241530f323:table_preserving_s512_o50:c161:843a9f2e1368",
+    "MSFT_FY2024_annual_report-979a3f819970:table_preserving_s512_o50:c141:daf3e9bea84c"
+   ]
+  },
+  {
+   "question_id": "dev-026",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "CRM",
+     "ADBE"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "CRM": [
+      2023
+     ],
+     "ADBE": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ADBE",
+    "CRM"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 2046,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1976,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "CRM": 2,
+     "ADBE": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c126:66f86b7de93a",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c81:164282bc2253",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c123:6ad21a68ff88",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c150:8164e8725a96",
+    "ADBE_FY2024_annual_report-5f79cfdc8a17:table_preserving_s512_o50:c130:b6eb74745f41"
+   ],
+   "scoped_top5": [
+    "CRM_FY2023_annual_report-0fc02d923ac0:table_preserving_s512_o50:c159:c7397b15d569",
+    "CRM_FY2023_annual_report-0fc02d923ac0:table_preserving_s512_o50:c163:1082c11a3d07",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c126:66f86b7de93a",
+    "CRM_FY2023_annual_report-0fc02d923ac0:table_preserving_s512_o50:c8:8a48a9f9b804",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c81:164282bc2253"
+   ]
+  },
+  {
+   "question_id": "dev-027",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "MSFT",
+     "ADBE"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "MSFT": [
+      2022
+     ],
+     "ADBE": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ADBE",
+    "MSFT"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1539,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1273,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "MSFT": 2,
+     "ADBE": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ADBE_FY2022_annual_report-ce8c716abac2:table_preserving_s512_o50:c158:463b7ebfea76",
+    "ADBE_FY2022_annual_report-ce8c716abac2:table_preserving_s512_o50:c217:68cadafcaef1",
+    "ADBE_FY2022_annual_report-ce8c716abac2:table_preserving_s512_o50:c194:386c96cbe6db",
+    "ADBE_FY2024_annual_report-5f79cfdc8a17:table_preserving_s512_o50:c152:81b84d936c4d",
+    "ADBE_FY2022_annual_report-ce8c716abac2:table_preserving_s512_o50:c130:e5125463dcf0"
+   ],
+   "scoped_top5": [
+    "ADBE_FY2022_annual_report-ce8c716abac2:table_preserving_s512_o50:c158:463b7ebfea76",
+    "ADBE_FY2022_annual_report-ce8c716abac2:table_preserving_s512_o50:c217:68cadafcaef1",
+    "ADBE_FY2022_annual_report-ce8c716abac2:table_preserving_s512_o50:c194:386c96cbe6db",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c212:5e5b64469f81",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c84:428697a20eb4"
+   ]
+  },
+  {
+   "question_id": "dev-028",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "WMT",
+     "AMZN"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "WMT": [
+      2024
+     ],
+     "AMZN": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AMZN",
+    "WMT"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1352,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1205,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "WMT": 2,
+     "AMZN": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "WMT_FY2024_annual_report-e00e572d6cf4:table_preserving_s512_o50:c241:9e9b606a7322",
+    "WMT_FY2024_annual_report-e00e572d6cf4:table_preserving_s512_o50:c243:c9c64ecd470c",
+    "WMT_FY2024_annual_report-e00e572d6cf4:table_preserving_s512_o50:c13:42bd78fe8d50",
+    "WMT_FY2024_annual_report-e00e572d6cf4:table_preserving_s512_o50:c110:1c1cf7a1664a",
+    "WMT_FY2024_annual_report-e00e572d6cf4:table_preserving_s512_o50:c105:c49bf6dd097e"
+   ],
+   "scoped_top5": [
+    "WMT_FY2024_annual_report-e00e572d6cf4:table_preserving_s512_o50:c241:9e9b606a7322",
+    "WMT_FY2024_annual_report-e00e572d6cf4:table_preserving_s512_o50:c243:c9c64ecd470c",
+    "WMT_FY2024_annual_report-e00e572d6cf4:table_preserving_s512_o50:c13:42bd78fe8d50",
+    "AMZN_FY2024_annual_report-d6c8919af431:table_preserving_s512_o50:c1:2d39c43965da",
+    "AMZN_FY2024_annual_report-d6c8919af431:table_preserving_s512_o50:c182:45bebd9bdd3e"
+   ]
+  },
+  {
+   "question_id": "dev-029",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "COST",
+     "TGT"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "COST": [
+      2023
+     ],
+     "TGT": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "COST",
+    "TGT"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1920,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1517,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "COST": 2,
+     "TGT": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c72:fb82c4f1778e",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c49:834394b47a76",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c74:c63c48a9748b",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c50:23dd8e367c26",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c70:53be2729072b"
+   ],
+   "scoped_top5": [
+    "TGT_FY2023_annual_report-a13fe761b800:table_preserving_s512_o50:c40:7cbbe1375330",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c72:fb82c4f1778e",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c49:834394b47a76",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c74:c63c48a9748b",
+    "TGT_FY2023_annual_report-a13fe761b800:table_preserving_s512_o50:c137:eccc0ba42c88"
+   ]
+  },
+  {
+   "question_id": "dev-030",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "AMZN",
+     "TGT"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "AMZN": [
+      2021
+     ],
+     "TGT": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AMZN",
+    "TGT"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2334,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2241,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "AMZN": 2,
+     "TGT": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "TGT_FY2021_annual_report-1b628017c437:table_preserving_s512_o50:c45:e39cce56860e",
+    "TGT_FY2021_annual_report-1b628017c437:table_preserving_s512_o50:c98:834269684039",
+    "TGT_FY2021_annual_report-1b628017c437:table_preserving_s512_o50:c59:01904cbd143c",
+    "TGT_FY2021_annual_report-1b628017c437:table_preserving_s512_o50:c46:5b5a78611f5b",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c90:ae84b4e16864"
+   ],
+   "scoped_top5": [
+    "TGT_FY2021_annual_report-1b628017c437:table_preserving_s512_o50:c45:e39cce56860e",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c65:a9785600604b",
+    "TGT_FY2021_annual_report-1b628017c437:table_preserving_s512_o50:c98:834269684039",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c84:bbb3196d1f7e",
+    "TGT_FY2021_annual_report-1b628017c437:table_preserving_s512_o50:c59:01904cbd143c"
+   ]
+  },
+  {
+   "question_id": "dev-031",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "KO",
+     "PEP"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "KO": [
+      2024
+     ],
+     "PEP": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "KO",
+    "PEP"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1835,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1996,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "KO": 2,
+     "PEP": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c349:ccebe61a687d",
+    "PEP_FY2024_annual_report-2626c28e287a:table_preserving_s512_o50:c167:f6d3e2cc556f",
+    "KO_FY2024_annual_report-9a208552a31a:table_preserving_s512_o50:c161:b72d49105622",
+    "PEP_FY2025_annual_report-da938d85e04c:table_preserving_s512_o50:c123:1fab5e7e0c8f",
+    "PEP_FY2024_annual_report-2626c28e287a:table_preserving_s512_o50:c138:3546c4a21bd4"
+   ],
+   "scoped_top5": [
+    "KO_FY2024_annual_report-9a208552a31a:table_preserving_s512_o50:c128:4684481a0659",
+    "PEP_FY2024_annual_report-2626c28e287a:table_preserving_s512_o50:c167:f6d3e2cc556f",
+    "KO_FY2024_annual_report-9a208552a31a:table_preserving_s512_o50:c161:b72d49105622",
+    "PEP_FY2024_annual_report-2626c28e287a:table_preserving_s512_o50:c138:3546c4a21bd4",
+    "KO_FY2024_annual_report-9a208552a31a:table_preserving_s512_o50:c164:6e74ba7dfe6d"
+   ]
+  },
+  {
+   "question_id": "dev-032",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "PG",
+     "CL"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "PG": [
+      2023
+     ],
+     "CL": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CL",
+    "PG"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1734,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1785,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "PG": 2,
+     "CL": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c83:9d916cbf6aee",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c82:c3b0adeda35c",
+    "CL_FY2024_annual_report-70a52aedee91:table_preserving_s512_o50:c83:75d9f94f6636",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c60:fd8fa30fb972",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c59:8eb088dd749a"
+   ],
+   "scoped_top5": [
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c83:9d916cbf6aee",
+    "PG_FY2023_annual_report-d673c999882b:table_preserving_s512_o50:c56:83101c3f8cb1",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c82:c3b0adeda35c",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c60:fd8fa30fb972",
+    "PG_FY2023_annual_report-d673c999882b:table_preserving_s512_o50:c74:e04cce006b23"
+   ]
+  },
+  {
+   "question_id": "dev-033",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "KO",
+     "CL"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "KO": [
+      2022
+     ],
+     "CL": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CL",
+    "KO"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1668,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1977,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "KO": 2,
+     "CL": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c83:9d916cbf6aee",
+    "CL_FY2025_annual_report-851a934dad4f:table_preserving_s512_o50:c264:d67a4f4ffd2c",
+    "CL_FY2022_annual_report-b757de426196:table_preserving_s512_o50:c143:a463ff698c93",
+    "CL_FY2023_annual_report-10d62a709cec:table_preserving_s512_o50:c252:ef39b091bf58",
+    "CL_FY2022_annual_report-b757de426196:table_preserving_s512_o50:c245:ad8181483934"
+   ],
+   "scoped_top5": [
+    "KO_FY2022_annual_report-9a4fe8724125:table_preserving_s512_o50:c158:959e38dd69e7",
+    "KO_FY2022_annual_report-9a4fe8724125:table_preserving_s512_o50:c124:2d0c4ca576bc",
+    "KO_FY2022_annual_report-9a4fe8724125:table_preserving_s512_o50:c125:c26d89669f71",
+    "CL_FY2022_annual_report-b757de426196:table_preserving_s512_o50:c241:dc2852ee0cdc",
+    "CL_FY2022_annual_report-b757de426196:table_preserving_s512_o50:c108:4a3cf85f3d9c"
+   ]
+  },
+  {
+   "question_id": "dev-034",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "CAT",
+     "DE"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "CAT": [
+      2024
+     ],
+     "DE": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CAT",
+    "DE"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2200,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 3653,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "CAT": 2,
+     "DE": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c67:8d0a6b86ee44",
+    "CAT_FY2022_annual_report-1505e0d94142:table_preserving_s512_o50:c69:7758c551b871",
+    "DE_FY2024_annual_report-ef14ad6dbbe8:table_preserving_s512_o50:c65:81a11cfbc751",
+    "DE_FY2024_annual_report-ef14ad6dbbe8:table_preserving_s512_o50:c91:10f4f4043439",
+    "DE_FY2024_annual_report-ef14ad6dbbe8:table_preserving_s512_o50:c94:b43a900e542a"
+   ],
+   "scoped_top5": [
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c67:8d0a6b86ee44",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c120:da160764f6f5",
+    "DE_FY2024_annual_report-ef14ad6dbbe8:table_preserving_s512_o50:c84:aafd4a338491",
+    "DE_FY2024_annual_report-ef14ad6dbbe8:table_preserving_s512_o50:c65:81a11cfbc751",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c128:e9806676036a"
+   ]
+  },
+  {
+   "question_id": "dev-035",
+   "split": "dev",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "CMI",
+     "ITW"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "CMI": [
+      2022
+     ],
+     "ITW": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CMI",
+    "ITW"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1794,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1967,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "CMI": 2,
+     "ITW": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c227:4d41ff341821",
+    "ITW_FY2024_annual_report-858c18a39218:table_preserving_s512_o50:c117:ced8e413b31a",
+    "ITW_FY2025_annual_report-12b17e55684c:table_preserving_s512_o50:c116:729e9a94f5bb",
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c54:3999bac51fe5",
+    "ITW_FY2023_annual_report-fb449530f9d5:table_preserving_s512_o50:c54:2ad4cd2bf91c"
+   ],
+   "scoped_top5": [
+    "CMI_FY2022_annual_report-1e59966218af:table_preserving_s512_o50:c169:8ed5881189d6",
+    "CMI_FY2022_annual_report-1e59966218af:table_preserving_s512_o50:c374:f2b99f871f2d",
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c227:4d41ff341821",
+    "CMI_FY2022_annual_report-1e59966218af:table_preserving_s512_o50:c167:b67328eda65d",
+    "ITW_FY2022_annual_report-833e878519bf:table_preserving_s512_o50:c44:b455ef15446e"
+   ]
+  },
+  {
+   "question_id": "dev-036",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "INTC"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "INTC": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "INTC"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2499,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2539,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "INTC_FY2021_annual_report-705cb59d5a52:table_preserving_s512_o50:c98:c5b4065c3c93",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c152:001f2020bf6e",
+    "INTC_FY2022_annual_report-27d255c2147b:table_preserving_s512_o50:c107:ad06c18b6c69",
+    "INTC_FY2022_annual_report-27d255c2147b:table_preserving_s512_o50:c108:e9201926fcd0",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c174:422b9c86dc21"
+   ],
+   "scoped_top5": [
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c152:001f2020bf6e",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c140:85e261037da1",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c188:feac5a02eed1",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c146:d7c907c314f6",
+    "INTC_FY2024_annual_report-5b9ba57e8d60:table_preserving_s512_o50:c174:422b9c86dc21"
+   ]
+  },
+  {
+   "question_id": "dev-037",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "NVDA"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "NVDA": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "NVDA"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2506,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2506,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c195:f5a32b6d3634",
+    "NVDA_FY2023_annual_report-ffac862ed5ae:table_preserving_s512_o50:c183:a42442b164ee",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c205:8bdac016eea0",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c204:a5f454047c5d",
+    "NVDA_FY2024_annual_report-b5751f4bb240:table_preserving_s512_o50:c194:cde78826d05a"
+   ],
+   "scoped_top5": [
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c205:8bdac016eea0",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c204:a5f454047c5d",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c203:0c06a443e61e",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c208:b93f1d7a81ef",
+    "NVDA_FY2025_annual_report-757b344ab62b:table_preserving_s512_o50:c257:db4704e50d70"
+   ]
+  },
+  {
+   "question_id": "dev-038",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "AMD"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "AMD": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AMD"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2382,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2482,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c42:f0f3390d9af8",
+    "AMD_FY2025_annual_report-b38e61bfeb17:table_preserving_s512_o50:c42:b1338a478c63",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c30:fad05e9aef73",
+    "AMD_FY2022_annual_report-a3bd74088fae:table_preserving_s512_o50:c41:736f56012bc0",
+    "AMD_FY2023_annual_report-4a2a8623b538:table_preserving_s512_o50:c43:de0744c50e6f"
+   ],
+   "scoped_top5": [
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c42:f0f3390d9af8",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c30:fad05e9aef73",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c41:a28c95fde4c1",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c75:d49b35062545",
+    "AMD_FY2024_annual_report-079208174889:table_preserving_s512_o50:c54:bcfb37b2a66d"
+   ]
+  },
+  {
+   "question_id": "dev-039",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "QCOM"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "QCOM": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "QCOM"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2392,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2453,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c49:614aa7321429",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c46:e8bfea867298",
+    "QCOM_FY2024_annual_report-89851f1bb2a3:table_preserving_s512_o50:c48:0604b2b0da35",
+    "QCOM_FY2025_annual_report-90852abbb69e:table_preserving_s512_o50:c42:1d9b0b64bfda",
+    "QCOM_FY2025_annual_report-90852abbb69e:table_preserving_s512_o50:c43:59e8b8909758"
+   ],
+   "scoped_top5": [
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c49:614aa7321429",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c46:e8bfea867298",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c50:0372ef81bc2c",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c91:2908fcc14c99",
+    "QCOM_FY2023_annual_report-7d0bd533637e:table_preserving_s512_o50:c79:935a4b0d1c33"
+   ]
+  },
+  {
+   "question_id": "dev-040",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "MSFT"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "MSFT": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "MSFT"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2471,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2497,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c38:938188e2b733",
+    "MSFT_FY2021_annual_report-b54bca858992:table_preserving_s512_o50:c8:106fd8f0c920",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c48:4b873171b3d2",
+    "MSFT_FY2023_annual_report-5eba1f84118d:table_preserving_s512_o50:c48:7bf75e7f053d",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c77:6a83660bd63b"
+   ],
+   "scoped_top5": [
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c38:938188e2b733",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c6:cb69a9325cf8",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c69:cf49ac75e461",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c37:e0ed0a562e31",
+    "MSFT_FY2022_annual_report-561d30b6cfcb:table_preserving_s512_o50:c7:8ff7824e4cba"
+   ]
+  },
+  {
+   "question_id": "dev-041",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "ORCL"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ORCL": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ORCL"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2402,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2377,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c71:5fafb8c492ad",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c8:2909eef63ffd",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c45:2b118644db62",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c70:52683d310b99",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c100:e3960d7a8c2c"
+   ],
+   "scoped_top5": [
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c37:b19c6d7d6be2",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c71:5fafb8c492ad",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c8:2909eef63ffd",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c45:2b118644db62",
+    "ORCL_FY2021_annual_report-316d3e1a49ea:table_preserving_s512_o50:c73:2a1238fd862a"
+   ]
+  },
+  {
+   "question_id": "dev-042",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "CRM"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "CRM": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CRM"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2467,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2450,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c31:0324f96e2c30",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c33:9ff2bfeaad81",
+    "CRM_FY2024_annual_report-1c991a3f8828:table_preserving_s512_o50:c36:682ef04d6806",
+    "CRM_FY2023_annual_report-0fc02d923ac0:table_preserving_s512_o50:c38:d0cb42cdf535",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c37:acfe2b0d18da"
+   ],
+   "scoped_top5": [
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c31:0324f96e2c30",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c33:9ff2bfeaad81",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c77:932c2ae06e56",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c37:acfe2b0d18da",
+    "CRM_FY2025_annual_report-90aaa33dc16d:table_preserving_s512_o50:c34:13c84ef11cb4"
+   ]
+  },
+  {
+   "question_id": "dev-043",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "ADBE"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ADBE": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ADBE"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2507,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2483,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c50:9546638a53bd",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c57:c51bdb449a64",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c56:5afd66b40ddd",
+    "ADBE_FY2022_annual_report-ce8c716abac2:table_preserving_s512_o50:c46:5a6754671d77",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c55:19ca60ab5913"
+   ],
+   "scoped_top5": [
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c50:9546638a53bd",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c21:fb79947ed8f0",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c57:c51bdb449a64",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c56:5afd66b40ddd",
+    "ADBE_FY2023_annual_report-2f027b253cd7:table_preserving_s512_o50:c64:5ab5845fb569"
+   ]
+  },
+  {
+   "question_id": "dev-044",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "AMZN"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "AMZN": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AMZN"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2443,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2469,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c29:0259fda293a0",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c31:de5dfd6321c0",
+    "AMZN_FY2022_annual_report-03401abb4272:table_preserving_s512_o50:c31:dad325a8b64e",
+    "AMZN_FY2022_annual_report-03401abb4272:table_preserving_s512_o50:c33:0b44a3271ac6",
+    "AMZN_FY2025_annual_report-63196177ef83:table_preserving_s512_o50:c34:54830060084d"
+   ],
+   "scoped_top5": [
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c29:0259fda293a0",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c31:de5dfd6321c0",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c51:4f1be61ae598",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c42:42530676914c",
+    "AMZN_FY2021_annual_report-9d6f8429cb68:table_preserving_s512_o50:c82:7d727facde03"
+   ]
+  },
+  {
+   "question_id": "dev-045",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "WMT"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "WMT": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "WMT"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2464,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2392,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c31:e045e7c76a72",
+    "WMT_FY2025_annual_report-c730ff07b5b0:table_preserving_s512_o50:c42:7cb6d3388152",
+    "WMT_FY2025_annual_report-c730ff07b5b0:table_preserving_s512_o50:c31:09372abde6ad",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c32:a82b95043c31",
+    "WMT_FY2023_annual_report-a18c2dbbd598:table_preserving_s512_o50:c33:1d8b1b321b1b"
+   ],
+   "scoped_top5": [
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c40:ffc70a7d5d75",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c37:acdaa63fd0a5",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c31:e045e7c76a72",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c32:a82b95043c31",
+    "WMT_FY2022_annual_report-72182901d4ac:table_preserving_s512_o50:c14:db40bb38ec41"
+   ]
+  },
+  {
+   "question_id": "dev-046",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "COST"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "COST": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "COST"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2501,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2454,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c12:975fc38a053f",
+    "COST_FY2025_annual_report-25449d39bb36:table_preserving_s512_o50:c21:9649c2f4b875",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c1:af73a760fb0a",
+    "COST_FY2024_annual_report-bdeca9c1891f:table_preserving_s512_o50:c13:252c1d0f8e2b",
+    "COST_FY2022_annual_report-833a9a96dce9:table_preserving_s512_o50:c11:2756759dd0fa"
+   ],
+   "scoped_top5": [
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c12:975fc38a053f",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c1:af73a760fb0a",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c46:472f6ff335f1",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c13:e061e43385b0",
+    "COST_FY2023_annual_report-002b2252df47:table_preserving_s512_o50:c146:009fe4cc5c10"
+   ]
+  },
+  {
+   "question_id": "dev-047",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "KO"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "KO": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "KO"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2458,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2482,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c64:4efc18dcfc65",
+    "KO_FY2024_annual_report-9a208552a31a:table_preserving_s512_o50:c34:e0e852bd4dba",
+    "KO_FY2024_annual_report-9a208552a31a:table_preserving_s512_o50:c64:8fb13dd42691",
+    "KO_FY2024_annual_report-9a208552a31a:table_preserving_s512_o50:c63:1073a8a3b709",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c63:c0e50232d318"
+   ],
+   "scoped_top5": [
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c64:4efc18dcfc65",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c19:8d9b94310403",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c63:c0e50232d318",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c34:a506036ce24d",
+    "KO_FY2025_annual_report-3cf15f041ac3:table_preserving_s512_o50:c62:beb9c92507fc"
+   ]
+  },
+  {
+   "question_id": "dev-048",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "PEP"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "PEP": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "PEP"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2126,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2201,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c46:106ffbf9feeb",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c77:b9ae12197ee6",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c52:69078bf1a13d",
+    "PEP_FY2024_annual_report-2626c28e287a:table_preserving_s512_o50:c27:74ab9f9923da",
+    "PEP_FY2024_annual_report-2626c28e287a:table_preserving_s512_o50:c81:2a2e75551466"
+   ],
+   "scoped_top5": [
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c46:106ffbf9feeb",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c77:b9ae12197ee6",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c52:69078bf1a13d",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c76:40fc5ce33752",
+    "PEP_FY2021_annual_report-9871aabb5020:table_preserving_s512_o50:c145:ea0c778ef625"
+   ]
+  },
+  {
+   "question_id": "dev-049",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "CAT"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "CAT": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CAT"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2525,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2474,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c43:86c04dc5c7f8",
+    "CAT_FY2022_annual_report-1505e0d94142:table_preserving_s512_o50:c48:48a19fc53af0",
+    "CAT_FY2025_annual_report-90479b5aa096:table_preserving_s512_o50:c46:6cdc9a2f566d",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c40:aafcabea126a",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c42:9fc0fd5fb584"
+   ],
+   "scoped_top5": [
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c43:86c04dc5c7f8",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c40:aafcabea126a",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c42:9fc0fd5fb584",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c91:eb1e706c39b0",
+    "CAT_FY2024_annual_report-3a38651c7240:table_preserving_s512_o50:c39:54f346e5b06c"
+   ]
+  },
+  {
+   "question_id": "dev-050",
+   "split": "dev",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "DE"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "DE": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "DE"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2389,
+    "pool_evidence_recall": 0.3333333333333333,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2426,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c33:3b7a98e1737d",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c29:8b48a281dec3",
+    "DE_FY2024_annual_report-ef14ad6dbbe8:table_preserving_s512_o50:c30:0b1b798117de",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c35:eb677c1e6b84",
+    "DE_FY2023_annual_report-d9ed67ef85cf:table_preserving_s512_o50:c33:bc28e37f0562"
+   ],
+   "scoped_top5": [
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c33:3b7a98e1737d",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c29:8b48a281dec3",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c35:eb677c1e6b84",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c34:7c33b56a2e8a",
+    "DE_FY2025_annual_report-1bba60fc5682:table_preserving_s512_o50:c32:72d6c3e27429"
+   ]
+  },
+  {
+   "question_id": "test-001",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "AVGO"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "AVGO": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AVGO"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1897,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2230,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "AVGO_FY2021_annual_report-5fa18e0dbcef:table_preserving_s512_o50:c105:a18d876bc7e7",
+    "AVGO_FY2021_annual_report-5fa18e0dbcef:table_preserving_s512_o50:c128:047c50fa1410",
+    "AVGO_FY2022_annual_report-f16ae901bf1e:table_preserving_s512_o50:c93:8eb1c73cd276",
+    "AVGO_FY2021_annual_report-5fa18e0dbcef:table_preserving_s512_o50:c104:1b687120ded3",
+    "AVGO_FY2021_annual_report-5fa18e0dbcef:table_preserving_s512_o50:c127:5fb7aad39a66"
+   ],
+   "scoped_top5": [
+    "AVGO_FY2021_annual_report-5fa18e0dbcef:table_preserving_s512_o50:c105:a18d876bc7e7",
+    "AVGO_FY2021_annual_report-5fa18e0dbcef:table_preserving_s512_o50:c100:8ff17db4ea9b",
+    "AVGO_FY2021_annual_report-5fa18e0dbcef:table_preserving_s512_o50:c128:047c50fa1410",
+    "AVGO_FY2021_annual_report-5fa18e0dbcef:table_preserving_s512_o50:c104:1b687120ded3",
+    "AVGO_FY2021_annual_report-5fa18e0dbcef:table_preserving_s512_o50:c127:5fb7aad39a66"
+   ]
+  },
+  {
+   "question_id": "test-002",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "TXN"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "TXN": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "TXN"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1968,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1973,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "TXN_FY2022_annual_report-502168842d2b:table_preserving_s512_o50:c41:77ec4dd67a08",
+    "TXN_FY2023_annual_report-c20ba7efbb8f:table_preserving_s512_o50:c32:4e327d2d86a1",
+    "TXN_FY2022_annual_report-502168842d2b:table_preserving_s512_o50:c45:281ab5c19eda",
+    "TXN_FY2024_annual_report-9fd9f3473d3f:table_preserving_s512_o50:c46:3cb2b3e8d454",
+    "TXN_FY2022_annual_report-502168842d2b:table_preserving_s512_o50:c58:74a7ed7aa1c8"
+   ],
+   "scoped_top5": [
+    "TXN_FY2022_annual_report-502168842d2b:table_preserving_s512_o50:c41:77ec4dd67a08",
+    "TXN_FY2022_annual_report-502168842d2b:table_preserving_s512_o50:c33:49dbd2eec695",
+    "TXN_FY2022_annual_report-502168842d2b:table_preserving_s512_o50:c45:281ab5c19eda",
+    "TXN_FY2022_annual_report-502168842d2b:table_preserving_s512_o50:c58:74a7ed7aa1c8",
+    "TXN_FY2022_annual_report-502168842d2b:table_preserving_s512_o50:c32:0339f56eac5d"
+   ]
+  },
+  {
+   "question_id": "test-003",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "MU"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "MU": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "MU"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2147,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2131,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "MU_FY2025_annual_report-4b50d54e91da:table_preserving_s512_o50:c112:5b34844e941e",
+    "MU_FY2023_annual_report-84b298838ae4:table_preserving_s512_o50:c99:fce1e4cca97c",
+    "MU_FY2023_annual_report-84b298838ae4:table_preserving_s512_o50:c182:cceead842ded",
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c108:c63893dadf4c",
+    "MU_FY2023_annual_report-84b298838ae4:table_preserving_s512_o50:c73:3b5131038703"
+   ],
+   "scoped_top5": [
+    "MU_FY2023_annual_report-84b298838ae4:table_preserving_s512_o50:c99:fce1e4cca97c",
+    "MU_FY2023_annual_report-84b298838ae4:table_preserving_s512_o50:c182:cceead842ded",
+    "MU_FY2023_annual_report-84b298838ae4:table_preserving_s512_o50:c132:794ded1e9784",
+    "MU_FY2023_annual_report-84b298838ae4:table_preserving_s512_o50:c73:3b5131038703",
+    "MU_FY2023_annual_report-84b298838ae4:table_preserving_s512_o50:c202:a5f263acb28b"
+   ]
+  },
+  {
+   "question_id": "test-004",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "ADI"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ADI": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ADI"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2523,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2471,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ADI_FY2024_annual_report-a8708cf84e3d:table_preserving_s512_o50:c24:c6a969b35c62",
+    "ADI_FY2023_annual_report-ea2afbb9dbfe:table_preserving_s512_o50:c26:2ae6341dac4a",
+    "ADI_FY2024_annual_report-a8708cf84e3d:table_preserving_s512_o50:c118:125eda429757",
+    "ADI_FY2024_annual_report-a8708cf84e3d:table_preserving_s512_o50:c106:5e8df385468c",
+    "ADI_FY2024_annual_report-a8708cf84e3d:table_preserving_s512_o50:c124:210d7c390ce6"
+   ],
+   "scoped_top5": [
+    "ADI_FY2024_annual_report-a8708cf84e3d:table_preserving_s512_o50:c24:c6a969b35c62",
+    "ADI_FY2024_annual_report-a8708cf84e3d:table_preserving_s512_o50:c118:125eda429757",
+    "ADI_FY2024_annual_report-a8708cf84e3d:table_preserving_s512_o50:c106:5e8df385468c",
+    "ADI_FY2024_annual_report-a8708cf84e3d:table_preserving_s512_o50:c124:210d7c390ce6",
+    "ADI_FY2024_annual_report-a8708cf84e3d:table_preserving_s512_o50:c116:636a1e7ce4dd"
+   ]
+  },
+  {
+   "question_id": "test-005",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "INTU"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "INTU": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "INTU"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2134,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1981,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "INTU_FY2025_annual_report-0ee7ee96a2cb:table_preserving_s512_o50:c141:e4d25641f9cf",
+    "INTU_FY2025_annual_report-0ee7ee96a2cb:table_preserving_s512_o50:c109:7a99cc69345d",
+    "INTU_FY2025_annual_report-0ee7ee96a2cb:table_preserving_s512_o50:c107:a213fedf079d",
+    "INTU_FY2024_annual_report-91421df147fe:table_preserving_s512_o50:c142:4c56cede0b29",
+    "INTU_FY2025_annual_report-0ee7ee96a2cb:table_preserving_s512_o50:c108:5569dcd999a5"
+   ],
+   "scoped_top5": [
+    "INTU_FY2025_annual_report-0ee7ee96a2cb:table_preserving_s512_o50:c141:e4d25641f9cf",
+    "INTU_FY2025_annual_report-0ee7ee96a2cb:table_preserving_s512_o50:c109:7a99cc69345d",
+    "INTU_FY2025_annual_report-0ee7ee96a2cb:table_preserving_s512_o50:c116:bc53bb90d746",
+    "INTU_FY2025_annual_report-0ee7ee96a2cb:table_preserving_s512_o50:c107:a213fedf079d",
+    "INTU_FY2025_annual_report-0ee7ee96a2cb:table_preserving_s512_o50:c108:5569dcd999a5"
+   ]
+  },
+  {
+   "question_id": "test-006",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "NOW"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "NOW": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "NOW"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2463,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2296,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "NOW_FY2021_annual_report-56e0be00ac7f:table_preserving_s512_o50:c24:d8bd08468207",
+    "NOW_FY2024_annual_report-7022cf7db0d2:table_preserving_s512_o50:c28:ff712698b18d",
+    "NOW_FY2025_annual_report-dd658d433110:table_preserving_s512_o50:c28:feeb219fdb36",
+    "NOW_FY2023_annual_report-5e5e72b9eb45:table_preserving_s512_o50:c28:e8e4a88f72bc",
+    "NOW_FY2022_annual_report-da1b43808336:table_preserving_s512_o50:c28:b27cf066451d"
+   ],
+   "scoped_top5": [
+    "NOW_FY2021_annual_report-56e0be00ac7f:table_preserving_s512_o50:c24:d8bd08468207",
+    "NOW_FY2021_annual_report-56e0be00ac7f:table_preserving_s512_o50:c16:3b35ac6f834d",
+    "NOW_FY2021_annual_report-56e0be00ac7f:table_preserving_s512_o50:c70:727b19616571",
+    "NOW_FY2021_annual_report-56e0be00ac7f:table_preserving_s512_o50:c36:29bdc4a99723",
+    "NOW_FY2021_annual_report-56e0be00ac7f:table_preserving_s512_o50:c22:0cf5505b0df6"
+   ]
+  },
+  {
+   "question_id": "test-007",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "ADSK"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ADSK": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ADSK"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1925,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1925,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c107:5b5d64540167",
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c101:c2a33ad6fd33",
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c105:2de932f388ce",
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c103:1b49bb2291ae",
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c149:6bbe959f00b3"
+   ],
+   "scoped_top5": [
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c107:5b5d64540167",
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c101:c2a33ad6fd33",
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c105:2de932f388ce",
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c103:1b49bb2291ae",
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c149:6bbe959f00b3"
+   ]
+  },
+  {
+   "question_id": "test-008",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "CDNS"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "CDNS": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "CDNS"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2236,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2237,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CDNS_FY2023_annual_report-2327cc77a832:table_preserving_s512_o50:c138:7450a086a163",
+    "CDNS_FY2025_annual_report-843918efd65e:table_preserving_s512_o50:c164:7da896ef5c0e",
+    "CDNS_FY2023_annual_report-2327cc77a832:table_preserving_s512_o50:c146:beb7f54a6afc",
+    "CDNS_FY2023_annual_report-2327cc77a832:table_preserving_s512_o50:c139:bc94566b89d0",
+    "CDNS_FY2023_annual_report-2327cc77a832:table_preserving_s512_o50:c141:a2b025eb5706"
+   ],
+   "scoped_top5": [
+    "CDNS_FY2023_annual_report-2327cc77a832:table_preserving_s512_o50:c138:7450a086a163",
+    "CDNS_FY2023_annual_report-2327cc77a832:table_preserving_s512_o50:c135:0a890205190a",
+    "CDNS_FY2023_annual_report-2327cc77a832:table_preserving_s512_o50:c146:beb7f54a6afc",
+    "CDNS_FY2023_annual_report-2327cc77a832:table_preserving_s512_o50:c139:bc94566b89d0",
+    "CDNS_FY2023_annual_report-2327cc77a832:table_preserving_s512_o50:c141:a2b025eb5706"
+   ]
+  },
+  {
+   "question_id": "test-009",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "HD"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "HD": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "HD"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2428,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2434,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c91:eea9808dd824",
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c75:e4f9659c6a5e",
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c111:bb82be3ffcd8",
+    "HD_FY2025_annual_report-e040696c63fc:table_preserving_s512_o50:c111:89e5e88bcdf2",
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c112:493f80937cd9"
+   ],
+   "scoped_top5": [
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c91:eea9808dd824",
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c90:55a75adf089c",
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c75:e4f9659c6a5e",
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c111:bb82be3ffcd8",
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c112:493f80937cd9"
+   ]
+  },
+  {
+   "question_id": "test-010",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "LOW"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "LOW": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "LOW"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2428,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2427,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "LOW_FY2024_annual_report-cab85ba70148:table_preserving_s512_o50:c16:a9d71ccd65f2",
+    "LOW_FY2025_annual_report-4f5bdeecdf93:table_preserving_s512_o50:c12:b1b5046427c3",
+    "LOW_FY2025_annual_report-4f5bdeecdf93:table_preserving_s512_o50:c13:a3a2c552cb8e",
+    "LOW_FY2025_annual_report-4f5bdeecdf93:table_preserving_s512_o50:c1:3b347f2cde4d",
+    "LOW_FY2023_annual_report-42cde5cff23e:table_preserving_s512_o50:c12:f6819d67fbf4"
+   ],
+   "scoped_top5": [
+    "LOW_FY2025_annual_report-4f5bdeecdf93:table_preserving_s512_o50:c12:b1b5046427c3",
+    "LOW_FY2025_annual_report-4f5bdeecdf93:table_preserving_s512_o50:c13:a3a2c552cb8e",
+    "LOW_FY2025_annual_report-4f5bdeecdf93:table_preserving_s512_o50:c1:3b347f2cde4d",
+    "LOW_FY2025_annual_report-4f5bdeecdf93:table_preserving_s512_o50:c9:d967c56ebcb5",
+    "LOW_FY2025_annual_report-4f5bdeecdf93:table_preserving_s512_o50:c10:6c10138a7439"
+   ]
+  },
+  {
+   "question_id": "test-011",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "NKE"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "NKE": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "NKE"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2518,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2491,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "NKE_FY2022_annual_report-9e09976d451d:table_preserving_s512_o50:c20:74f11599a138",
+    "NKE_FY2024_annual_report-ad45136466f5:table_preserving_s512_o50:c20:599a00ac24e7",
+    "NKE_FY2023_annual_report-51f5a0fc6ede:table_preserving_s512_o50:c19:04e55e469a65",
+    "NKE_FY2025_annual_report-7b1b8ae4da58:table_preserving_s512_o50:c19:a3cd2b761f05",
+    "NKE_FY2021_annual_report-73b54e5e0b1b:table_preserving_s512_o50:c226:6d1f74ff21da"
+   ],
+   "scoped_top5": [
+    "NKE_FY2021_annual_report-73b54e5e0b1b:table_preserving_s512_o50:c19:57bd0b853966",
+    "NKE_FY2021_annual_report-73b54e5e0b1b:table_preserving_s512_o50:c226:6d1f74ff21da",
+    "NKE_FY2021_annual_report-73b54e5e0b1b:table_preserving_s512_o50:c215:9732e75fcdd6",
+    "NKE_FY2021_annual_report-73b54e5e0b1b:table_preserving_s512_o50:c229:e146d97ca2a8",
+    "NKE_FY2021_annual_report-73b54e5e0b1b:table_preserving_s512_o50:c13:f86f7be7f097"
+   ]
+  },
+  {
+   "question_id": "test-012",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "SBUX"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "SBUX": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "SBUX"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1618,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1955,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "SBUX_FY2022_annual_report-e4f5f266b296:table_preserving_s512_o50:c61:429b8cad376d",
+    "SBUX_FY2022_annual_report-e4f5f266b296:table_preserving_s512_o50:c67:bbac842d2d6f",
+    "SBUX_FY2022_annual_report-e4f5f266b296:table_preserving_s512_o50:c93:f37955387913",
+    "SBUX_FY2024_annual_report-3a4ed724de13:table_preserving_s512_o50:c223:1ed2249c3d15",
+    "SBUX_FY2022_annual_report-e4f5f266b296:table_preserving_s512_o50:c211:4b3e66c49bdd"
+   ],
+   "scoped_top5": [
+    "SBUX_FY2022_annual_report-e4f5f266b296:table_preserving_s512_o50:c61:429b8cad376d",
+    "SBUX_FY2022_annual_report-e4f5f266b296:table_preserving_s512_o50:c67:bbac842d2d6f",
+    "SBUX_FY2022_annual_report-e4f5f266b296:table_preserving_s512_o50:c93:f37955387913",
+    "SBUX_FY2022_annual_report-e4f5f266b296:table_preserving_s512_o50:c211:4b3e66c49bdd",
+    "SBUX_FY2022_annual_report-e4f5f266b296:table_preserving_s512_o50:c70:559e1c464b2b"
+   ]
+  },
+  {
+   "question_id": "test-013",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "KMB"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "KMB": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "KMB"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2487,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2496,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c10:f76053cdfd40",
+    "KMB_FY2021_annual_report-54d6473fbb6d:table_preserving_s512_o50:c10:1a7d0740b0f9",
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c177:0db8e29c2322",
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c85:5355327dc59a",
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c178:a709919d01c3"
+   ],
+   "scoped_top5": [
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c10:f76053cdfd40",
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c177:0db8e29c2322",
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c41:83fcf93a3f1c",
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c85:5355327dc59a",
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c178:a709919d01c3"
+   ]
+  },
+  {
+   "question_id": "test-014",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "MDLZ"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "MDLZ": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "MDLZ"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2135,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2139,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "MDLZ_FY2024_annual_report-ed3fa5364352:table_preserving_s512_o50:c119:3fd506aac20f",
+    "MDLZ_FY2024_annual_report-ed3fa5364352:table_preserving_s512_o50:c155:550e42271e1b",
+    "MDLZ_FY2024_annual_report-ed3fa5364352:table_preserving_s512_o50:c118:70fb0e08e5b4",
+    "MDLZ_FY2024_annual_report-ed3fa5364352:table_preserving_s512_o50:c94:37d2aeaa6ac6",
+    "MDLZ_FY2024_annual_report-ed3fa5364352:table_preserving_s512_o50:c156:72e859da2e46"
+   ],
+   "scoped_top5": [
+    "MDLZ_FY2024_annual_report-ed3fa5364352:table_preserving_s512_o50:c119:3fd506aac20f",
+    "MDLZ_FY2024_annual_report-ed3fa5364352:table_preserving_s512_o50:c155:550e42271e1b",
+    "MDLZ_FY2024_annual_report-ed3fa5364352:table_preserving_s512_o50:c80:5ef288f5a72a",
+    "MDLZ_FY2024_annual_report-ed3fa5364352:table_preserving_s512_o50:c118:70fb0e08e5b4",
+    "MDLZ_FY2024_annual_report-ed3fa5364352:table_preserving_s512_o50:c94:37d2aeaa6ac6"
+   ]
+  },
+  {
+   "question_id": "test-015",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "GIS"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "GIS": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "GIS"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2358,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1890,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "GIS_FY2023_annual_report-48a68f2e6dae:table_preserving_s512_o50:c10:92b9d3b69c39",
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c33:83a87c31a551",
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c34:5483afe8f0c5",
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c30:90b00186f959",
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c90:23b05c4c36e8"
+   ],
+   "scoped_top5": [
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c260:df7846f61dac",
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c33:83a87c31a551",
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c34:5483afe8f0c5",
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c30:90b00186f959",
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c90:23b05c4c36e8"
+   ]
+  },
+  {
+   "question_id": "test-016",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "KHC"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "KHC": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "KHC"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1255,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1502,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "KHC_FY2021_annual_report-bfb63cf6981c:table_preserving_s512_o50:c19:4813dc331eb6",
+    "KHC_FY2022_annual_report-0d87f26308a5:table_preserving_s512_o50:c17:eeb0be5060a5",
+    "KHC_FY2021_annual_report-bfb63cf6981c:table_preserving_s512_o50:c56:8eaee72dbe58",
+    "KHC_FY2021_annual_report-bfb63cf6981c:table_preserving_s512_o50:c79:1d53a8e72c4d",
+    "KHC_FY2022_annual_report-0d87f26308a5:table_preserving_s512_o50:c72:30b1ee6ce9ec"
+   ],
+   "scoped_top5": [
+    "KHC_FY2021_annual_report-bfb63cf6981c:table_preserving_s512_o50:c19:4813dc331eb6",
+    "KHC_FY2021_annual_report-bfb63cf6981c:table_preserving_s512_o50:c134:c7f42ad13365",
+    "KHC_FY2021_annual_report-bfb63cf6981c:table_preserving_s512_o50:c65:dcbf38c378db",
+    "KHC_FY2021_annual_report-bfb63cf6981c:table_preserving_s512_o50:c185:39ce330ee0e1",
+    "KHC_FY2021_annual_report-bfb63cf6981c:table_preserving_s512_o50:c73:259f5fa79883"
+   ]
+  },
+  {
+   "question_id": "test-017",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "EMR"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "EMR": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "EMR"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1708,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1711,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "EMR_FY2022_annual_report-4f642271d951:table_preserving_s512_o50:c43:4837796cdb9a",
+    "EMR_FY2024_annual_report-606deb166437:table_preserving_s512_o50:c13:01ed09bc2e49",
+    "EMR_FY2023_annual_report-98f3b48e943d:table_preserving_s512_o50:c30:3cb2ef37bb2c",
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c38:f19d7e248561",
+    "EMR_FY2022_annual_report-4f642271d951:table_preserving_s512_o50:c145:63eaef15fb5d"
+   ],
+   "scoped_top5": [
+    "EMR_FY2022_annual_report-4f642271d951:table_preserving_s512_o50:c43:4837796cdb9a",
+    "EMR_FY2022_annual_report-4f642271d951:table_preserving_s512_o50:c66:ac42c22fc916",
+    "EMR_FY2022_annual_report-4f642271d951:table_preserving_s512_o50:c145:63eaef15fb5d",
+    "EMR_FY2022_annual_report-4f642271d951:table_preserving_s512_o50:c112:60e80ddee0e2",
+    "EMR_FY2022_annual_report-4f642271d951:table_preserving_s512_o50:c146:c24a75f80d31"
+   ]
+  },
+  {
+   "question_id": "test-018",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "PH"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "PH": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "PH"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1755,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1413,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "PH_FY2023_annual_report-a836fa51b820:table_preserving_s512_o50:c85:308be17a29cc",
+    "PH_FY2023_annual_report-a836fa51b820:table_preserving_s512_o50:c213:f4f960960772",
+    "PH_FY2023_annual_report-a836fa51b820:table_preserving_s512_o50:c47:56bebb55b19c",
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c76:e4123eb8dff3",
+    "PH_FY2023_annual_report-a836fa51b820:table_preserving_s512_o50:c95:4869c82ba608"
+   ],
+   "scoped_top5": [
+    "PH_FY2023_annual_report-a836fa51b820:table_preserving_s512_o50:c85:308be17a29cc",
+    "PH_FY2023_annual_report-a836fa51b820:table_preserving_s512_o50:c213:f4f960960772",
+    "PH_FY2023_annual_report-a836fa51b820:table_preserving_s512_o50:c208:3cbc61cd1c8b",
+    "PH_FY2023_annual_report-a836fa51b820:table_preserving_s512_o50:c47:56bebb55b19c",
+    "PH_FY2023_annual_report-a836fa51b820:table_preserving_s512_o50:c95:4869c82ba608"
+   ]
+  },
+  {
+   "question_id": "test-019",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "ROK"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ROK": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ROK"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2097,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2097,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c227:3e9f113ae16b",
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c77:30eb74c82dd5",
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c51:ef2e6ba64aed",
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c89:2b5f708590a1",
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c75:21aa45701c50"
+   ],
+   "scoped_top5": [
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c227:3e9f113ae16b",
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c77:30eb74c82dd5",
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c51:ef2e6ba64aed",
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c89:2b5f708590a1",
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c75:21aa45701c50"
+   ]
+  },
+  {
+   "question_id": "test-020",
+   "split": "test",
+   "category": "factual",
+   "scope": {
+    "tickers": [
+     "DOV"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "DOV": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "DOV"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2438,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2165,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "DOV_FY2025_annual_report-025374f9d804:table_preserving_s512_o50:c25:adeeab3247aa",
+    "DOV_FY2025_annual_report-025374f9d804:table_preserving_s512_o50:c8:5dd4583a13e9",
+    "DOV_FY2022_annual_report-5b5b757a2ac3:table_preserving_s512_o50:c24:8497f4ef21db",
+    "DOV_FY2023_annual_report-aa8bf20ed0d7:table_preserving_s512_o50:c24:0408dd1508b7",
+    "DOV_FY2025_annual_report-025374f9d804:table_preserving_s512_o50:c57:0bef1be15da0"
+   ],
+   "scoped_top5": [
+    "DOV_FY2025_annual_report-025374f9d804:table_preserving_s512_o50:c25:adeeab3247aa",
+    "DOV_FY2025_annual_report-025374f9d804:table_preserving_s512_o50:c8:5dd4583a13e9",
+    "DOV_FY2025_annual_report-025374f9d804:table_preserving_s512_o50:c57:0bef1be15da0",
+    "DOV_FY2025_annual_report-025374f9d804:table_preserving_s512_o50:c72:9a0af39499af",
+    "DOV_FY2025_annual_report-025374f9d804:table_preserving_s512_o50:c289:839a5f4e30f6"
+   ]
+  },
+  {
+   "question_id": "test-021",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "AVGO",
+     "TXN"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "AVGO": [
+      2023
+     ],
+     "TXN": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AVGO",
+    "TXN"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1585,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 878,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "AVGO": 2,
+     "TXN": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "AVGO_FY2023_annual_report-7243c658bb4e:table_preserving_s512_o50:c116:8ef08f969674",
+    "AVGO_FY2023_annual_report-7243c658bb4e:table_preserving_s512_o50:c121:16c090f7dfe6",
+    "AVGO_FY2023_annual_report-7243c658bb4e:table_preserving_s512_o50:c117:198cbcaa8522",
+    "TXN_FY2023_annual_report-c20ba7efbb8f:table_preserving_s512_o50:c51:d343a6dc2248",
+    "TXN_FY2023_annual_report-c20ba7efbb8f:table_preserving_s512_o50:c47:b93d83a8343d"
+   ],
+   "scoped_top5": [
+    "AVGO_FY2023_annual_report-7243c658bb4e:table_preserving_s512_o50:c128:6354bfde073f",
+    "AVGO_FY2023_annual_report-7243c658bb4e:table_preserving_s512_o50:c236:4c36b6e6dca2",
+    "TXN_FY2023_annual_report-c20ba7efbb8f:table_preserving_s512_o50:c46:8327bd30271c",
+    "TXN_FY2023_annual_report-c20ba7efbb8f:table_preserving_s512_o50:c156:ffe8f2e06367",
+    "AVGO_FY2023_annual_report-7243c658bb4e:table_preserving_s512_o50:c119:9c92de212323"
+   ]
+  },
+  {
+   "question_id": "test-022",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "MU",
+     "TXN"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "MU": [
+      2022
+     ],
+     "TXN": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "MU",
+    "TXN"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1487,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1872,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "MU": 2,
+     "TXN": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "MU_FY2022_annual_report-b26295f9bd76:table_preserving_s512_o50:c97:2aabc564dd7d",
+    "MU_FY2022_annual_report-b26295f9bd76:table_preserving_s512_o50:c73:9197695f3e47",
+    "MU_FY2022_annual_report-b26295f9bd76:table_preserving_s512_o50:c74:5f1688d44565",
+    "MU_FY2022_annual_report-b26295f9bd76:table_preserving_s512_o50:c100:5f48b1b59328",
+    "MU_FY2022_annual_report-b26295f9bd76:table_preserving_s512_o50:c110:53e82e862bc3"
+   ],
+   "scoped_top5": [
+    "MU_FY2022_annual_report-b26295f9bd76:table_preserving_s512_o50:c204:762127527145",
+    "MU_FY2022_annual_report-b26295f9bd76:table_preserving_s512_o50:c97:2aabc564dd7d",
+    "MU_FY2022_annual_report-b26295f9bd76:table_preserving_s512_o50:c73:9197695f3e47",
+    "TXN_FY2022_annual_report-502168842d2b:table_preserving_s512_o50:c308:0ff2aba84ba2",
+    "TXN_FY2022_annual_report-502168842d2b:table_preserving_s512_o50:c309:f3517fbdb3dd"
+   ]
+  },
+  {
+   "question_id": "test-023",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "AVGO",
+     "MU"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "AVGO": [
+      2025
+     ],
+     "MU": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AVGO",
+    "MU"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 2240,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1625,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "AVGO": 2,
+     "MU": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "MU_FY2025_annual_report-4b50d54e91da:table_preserving_s512_o50:c112:5b34844e941e",
+    "MU_FY2025_annual_report-4b50d54e91da:table_preserving_s512_o50:c86:cba1f3bd7280",
+    "MU_FY2022_annual_report-b26295f9bd76:table_preserving_s512_o50:c73:9197695f3e47",
+    "MU_FY2025_annual_report-4b50d54e91da:table_preserving_s512_o50:c114:41c699e170b0",
+    "MU_FY2022_annual_report-b26295f9bd76:table_preserving_s512_o50:c97:2aabc564dd7d"
+   ],
+   "scoped_top5": [
+    "MU_FY2025_annual_report-4b50d54e91da:table_preserving_s512_o50:c112:5b34844e941e",
+    "MU_FY2025_annual_report-4b50d54e91da:table_preserving_s512_o50:c86:cba1f3bd7280",
+    "MU_FY2025_annual_report-4b50d54e91da:table_preserving_s512_o50:c120:cf34b542d1f7",
+    "AVGO_FY2025_annual_report-56e3343ddf27:table_preserving_s512_o50:c190:dae97e2ee738",
+    "AVGO_FY2025_annual_report-56e3343ddf27:table_preserving_s512_o50:c109:e2fed3416daf"
+   ]
+  },
+  {
+   "question_id": "test-024",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "INTU",
+     "NOW"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "INTU": [
+      2024
+     ],
+     "NOW": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "INTU",
+    "NOW"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1276,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1811,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "INTU": 2,
+     "NOW": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "NOW_FY2024_annual_report-7022cf7db0d2:table_preserving_s512_o50:c102:e9b8b02d01f9",
+    "NOW_FY2025_annual_report-dd658d433110:table_preserving_s512_o50:c103:80bda5a50c59",
+    "NOW_FY2024_annual_report-7022cf7db0d2:table_preserving_s512_o50:c101:3b240e83c7c9",
+    "NOW_FY2024_annual_report-7022cf7db0d2:table_preserving_s512_o50:c120:ba414baadb96",
+    "NOW_FY2024_annual_report-7022cf7db0d2:table_preserving_s512_o50:c122:00ceddbfdcdb"
+   ],
+   "scoped_top5": [
+    "NOW_FY2024_annual_report-7022cf7db0d2:table_preserving_s512_o50:c102:e9b8b02d01f9",
+    "NOW_FY2024_annual_report-7022cf7db0d2:table_preserving_s512_o50:c101:3b240e83c7c9",
+    "NOW_FY2024_annual_report-7022cf7db0d2:table_preserving_s512_o50:c120:ba414baadb96",
+    "INTU_FY2024_annual_report-91421df147fe:table_preserving_s512_o50:c142:4c56cede0b29",
+    "INTU_FY2024_annual_report-91421df147fe:table_preserving_s512_o50:c110:42d1b9f62ded"
+   ]
+  },
+  {
+   "question_id": "test-025",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "ADSK",
+     "CDNS"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ADSK": [
+      2021
+     ],
+     "CDNS": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ADSK",
+    "CDNS"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 232,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1069,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "ADSK": 2,
+     "CDNS": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "CDNS_FY2021_annual_report-5c804276a621:table_preserving_s512_o50:c187:ab0b7ae755ad",
+    "CDNS_FY2021_annual_report-5c804276a621:table_preserving_s512_o50:c121:161c63f657b1",
+    "CDNS_FY2021_annual_report-5c804276a621:table_preserving_s512_o50:c126:03a9fd053f13",
+    "CDNS_FY2021_annual_report-5c804276a621:table_preserving_s512_o50:c124:c0f919439ffb",
+    "CDNS_FY2021_annual_report-5c804276a621:table_preserving_s512_o50:c130:2180e43f1456"
+   ],
+   "scoped_top5": [
+    "ADSK_FY2021_annual_report-7ba58717db63:table_preserving_s512_o50:c234:d037962c65d0",
+    "CDNS_FY2021_annual_report-5c804276a621:table_preserving_s512_o50:c187:ab0b7ae755ad",
+    "CDNS_FY2021_annual_report-5c804276a621:table_preserving_s512_o50:c121:161c63f657b1",
+    "CDNS_FY2021_annual_report-5c804276a621:table_preserving_s512_o50:c126:03a9fd053f13",
+    "ADSK_FY2021_annual_report-7ba58717db63:table_preserving_s512_o50:c235:152927f5d67c"
+   ]
+  },
+  {
+   "question_id": "test-026",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "INTU",
+     "ADSK"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "INTU": [
+      2023
+     ],
+     "ADSK": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ADSK",
+    "INTU"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1699,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1972,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "INTU": 2,
+     "ADSK": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "INTU_FY2023_annual_report-96e3c010327f:table_preserving_s512_o50:c228:bd76a6b78cfb",
+    "INTU_FY2023_annual_report-96e3c010327f:table_preserving_s512_o50:c127:65f3a491ce52",
+    "INTU_FY2023_annual_report-96e3c010327f:table_preserving_s512_o50:c142:4ebb3803520e",
+    "INTU_FY2023_annual_report-96e3c010327f:table_preserving_s512_o50:c129:ce39ec52938e",
+    "INTU_FY2025_annual_report-0ee7ee96a2cb:table_preserving_s512_o50:c87:e3de5e8f3bac"
+   ],
+   "scoped_top5": [
+    "ADSK_FY2023_annual_report-1714b7cb4aac:table_preserving_s512_o50:c315:1454ab3b3de3",
+    "INTU_FY2023_annual_report-96e3c010327f:table_preserving_s512_o50:c228:bd76a6b78cfb",
+    "ADSK_FY2023_annual_report-1714b7cb4aac:table_preserving_s512_o50:c255:3ed762342970",
+    "INTU_FY2023_annual_report-96e3c010327f:table_preserving_s512_o50:c90:664cd2262aa0",
+    "INTU_FY2023_annual_report-96e3c010327f:table_preserving_s512_o50:c127:65f3a491ce52"
+   ]
+  },
+  {
+   "question_id": "test-027",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "HD",
+     "LOW"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "HD": [
+      2023
+     ],
+     "LOW": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "HD",
+    "LOW"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2317,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2312,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "HD": 2,
+     "LOW": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "HD_FY2023_annual_report-4c0b625e5568:table_preserving_s512_o50:c91:66a77387e4f3",
+    "LOW_FY2023_annual_report-42cde5cff23e:table_preserving_s512_o50:c104:e5834d8b4c14",
+    "HD_FY2023_annual_report-4c0b625e5568:table_preserving_s512_o50:c115:1f3be49ffb51",
+    "LOW_FY2023_annual_report-42cde5cff23e:table_preserving_s512_o50:c105:8e2a8fa3d8e9",
+    "HD_FY2023_annual_report-4c0b625e5568:table_preserving_s512_o50:c114:b39f56862ee4"
+   ],
+   "scoped_top5": [
+    "HD_FY2023_annual_report-4c0b625e5568:table_preserving_s512_o50:c91:66a77387e4f3",
+    "LOW_FY2023_annual_report-42cde5cff23e:table_preserving_s512_o50:c104:e5834d8b4c14",
+    "LOW_FY2023_annual_report-42cde5cff23e:table_preserving_s512_o50:c91:67795d91d65b",
+    "LOW_FY2023_annual_report-42cde5cff23e:table_preserving_s512_o50:c102:d940f02b286d",
+    "HD_FY2023_annual_report-4c0b625e5568:table_preserving_s512_o50:c115:1f3be49ffb51"
+   ]
+  },
+  {
+   "question_id": "test-028",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "NKE",
+     "SBUX"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "NKE": [
+      2025
+     ],
+     "SBUX": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "NKE",
+    "SBUX"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1720,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1268,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "NKE": 2,
+     "SBUX": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "SBUX_FY2025_annual_report-dfab526cdc0e:table_preserving_s512_o50:c113:6ddf6468eb9a",
+    "NKE_FY2025_annual_report-7b1b8ae4da58:table_preserving_s512_o50:c140:261dadcda7f7",
+    "SBUX_FY2025_annual_report-dfab526cdc0e:table_preserving_s512_o50:c216:f715e8b32230",
+    "SBUX_FY2025_annual_report-dfab526cdc0e:table_preserving_s512_o50:c62:71305a22a541",
+    "SBUX_FY2025_annual_report-dfab526cdc0e:table_preserving_s512_o50:c97:9f0f2173a486"
+   ],
+   "scoped_top5": [
+    "SBUX_FY2025_annual_report-dfab526cdc0e:table_preserving_s512_o50:c113:6ddf6468eb9a",
+    "NKE_FY2025_annual_report-7b1b8ae4da58:table_preserving_s512_o50:c82:f2b345740088",
+    "NKE_FY2025_annual_report-7b1b8ae4da58:table_preserving_s512_o50:c140:261dadcda7f7",
+    "SBUX_FY2025_annual_report-dfab526cdc0e:table_preserving_s512_o50:c216:f715e8b32230",
+    "NKE_FY2025_annual_report-7b1b8ae4da58:table_preserving_s512_o50:c142:00c0f0f42422"
+   ]
+  },
+  {
+   "question_id": "test-029",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "HD",
+     "NKE"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "HD": [
+      2022
+     ],
+     "NKE": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "HD",
+    "NKE"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 580,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1179,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "HD": 2,
+     "NKE": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "NKE_FY2022_annual_report-9e09976d451d:table_preserving_s512_o50:c205:7da78463cc55",
+    "NKE_FY2022_annual_report-9e09976d451d:table_preserving_s512_o50:c134:005b3b70bdf1",
+    "NKE_FY2022_annual_report-9e09976d451d:table_preserving_s512_o50:c136:cf3b2c7b1ebd",
+    "NKE_FY2022_annual_report-9e09976d451d:table_preserving_s512_o50:c142:2ab249e0eb91",
+    "NKE_FY2025_annual_report-7b1b8ae4da58:table_preserving_s512_o50:c140:261dadcda7f7"
+   ],
+   "scoped_top5": [
+    "NKE_FY2022_annual_report-9e09976d451d:table_preserving_s512_o50:c205:7da78463cc55",
+    "NKE_FY2022_annual_report-9e09976d451d:table_preserving_s512_o50:c134:005b3b70bdf1",
+    "HD_FY2022_annual_report-a7a9929fff37:table_preserving_s512_o50:c108:01cfec4aea5a",
+    "NKE_FY2022_annual_report-9e09976d451d:table_preserving_s512_o50:c131:9ebffd4259e9",
+    "HD_FY2022_annual_report-a7a9929fff37:table_preserving_s512_o50:c100:503138758c6b"
+   ]
+  },
+  {
+   "question_id": "test-030",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "KMB",
+     "MDLZ"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "KMB": [
+      2021
+     ],
+     "MDLZ": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "KMB",
+    "MDLZ"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1648,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1883,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "KMB": 2,
+     "MDLZ": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "KMB_FY2021_annual_report-54d6473fbb6d:table_preserving_s512_o50:c39:e733b77f9889",
+    "MDLZ_FY2021_annual_report-068eb2b09bf2:table_preserving_s512_o50:c176:c29545f8da5e",
+    "KMB_FY2022_annual_report-7bc881b4304e:table_preserving_s512_o50:c44:5bf7dd054ace",
+    "MDLZ_FY2021_annual_report-068eb2b09bf2:table_preserving_s512_o50:c171:ab7d7388715c",
+    "KMB_FY2022_annual_report-7bc881b4304e:table_preserving_s512_o50:c71:cec654edf40c"
+   ],
+   "scoped_top5": [
+    "KMB_FY2021_annual_report-54d6473fbb6d:table_preserving_s512_o50:c88:81d0c073c0bc",
+    "KMB_FY2021_annual_report-54d6473fbb6d:table_preserving_s512_o50:c39:e733b77f9889",
+    "MDLZ_FY2021_annual_report-068eb2b09bf2:table_preserving_s512_o50:c340:67f7d2f43467",
+    "KMB_FY2021_annual_report-54d6473fbb6d:table_preserving_s512_o50:c180:00690332ffa3",
+    "MDLZ_FY2021_annual_report-068eb2b09bf2:table_preserving_s512_o50:c318:4a7b28d93649"
+   ]
+  },
+  {
+   "question_id": "test-031",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "GIS",
+     "KHC"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "GIS": [
+      2024
+     ],
+     "KHC": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "GIS",
+    "KHC"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 2312,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2066,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "GIS": 2,
+     "KHC": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "KHC_FY2024_annual_report-2aa1a3aad4a8:table_preserving_s512_o50:c157:852737355f20",
+    "KHC_FY2024_annual_report-2aa1a3aad4a8:table_preserving_s512_o50:c158:40e52d09aea6",
+    "KHC_FY2025_annual_report-de4d502d6ced:table_preserving_s512_o50:c159:d81358feb9d4",
+    "KHC_FY2024_annual_report-2aa1a3aad4a8:table_preserving_s512_o50:c67:6e369672a45c",
+    "KHC_FY2024_annual_report-2aa1a3aad4a8:table_preserving_s512_o50:c144:28912183777e"
+   ],
+   "scoped_top5": [
+    "GIS_FY2024_annual_report-8226c381ceca:table_preserving_s512_o50:c51:7adc79e94667",
+    "KHC_FY2024_annual_report-2aa1a3aad4a8:table_preserving_s512_o50:c157:852737355f20",
+    "KHC_FY2024_annual_report-2aa1a3aad4a8:table_preserving_s512_o50:c158:40e52d09aea6",
+    "KHC_FY2024_annual_report-2aa1a3aad4a8:table_preserving_s512_o50:c67:6e369672a45c",
+    "GIS_FY2024_annual_report-8226c381ceca:table_preserving_s512_o50:c99:89b0f91959bc"
+   ]
+  },
+  {
+   "question_id": "test-032",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "MDLZ",
+     "GIS"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "MDLZ": [
+      2022
+     ],
+     "GIS": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "GIS",
+    "MDLZ"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 926,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1194,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "MDLZ": 2,
+     "GIS": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "MDLZ_FY2022_annual_report-82aa2e60d211:table_preserving_s512_o50:c157:5b4ce9a91d78",
+    "MDLZ_FY2022_annual_report-82aa2e60d211:table_preserving_s512_o50:c159:c75c92f0a8bd",
+    "MDLZ_FY2022_annual_report-82aa2e60d211:table_preserving_s512_o50:c335:b63b1c62f193",
+    "MDLZ_FY2022_annual_report-82aa2e60d211:table_preserving_s512_o50:c156:85c23d2636b2",
+    "MDLZ_FY2022_annual_report-82aa2e60d211:table_preserving_s512_o50:c76:3a1bf7a6034f"
+   ],
+   "scoped_top5": [
+    "MDLZ_FY2022_annual_report-82aa2e60d211:table_preserving_s512_o50:c157:5b4ce9a91d78",
+    "MDLZ_FY2022_annual_report-82aa2e60d211:table_preserving_s512_o50:c159:c75c92f0a8bd",
+    "GIS_FY2022_annual_report-7a26bff5598d:table_preserving_s512_o50:c36:b888bae77f02",
+    "MDLZ_FY2022_annual_report-82aa2e60d211:table_preserving_s512_o50:c335:b63b1c62f193",
+    "GIS_FY2022_annual_report-7a26bff5598d:table_preserving_s512_o50:c99:7482b4b2c2a4"
+   ]
+  },
+  {
+   "question_id": "test-033",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "EMR",
+     "PH"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "EMR": [
+      2025
+     ],
+     "PH": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "EMR",
+    "PH"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1433,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.5,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2497,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "EMR": 2,
+     "PH": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c88:03f76a94225b",
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c77:3e6e61b194b9",
+    "EMR_FY2025_annual_report-13ca4e7d1396:table_preserving_s512_o50:c93:6a3cdd7c93b0",
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c217:adee64714e58",
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c76:e4123eb8dff3"
+   ],
+   "scoped_top5": [
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c88:03f76a94225b",
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c87:90fe323aa2de",
+    "EMR_FY2025_annual_report-13ca4e7d1396:table_preserving_s512_o50:c85:1be9aeaf0086",
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c184:8b873df80c49",
+    "EMR_FY2025_annual_report-13ca4e7d1396:table_preserving_s512_o50:c93:6a3cdd7c93b0"
+   ]
+  },
+  {
+   "question_id": "test-034",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "ROK",
+     "DOV"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ROK": [
+      2021
+     ],
+     "DOV": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "DOV",
+    "ROK"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1098,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 1051,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "ROK": 2,
+     "DOV": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ROK_FY2021_annual_report-9c37c8e8519a:table_preserving_s512_o50:c116:e979a1c8817b",
+    "ROK_FY2021_annual_report-9c37c8e8519a:table_preserving_s512_o50:c101:15751a3dc939",
+    "ROK_FY2022_annual_report-b112fbad419f:table_preserving_s512_o50:c113:bfeab5708532",
+    "ROK_FY2021_annual_report-9c37c8e8519a:table_preserving_s512_o50:c106:6e36a4b5781b",
+    "ROK_FY2021_annual_report-9c37c8e8519a:table_preserving_s512_o50:c104:e1d2590133df"
+   ],
+   "scoped_top5": [
+    "ROK_FY2021_annual_report-9c37c8e8519a:table_preserving_s512_o50:c220:b55ff31d34d5",
+    "ROK_FY2021_annual_report-9c37c8e8519a:table_preserving_s512_o50:c116:e979a1c8817b",
+    "ROK_FY2021_annual_report-9c37c8e8519a:table_preserving_s512_o50:c101:15751a3dc939",
+    "DOV_FY2021_annual_report-f9c950a456dc:table_preserving_s512_o50:c278:7c02cd59b0ae",
+    "DOV_FY2021_annual_report-f9c950a456dc:table_preserving_s512_o50:c136:04fa3c1bc2a5"
+   ]
+  },
+  {
+   "question_id": "test-035",
+   "split": "test",
+   "category": "comparative",
+   "scope": {
+    "tickers": [
+     "PH",
+     "ROK"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "PH": [
+      2022
+     ],
+     "ROK": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "PH",
+    "ROK"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 0.5,
+    "context_tokens_at_5": 1907,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2656,
+    "pool_evidence_recall": 0.5,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {
+     "PH": 2,
+     "ROK": 2
+    },
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ROK_FY2022_annual_report-b112fbad419f:table_preserving_s512_o50:c113:bfeab5708532",
+    "ROK_FY2024_annual_report-b4a8bb0b90cd:table_preserving_s512_o50:c101:47d19afb41e7",
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c88:03f76a94225b",
+    "ROK_FY2025_annual_report-1b7d42e4f953:table_preserving_s512_o50:c102:c4fed3347496",
+    "ROK_FY2022_annual_report-b112fbad419f:table_preserving_s512_o50:c102:6a46b23adc1a"
+   ],
+   "scoped_top5": [
+    "ROK_FY2022_annual_report-b112fbad419f:table_preserving_s512_o50:c113:bfeab5708532",
+    "ROK_FY2022_annual_report-b112fbad419f:table_preserving_s512_o50:c176:3a08ec786789",
+    "ROK_FY2022_annual_report-b112fbad419f:table_preserving_s512_o50:c99:f27faf8e0d63",
+    "PH_FY2022_annual_report-6f0ac348b0cc:table_preserving_s512_o50:c94:bb0eea7d4d7d",
+    "PH_FY2022_annual_report-6f0ac348b0cc:table_preserving_s512_o50:c95:3da41affeec4"
+   ]
+  },
+  {
+   "question_id": "test-036",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "AVGO"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "AVGO": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "AVGO"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2516,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2516,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "AVGO_FY2022_annual_report-f16ae901bf1e:table_preserving_s512_o50:c5:9c0703a84369",
+    "AVGO_FY2022_annual_report-f16ae901bf1e:table_preserving_s512_o50:c73:cfa035a73b91",
+    "AVGO_FY2023_annual_report-7243c658bb4e:table_preserving_s512_o50:c130:da0fd8536563",
+    "AVGO_FY2023_annual_report-7243c658bb4e:table_preserving_s512_o50:c6:d14564ac87cf",
+    "AVGO_FY2022_annual_report-f16ae901bf1e:table_preserving_s512_o50:c114:37ea48f97e09"
+   ],
+   "scoped_top5": [
+    "AVGO_FY2022_annual_report-f16ae901bf1e:table_preserving_s512_o50:c37:48cd65343434",
+    "AVGO_FY2022_annual_report-f16ae901bf1e:table_preserving_s512_o50:c5:9c0703a84369",
+    "AVGO_FY2022_annual_report-f16ae901bf1e:table_preserving_s512_o50:c73:cfa035a73b91",
+    "AVGO_FY2022_annual_report-f16ae901bf1e:table_preserving_s512_o50:c116:f4287874ad76",
+    "AVGO_FY2022_annual_report-f16ae901bf1e:table_preserving_s512_o50:c204:448a8cb1204b"
+   ]
+  },
+  {
+   "question_id": "test-037",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "TXN"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "TXN": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "TXN"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2424,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2365,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "TXN_FY2025_annual_report-727d32d4f516:table_preserving_s512_o50:c15:e9f5c9486f91",
+    "TXN_FY2024_annual_report-9fd9f3473d3f:table_preserving_s512_o50:c164:500ddf93873e",
+    "TXN_FY2025_annual_report-727d32d4f516:table_preserving_s512_o50:c16:2e68a3196180",
+    "TXN_FY2023_annual_report-c20ba7efbb8f:table_preserving_s512_o50:c15:5fbe4172d309",
+    "TXN_FY2025_annual_report-727d32d4f516:table_preserving_s512_o50:c22:67e164fbb065"
+   ],
+   "scoped_top5": [
+    "TXN_FY2025_annual_report-727d32d4f516:table_preserving_s512_o50:c15:e9f5c9486f91",
+    "TXN_FY2025_annual_report-727d32d4f516:table_preserving_s512_o50:c183:93870f42f0c6",
+    "TXN_FY2025_annual_report-727d32d4f516:table_preserving_s512_o50:c16:2e68a3196180",
+    "TXN_FY2025_annual_report-727d32d4f516:table_preserving_s512_o50:c25:bf5ce87d1504",
+    "TXN_FY2025_annual_report-727d32d4f516:table_preserving_s512_o50:c24:bbeb6f1cce3e"
+   ]
+  },
+  {
+   "question_id": "test-038",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "MU"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "MU": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "MU"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2352,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2352,
+    "pool_evidence_recall": 0.3333333333333333,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c36:8f551200940f",
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c32:5de6ae20ddc2",
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c60:591d82208acd",
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c55:a2f3d17d702e",
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c44:c5ec21ac0956"
+   ],
+   "scoped_top5": [
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c36:8f551200940f",
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c32:5de6ae20ddc2",
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c60:591d82208acd",
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c55:a2f3d17d702e",
+    "MU_FY2024_annual_report-843455858d7a:table_preserving_s512_o50:c44:c5ec21ac0956"
+   ]
+  },
+  {
+   "question_id": "test-039",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "INTU"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "INTU": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "INTU"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2392,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2407,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "INTU_FY2021_annual_report-9d98dc7f0753:table_preserving_s512_o50:c44:e534cf9f64d3",
+    "INTU_FY2021_annual_report-9d98dc7f0753:table_preserving_s512_o50:c37:c121719c6cae",
+    "INTU_FY2021_annual_report-9d98dc7f0753:table_preserving_s512_o50:c36:c1e260db5974",
+    "INTU_FY2021_annual_report-9d98dc7f0753:table_preserving_s512_o50:c40:5b244b55fa22",
+    "INTU_FY2021_annual_report-9d98dc7f0753:table_preserving_s512_o50:c47:20b2bdd6146a"
+   ],
+   "scoped_top5": [
+    "INTU_FY2021_annual_report-9d98dc7f0753:table_preserving_s512_o50:c43:b26fdfdd38ad",
+    "INTU_FY2021_annual_report-9d98dc7f0753:table_preserving_s512_o50:c44:e534cf9f64d3",
+    "INTU_FY2021_annual_report-9d98dc7f0753:table_preserving_s512_o50:c37:c121719c6cae",
+    "INTU_FY2021_annual_report-9d98dc7f0753:table_preserving_s512_o50:c36:c1e260db5974",
+    "INTU_FY2021_annual_report-9d98dc7f0753:table_preserving_s512_o50:c50:e4b071fdb549"
+   ]
+  },
+  {
+   "question_id": "test-040",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "NOW"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "NOW": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "NOW"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2488,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2483,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "NOW_FY2023_annual_report-5e5e72b9eb45:table_preserving_s512_o50:c35:081ff708cd1a",
+    "NOW_FY2022_annual_report-da1b43808336:table_preserving_s512_o50:c37:e488129b0dd7",
+    "NOW_FY2022_annual_report-da1b43808336:table_preserving_s512_o50:c30:8a704c63117a",
+    "NOW_FY2025_annual_report-dd658d433110:table_preserving_s512_o50:c30:4143f3564c30",
+    "NOW_FY2024_annual_report-7022cf7db0d2:table_preserving_s512_o50:c29:ca793ceda228"
+   ],
+   "scoped_top5": [
+    "NOW_FY2023_annual_report-5e5e72b9eb45:table_preserving_s512_o50:c35:081ff708cd1a",
+    "NOW_FY2023_annual_report-5e5e72b9eb45:table_preserving_s512_o50:c30:c66dcac6aa46",
+    "NOW_FY2023_annual_report-5e5e72b9eb45:table_preserving_s512_o50:c60:0d4559c52684",
+    "NOW_FY2023_annual_report-5e5e72b9eb45:table_preserving_s512_o50:c41:ec44abe5e35d",
+    "NOW_FY2023_annual_report-5e5e72b9eb45:table_preserving_s512_o50:c40:f129dae45a1e"
+   ]
+  },
+  {
+   "question_id": "test-041",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "ADSK"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "ADSK": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "ADSK"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2496,
+    "pool_evidence_recall": 0.3333333333333333,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2442,
+    "pool_evidence_recall": 0.3333333333333333,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "ADSK_FY2022_annual_report-6434ce03f9a2:table_preserving_s512_o50:c27:ef6a485c4f2f",
+    "ADSK_FY2025_annual_report-adad5a89684d:table_preserving_s512_o50:c258:16046ed04c77",
+    "ADSK_FY2024_annual_report-a2e27e1e54b3:table_preserving_s512_o50:c26:178794634fab",
+    "ADSK_FY2024_annual_report-a2e27e1e54b3:table_preserving_s512_o50:c28:1f87c3e50c10",
+    "ADSK_FY2024_annual_report-a2e27e1e54b3:table_preserving_s512_o50:c100:1004344566ca"
+   ],
+   "scoped_top5": [
+    "ADSK_FY2024_annual_report-a2e27e1e54b3:table_preserving_s512_o50:c27:ff03687c53a6",
+    "ADSK_FY2024_annual_report-a2e27e1e54b3:table_preserving_s512_o50:c26:178794634fab",
+    "ADSK_FY2024_annual_report-a2e27e1e54b3:table_preserving_s512_o50:c28:1f87c3e50c10",
+    "ADSK_FY2024_annual_report-a2e27e1e54b3:table_preserving_s512_o50:c76:01a25a15ae8a",
+    "ADSK_FY2024_annual_report-a2e27e1e54b3:table_preserving_s512_o50:c235:1f87602336a8"
+   ]
+  },
+  {
+   "question_id": "test-042",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "HD"
+    ],
+    "years": [
+     2025
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "HD": [
+      2025
+     ]
+    }
+   },
+   "gold_tickers": [
+    "HD"
+   ],
+   "gold_fiscal_years": [
+    2025
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2375,
+    "pool_evidence_recall": 0.3333333333333333,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2425,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "HD_FY2025_annual_report-e040696c63fc:table_preserving_s512_o50:c38:08bebec007ed",
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c43:20e5289ae366",
+    "HD_FY2025_annual_report-e040696c63fc:table_preserving_s512_o50:c43:bbd2bb270db0",
+    "HD_FY2024_annual_report-a291decad354:table_preserving_s512_o50:c39:5609202215bf",
+    "HD_FY2025_annual_report-e040696c63fc:table_preserving_s512_o50:c44:a0089241d3bd"
+   ],
+   "scoped_top5": [
+    "HD_FY2025_annual_report-e040696c63fc:table_preserving_s512_o50:c11:be8ad40f78a3",
+    "HD_FY2025_annual_report-e040696c63fc:table_preserving_s512_o50:c33:e441534038a0",
+    "HD_FY2025_annual_report-e040696c63fc:table_preserving_s512_o50:c38:08bebec007ed",
+    "HD_FY2025_annual_report-e040696c63fc:table_preserving_s512_o50:c43:bbd2bb270db0",
+    "HD_FY2025_annual_report-e040696c63fc:table_preserving_s512_o50:c44:a0089241d3bd"
+   ]
+  },
+  {
+   "question_id": "test-043",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "NKE"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "NKE": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "NKE"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2473,
+    "pool_evidence_recall": 0.3333333333333333,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2428,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "NKE_FY2024_annual_report-ad45136466f5:table_preserving_s512_o50:c27:612573364e1e",
+    "NKE_FY2025_annual_report-7b1b8ae4da58:table_preserving_s512_o50:c26:cc85179ddb42",
+    "NKE_FY2024_annual_report-ad45136466f5:table_preserving_s512_o50:c36:e00ed6b3cf35",
+    "NKE_FY2024_annual_report-ad45136466f5:table_preserving_s512_o50:c35:25051d5777e8",
+    "NKE_FY2025_annual_report-7b1b8ae4da58:table_preserving_s512_o50:c34:58e27fbd60ec"
+   ],
+   "scoped_top5": [
+    "NKE_FY2024_annual_report-ad45136466f5:table_preserving_s512_o50:c27:612573364e1e",
+    "NKE_FY2024_annual_report-ad45136466f5:table_preserving_s512_o50:c36:e00ed6b3cf35",
+    "NKE_FY2024_annual_report-ad45136466f5:table_preserving_s512_o50:c35:25051d5777e8",
+    "NKE_FY2024_annual_report-ad45136466f5:table_preserving_s512_o50:c37:3ac1f60d35b0",
+    "NKE_FY2024_annual_report-ad45136466f5:table_preserving_s512_o50:c34:d68ca1b5a182"
+   ]
+  },
+  {
+   "question_id": "test-044",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "KHC"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "KHC": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "KHC"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2488,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2523,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "KHC_FY2023_annual_report-f40e0161e718:table_preserving_s512_o50:c101:f28c130a043d",
+    "KHC_FY2023_annual_report-f40e0161e718:table_preserving_s512_o50:c34:240c8e8b5071",
+    "KHC_FY2023_annual_report-f40e0161e718:table_preserving_s512_o50:c7:e8eeea1304db",
+    "KHC_FY2022_annual_report-0d87f26308a5:table_preserving_s512_o50:c10:f5d9946c626e",
+    "KHC_FY2025_annual_report-de4d502d6ced:table_preserving_s512_o50:c13:3f5eafab8b33"
+   ],
+   "scoped_top5": [
+    "KHC_FY2023_annual_report-f40e0161e718:table_preserving_s512_o50:c101:f28c130a043d",
+    "KHC_FY2023_annual_report-f40e0161e718:table_preserving_s512_o50:c10:5e764d7b2151",
+    "KHC_FY2023_annual_report-f40e0161e718:table_preserving_s512_o50:c34:240c8e8b5071",
+    "KHC_FY2023_annual_report-f40e0161e718:table_preserving_s512_o50:c7:e8eeea1304db",
+    "KHC_FY2023_annual_report-f40e0161e718:table_preserving_s512_o50:c122:4ee205186d80"
+   ]
+  },
+  {
+   "question_id": "test-045",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "KMB"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "KMB": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "KMB"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2440,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2434,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "KMB_FY2022_annual_report-7bc881b4304e:table_preserving_s512_o50:c21:188ac3624946",
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c19:15ea1de4a3c9",
+    "KMB_FY2024_annual_report-cf76c4115ec1:table_preserving_s512_o50:c43:d9fa706e3bdf",
+    "KMB_FY2023_annual_report-b0732e361c81:table_preserving_s512_o50:c16:388d94d6913d",
+    "KMB_FY2022_annual_report-7bc881b4304e:table_preserving_s512_o50:c40:712dc3b438d5"
+   ],
+   "scoped_top5": [
+    "KMB_FY2022_annual_report-7bc881b4304e:table_preserving_s512_o50:c19:ca3911ed61c1",
+    "KMB_FY2022_annual_report-7bc881b4304e:table_preserving_s512_o50:c21:188ac3624946",
+    "KMB_FY2022_annual_report-7bc881b4304e:table_preserving_s512_o50:c40:712dc3b438d5",
+    "KMB_FY2022_annual_report-7bc881b4304e:table_preserving_s512_o50:c16:672a5cd7d486",
+    "KMB_FY2022_annual_report-7bc881b4304e:table_preserving_s512_o50:c18:4e6f8ba9cdfe"
+   ]
+  },
+  {
+   "question_id": "test-046",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "MDLZ"
+    ],
+    "years": [
+     2023
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "MDLZ": [
+      2023
+     ]
+    }
+   },
+   "gold_tickers": [
+    "MDLZ"
+   ],
+   "gold_fiscal_years": [
+    2023
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2455,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2390,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "MDLZ_FY2025_annual_report-55c98e69b325:table_preserving_s512_o50:c30:0a612814edb0",
+    "MDLZ_FY2025_annual_report-55c98e69b325:table_preserving_s512_o50:c29:2c6e3172d863",
+    "MDLZ_FY2023_annual_report-b1c3e7772d8a:table_preserving_s512_o50:c27:4099bebc2233",
+    "MDLZ_FY2023_annual_report-b1c3e7772d8a:table_preserving_s512_o50:c8:ec3336634195",
+    "MDLZ_FY2022_annual_report-82aa2e60d211:table_preserving_s512_o50:c29:fc8a44ec9451"
+   ],
+   "scoped_top5": [
+    "MDLZ_FY2023_annual_report-b1c3e7772d8a:table_preserving_s512_o50:c27:4099bebc2233",
+    "MDLZ_FY2023_annual_report-b1c3e7772d8a:table_preserving_s512_o50:c26:33b933c2d9cf",
+    "MDLZ_FY2023_annual_report-b1c3e7772d8a:table_preserving_s512_o50:c8:ec3336634195",
+    "MDLZ_FY2023_annual_report-b1c3e7772d8a:table_preserving_s512_o50:c138:9e1958ae5c5f",
+    "MDLZ_FY2023_annual_report-b1c3e7772d8a:table_preserving_s512_o50:c41:604202eaf759"
+   ]
+  },
+  {
+   "question_id": "test-047",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "GIS"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "GIS": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "GIS"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2468,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2480,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "GIS_FY2024_annual_report-8226c381ceca:table_preserving_s512_o50:c19:beabcda5057d",
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c17:89d5e0606f27",
+    "GIS_FY2022_annual_report-7a26bff5598d:table_preserving_s512_o50:c20:cbab958c2301",
+    "GIS_FY2024_annual_report-8226c381ceca:table_preserving_s512_o50:c16:171bdcfcbe7a",
+    "GIS_FY2025_annual_report-b6c75e29b87f:table_preserving_s512_o50:c20:6c1e29fa4f90"
+   ],
+   "scoped_top5": [
+    "GIS_FY2024_annual_report-8226c381ceca:table_preserving_s512_o50:c19:beabcda5057d",
+    "GIS_FY2024_annual_report-8226c381ceca:table_preserving_s512_o50:c81:12fcc9c63cc0",
+    "GIS_FY2024_annual_report-8226c381ceca:table_preserving_s512_o50:c16:171bdcfcbe7a",
+    "GIS_FY2024_annual_report-8226c381ceca:table_preserving_s512_o50:c23:66163487d737",
+    "GIS_FY2024_annual_report-8226c381ceca:table_preserving_s512_o50:c142:fd34c972eb0a"
+   ]
+  },
+  {
+   "question_id": "test-048",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "EMR"
+    ],
+    "years": [
+     2021
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "EMR": [
+      2021
+     ]
+    }
+   },
+   "gold_tickers": [
+    "EMR"
+   ],
+   "gold_fiscal_years": [
+    2021
+   ],
+   "global": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2229,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 1.0,
+    "all_evidence_hit_at_5": 1,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2260,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c46:49feaf999f93",
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c44:e7145209d778",
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c43:4f7145a16b7a",
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c20:b6f99ee69361",
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c18:08fe8fd0a5a3"
+   ],
+   "scoped_top5": [
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c45:dc4590530ca9",
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c46:49feaf999f93",
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c44:e7145209d778",
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c43:4f7145a16b7a",
+    "EMR_FY2021_annual_report-b7257aa0e479:table_preserving_s512_o50:c20:b6f99ee69361"
+   ]
+  },
+  {
+   "question_id": "test-049",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "PH"
+    ],
+    "years": [
+     2024
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "PH": [
+      2024
+     ]
+    }
+   },
+   "gold_tickers": [
+    "PH"
+   ],
+   "gold_fiscal_years": [
+    2024
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.3333333333333333,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2472,
+    "pool_evidence_recall": 0.6666666666666666,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.6666666666666666,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2514,
+    "pool_evidence_recall": 1.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c30:2cdb0c10699e",
+    "PH_FY2024_annual_report-5defe0a7a7f3:table_preserving_s512_o50:c26:2f0907610f72",
+    "PH_FY2024_annual_report-5defe0a7a7f3:table_preserving_s512_o50:c43:37faaf3f77e1",
+    "PH_FY2025_annual_report-85061de3adad:table_preserving_s512_o50:c26:f5d28f987952",
+    "PH_FY2022_annual_report-6f0ac348b0cc:table_preserving_s512_o50:c23:f32860656876"
+   ],
+   "scoped_top5": [
+    "PH_FY2024_annual_report-5defe0a7a7f3:table_preserving_s512_o50:c30:3e7b4380e8da",
+    "PH_FY2024_annual_report-5defe0a7a7f3:table_preserving_s512_o50:c26:2f0907610f72",
+    "PH_FY2024_annual_report-5defe0a7a7f3:table_preserving_s512_o50:c43:37faaf3f77e1",
+    "PH_FY2024_annual_report-5defe0a7a7f3:table_preserving_s512_o50:c15:0eb1267c409d",
+    "PH_FY2024_annual_report-5defe0a7a7f3:table_preserving_s512_o50:c28:8f19810dd000"
+   ]
+  },
+  {
+   "question_id": "test-050",
+   "split": "test",
+   "category": "summary",
+   "scope": {
+    "tickers": [
+     "DOV"
+    ],
+    "years": [
+     2022
+    ],
+    "period_mode": "explicit",
+    "report_years": {
+     "DOV": [
+      2022
+     ]
+    }
+   },
+   "gold_tickers": [
+    "DOV"
+   ],
+   "gold_fiscal_years": [
+    2022
+   ],
+   "global": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2484,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "scoped": {
+    "evidence_recall_at_5": 0.0,
+    "all_evidence_hit_at_5": 0,
+    "document_recall_at_5": 1.0,
+    "context_tokens_at_5": 2204,
+    "pool_evidence_recall": 0.0,
+    "pool_size": 20
+   },
+   "trace": {
+    "quota": {},
+    "reserved_latest": [],
+    "suppressed_duplicates": []
+   },
+   "global_top5": [
+    "DOV_FY2022_annual_report-5b5b757a2ac3:table_preserving_s512_o50:c29:f8d83166e8b2",
+    "DOV_FY2023_annual_report-aa8bf20ed0d7:table_preserving_s512_o50:c30:f8d83166e8b2",
+    "DOV_FY2024_annual_report-019ebbfb43b8:table_preserving_s512_o50:c31:6aa7b3bffe94",
+    "DOV_FY2024_annual_report-019ebbfb43b8:table_preserving_s512_o50:c34:b374c074388b",
+    "DOV_FY2025_annual_report-025374f9d804:table_preserving_s512_o50:c31:6aa7b3bffe94"
+   ],
+   "scoped_top5": [
+    "DOV_FY2022_annual_report-5b5b757a2ac3:table_preserving_s512_o50:c29:f8d83166e8b2",
+    "DOV_FY2022_annual_report-5b5b757a2ac3:table_preserving_s512_o50:c33:65941a1e332e",
+    "DOV_FY2022_annual_report-5b5b757a2ac3:table_preserving_s512_o50:c54:0e8ed2e08daa",
+    "DOV_FY2022_annual_report-5b5b757a2ac3:table_preserving_s512_o50:c55:2a2d289d9286",
+    "DOV_FY2022_annual_report-5b5b757a2ac3:table_preserving_s512_o50:c117:84528a80e7ea"
+   ]
+  }
+ ],
+ "limitations": [
+  "Agent-authored, non-exhaustive gold evidence without independent human review.",
+  "Source-selection metrics only; generated answers are not graded here.",
+  "Benchmark questions name their company and year explicitly, so this measures the explicit-scope case, not relative or undated questions."
+ ]
+}

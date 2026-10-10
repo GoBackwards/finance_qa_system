@@ -1,0 +1,428 @@
+{
+ "provenance": {
+  "method": "Blind four-way grading of the 12 live-pool comparison questions (B01-B12): per question the systems were shown as system_A..D in a seeded random order; one grader agent graded all four against the verified gold answer, gold sources and traps, and an independent skeptic agent re-checked every grade and could change it (none changed).",
+  "systems": {
+   "after_fix": "final live-pool configuration (scoped retrieval, prompt v2.1); the run graded in live_usage_grades.json",
+   "decomposed_rule": "rule decomposition, prompt v2.1",
+   "after_fix_v22": "scoped retrieval, prompt v2.2",
+   "decomposed_rule_v22": "rule decomposition, prompt v2.2"
+  },
+  "runs": "data/experiments/live_usage/{after_fix,decomposed_rule,after_fix_v22,decomposed_rule_v22}.jsonl",
+  "human_reviewed": false
+ },
+ "summary": {
+  "after_fix": {
+   "partially_correct": 4,
+   "false_abstention": 6,
+   "correct_answer": 1,
+   "wrong_answer": 1
+  },
+  "decomposed_rule": {
+   "false_abstention": 7,
+   "partially_correct": 2,
+   "correct_answer": 2,
+   "wrong_answer": 1
+  },
+  "after_fix_v22": {
+   "correct_answer": 2,
+   "false_abstention": 8,
+   "partially_correct": 2
+  },
+  "decomposed_rule_v22": {
+   "false_abstention": 11,
+   "partially_correct": 1
+  },
+  "best": {
+   "after_fix_v22": 2,
+   "decomposed_rule": 2,
+   "tie": 7,
+   "after_fix": 1
+  }
+ },
+ "grades": [
+  {
+   "question_id": "B01",
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Released 'I'm not sure', but the corpus states KO 25.4% (p50) and PEP 13.3% (p51), a 12.1-pt gap."
+   },
+   "after_fix_v22": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "KO 25.4% (p50, FY2022 column) and PEP 13.3% (p51). Says KO is higher by 12.1 pts, with the calculation shown. Matches gold."
+   },
+   "after_fix": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "Both margins are right (25.4% and 13.3%), but it never says which is higher or how far apart they are. The requested verdict and gap are missing."
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Released 'I'm not sure'. Both drafts claimed PEP was higher, and one used an invented ~7.7% KO margin; both were suppressed."
+   },
+   "best": "after_fix_v22",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "after_fix_v22",
+    "system_C": "after_fix",
+    "system_D": "decomposed_rule_v22"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked against the gold sources. KO p50 25.4% is the FY2022 column and PEP p51 13.3% is FY2022, so B's 12.1-pt gap is right. C gives the figures with no comparison, so partial. I confirmed in model_calls that D's wrong drafts (PEP higher, ~7.7% KO margin) were not released. No changes."
+  },
+  {
+   "question_id": "B02",
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "Released only 'Lowe's adjusted operating margin was 13.3% in fiscal 2023' (LOW p3 letter, consistent with p98 adjusted 13.31%). It is accurate and labelled as adjusted. There is no HD figure, no GAAP LOW 13.38% and no verdict (HD 14.2% is better). Only a fragment, given on the non-GAAP trap basis."
+   },
+   "after_fix_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained. HD 14.2% (p35) and LOW 13.38% (p51/p98) are stated verbatim."
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (generator_abstained) even though the corpus answers it."
+   },
+   "after_fix": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source). Nothing wrong was released."
+   },
+   "best": "decomposed_rule",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "after_fix_v22",
+    "system_C": "decomposed_rule_v22",
+    "system_D": "after_fix"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "A's released claim is true as labelled (adjusted 13.3%, matching p98 13.31%) but answers only a sliver of the question. Partially_correct is the most defensible label because nothing stated is false. B, C and D released plain abstentions. No changes."
+  },
+  {
+   "question_id": "B03",
+   "after_fix_v22": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Intel DCAI: $15.5B revenue, $530M operating loss (INTC p32 DCAI section, which I confirmed). AMD Data Center: $6.5B revenue, $1.3B operating income. States that Intel is larger but losing money and AMD is profitable. Segment basis is right. 'Calendar year 2023' for AMD is fine because its FY ended Dec 30, 2023."
+   },
+   "after_fix": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Intel DCAI: $15.5B revenue, $(530)M loss. AMD DC: $6,496M revenue, $1,267M operating income (exact, p51). States that Intel was losing money and AMD was profitable. Correct, but there is no explicit revenue-size comparison."
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source) even though the segment figures are in the corpus."
+   },
+   "decomposed_rule": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "All four segment figures are right ($15.5B and a $530M operating loss vs $6.5B and $1.3B operating income). Stating Intel's operating loss directly answers 'losing money'. No synthesis sentence."
+   },
+   "best": "after_fix_v22",
+   "blind_labels": {
+    "system_A": "after_fix_v22",
+    "system_B": "after_fix",
+    "system_C": "decomposed_rule_v22",
+    "system_D": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "I confirmed in INTC FY2023 document.md that the 'operating loss of $530 million in 2023' sentence sits in the DCAI section, next to the DCAI revenue chart, so it is not consolidated. None of the systems used consolidated figures. A gives the fullest synthesis. No changes."
+  },
+  {
+   "question_id": "B04",
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained after calculation-validation failures. Intel -31.4% and AMD +38.0% are computable from the FY2023 reports."
+   },
+   "after_fix_v22": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "Intel -31.4% (79,024 to 54,228, GAAP net revenue, INTC p42) is correct. For AMD it gives only the FY22 to FY23 -4%, which is correctly labelled, instead of the requested two-year +38.0%. Because the true direction is the opposite, the answer could mislead, but no statement is false."
+   },
+   "after_fix": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "Same content as B: Intel -31.4% is correct, and AMD gets only the labelled one-year -4% instead of the two-year +38%."
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (calculation_operand_not_cited) even though the corpus answers it."
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "after_fix_v22",
+    "system_C": "after_fix",
+    "system_D": "decomposed_rule"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "I checked that INTC p42 79,024 and 54,228 are GAAP net revenue (income-statement % table), not the non-GAAP 74,718. For B and C, I considered calling the AMD part wrong_answer, since it substitutes a different window with the opposite sign. But the period is explicitly labelled FY2022 to FY2023, so the statement is literally true. It counts as a missing part, not a material misstatement. B and C are equivalent, so the best is a tie."
+  },
+  {
+   "question_id": "B05",
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (invalid_claim_schema) even though the corpus answers it."
+   },
+   "decomposed_rule": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "TXN fell from 50.6% to 41.8% (p23) and ADI rose from 27.3% to 31.1% (p32). Explicitly concludes that ADI held up better. Matches gold."
+   },
+   "after_fix_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (claim_number_not_in_evidence). Nothing was released."
+   },
+   "after_fix": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "All four margins and both directions are right. It never states the requested verdict ('which one held up better'), so the reader has to infer it."
+   },
+   "best": "decomposed_rule",
+   "blind_labels": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "decomposed_rule",
+    "system_C": "after_fix_v22",
+    "system_D": "after_fix"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "I confirmed in ADI FY2023 document.md that 31.1% and 27.3% follow 'Operating income as a % of revenue' under operating income of $3,823,112 / $3,278,700, so these are consolidated operating margins and not the 17% $-change or the gross margin. B states the verdict; D does not. No changes."
+  },
+  {
+   "question_id": "B06",
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained. Deere ~16.6% vs CAT ~15.4% is computable from DE p46 and CAT p51."
+   },
+   "after_fix_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (invalid_calculation_schema)."
+   },
+   "after_fix": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (claim_number_not_in_evidence). Nothing was released."
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (invalid_quote) even though the corpus answers it."
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "after_fix_v22",
+    "system_C": "after_fix",
+    "system_D": "decomposed_rule_v22"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "All four released 'I'm not sure', and gold is answerable by calculation. No changes."
+  },
+  {
+   "question_id": "B07",
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained. Gold: CAT ME&T $63,869M vs DE $55,565M."
+   },
+   "after_fix_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (claim_number_not_in_evidence). Nothing was released."
+   },
+   "decomposed_rule": {
+    "outcome": "wrong_answer",
+    "contains_error": true,
+    "note": "Says CAT ME&T sales were $32,513M. That is the North America regional ME&T subtotal (CAT p31 'Sales and Revenues by Geographic Region'), not the total of $63,869M. Deere's $55,565M is right, but with these figures Deere looks bigger, which reverses the true verdict (CAT larger by $8,304M)."
+   },
+   "after_fix": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (invalid_quote). Nothing was released."
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "after_fix_v22",
+    "system_C": "decomposed_rule",
+    "system_D": "after_fix"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "I confirmed in CAT FY2023 document.md that 32,513 sits under the 'North America' heading on p31, while the consolidated ME&T total on p30/p51 is 63,869. C is a regional-subtotal-for-total error, so wrong_answer. The rest abstained, so the best is a tie. No changes."
+  },
+  {
+   "question_id": "B08",
+   "decomposed_rule": {
+    "outcome": "partially_correct",
+    "contains_error": true,
+    "note": "58.2% and 47.9% are right, and the 'not entirely apples-to-apples' verdict is right. 'Colgate's higher gross margin reflects higher pricing (390bps)...' presents YoY change drivers as if they explained Colgate's level gap to P&G. The wording is ambiguous, so the error is minor. The reason given (mix, cost structures, charges) misses the real issue: Colgate books logistics in SG&A (-910 bps, ~49.1% comparable)."
+   },
+   "after_fix": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "Figures and verdict are right. The reason given (Colgate's 2023 gross profit includes 2022 GPI charges) is true per CL p35, but the charge is only ~$1M ($11,326 vs $11,327 ex-charges). It misses the shipping/handling classification and the ~49.1% comparable figure."
+   },
+   "after_fix_v22": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "Figures and verdict are right. The reason ('product mix impacts and cost components') is vague YoY-driver talk and does not identify the shipping/handling classification difference."
+   },
+   "decomposed_rule_v22": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "Figures and verdict are right. The reason (different YoY drivers) is a non-sequitur, and the real comparability issue (logistics costs in SG&A, 910 bps) is missing."
+   },
+   "best": "after_fix",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "after_fix",
+    "system_C": "after_fix_v22",
+    "system_D": "decomposed_rule_v22"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "I checked CL document.md: line 1007 confirms the GPI charge in gross profit is $1M, and line 1808 has the 910-bps shipping/handling caveat, which no system surfaced. All four get the figures and the 'not apples-to-apples' direction but not the real reason, so partial is right. A's misattribution is minor and ambiguous; it is flagged with contains_error but not severe enough for wrong_answer. B's factor is true and is one Colgate itself adjusts for, so B is best. No changes."
+  },
+  {
+   "question_id": "B09",
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence). AVGO R&D of $5,253M and the 15% ratio (p43) and QCOM's 25% are in the corpus."
+   },
+   "after_fix": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained. Its draft wrongly called Broadcom's revenue higher, but nothing was released."
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained even though the corpus answers it (revenue near-tie, QCOM ~25% vs AVGO ~15%)."
+   },
+   "after_fix_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained even though the corpus answers it."
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_rule",
+    "system_B": "after_fix",
+    "system_C": "decomposed_rule_v22",
+    "system_D": "after_fix_v22"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "All four released 'I'm not sure'. I confirmed that B's suppressed draft claimed 'Broadcom's revenue slightly higher', which is wrong, but it was not released. No changes."
+  },
+  {
+   "question_id": "B10",
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Generator abstained. Gold: CRM GAAP ~14% vs NOW ~8.5%. Its top 5 was CRM FY2023 and FY2024 non-GAAP chunks plus NOW gross-loss commentary, with no GAAP operating line."
+   },
+   "after_fix_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Generator abstained even though the corpus answers it."
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Generator abstained even though the corpus answers it."
+   },
+   "after_fix": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Generator abstained even though the corpus answers it."
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "after_fix_v22",
+    "system_C": "decomposed_rule",
+    "system_D": "after_fix"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "All four released plain abstentions on an answerable question. I checked the top 5: it is dominated by non-GAAP and wrong-year chunks, which explains the abstentions. No changes."
+  },
+  {
+   "question_id": "B11",
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Plain 'I'm not sure', with no clarification of the FY-label mismatch. Target ~3.85% vs WMT ~1.9% (FY23 label) or ~2.4% (period-aligned FY24) is computable."
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Plain abstention, not a clarification."
+   },
+   "after_fix": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Plain abstention, not a clarification."
+   },
+   "after_fix_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Plain abstention, not a clarification."
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "decomposed_rule_v22",
+    "system_B": "decomposed_rule",
+    "system_C": "after_fix",
+    "system_D": "after_fix_v22"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "expected_behavior is answer_or_clarify. A bare 'I'm not sure' with no question to the user is neither, and the corpus supports an answer, so false_abstention for all four. No changes."
+  },
+  {
+   "question_id": "B12",
+   "after_fix_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (generator_abstained after a calc-citation failure). Gold: KHC +2.3%, MDLZ +25.4%."
+   },
+   "decomposed_rule": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained. Its drafts used Latin America segment figures (2,797/3,629/5,006) for MDLZ, but nothing was released."
+   },
+   "decomposed_rule_v22": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (calculation_result_mismatch). Nothing was released."
+   },
+   "after_fix": {
+    "outcome": "wrong_answer",
+    "contains_error": true,
+    "note": "KHC gets only the one-year FY22 to FY23 +0.6%, not the two-year +2.3%. MDLZ's '$6,465M FY2021 to $6,767M FY2023, +4.6%' uses AMEA segment net revenues (p53), not company totals ($28,720M to $36,016M). $6,767M is AMEA FY2022, and the cited 4.6% is AMEA's 2022 to 2023 change ($308M). Wrong basis, period and number."
+   },
+   "best": "tie",
+   "blind_labels": {
+    "system_A": "after_fix_v22",
+    "system_B": "decomposed_rule",
+    "system_C": "decomposed_rule_v22",
+    "system_D": "after_fix"
+   },
+   "verifier_agrees": true,
+   "verifier_notes": "I confirmed in MDLZ FY2023 document.md p53 that AMEA is 6,465 / 6,767 / 7,075 for 2021, 2022 and 2023, and that '$308 million (4.6%)' is 2023 vs 2022. D is clearly wrong_answer. I refined D's note to name the AMEA segment. Grades are unchanged."
+  }
+ ]
+}

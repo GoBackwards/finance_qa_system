@@ -1,0 +1,261 @@
+{
+ "schema_version": 1,
+ "description": "Typical live bad cases (docs/live_bad_cases.md). Outcomes are verified agent grades from data/evaluation/live_usage_grades.json; the human-readable table is the primary presentation.",
+ "cases": [
+  {
+   "case": 1,
+   "failure_type": "Context assembly overflow",
+   "stage": "context_assembly",
+   "question_ids": [
+    "A07",
+    "A10",
+    "B03",
+    "B04",
+    "B07",
+    "B09",
+    "D03",
+    "D14"
+   ],
+   "example": "A07",
+   "root_cause": "Each evidence unit was serialized three times with its full citation object; fragmented pages expanded ~10k characters of text to 100-400k, above the 100,000-character budget, so the request was refused before generation.",
+   "mitigation": "Compact model view (each unit once as [id, page, kind, text]); provenance kept local; over budget drop the lowest-ranked passage that is not a company's or year's last; recheck the gate on packed passages.",
+   "code": [
+    "src/report_search/generation.py:model_sources",
+    "src/report_search/generation.py:_bind_within_budget"
+   ],
+   "measured": {
+    "median_context_characters_before": 65478.5,
+    "median_context_characters_after": 11708
+   }
+  },
+  {
+   "case": 2,
+   "failure_type": "Exact-quote mismatch (typography)",
+   "stage": "reference_validation",
+   "question_ids": [
+    "C04",
+    "C05",
+    "D13"
+   ],
+   "example": "C04",
+   "root_cause": "Sources contain NBSP, PDF ligatures and curly quotes; the model retyped them (spaces, letters, NUL plus hex), so the exact-substring check failed on correct drafts.",
+   "mitigation": "Citation-repair pre-pass matches under NFKC/whitespace/dot-leader/hyphen normalization and rewrites the quote to the exact source span; the strict validator is unchanged.",
+   "code": [
+    "src/report_search/answer_verification.py:canonicalize_citations"
+   ]
+  },
+  {
+   "case": 3,
+   "failure_type": "Quote split across parser fragments",
+   "stage": "reference_validation",
+   "question_ids": [
+    "D08",
+    "A09",
+    "A12",
+    "B05"
+   ],
+   "example": "D08",
+   "root_cause": "The parser stores one visual line as adjacent units; the model quotes across the boundary or cites the neighbouring evidence ID.",
+   "mitigation": "Split a uniquely matching cross-unit quote into exact per-unit citations; rebind wrong IDs only to a unique exact match in the same report; one corrective retry for mechanical failures.",
+   "code": [
+    "src/report_search/answer_verification.py:_split_across_units",
+    "src/report_search/generation.py:_retry_feedback"
+   ]
+  },
+  {
+   "case": 4,
+   "failure_type": "Comparison entity missing",
+   "stage": "retrieval",
+   "question_ids": [
+    "B01",
+    "B02",
+    "B06",
+    "B08",
+    "B09",
+    "B11"
+   ],
+   "example": "B01",
+   "root_cause": "One global vector search without entity resolution: aliases ('coke'), ambiguous tickers ('HD') and the more frequent company crowded out the other side.",
+   "mitigation": "Query-scope resolver (names, aliases, typos, tickers, Chinese names); one exact FAISS search per company restricted to its reports; Top-5 reserves slots per company.",
+   "code": [
+    "src/report_search/query_scope.py",
+    "src/report_search/scoped_retrieval.py",
+    "src/report_search/retrieval.py:RetrievalEngine.vector"
+   ]
+  },
+  {
+   "case": 5,
+   "failure_type": "Calculation refused",
+   "stage": "generation",
+   "question_ids": [
+    "B04",
+    "B06",
+    "B10",
+    "B11"
+   ],
+   "example": "B04",
+   "root_cause": "Prompt v1 forbade derived values; margins and growth rates could not be quoted.",
+   "mitigation": "Claims may carry a calculation object over cited operand cells; the application recomputes it in Decimal (scale constants only, sign/direction checked) and renders the formula.",
+   "code": [
+    "src/report_search/answer_verification.py:verify_calculation"
+   ]
+  },
+  {
+   "case": 6,
+   "failure_type": "Relative period resolved to a stale year",
+   "stage": "query_understanding",
+   "question_ids": [
+    "A13",
+    "D07",
+    "C11"
+   ],
+   "example": "A13",
+   "root_cause": "No resolution of 'last year' / 'current'; the model chose a year from its own knowledge and the typo 'starbuks' weakened matching.",
+   "mitigation": "Resolve relative periods to each company's latest report, filter retrieval to it, and pass the interpretation to both models; fuzzy company matching.",
+   "code": [
+    "src/report_search/query_scope.py:ScopeResolver.resolve"
+   ]
+  },
+  {
+   "case": 7,
+   "failure_type": "Undated question answered from an old report",
+   "stage": "query_understanding",
+   "question_ids": [
+    "D12",
+    "C06"
+   ],
+   "example": "D12",
+   "root_cause": "No period given and the reranker preferred older tables.",
+   "mitigation": "Dedicated latest-report pool and two reserved latest-year slots for undated questions, plus a note to answer for and state the latest fiscal year.",
+   "code": [
+    "src/report_search/scoped_retrieval.py:plan_pools",
+    "src/report_search/scoped_retrieval.py:select_candidates"
+   ]
+  },
+  {
+   "case": 8,
+   "failure_type": "Historical figure presented as a forecast",
+   "stage": "generation",
+   "question_ids": [
+    "D05"
+   ],
+   "example": "D05",
+   "root_cause": "The generator relabelled FY2025 actuals as a 2027 projection and the verifier approved it while its reason noted the mismatch; no deterministic period check.",
+   "mitigation": "Deterministic grounding of years, dates, numbers and companies against cited text; forecast intent and out-of-coverage notes; verdicts whose reason expresses doubt are rejected.",
+   "code": [
+    "src/report_search/answer_verification.py:check_claim_grounding",
+    "src/report_search/answer_verification.py:validate_semantic_verdict"
+   ]
+  },
+  {
+   "case": 9,
+   "failure_type": "Answer for the wrong period",
+   "stage": "retrieval",
+   "question_ids": [
+    "B05"
+   ],
+   "example": "B05",
+   "root_cause": "Without year scoping, FY2024 reports outranked FY2023 ones and the verifier did not compare periods.",
+   "mitigation": "Explicit years restrict each company's pool to that report; both models receive the requested period.",
+   "code": [
+    "src/report_search/query_scope.py",
+    "src/report_search/scoped_retrieval.py:plan_pools"
+   ]
+  },
+  {
+   "case": 10,
+   "failure_type": "Qualifier dropped or invented",
+   "stage": "generation",
+   "question_ids": [
+    "B12",
+    "B07",
+    "D07"
+   ],
+   "example": "B12",
+   "root_cause": "Quotes were exact and numbers grounded, but the claim dropped 'Organic/non-GAAP' or 'including noncontrolling interests', or added 'excluding financing'; the verifier missed the basis change.",
+   "mitigation": "Per-figure qualifier check: a qualifier attached to a quoted figure must stay with that figure in the claim; 'excluding' and similar narrowing words may only come from the sources.",
+   "code": [
+    "src/report_search/answer_verification.py:_qualifier_mismatch"
+   ],
+   "replay": {
+    "note": "Iteration-2 released drafts replayed through the final checks",
+    "B07": "claim_qualifier_mismatch",
+    "B12": "claim_qualifier_mismatch",
+    "D07": "claim_qualifier_mismatch",
+    "A06": "not caught"
+   }
+  },
+  {
+   "case": 11,
+   "failure_type": "Partial answer released with an admitted gap",
+   "stage": "semantic_verifier",
+   "question_ids": [
+    "C01",
+    "B09",
+    "C07"
+   ],
+   "example": "C01",
+   "root_cause": "The generator answered the convenient part and wrote that the rest was not provided; the verifier passed it; a retry could delete the admission.",
+   "mitigation": "Claims admitting missing evidence are rejected and that failure is never retried.",
+   "code": [
+    "src/report_search/answer_verification.py:check_claim_grounding",
+    "src/report_search/generation.py:_NOT_RETRIED"
+   ]
+  },
+  {
+   "case": 12,
+   "failure_type": "Over-refusal by the calibrated confidence gate",
+   "stage": "confidence_gate",
+   "question_ids": [
+    "A07",
+    "A06",
+    "A11",
+    "B05",
+    "D03",
+    "D13"
+   ],
+   "example": "A11",
+   "root_cause": "Raw reranker logits are uncalibrated; table rows and scoped pools score low even when the answer is correct.",
+   "mitigation": "No default threshold; release is decided by exact references, deterministic grounding and the verifier; the 6.359375 gate stays an opt-in diagnostic.",
+   "code": [
+    "src/report_search/confidence.py"
+   ],
+   "measured": {
+    "final_run_gate_accepts": 4,
+    "question_count": 50,
+    "correct_or_acceptable_released": 25,
+    "of_which_gate_accepts": 4,
+    "bad_released": 5,
+    "of_which_gate_blocks": 5
+   }
+  },
+  {
+   "case": 13,
+   "failure_type": "Evaluation leakage through prompt examples",
+   "stage": "evaluation",
+   "question_ids": [
+    "A06",
+    "B04"
+   ],
+   "example": "A06",
+   "root_cause": "Prompt v2's worked examples were written from observed live failures: the scale example used A06's wrong sub-row figure (6,690) and the calculation example was B04's gold answer (Intel -31.4% from 54,228 and 79,024).",
+   "mitigation": "Prompt v2.1 uses a fictional 'Example Corp'; prompts scanned for any question-pool figure; the final run repeated in full.",
+   "code": [
+    "src/report_search/generation.py:GENERATOR_SYSTEM"
+   ],
+   "outcomes": {
+    "A06": {
+     "baseline": "wrong_answer",
+     "iteration2": "wrong_answer",
+     "iteration3": "partially_correct",
+     "final": "correct_answer"
+    },
+    "B04": {
+     "baseline": "false_abstention",
+     "iteration3": "partially_correct",
+     "final": "partially_correct"
+    }
+   }
+  }
+ ]
+}
