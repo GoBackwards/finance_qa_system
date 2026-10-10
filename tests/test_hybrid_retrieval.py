@@ -116,6 +116,20 @@ class RetrievalEngineTests(unittest.TestCase):
             self.assertEqual(engine.bm25("zzzzunmatchedword", 5), [])
             self.assertEqual(engine.bm25("and the of", 5), [])
 
+    def test_document_scoped_vector_search_is_exact_within_scope(self):
+        with self.engine() as engine:
+            self.assertEqual(engine.document_ids(), ["doc1", "doc2"])
+            scoped = engine.vector(self.query, 5, document_ids=["doc2"])
+            # Scoping searches inside doc2; it is not a post-filter of the global Top-K.
+            self.assertEqual([r["chunk_id"] for r in scoped], ["b", "c"])
+            self.assertEqual({r["document_id"] for r in scoped}, {"doc2"})
+            self.assertEqual([r["rank"] for r in scoped], [1, 2])
+            tied = engine.vector(self.query, 1, document_ids=["doc1"])
+            self.assertEqual([r["chunk_id"] for r in tied], ["a"])
+            for invalid in ([], ["missing"], ["doc1", "missing"]):
+                with self.assertRaises(ValueError):
+                    engine.vector(self.query, 2, document_ids=invalid)
+
     def test_pure_ranking_endpoints_and_cached_candidate_fusion(self):
         with self.engine() as engine:
             vector, bm25 = engine.vector(self.query, 4), engine.bm25("Revenue", 4)

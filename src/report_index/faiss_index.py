@@ -324,8 +324,8 @@ def load_chunk_mapping(index_path: str | Path, *, verify_source: bool = True) ->
     return mapping
 
 
-def _ranked_search(index, queries: np.ndarray, k: int) -> tuple[np.ndarray, np.ndarray]:
-    distances, indices = index.search(queries, k)
+def _ranked_search(index, queries: np.ndarray, k: int, params=None) -> tuple[np.ndarray, np.ndarray]:
+    distances, indices = index.search(queries, k) if params is None else index.search(queries, k, params=params)
     # FAISS has no global ID tie guarantee at the k boundary. We stabilize the
     # order within the returned candidate set and explicitly document that limit.
     for row in range(len(indices)):
@@ -335,16 +335,33 @@ def _ranked_search(index, queries: np.ndarray, k: int) -> tuple[np.ndarray, np.n
 
 
 def search_faiss_index(index_or_path, query_vectors: np.ndarray | str | Path, *,
-                       k: int = 5, threads: int = 1) -> tuple[np.ndarray, np.ndarray]:
-    """Return cosine scores and stable zero-based row IDs, highest score first."""
+                       k: int = 5, threads: int = 1,
+                       selector_ids: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray]:
+    """Return cosine scores and stable zero-based row IDs, highest score first.
+
+    ``selector_ids`` restricts an exact Flat search to those row IDs. Approximate
+    indexes need index-specific search parameters, so filtering them is refused
+    rather than silently searching the whole corpus.
+    """
     k = _positive_int(k, "k")
     index = load_faiss_index(index_or_path) if isinstance(index_or_path, (str, Path)) else index_or_path
     queries = _vectors(query_vectors, dimension=index.d)
     validate_vectors(queries, dimension=index.d)
     if index.metric_type != _faiss().METRIC_INNER_PRODUCT:
         raise ValueError("Expected an inner-product index")
+    params = None
+    if selector_ids is not None:
+        faiss = _faiss()
+        if not isinstance(index, faiss.IndexFlat):
+            raise ValueError("Filtered search requires an exact Flat index")
+        ids = np.unique(np.asarray(selector_ids, dtype=np.int64))
+        if ids.ndim != 1 or not ids.size or ids[0] < 0 or ids[-1] >= index.ntotal:
+            raise ValueError("selector_ids must be nonempty row IDs within the index")
+        selector = faiss.IDSelectorBatch(ids)
+        params = faiss.SearchParameters(sel=selector)
+        k = min(k, int(ids.size))
     with _threads(threads):
-        return _ranked_search(index, np.ascontiguousarray(queries), k)
+        return _ranked_search(index, np.ascontiguousarray(queries), k, params)
 
 
 def benchmark_indexes(indexfiles: Mapping[str, str | Path], query_vectors: np.ndarray | str | Path,

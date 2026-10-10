@@ -173,6 +173,10 @@ class RetrievalEngine:
         self._chunk_ids = {chunk_id for chunk_id, _ in self._mapping}
         if len(self._chunk_ids) != len(self._mapping):
             raise ValueError("Vector mapping contains duplicate chunk IDs")
+        rows_by_document: dict[str, list[int]] = {}
+        for vector_id, (_, document_id) in enumerate(self._mapping):
+            rows_by_document.setdefault(document_id, []).append(vector_id)
+        self._document_rows = {key: np.asarray(rows, dtype=np.int64) for key, rows in rows_by_document.items()}
         expected_count = len(self._mapping)
         if (self.vector_manifest.get("chunk_count") != expected_count
                 or self.bm25_stats.get("chunk_count") != expected_count):
@@ -229,11 +233,16 @@ class RetrievalEngine:
         chunk["text"] = row[1]
         return chunk
 
-    def vector(self, query_vector: np.ndarray, top_k: int = 5) -> list[dict]:
+    def document_ids(self) -> list[str]:
+        return sorted(self._document_rows)
+
+    def vector(self, query_vector: np.ndarray, top_k: int = 5, *,
+               document_ids: Iterable[str] | None = None) -> list[dict]:
         """Search normalized query embeddings; resolve all cutoff ties by chunk ID.
 
-        Flat search considers the entire corpus. With an approximate index,
-        the tie rule applies to candidates visited by that index's search.
+        Flat search considers the entire corpus, or only ``document_ids`` when
+        given (an exact scoped search, not a post-filter of a global Top-K).
+        With an approximate index, the tie rule applies to visited candidates.
         """
         self._require_open()
         _positive_integer(top_k, "top_k")
@@ -242,16 +251,25 @@ class RetrievalEngine:
             query = query.reshape(1, -1)
         if query.ndim != 2 or query.shape[0] != 1:
             raise ValueError("query_vector must contain exactly one query")
-        wanted = min(top_k, self.index.ntotal)
-        search_k = min(wanted + 1, self.index.ntotal)
+        selector, total = None, self.index.ntotal
+        if document_ids is not None:
+            requested = sorted(set(document_ids))
+            unknown = [document_id for document_id in requested if document_id not in self._document_rows]
+            if not requested or unknown:
+                raise ValueError("document_ids must name documents in this verified corpus")
+            selector = np.concatenate([self._document_rows[document_id] for document_id in requested])
+            total = int(selector.size)
+        wanted = min(top_k, total)
+        search_k = min(wanted + 1, total)
         while True:
-            scores, ids = search_faiss_index(self.index, query, k=search_k, threads=self.threads)
+            scores, ids = search_faiss_index(self.index, query, k=search_k, threads=self.threads,
+                                             selector_ids=selector)
             candidates = [(float(score), int(index)) for score, index in zip(scores[0], ids[0]) if index >= 0]
             candidates.sort(key=lambda row: (-row[0], self._mapping[row[1]][0]))
-            if (search_k == self.index.ntotal or len(candidates) <= wanted
+            if (search_k == total or len(candidates) <= wanted
                     or candidates[wanted - 1][0] != candidates[-1][0]):
                 break
-            search_k = min(self.index.ntotal, max(search_k + 1, search_k * 2))
+            search_k = min(total, max(search_k + 1, search_k * 2))
         results = []
         for rank, (score, vector_id) in enumerate(candidates[:wanted], 1):
             chunk = self._payload(*self._mapping[vector_id])
