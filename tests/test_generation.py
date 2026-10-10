@@ -71,17 +71,87 @@ class GenerationTests(unittest.TestCase):
                 self.assertFalse(generator.calls or verifier.calls)
 
     def test_valid_quote_does_not_allow_false_claim(self):
+        # A number absent from the citation is now rejected deterministically.
         draft = copy.deepcopy(DRAFT)
         draft["claims"][0]["text"] = "Revenue was $100 million."
-        verdict = copy.deepcopy(VERDICT)
-        verdict["claim_verdicts"][0]["supported"] = False
-        result, _, _, verifier = self.run_answer(draft=draft, verdict=verdict)
+        result, _, _, verifier = self.run_answer(draft=draft)
         self.assertEqual(result["answer"], "I'm not sure")
+        self.assertEqual(result["reason"], "claim_number_not_in_evidence")
         self.assertEqual(result["citations"], [])
-        self.assertTrue(verifier.calls)
+        self.assertFalse(verifier.calls)
         self.assertTrue(result["reference_verified"])
         self.assertFalse(result["semantic_supported"])
         self.assertNotIn("100 million", str(result))
+        # A false claim with grounded numbers still needs the semantic verifier.
+        draft["claims"][0]["text"] = "Revenue fell to $10 million because of tariffs."
+        verdict = copy.deepcopy(VERDICT)
+        verdict["claim_verdicts"][0]["supported"] = False
+        result, _, _, verifier = self.run_answer(draft=draft, verdict=verdict)
+        self.assertEqual(result["reason"], "unsupported_claim")
+        self.assertTrue(verifier.calls)
+        self.assertNotIn("tariffs", str(result))
+
+    def test_models_receive_compact_sources_without_provenance_payloads(self):
+        result, _, generator, verifier = self.run_answer()
+        context = json.loads(generator.calls[0][1]["content"])
+        self.assertEqual(context["sources"][0]["evidence"], [["E1", 7, "prose", TEXT]])
+        self.assertEqual(context["sources"][0]["report_fiscal_year"], 2025)
+        for payload in (generator.calls[0][1]["content"], verifier.calls[0][1]["content"]):
+            self.assertNotIn("sha256", payload)
+            self.assertNotIn("bbox", payload)
+        self.assertEqual(result["citations"][0]["citation"]["sha256"], "a" * 64)
+
+    def test_scope_notes_reach_both_models_and_the_audit(self):
+        scope = {"tickers": ["DEMO"], "years": [], "period_mode": "relative_latest", "latest_year": {"DEMO": 2025},
+                 "notes": ["'last year' was interpreted as the latest available fiscal year: Demo FY2025."],
+                 "report_years": {"DEMO": [2025]}}
+        result, _, generator, verifier = self.run_answer(scope=scope)
+        for model in (generator, verifier):
+            context = json.loads(model.calls[0][1]["content"])
+            self.assertEqual(context["query_scope"]["notes"], scope["notes"])
+            self.assertNotIn("report_years", context["query_scope"])
+        self.assertEqual(result["audit"]["query_scope"]["companies"], ["DEMO"])
+
+    def test_oversized_context_drops_lowest_ranked_passages_instead_of_refusing(self):
+        class GrowingSource(Source):
+            def build(self, candidates):
+                self.calls += 1
+                bundle = copy.deepcopy(BUNDLE)
+                for index in range(2, len(candidates) + 1):
+                    identifier = f"E{index}"
+                    bundle["evidence"][identifier] = dict(copy.deepcopy(BUNDLE["evidence"]["E1"]),
+                                                          evidence_id=identifier, text="x" * 4000)
+                    bundle["chunks"].append({"chunk_id": f"c{index}", "text": "x" * 4000, "evidence_ids": [identifier]})
+                return bundle
+
+        candidates = [{"chunk_id": f"c{index}", "reranker_score": 7.0} for index in range(1, 6)]
+        source, generator = GrowingSource(), Model(DRAFT)
+        result = generate_answer("What was revenue?", candidates, threshold=6, source_store=source,
+                                 generator=generator, verifier=Model(VERDICT), max_context_chars=6_000)
+        self.assertEqual(result["status"], "answer")
+        self.assertEqual(result["audit"]["context_passages"], 2)
+        self.assertEqual(result["audit"]["context_passages_dropped"], 3)
+        self.assertLessEqual(result["audit"]["context_characters"], 6_000)
+
+    def test_typography_only_quote_difference_is_repaired_to_exact_source_text(self):
+        source_text = "Revenue was $10 million."
+        bundle = copy.deepcopy(BUNDLE)
+        bundle["evidence"]["E1"]["text"] = bundle["chunks"][0]["text"] = source_text
+        draft = copy.deepcopy(DRAFT)
+        draft["claims"][0]["text"] = "Revenue was $10 million."
+        draft["claims"][0]["citations"][0]["quote"] = "Revenue was $10 million."
+        with patch.object(Source, "build", return_value=bundle):
+            result, *_ = self.run_answer(draft=draft)
+        self.assertEqual(result["status"], "answer")
+        self.assertEqual(result["citations"][0]["quote"], source_text)
+        self.assertEqual(result["audit"]["citation_repairs"][0]["kind"], "typography")
+
+    def test_claim_period_absent_from_citations_is_rejected_before_review(self):
+        draft = copy.deepcopy(DRAFT)
+        draft["claims"][0]["text"] = "Revenue is projected to be $10 million in 2027."
+        result, _, _, verifier = self.run_answer(draft=draft)
+        self.assertEqual(result["reason"], "claim_period_not_in_evidence")
+        self.assertFalse(verifier.calls)
 
     def test_irrelevant_or_incomplete_answer_is_rejected(self):
         verdict = copy.deepcopy(VERDICT)
@@ -323,6 +393,132 @@ class GenerationTests(unittest.TestCase):
         self.assertEqual(result["status"], "answer")
         self.assertIn(query, generator.calls[0][1]["content"])
         self.assertTrue(result["answer"].encode("utf-8"))
+
+
+
+class SequenceModel(Model):
+    """Returns the queued responses in order, recording every request."""
+
+    def __init__(self, *responses):
+        super().__init__(None)
+        self.responses = list(responses)
+
+    def complete_json(self, messages):
+        self.calls.append(messages)
+        return copy.deepcopy(self.responses.pop(0))
+
+
+class RepairRoundTests(unittest.TestCase):
+    def test_one_feedback_round_fixes_an_inexact_quote_and_is_fully_rechecked(self):
+        bad = copy.deepcopy(DRAFT)
+        bad["claims"][0]["citations"][0]["quote"] = "Revenue was 10 million dollars."
+        generator, verifier = SequenceModel(bad, DRAFT), Model(VERDICT)
+        result = generate_answer("What was revenue?", CANDIDATES, threshold=6, source_store=Source(),
+                                 generator=generator, verifier=verifier)
+        self.assertEqual(result["status"], "answer")
+        self.assertEqual(len(generator.calls), 2)
+        feedback = generator.calls[1][-1]["content"]
+        self.assertIn("quote_not_in_source", feedback)
+        self.assertIn("E1", feedback)
+        self.assertEqual(generator.calls[1][-2]["role"], "assistant")
+        self.assertEqual(result["audit"]["first_attempt_reason"], "quote_not_in_source")
+        self.assertEqual(result["audit"]["generation_attempts"], 2)
+        stages = [row["stage"] for row in result["audit"]["stage_timings"]]
+        self.assertEqual(stages[:4], ["source_binding", "generation", "reference_validation", "generation_retry"])
+
+    def test_retry_is_single_and_abstentions_are_never_retried(self):
+        bad = copy.deepcopy(DRAFT)
+        bad["claims"][0]["text"] = "Revenue was $100 million."
+        generator, verifier = SequenceModel(bad, bad), Model(VERDICT)
+        result = generate_answer("What was revenue?", CANDIDATES, threshold=6, source_store=Source(),
+                                 generator=generator, verifier=verifier)
+        self.assertEqual(result["reason"], "claim_number_not_in_evidence")
+        self.assertEqual(len(generator.calls), 2)
+        self.assertFalse(verifier.calls)
+        abstaining = SequenceModel({"status": "abstain", "claims": []})
+        result = generate_answer("What was revenue?", CANDIDATES, threshold=6, source_store=Source(),
+                                 generator=abstaining, verifier=Model(VERDICT))
+        self.assertEqual(result["reason"], "generator_abstained")
+        self.assertEqual(len(abstaining.calls), 1)
+
+
+class PackingTests(unittest.TestCase):
+    def growing_source(self):
+        class GrowingSource(Source):
+            def build(self, candidates):
+                self.calls += 1
+                bundle = {"source_verified": True, "evidence": {}, "chunks": []}
+                for index, candidate in enumerate(candidates, 1):
+                    identifier = f"E{index}"
+                    text = TEXT if candidate["chunk_id"] == "c1" else "x" * 3000
+                    bundle["evidence"][identifier] = dict(copy.deepcopy(BUNDLE["evidence"]["E1"]),
+                                                          evidence_id=identifier, text=text)
+                    bundle["chunks"].append({"chunk_id": candidate["chunk_id"], "text": text,
+                                             "evidence_ids": [identifier], "ticker": candidate["ticker"],
+                                             "fiscal_year": candidate["fiscal_year"]})
+                return bundle
+        return GrowingSource()
+
+    def test_packing_never_drops_a_companys_or_years_last_passage(self):
+        candidates = [{"chunk_id": "c1", "reranker_score": 7.0, "ticker": "PEP", "fiscal_year": 2022},
+                      {"chunk_id": "c2", "reranker_score": 6.9, "ticker": "PEP", "fiscal_year": 2022},
+                      {"chunk_id": "c3", "reranker_score": 6.8, "ticker": "PEP", "fiscal_year": 2022},
+                      {"chunk_id": "c4", "reranker_score": 6.7, "ticker": "KO", "fiscal_year": 2022}]
+        generator = Model(DRAFT)
+        result = generate_answer("Coke vs Pepsi?", candidates, threshold=6, source_store=self.growing_source(),
+                                 generator=generator, verifier=Model(VERDICT), max_context_chars=8_000)
+        context = json.loads(generator.calls[0][1]["content"])
+        self.assertEqual([source["ticker"] for source in context["sources"]], ["PEP", "PEP", "KO"])
+        self.assertEqual(result["audit"]["context_passages_dropped"], 1)
+
+    def test_gate_is_rechecked_on_the_packed_passages(self):
+        # Unsorted caller input: the only high-scoring passage is last and oversized.
+        candidates = [{"chunk_id": "c3", "reranker_score": 1.0, "ticker": "PEP", "fiscal_year": 2022},
+                      {"chunk_id": "c1", "reranker_score": 1.0, "ticker": "PEP", "fiscal_year": 2022},
+                      {"chunk_id": "c2", "reranker_score": 9.0, "ticker": "PEP", "fiscal_year": 2022}]
+        generator = Model(DRAFT)
+        result = generate_answer("Revenue?", candidates, threshold=6, source_store=self.growing_source(),
+                                 generator=generator, verifier=Model(VERDICT), max_context_chars=5_000)
+        self.assertEqual(result["reason"], "below_threshold")
+        self.assertEqual(result["audit"]["context_passages_dropped"], 1)
+        self.assertFalse(generator.calls)
+
+
+class ModelViewTests(unittest.TestCase):
+    def test_header_rows_are_marked_for_the_models(self):
+        bundle = copy.deepcopy(BUNDLE)
+        bundle["evidence"]["E2"] = dict(copy.deepcopy(BUNDLE["evidence"]["E1"]), evidence_id="E2", kind="row",
+                                        text=" | 2024 | 2023", source_locator={"table_id": "t", "row_index": 0,
+                                                                              "role": "header"})
+        bundle["chunks"][0]["evidence_ids"] = ["E2", "E1"]
+        from report_search.generation import model_sources
+        units = model_sources(bundle)[0]["evidence"]
+        self.assertEqual(units[0][2], "header_row")
+        self.assertEqual(units[1][2], "prose")
+
+
+
+class AdmissionRetryTests(unittest.TestCase):
+    def test_admitted_gap_is_not_retried_away(self):
+        admitted = copy.deepcopy(DRAFT)
+        admitted["claims"].append({"text": "The R&D share is not provided in the sources.",
+                                   "citations": [{"evidence_id": "E1", "quote": TEXT}]})
+        generator = SequenceModel(admitted, DRAFT)
+        result = generate_answer("What was revenue?", CANDIDATES, threshold=6, source_store=Source(),
+                                 generator=generator, verifier=Model(VERDICT))
+        self.assertEqual(result["reason"], "claim_admits_missing_evidence")
+        self.assertEqual(len(generator.calls), 1)
+
+
+
+class PromptTests(unittest.TestCase):
+    def test_prompts_name_no_corpus_company(self):
+        from pathlib import Path
+        from report_search.generation import GENERATOR_SYSTEM, VERIFIER_SYSTEM
+        from report_search.query_scope import ScopeResolver
+        manifest = Path(__file__).resolve().parents[1] / "data/manifest.json"
+        resolver = ScopeResolver(json.loads(manifest.read_text(encoding="utf-8-sig")))
+        self.assertEqual(resolver.companies_in_text(GENERATOR_SYSTEM + VERIFIER_SYSTEM), frozenset())
 
 
 if __name__ == "__main__":

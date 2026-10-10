@@ -1,12 +1,13 @@
 """Adversarial reference validation and independent semantic gate contracts."""
 
 import copy
+import html
 import json
 import unittest
 
 from report_search.answer_verification import (
     ABSTENTION, MAX_CLAIMS, MAX_CLAIM_CHARS, MAX_JSON_CHARS,
-    render_verified_answer, validate_draft, validate_semantic_verdict,
+    render_verified_answer, validate_draft, validate_semantic_verdict, verify_calculation,
 )
 
 
@@ -232,6 +233,235 @@ class AnswerVerificationTests(unittest.TestCase):
         for claim in ("Revenue is $100 [1].", "Revenue is $100 [E2].", "Revenue is $100 [^3].",
                       "Revenue is $100 【99†source】.", "Revenue is $100\u202e."):
             self.assertFalse(validate_draft(draft(claim), bundle())["ok"])
+
+
+def intel_bundle():
+    """Intel net revenue rows from the FY2023 and FY2021 reports (USD millions)."""
+    source = bundle()
+    template = source["evidence"].pop("E1")
+    for identifier, text, year, row in (("E3", "Net revenue | $ 54,228 | $ 63,054", 2023, 3),
+                                        ("E9", "Net revenue | $ 79,024 | $ 77,867", 2021, 9),
+                                        ("E5", "Operating income (loss) | (1,234) | \u22125", 2023, 5)):
+        entry = copy.deepcopy(template)
+        entry.update(evidence_id=identifier, text=text, kind="row", chunk_ids=[f"chunk_{identifier}"],
+                     source_locator={"table_id": f"INTC_FY{year}:p40:table1", "row_index": row})
+        entry["citation"].update(ticker="INTC", fiscal_year=year, document_id=f"INTC_FY{year}_annual_report")
+        source["evidence"][identifier] = entry
+    return source
+
+
+def growth_claim(text="Intel's revenue fell 31.4% from FY2021 to FY2023.", **changes):
+    calculation = {"expression": "(a - b) / b * 100", "result": "-31.4", "unit": "%", "operands": [
+        {"name": "a", "evidence_id": "E3", "value": "54,228", "label": "Intel net revenue FY2023 (USD millions)"},
+        {"name": "b", "evidence_id": "E9", "value": "79,024", "label": "Intel net revenue FY2021 (USD millions)"}]}
+    calculation.update(changes)
+    return {"text": text, "citations": [{"evidence_id": "E3", "quote": "Net revenue | $ 54,228"},
+                                        {"evidence_id": "E9", "quote": "Net revenue | $ 79,024"}],
+            "calculation": calculation}
+
+
+class CalculationTests(unittest.TestCase):
+    def reason(self, claim):
+        return validate_draft({"status": "answer", "claims": [claim]}, intel_bundle())["reason"]
+
+    def test_application_recomputes_growth_from_cited_operands(self):
+        claim = growth_claim()
+        checked = validate_draft({"status": "answer", "claims": [claim]}, intel_bundle())
+        self.assertTrue(checked["ok"], checked["reason"])
+        self.assertEqual(checked["claims"][0]["calculation"], claim["calculation"])
+        result = verify_calculation(claim, intel_bundle()["evidence"])
+        self.assertTrue(result["ok"])
+        self.assertIsNone(result["reason"])
+        self.assertTrue(result["computed"].startswith("-31.37780"))
+        self.assertEqual(result["expression_display"], "(54,228 \u2212 79,024) \u00f7 79,024 \u00d7 100")
+
+    def test_result_must_match_recomputation_at_its_written_precision(self):
+        for result, text, expected in (("-31.38", "fell 31.38%", None), ("-31", "fell 31%", None),
+                                       ("-31.378", "fell 31.378%", None),
+                                       ("-31.37", "fell 31.37%", "calculation_result_mismatch"),
+                                       ("-31.5", "fell 31.5%", "calculation_result_mismatch"),
+                                       ("31.4", "fell 31.4%", "calculation_result_mismatch")):
+            with self.subTest(result=result):
+                self.assertEqual(self.reason(growth_claim(f"Intel's revenue {text}.", result=result)), expected)
+
+    def test_result_must_be_written_in_the_claim(self):
+        for text in ("Intel's revenue fell sharply.", "Intel's revenue fell 131.4%.", "Intel's revenue fell 31.45%.",
+                     "Intel's revenue fell 31.40%."):
+            with self.subTest(text=text):
+                self.assertEqual(self.reason(growth_claim(text)), "calculation_result_not_in_claim")
+        difference = growth_claim("Intel's revenue was $24,796 million lower in FY2023 than in FY2021.",
+                                  expression="b - a", result="24796", unit="USD millions")
+        self.assertIsNone(self.reason(difference))
+
+    def test_operands_must_be_cited_and_copied_from_their_source_unit(self):
+        claim = growth_claim()
+        claim["calculation"]["operands"][1]["evidence_id"] = "E5"
+        self.assertEqual(self.reason(claim), "calculation_operand_not_cited")
+        for value, expected in (("54,229", "calculation_operand_not_in_source"),
+                                ("228", "calculation_operand_not_in_source"),
+                                ("54228", "calculation_operand_not_in_source"),
+                                ("63,054", "calculation_result_mismatch"),
+                                ("$ 54,228", None)):
+            with self.subTest(value=value):
+                claim = growth_claim()
+                claim["calculation"]["operands"][0]["value"] = value
+                self.assertEqual(self.reason(claim), expected)
+
+    def test_operands_keep_the_sign_they_have_in_the_source(self):
+        def operand_reason(text, kind, value):
+            source = intel_bundle()["evidence"]
+            entry = source["E5"]
+            entry.update(text=text, kind=kind)
+            if kind == "prose":
+                entry["source_locator"] = {"element_id": "p40_b1", "char_start": 0, "char_end": len(text)}
+            claim = {"text": "The change was 1,801 in FY2023.",
+                     "citations": [{"evidence_id": "E5", "quote": text}],
+                     "calculation": {"expression": "a - b", "result": "1801", "unit": "", "operands": [
+                         {"name": "a", "evidence_id": "E5", "value": value, "label": "Figure FY2023"},
+                         {"name": "b", "evidence_id": "E5", "value": "567", "label": "Figure FY2022"}]}}
+            return verify_calculation(claim, source)["reason"]
+
+        # The claim states a - b = 2,368 - 567 = 1,801, so only an unsigned 2,368 can pass.
+        cases = (
+            ("Operating income (loss) | (2,368) | 567", "row", "2,368", "calculation_operand_not_in_source"),
+            ("Operating income (loss) | $ (2,368) | 567", "row", "2,368", "calculation_operand_not_in_source"),
+            ("Operating income (loss) | -2,368 | 567", "row", "2,368", "calculation_operand_not_in_source"),
+            ("Operating income (loss) | (2,368) | 567", "row", "(2,368)", "calculation_result_mismatch"),
+            ("Operating income | (2,368) | 2,368 | 567", "row", "2,368", None),
+            ("Senior notes (2,368 tranche) | 1 | 567", "row", "2,368", None),
+            ("Volume/mix | - | 2,368 | 567", "row", "2,368", None),
+            ("Net revenues increased $567 million (2,368 units) in 2022-2023.", "prose", "2,368", None),
+            ("Operating income fell from 567 to -2,368.", "prose", "2,368", "calculation_operand_not_in_source"),
+        )
+        for text, kind, value, expected in cases:
+            with self.subTest(text=text, value=value):
+                self.assertEqual(operand_reason(text, kind, value), expected)
+
+    def test_parenthesized_negatives_and_unicode_minus_are_parsed(self):
+        claim = {"text": "Operating loss narrowed by 1,229 in FY2023.",
+                 "citations": [{"evidence_id": "E5", "quote": "Operating income (loss) | (1,234)"}],
+                 "calculation": {"expression": "-(a - b)", "result": "1229", "unit": "USD millions", "operands": [
+                     {"name": "a", "evidence_id": "E5", "value": "(1,234)", "label": "Operating loss FY2023"},
+                     {"name": "b", "evidence_id": "E5", "value": "\u22125", "label": "Operating loss FY2022"}]}}
+        self.assertIsNone(self.reason(claim))
+        self.assertEqual(verify_calculation(claim, intel_bundle()["evidence"])["expression_display"],
+                         "\u2212((1,234) \u2212 \u22125)")
+
+    def test_expression_whitelist_rejects_anything_but_arithmetic_on_operands(self):
+        for expression in ("a ** 2 + b", "abs(a) + b", "a.real + b", "a + b + c", "a", "a + b + 'x'",
+                           "a + b + True", "a / (b - b)", "a +", "a // b", "a % b", "a < b", "[a, b]",
+                           "a if b else b", "__import__('os').system('x') + a + b", "1e999 + a + b",
+                           "a + b + 1j", "(lambda: a)() + b", "a; b"):
+            with self.subTest(expression=expression):
+                self.assertEqual(self.reason(growth_claim(expression=expression)), "invalid_calculation_expression")
+        self.assertIsNone(self.reason(growth_claim(expression="((a) - b) / +b * 100.0")))
+
+    def test_calculation_schema_is_exact(self):
+        operand = growth_claim()["calculation"]["operands"][0]
+        mutations = [
+            lambda c: c.update(extra=1), lambda c: c.pop("unit"), lambda c: c.update(operands=[]),
+            lambda c: c.update(operands=[dict(operand, name=f"x{i}") for i in range(9)]),
+            lambda c: c.update(operands="a"), lambda c: c["operands"][0].update(name="A"),
+            lambda c: c["operands"][0].update(name="1a"), lambda c: c["operands"][0].update(name="b"),
+            lambda c: c["operands"][0].update(name="if"), lambda c: c["operands"][0].update(name="a" * 17),
+            lambda c: c["operands"][0].update(label=""), lambda c: c["operands"][0].update(label="x" * 121),
+            lambda c: c["operands"][0].update(value="n/a"), lambda c: c["operands"][0].update(value="1" * 65),
+            lambda c: c["operands"][0].update(evidence_id=3), lambda c: c["operands"][0].pop("label"),
+            lambda c: c["operands"][0].update(source="E3"), lambda c: c.update(result="1e3"),
+            lambda c: c.update(result="31.4%"), lambda c: c.update(result="31."), lambda c: c.update(result=-31.4),
+            lambda c: c.update(unit="x" * 41), lambda c: c.update(unit="%\u202e"), lambda c: c.update(unit=None),
+            lambda c: c.update(expression="a" * 201), lambda c: c.update(expression=" "),
+        ]
+        for index, mutation in enumerate(mutations):
+            with self.subTest(index=index):
+                claim = growth_claim()
+                mutation(claim["calculation"])
+                self.assertEqual(self.reason(claim), "invalid_calculation_schema")
+        self.assertEqual(verify_calculation(None, intel_bundle()["evidence"])["reason"], "invalid_calculation_schema")
+
+    def test_claim_keys_stay_exact(self):
+        claim = growth_claim()
+        claim["calc"] = claim.pop("calculation")
+        self.assertEqual(self.reason(claim), "invalid_claim_schema")
+        claim = growth_claim()
+        claim["calculation"] = None
+        self.assertEqual(self.reason(claim), "invalid_calculation_schema")
+
+    def test_renderer_shows_recomputed_calculation_with_operand_references(self):
+        claim = growth_claim()
+        result = render_verified_answer([claim], intel_bundle(), verdict())
+        self.assertEqual(result["status"], "answer")
+        self.assertEqual(result["calculations"], [{
+            "claim_index": 0, "expression": "(a - b) / b * 100",
+            "expression_display": "(54,228 \u2212 79,024) \u00f7 79,024 \u00d7 100",
+            "operands": claim["calculation"]["operands"], "result": "-31.4", "unit": "%"}])
+        paragraphs = result["answer"].split("\n\n")
+        self.assertEqual(html.unescape(paragraphs[1]),
+                         "Calculated by the application: (54,228 \u2212 79,024) \u00f7 79,024 \u00d7 100 = \u221231.4% "
+                         "(operands: a = Intel net revenue FY2023 (USD millions), 54,228 [^1]; "
+                         "b = Intel net revenue FY2021 (USD millions), 79,024 [^2])")
+        self.assertIn("[^1]", paragraphs[1])
+        self.assertNotIn("(", paragraphs[1])
+
+    def test_renderer_escapes_model_supplied_operand_labels(self):
+        claim = growth_claim()
+        claim["calculation"]["operands"][0]["label"] = "<script>x</script> [link](https://evil.example)"
+        result = render_verified_answer([claim], intel_bundle(), verdict())
+        self.assertEqual(result["status"], "answer")
+        for raw in ("<script>", "[link]", "https://"):
+            self.assertNotIn(raw, result["answer"])
+
+    def test_calculations_list_is_empty_without_calculations_or_on_abstention(self):
+        self.assertEqual(render_verified_answer(draft()["claims"], bundle(), verdict())["calculations"], [])
+        wrong = growth_claim(result="-32.0", text="Intel's revenue fell 32.0%.")
+        result = render_verified_answer([wrong], intel_bundle(), verdict())
+        self.assertEqual((result["status"], result["calculations"], result["reason"]),
+                         ("abstain", [], "calculation_result_mismatch"))
+
+
+
+class CalculationHardeningTests(unittest.TestCase):
+    def reason(self, claim):
+        return validate_draft({"status": "answer", "claims": [claim]}, intel_bundle())["reason"]
+
+    def test_only_scale_constants_are_allowed(self):
+        injected = growth_claim("Intel's revenue fell 12.5%.", expression="a - a + b * 0 - 12.5", result="-12.5")
+        self.assertEqual(self.reason(injected), "invalid_calculation_expression")
+        scaled = growth_claim("Intel's revenue was $54.228 billion in FY2023.", expression="a / 1000",
+                              result="54.228", unit="USD billions",
+                              operands=[growth_claim()["calculation"]["operands"][0]])
+        self.assertIsNone(self.reason(scaled))
+
+    def test_negative_result_must_read_as_a_decrease(self):
+        self.assertEqual(self.reason(growth_claim("Intel's revenue grew 31.4% from FY2021 to FY2023.")),
+                         "calculation_direction_mismatch")
+        self.assertIsNone(self.reason(growth_claim("Intel's revenue changed by -31.4% from FY2021 to FY2023.")))
+        positive = growth_claim("Intel's revenue changed by -45.7%.", expression="(b - a) / a * 100", result="45.7")
+        self.assertEqual(self.reason(positive), "calculation_direction_mismatch")
+
+    def test_results_with_separators_are_accepted(self):
+        difference = growth_claim("Intel's revenue was $24,796 million lower in FY2023 than in FY2021.",
+                                  expression="a - b", result="-24,796", unit="USD millions")
+        self.assertIsNone(self.reason(difference))
+
+
+
+class VerdictDoubtTests(unittest.TestCase):
+    def test_supported_verdict_whose_reason_expresses_doubt_is_rejected(self):
+        claims = [{"text": "Revenue was $10 million.", "citations": [{"evidence_id": "E1", "quote": "x"}]}]
+        for reason in ("The payment is not in the cited evidence but implied by the context.",
+                       "This is a projection for 2025, not for 2027; however it can reasonably be interpreted as one.",
+                       "The source does not specify the period."):
+            verdict = {"answers_question": True,
+                       "claim_verdicts": [{"claim_index": 0, "supported": True, "reason": reason}]}
+            with self.subTest(reason=reason):
+                self.assertEqual(validate_semantic_verdict(verdict, claims)["reason"],
+                                 "verifier_reason_contradicts_verdict")
+        for reason in ("E1 states revenue of $10 million.",
+                       "E1 confirms a $7.2 billion purchase price including assumed debt."):  # live C02
+            verdict = {"answers_question": True,
+                       "claim_verdicts": [{"claim_index": 0, "supported": True, "reason": reason}]}
+            self.assertTrue(validate_semantic_verdict(verdict, claims)["ok"], reason)
 
 
 if __name__ == "__main__":
