@@ -18,7 +18,7 @@ The questions were written after inspecting the source passages and tables, befo
 
 Questions explicitly name the company and the source annual report's fiscal year. This distinguishes, for example, a value in the FY2021 report from the same historical value repeated in a later filing. Questions cover financial-statement amounts, business segments, revenue recognition, supply chains, distribution operations, and operating strategy. Several require two rows, two passages, or two tables on different pages.
 
-Only readable narrative passages and accepted structured table rows were selected. The pilot does not cover rejected table candidates, image-only evidence, chart interpretation, unanswerable queries, or cross-company synthesis. These are gaps to address in a later benchmark.
+Only readable narrative passages and accepted structured table rows were selected. The pilot does not cover rejected table candidates, image-only evidence, chart interpretation, unanswerable queries, or cross-company synthesis. Cross-company comparisons were added later in the [100-question retrieval benchmark](retrieval_experiment.md).
 
 ## Stable source judgments
 
@@ -51,7 +51,7 @@ Keep corpus coverage, questions, tokenizer, retrieval model, ranking parameters,
 
 Use identical provenance rules for every group. Table rows remain atomic, and repeated headers or context must not create extra evidence units. Oversized rows need an explicit overflow rule instead of silent splitting. Report actual chunk lengths and oversize counts; target length alone does not describe the resulting corpus.
 
-The initial local BM25 evaluation is a lexical baseline. Results should be identified as BM25 results, not embedding retrieval results. Re-run the unchanged benchmark after selecting an embedding model or hybrid retriever. If company/year filters are used, label those results separately from retrieval across all 200 reports; do not infer filters from hidden gold metadata without reporting that advantage.
+The initial local BM25 evaluation is a lexical baseline. Results should be identified as BM25 results, not embedding retrieval results. The unchanged benchmark was later re-run with BGE-M3 dense retrieval (48.75% evidence Recall@5 versus 50.00% for BM25; [vector index](vector_index.md)); hybrid retrieval was evaluated on the separate 100-question benchmark ([retrieval comparison](retrieval_comparison.md)). If company/year filters are used, label those results separately from retrieval across all 200 reports; do not infer filters from hidden gold metadata without reporting that advantage.
 
 ## Validation and interpretation
 

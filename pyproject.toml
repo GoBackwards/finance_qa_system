@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "financial-report-parser"
 version = "0.1.0"
-description = "Page-grounded annual-report text and table parsing"
+description = "Page-grounded question answering over financial annual reports: parsing, dense retrieval, reranking and evidence-bound generation"
 requires-python = ">=3.11"
 dependencies = ["PyMuPDF==1.28.2", "pdfplumber==0.11.9"]
 

@@ -8,6 +8,8 @@ This corpus contains 200 annual-report PDFs: 40 companies, with one report for e
 data/raw/<TICKER>/<TICKER>_FY<YEAR>_annual_report.pdf
 ```
 
+The PDFs are not committed (`data/raw/` is gitignored); the commands in [Reproduce or resume](#reproduce-or-resume) download them from the tracked source mappings.
+
 | Group | Companies | PDFs |
 | --- | ---: | ---: |
 | Semiconductors | 8 | 40 |
@@ -31,7 +33,7 @@ Filenames use the company's fiscal-year designation, not the filing or download 
 
 For Q&A ingestion, preserve the filename, ticker, fiscal year, SHA-256, and **1-based PDF page number** on every text chunk. Printed page labels can differ from PDF page numbers because of covers, proxy statements, and publisher material. Keep the two page-number fields separate if printed labels are extracted. Retain page boundaries during extraction, and exclude publisher front matter and proxy sections when they are outside the question's scope.
 
-Checks confirm that each PDF opens and contains extractable report text. Table layouts, scanned covers, and occasional letter spacing still require normal extraction handling; these checks do not certify every extracted table cell. No OCR or Q&A index has been generated.
+Checks confirm that each PDF opens and contains extractable report text. Table layouts, scanned covers, and occasional letter spacing still require normal extraction handling; these checks do not certify every extracted table cell. No OCR has been run; the retrieval indexes built from this corpus are described in [vector_index.md](../docs/vector_index.md) and [system_architecture.md](../docs/system_architecture.md).
 
 ## Reproduce or resume
 

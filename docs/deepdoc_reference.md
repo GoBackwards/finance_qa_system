@@ -4,7 +4,7 @@ Research checked on 2026-10-08. These are architectural observations and project
 
 ## Version matters
 
-RAGFlow's current main branch uses Go and places the PDF pipeline under `internal/deepdoc/parser/pdf`. The reviewed snapshot is [commit ef150bc2cd2c4b6ccb6be72014e1d8bc382bff6c](https://github.com/infiniflow/ragflow/commit/ef150bc2cd2c4b6ccb6be72014e1d8bc382bff6c). Old links to `main/deepdoc/parser/pdf_parser.py` therefore return 404. For the Python module the user is likely referring to, this review also pins [v0.27.2 / a024bea0cd93f39e6652a42bf84dd20c55bc560b](https://github.com/infiniflow/ragflow/tree/a024bea0cd93f39e6652a42bf84dd20c55bc560b/deepdoc).
+RAGFlow's current main branch uses Go and places the PDF pipeline under `internal/deepdoc/parser/pdf`. The reviewed snapshot is [commit ef150bc2cd2c4b6ccb6be72014e1d8bc382bff6c](https://github.com/infiniflow/ragflow/commit/ef150bc2cd2c4b6ccb6be72014e1d8bc382bff6c). Old links to `main/deepdoc/parser/pdf_parser.py` therefore return 404. For the older Python module those links refer to, this review also pins [v0.27.2 / a024bea0cd93f39e6652a42bf84dd20c55bc560b](https://github.com/infiniflow/ragflow/tree/a024bea0cd93f39e6652a42bf84dd20c55bc560b/deepdoc).
 
 ## What to learn from DeepDoc
 

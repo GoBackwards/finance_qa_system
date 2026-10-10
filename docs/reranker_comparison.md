@@ -60,6 +60,6 @@ Sources: [pinned model](https://huggingface.co/BAAI/bge-reranker-v2-m3/tree/953d
 
 ## Interpretation
 
-Evidence Recall@5 improved by 10.67 percentage points on the 50 frozen test questions. The exploratory paired interval is +3.67 to +18.34 points. The accuracy@1 interval crosses zero (-2 to +26 points), and summary-question accuracy@1 fell from 13.33% to 6.67% despite better Top-5 recall. This supports using reranking for further evaluation, while leaving its effect on generated-answer accuracy unmeasured.
+Evidence Recall@5 improved by 10.67 percentage points on the 50 frozen test questions. The exploratory paired interval is +3.67 to +18.34 points. The accuracy@1 interval crosses zero (-2 to +26 points), and summary-question accuracy@1 fell from 13.33% to 6.67% despite better Top-5 recall. This supports using reranking for further evaluation, while leaving its effect on generated-answer accuracy unmeasured. End-to-end answer accuracy of the pipeline that includes this reranking step was measured later in [system architecture](system_architecture.md) Table A10; no run isolates the reranker's own effect on answers.
 
-The adapter passed the same-model stock FlagEmbedding smoke check: identical paired token IDs and zero absolute logit difference on four warmup pairs. All 2,000 complete pairs were scored without truncation. The project suite passes 212 tests. See the [integration and reproduction guide](reranker.md).
+The adapter passed the same-model stock FlagEmbedding smoke check: identical paired token IDs and zero absolute logit difference on four warmup pairs. All 2,000 complete pairs were scored without truncation. The suite passed 212 tests at the time of this run. See the [integration and reproduction guide](reranker.md).

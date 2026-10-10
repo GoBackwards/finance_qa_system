@@ -62,6 +62,6 @@ reranker = BGEReranker(device="cuda:0", batch_size=4)
 top5 = reranker.rank_candidates(query, vector_top20, top_k=5)
 ```
 
-Selected chunks retain `vector_rank` and `vector_score`, and add `reranker_score`; `rank` and `score` describe the final ranking. The adapter also exposes `preflight_pairs()` and `score_pairs()` for explicit question/passage pairs.
+Selected chunks retain `vector_rank` and `vector_score`, and add `reranker_score`; `rank` and `score` describe the final ranking. The adapter also exposes `preflight_pairs()` and `score_pairs()` for explicit question/passage pairs. The demo path (`DemoService`) instead reranks per-company pools when the question names companies, then selects a balanced Top 5; see [system architecture](system_architecture.md).
 
 Generated candidates, preflight audits, atomic scoring checkpoints, scores, and full evaluation records remain under `data/experiments/reranker/`. Resume checks bind scores to candidate content/order, model and tokenizer identity, package versions, device, batch size, and implementation hashes. Use a fresh `--output` directory after configuration, dependency, or scoring-code changes. PDFs, model weights, and generated caches remain excluded from Git.

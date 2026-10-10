@@ -104,7 +104,7 @@ Default output: `data/indexes/bge-m3/table_preserving_s512_o50/`.
 
 `document_count` means distinct annual reports, not vector count. `vector_count` and `chunk_count` must match. An index with a mismatched source hash is rejected before source payloads are read. The original chunks remain authoritative; vector metadata does not replace page-level evidence.
 
-Large PDFs, parsed text, embedding shards, and FAISS indexes are excluded from Git. Code, dependency pins, corpus provenance, benchmark labels, and documentation are versioned. The local repository's origin is `https://github.com/GoBackwards/finance_qa_system.git`.
+Large PDFs, parsed text, embedding shards, and FAISS indexes are excluded from Git. Code, dependency pins, corpus provenance, benchmark labels, and documentation are versioned.
 
 ## Measured index run — 2026-10-08
 
@@ -120,6 +120,6 @@ The full run produced **56,525 normalized float32 vectors of dimension 1,024 fro
 
 Measurements use the same **40 agent-curated development questions**, four FAISS CPU search threads, two warmup passes, and three timed single-query searches per question. Search latency excludes embedding, loading, and validation. Build time includes validation and artifact writing, but excludes model inference. HNSW construction uses one thread; IVF uses 256 lists and 16 probes. These are measurements on this laptop, not a production latency or approximation-recall guarantee. The approximate indexes matched every exact top-five neighbor in this pilot; that does not imply perfect agreement for other questions.
 
-The prior BM25 baseline scored **50.00%** overall, versus dense retrieval's **48.75%**. Dense table recall was **57.5%** (BM25: 35%), while dense prose recall was **40%** (BM25: 65%). This motivates a later hybrid experiment; it does not establish that combining the retrievers will improve results. The small development set and non-exhaustive source judgments remain limitations. Retain Flat as the exact reference when tuning approximate indexes or evaluating new questions.
+The prior BM25 baseline scored **50.00%** overall, versus dense retrieval's **48.75%**. Dense table recall was **57.5%** (BM25: 35%), while dense prose recall was **40%** (BM25: 65%). The later hybrid experiment is reported in [retrieval_comparison.md](retrieval_comparison.md). The small development set and non-exhaustive source judgments remain limitations. Retain Flat as the exact reference when tuning approximate indexes or evaluating new questions.
 
-The independent artifact audit checked all vector norms/dimensions, persisted index sizes and counts, hashes, source mappings, and every retrieved evidence judgment. All **127 tests passed**, including a regression for near-tie arithmetic differences between batch and single-query Flat search. Exact-neighbor references now use the same single-query shape and thread settings as timed searches. Indexes are loaded one at a time during benchmarking to reduce peak memory.
+The independent artifact audit checked all vector norms/dimensions, persisted index sizes and counts, hashes, source mappings, and every retrieved evidence judgment. At the time of this run all **127 tests passed**, including a regression for near-tie arithmetic differences between batch and single-query Flat search. Exact-neighbor references use the same single-query shape and thread settings as timed searches. Indexes are loaded one at a time during benchmarking to reduce peak memory.
