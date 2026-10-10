@@ -11,6 +11,7 @@ The system was measured on a frozen 100-question benchmark (50 dev and 50 test q
 | Evidence Recall@5, 50 test questions | 37.33% vector → 48.00% reranked → 51.33% scoped (the scoping step is within noise) | [A7](docs/system_architecture.md#a7-re-ranking-vector-top-5-vs-vector-top-20--bge-reranker--top-5), [A6](docs/system_architecture.md#a6-retrieval--re-ranking-global-vs-scoped-pools-frozen-benchmark-same-reranker) |
 | End-to-end answer accuracy, 100 benchmark questions | 34% → 51% overall; test split 32% → 48% | [A10](docs/system_architecture.md#a10-end-to-end-answers-on-the-frozen-100-question-benchmark-original-vs-current-pipeline) |
 | Live usage pool, 50 questions: good / wrong / unsafe | 17 / 5 / 1 → 32 / 1 / 0 | [A9](docs/system_architecture.md#a9-end-to-end-live-usage-pool-before-and-after-the-bad-case-fixes) |
+| Context extras after the Top-5, 100 benchmark and 50 live questions | Evidence Recall of the delivered context 57.5% (5 passages) → 75.8% (7.6 on average); answer accuracy 50% → 64% (test 44% → 56%), wrong answers 8 → 3; live pool good outcomes 32 → 34 (not significant), wrong 2 → 3 | [A12](docs/system_architecture.md#a12-context-extras-passages-appended-after-the-reranked-top-5-benchmark-and-live-pool) |
 | Comparison decomposition, 30 comparative questions | Evidence Recall@5 31.67% → 53.33% (rule rewrite); no clear answer-accuracy gain, so off by default | [A11](docs/system_architecture.md#a11-comparison-decomposition-per-company-sub-questions-30-comparative-benchmark-questions-12-live-comparisons) |
 
 A good outcome is a correct answer, an acceptable clarification or a correct refusal. The caveats in [Evaluation](#evaluation) apply to every row.
@@ -23,7 +24,7 @@ flowchart LR
     SEG --> IDX["2 · Indexing<br/>BGE-M3 dense vectors<br/>FAISS Flat + SQLite FTS5"]
     Q(["Question"]) --> RET["3 · Retrieval<br/>company and period scope<br/>per-company exact search"]
     IDX --> RET
-    RET --> RR["4 · Re-ranking<br/>BGE reranker v2-m3<br/>balanced Top-5"]
+    RET --> RR["4 · Re-ranking<br/>BGE reranker v2-m3<br/>balanced Top-5 + context extras"]
     RR --> GEN["5 · Generation<br/>gate, source binding, quoted claims<br/>deterministic checks, verifier"]
     GEN --> ANS(["Cited answer, or<br/>'I'm not sure' + reason code"])
     RR -.-> EVAL["6 · Evaluation<br/>100-question benchmark<br/>50-question live pool"]
@@ -37,7 +38,7 @@ The full diagram, the request path in code and the reasons for each module are i
 1. **Segmentation.** PyMuPDF extracts native text and pdfplumber extracts tables. The parser uses transparent geometric layout heuristics rather than a neural layout stack, and every paragraph and table keeps its PDF page and bounding box. A numeric-integrity gate keeps a table as structured rows only when its digits match the native text: 12,055 of 13,141 tables pass, and the other 1,086 fall back to the original text. Chunks are 512 tokens with a 50-token overlap and never split a table row. In a 40-question BM25 pilot, this setting had the highest Evidence Recall@5 of the nine variants (50.00%) and the smallest Top-5 context ([A1](docs/system_architecture.md#a1-segmentation-chunk-size--overlap-bm25-40-question-pilot-48-gold-units)).
 2. **Indexing.** Chunks are embedded with BGE-M3 (1,024 dimensions, 8,192-token limit) into an exact FAISS `IndexFlatIP`. SQLite FTS5 stores chunk payloads and citations. BGE-M3 embeds all 56,525 chunks without truncation, whereas bge-large-en-v1.5 would have to truncate 14,704 of them (26.01%) ([A2](docs/system_architecture.md#a2-indexing-embedding-model-feasibility-all-56525-rendered-chunks)). Exact search takes about 22 ms per query (median, CPU) and, unlike the approximate indexes, supports exact per-company filtered search ([A3](docs/system_architecture.md#a3-indexing-faiss-index-type-50-test-questions-cpu-4-threads)).
 3. **Retrieval.** A scope resolver maps company names, aliases, tickers, typos and Chinese names to the corpus. It also resolves explicit years, relative periods such as "last year", and questions with no period. Each resolved company then gets its own exact vector search. Dense search outperformed BM25 (37.33% vs 11.33% test Evidence Recall@5), and hybrid fusion did not beat dense search at depth 20, the reranker's standard candidate depth ([A4](docs/system_architecture.md#a4-retrieval-dense-vs-bm25-vs-weighted-hybrid-frozen-benchmark)). Scoping fixes which reports are searched: Document Recall@5 reached 100% on both splits ([A6](docs/system_architecture.md#a6-retrieval--re-ranking-global-vs-scoped-pools-frozen-benchmark-same-reranker)).
-4. **Re-ranking.** The BGE reranker v2-m3 cross-encoder scores every pooled candidate at full length and refuses to truncate. It then selects a balanced Top-5: slots reserved for each compared company, near-duplicates from a company's other reports skipped, and latest-report slots for undated questions. Re-ranking added 10.67 points of test Evidence Recall@5 at a median cost of 388.8 ms of GPU scoring per query ([A7](docs/system_architecture.md#a7-re-ranking-vector-top-5-vs-vector-top-20--bge-reranker--top-5)).
+4. **Re-ranking.** The BGE reranker v2-m3 cross-encoder scores every pooled candidate at full length and refuses to truncate. It then selects a balanced Top-5: slots reserved for each compared company, near-duplicates from a company's other reports skipped, and latest-report slots for undated questions. Re-ranking added 10.67 points of test Evidence Recall@5 at a median cost of 388.8 ms of GPU scoring per query ([A7](docs/system_architecture.md#a7-re-ranking-vector-top-5-vs-vector-top-20--bge-reranker--top-5)). Because the reranker demotes statement tables, up to 8 context extras are then appended: the best row-label table per company, one passage per theme of a summary question, and the continuation of a split table. Evidence recall of the delivered context rose from 57.5% to 75.8% (5 → 7.6 passages, about 44% more tokens) and benchmark accuracy from 50% to 64% ([A12](docs/system_architecture.md#a12-context-extras-passages-appended-after-the-reranked-top-5-benchmark-and-live-pool)).
 5. **Generation.** A fail-closed confidence gate runs first. Source binding then re-derives every passage from the parsed source. The generator returns individually checkable claims, each carrying verbatim quotes, and the application recomputes any derived value. Deterministic checks follow:
    - citation repair re-points a quote to an exact source span;
    - every quote must match its source exactly;
@@ -149,30 +150,29 @@ Read the results with these caveats:
 
 ## Project status
 
-**Complete.** Every stage, from PDF download to cited answer, is implemented and runs on one machine; answer generation also needs an OpenAI-compatible model endpoint. The Streamlit demo shows the interpreted scope, the selected passages and each cited PDF page. The main design choices are backed by recorded comparisons (Tables A1–A11); each table names its result file, most of them in [`data/evaluation/`](data/evaluation).
+**Complete.** Every stage, from PDF download to cited answer, is implemented and runs on one machine; answer generation also needs an OpenAI-compatible model endpoint. The Streamlit demo shows the interpreted scope, the selected passages and each cited PDF page. The main design choices are backed by recorded comparisons (Tables A1–A12); each table names its result file, most of them in [`data/evaluation/`](data/evaluation).
 
 **Open problems.**
-- **Most remaining live failures are false refusals.** 18 of 50 live questions still fail: 13 false refusals, 4 partially correct answers and 1 wrong answer. In 6 of these, the reranker prefers prose containing the question's words over the statement or table row that holds the figure ([remaining failures](docs/live_bad_cases.md#remaining-failures-final-run)).
-- **Comparative answers often omit the verdict.** With prompt v2.1, comparative accuracy on the benchmark was 17%, against 90% for factual questions; many answers list both figures without saying which is higher. Prompt v2.2 asks for an explicit verdict. On the 30 comparative questions it reached 20% on the default path and 27–30% with decomposition, gains that are not statistically clear.
-- **Segment versus company scope.** The one remaining live wrong answer (B12) labels segment figures as company totals. No check yet ties a number to its segment or column year.
+- **Misread columns and segments are now the main error.** With context extras, 3 benchmark answers and 3 live answers are still wrong. Most of them use the right evidence but take another fiscal-year column (dev-017, test-028) or a segment total for the company figure (dev-021). In B12 the consolidated figure was missing and a table extra supplied a segment table instead. No check yet ties a number to its column year or segment ([A12](docs/system_architecture.md#a12-context-extras-passages-appended-after-the-reranked-top-5-benchmark-and-live-pool)).
+- **Live gains are small.** 16 of 50 live questions still fail with context extras: 7 false refusals, 6 partially correct answers and 3 wrong answers. Good outcomes rose from 32 to 34, which is not statistically clear.
+- **Comparative accuracy is still the weakest.** It rose from 7% to 30% with context extras, in same-pass blind grading; A11's separate pass scored the same base at 20%. Factual accuracy is 92%. All 12 partially correct comparative answers omit which company is higher.
 - **No OCR.** 324 pages carry sparse-text or encoding warnings.
 - **No default confidence threshold.** Raw reranker logits are not calibrated probabilities. The dev-calibrated threshold (6.359375) would have kept only 4 of the 25 correct or acceptable live answers, so operators must choose a threshold.
 - **No independent human review** of labels or grades.
 
 **Next steps.**
-- Add per-metric sub-queries for margin and ratio questions, and a per-page cap so slices of one table cannot fill the Top-5.
-- Carry segment headings into table chunks, and check that a claim's period span matches the requested span.
-- Add scoped BM25 fusion and neighbour-chunk expansion, for lexical cues and schedules split across chunks.
+- Bind each cited figure to its column year and segment heading, and carry those headings into table chunks.
+- Confirm the context-extras gain on a fresh held-out question set, since its rules were designed on the benchmark and live failures.
+- Add scoped BM25 candidates for lexical cues ("critical audit matter", credit ratings) and section typing for summary themes outside Item 1A ([recall roadmap](docs/recall_roadmap.md)).
 - Add an OCR stage for flagged pages.
-- Get human review of labels and grades, and build a fresh held-out live question set.
+- Get human review of labels and grades.
 - Retry once when a comparison answer states no verdict, and validate that on fresh comparison questions.
-- Re-run the factual and summary questions with prompt v2.2.
 
 ## Documentation
 
 | Document | Contents |
 |---|---|
-| [System architecture](docs/system_architecture.md) | Start here: pipeline diagram, request path in code, module rationale, experiment Tables A1–A11, reproduction commands |
+| [System architecture](docs/system_architecture.md) | Start here: pipeline diagram, request path in code, module rationale, experiment Tables A1–A12, reproduction commands |
 | [Corpus](data/README.md) | Report collection, sources, fiscal-year naming and page-citation conventions |
 | [PDF parsing](docs/parsing.md) · [DeepDoc reference](docs/deepdoc_reference.md) | Parser commands, output format, parsing decisions, quality limits and the validated corpus run; design review of DeepDoc |
 | [Chunking experiment](docs/chunking_experiment.md) · [chunking pilot benchmark](docs/chunking_benchmark.md) | Table-preserving chunker and the size/overlap comparison (A1) |
@@ -184,3 +184,4 @@ Read the results with these caveats:
 | [Live bad cases](docs/live_bad_cases.md) | Live audit: failure types, root causes, mitigations and before/after results (A9) |
 | [Classic bad cases](docs/classic_bad_cases.md) | Earlier controlled audit: retrieval probes, injected generation faults and provider defects |
 | [Failure handling](docs/failure_handling.md) | Failure taxonomy and the query-expansion ablation (A5) |
+| [Recall roadmap](docs/recall_roadmap.md) | Where recall is lost (pool vs reranking), ranked improvement directions and what not to do; its quick wins became the context extras (A12) |

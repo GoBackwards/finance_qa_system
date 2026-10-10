@@ -27,7 +27,7 @@ flowchart LR
     end
     subgraph S4["4 · Re-ranking"]
         VEC --> RR["BGE reranker v2-m3<br/>cross-encoder raw logits<br/>no truncation (8,192 tokens)"]
-        RR --> SEL["Balanced Top-5<br/>per-company quota, cross-year<br/>de-duplication, latest-year slots"]
+        RR --> SEL["Balanced Top-5<br/>per-company quota, cross-year<br/>de-duplication, latest-year slots<br/>+ context extras (table, theme, stitched)"]
     end
     subgraph S5["5 · Generation"]
         SEL --> GATE{"Confidence gate<br/>(explicit threshold)"}
@@ -56,6 +56,7 @@ The Streamlit demo ([streamlit_demo.md](streamlit_demo.md)) and [`scripts/run_li
 | Retrieve | [`scoped_retrieval.py`](../src/report_search/scoped_retrieval.py), [`retrieval.py`](../src/report_search/retrieval.py) | One exact FAISS search per resolved company (max(6, ⌈20/n⌉) candidates each, at most 30 in total), restricted to that company's reports and to the resolved report years when stated or implied. For an undated question, a 4-candidate search restricted to each company's latest report is added. Without a resolved company, the original global vector Top-20 is used. |
 | Decompose (optional, off by default) | [`decomposition.py`](../src/report_search/decomposition.py) | For a comparison of two or more resolved companies, `DemoService(decompose_comparisons=True)` gives each company its own sub-question (a deterministic rewrite, or a validated model plan), searches it only in that company's reports and reranks it against its own wording; the Top-5 gives each company an equal share first. The original question is then answered from the combined passages. Measured in Table A11. |
 | Rerank and select | [`reranker.py`](../src/report_search/reranker.py), [`scoped_retrieval.py`](../src/report_search/scoped_retrieval.py) | Every pooled candidate is scored by the cross-encoder. The Top-5 reserves floor(5 / companies) slots per compared company (at least one; with six or more companies some get none, which the trace records), skips a passage that repeats one already selected from the same company's other report with identical figures, and for undated questions keeps latest-report slots (two for one company, one per company in a comparison). |
+| Context extras | [`scoped_retrieval.py`](../src/report_search/scoped_retrieval.py) | On the scoped path (a resolved company, decomposition off), up to 8 passages are appended after the Top-5 and scored by the reranker:<br>• for non-summary questions, per company, the table among its vector Top-20 whose row labels best match the question;<br>• one BM25 hit per theme of a single-company question that asks for a summary;<br>• the same-table neighbours of a selected table, and the table chunk that directly follows a selected non-table passage on the same or next page.<br>Measured in Table A12. |
 | Gate | [`confidence.py`](../src/report_search/confidence.py) | Always applied and fail-closed: the maximum raw reranker logit must reach an explicitly configured threshold, and with no threshold every request abstains (`unconfigured_threshold`). No default value is installed (see Table A8). |
 | Bind | [`evidence_binding.py`](../src/report_search/evidence_binding.py), [`generation.py`](../src/report_search/generation.py) | Re-derives each chunk from the parsed source and checks hashes. The models receive a compact projection: evidence IDs, pages, unit kind (header rows marked) and text, each once. Over the context budget, the lowest-ranked passage that is not a company's or report year's last passage is dropped, repeatedly; if none can be dropped the request abstains (`context_budget_exceeded`), and the gate is rechecked on the passages kept. |
 | Generate | [`generation.py`](../src/report_search/generation.py) | Prompt `evidence-bound-claims-v2.2`: one checkable claim per item, verbatim quotes, period and premise rules, derived values only via a `calculation` object, and an explicit result claim for "which is higher" comparisons (added in v2.2; Tables A9 and A10 were measured with v2.1). |
@@ -92,6 +93,7 @@ The Streamlit demo ([streamlit_demo.md](streamlit_demo.md)) and [`scripts/run_li
 - **No truncation.** 1,062 of 2,000 benchmark pairs exceed 512 tokens, so the default length would cut table rows; the adapter uses the 8,192-token limit and rejects any overflow. The maximum observed pair was 1,566 tokens.
 - **Cost.** 388.8 ms median added GPU scoring per 20-candidate test query (RTX 4060 laptop, FP16), plus about 17–18 s one-time model load.
 - **Balanced selection.** Raw reranker order is kept, except that comparisons reserve slots per company, cross-year near-duplicates are skipped, and undated questions keep the latest report.
+- **Context extras after the Top-5.** The reranker demotes statement tables: it ranks a gold table above narrative prose in only 24.2% of pairs, against 66.7% for vector order. A few structure-aware passages are therefore appended after the Top-5 rather than replacing it. Benchmark EvR rose from 57.50% to 75.83%, and answer accuracy from 50% to 64%, for about 44% more tokens (Table A12).
 
 ### 2.5 Generation: evidence-bound claims with deterministic and model checks
 
@@ -328,6 +330,99 @@ B05 under scoped v2.1 is graded partial here (no explicit verdict) but correct i
 4. **Decision.** Decomposition stays off by default. Prompt v2.2 is kept: its new rule applies only to comparisons, and on the scoped path it changed two benchmark grades (dev-032 partial → correct, test-030 false refusal → partial) and added no wrong answers (live: correct 1 → 2, wrong 1 → 0, refusals 6 → 8). Factual and summary questions were not re-run with v2.2.
 5. **Integrity.** Prompt v2.2 was written after seeing the v2.1 grades on these same questions. Only the rule-decomposition retrieval comparison is a pre-registered result.
 
+### A12. Context extras: passages appended after the reranked Top-5 (benchmark and live pool)
+
+Source: `data/evaluation/context_extras_results.json` (grades included). Code: `context_extras` in [`scoped_retrieval.py`](../src/report_search/scoped_retrieval.py), called by `DemoService` after the balanced Top-5. Design: [recall roadmap](recall_roadmap.md), quick wins Q1–Q3.
+
+**Why.** A diagnosis of every lost evidence unit on the benchmark showed that most loss happens after retrieval:
+- Of the 42.5 missing points of EvR@5, 24.5 were lost between the 20-candidate pool and the Top-5.
+- The reranker ranks a gold statement table above narrative prose in only 24.2% of pairs, against 66.7% for plain vector order.
+- One blended summary query drops whole themes.
+- A table's continuation or its statement title often sits in the neighbouring chunk.
+
+**What is added.** The Top-5 is unchanged. Up to 8 passages are appended, chosen from the question, the selected passages and new scoped searches of the same indexes. No hand-written lexicon or gold labels are used:
+- **Row-label table** (non-summary questions): per company, the table among its vector Top-20 whose first-column row labels best overlap the question's content words.
+- **Summary themes** (single-company questions containing "summary" or "summarize"): one FTS5 BM25 hit per theme the question enumerates.
+- **Stitching:** the same-`table_id` neighbours of each selected table, and the table that directly follows a selected non-table chunk on the same or next page.
+
+The extras are scored by the reranker, so the confidence gate still sees every passage, and the answer-stage passage limit rose from 5 to 13. The design-phase prototype also used a metric lexicon and an Item 1A section filter. They were left out: the lexicon was partly written from live failures, and the filter added about 1 point of recall for about 25 more lines.
+
+**Method.** Both systems answered all 100 benchmark and 50 live questions live: gpt-4.1-mini generator and verifier, prompt v2.2, gate open, one run each.
+- **Base** is commit 7234349.
+- **Extras** is the same code plus `context_extras`.
+- **Grading:** blind A/B. Labels were shuffled per question, one grader handled each batch of 10 questions, and a skeptic re-checked every grade.
+- **Retrieval scores:** strict scores come from the repo judge; eq is the design-phase equivalence judge (table units only).
+
+**Retrieval** (macro EvR at the delivered context; the reranked Top-5 alone is unchanged):
+
+| Split · group | Strict, base → extras | Eq, base → extras | Passages | Tokens |
+|---|---:|---:|---:|---:|
+| All 100 | 57.50% → **75.83%** | 70.00% → **86.83%** | 5 → 7.57 | 2,115 → 3,046 |
+| Dev 50 | 63.67% → 81.00% | 75.67% → 92.00% | 5 → 7.38 | 2,160 → 3,028 |
+| Test 50 | 51.33% → **70.67%** | 64.33% → 81.67% | 5 → 7.76 | 2,070 → 3,063 |
+| Factual 40 | 80.00% → 87.50% | 90.00% → 90.00% | 5 → 7.15 | 2,098 → 2,794 |
+| Comparative 30 | 31.67% → 61.67% | 60.00% → 95.00% | 5 → 8.87 | 1,822 → 3,157 |
+| Summary 30 | 53.33% → 74.44% | 53.33% → 74.44% | 5 → 6.83 | 2,430 → 3,269 |
+
+No evidence unit present in the base context was lost. On the live pool, 58 answer facts across 20 cases were checked with model-free text predicates written during the diagnosis (in-sample). The delivered context held 32 of them before and 47 after, and cases with every fact present rose from 6 to 10. Median added search time was 108 ms on the benchmark and 51 ms on the live pool (57 ms over the 48 scoped questions; the 2 global-path questions add none). That covers one Top-20 vector search per company for non-summary questions, one BM25 query per theme for summary questions, neighbour lookups, and reranking 2.6 (benchmark) or 1.8 (live) extra passages on average.
+
+**End-to-end answers on the benchmark:**
+
+| Group | Accuracy (fully correct) | Correct or partial | Answered | Wrong | Gold answer points |
+|---|---:|---:|---:|---:|---:|
+| All 100 | 50% → **64%** | 67% → 81% | 75% → 84% | 8 → 3 | 52.3% → 69.5% |
+| Dev 50 | 56% → 72% | 66% → 84% | 78% → 88% | 6 → 2 | 57.3% → 74.5% |
+| Test 50 | 44% → **56%** | 68% → 78% | 72% → 80% | 2 → 1 | 47.3% → 64.5% |
+| Factual 40 | 92% → 92% | 92% → 92% | 95% → 95% | 1 → 1 | 92.5% → 92.5% |
+| Comparative 30 | 7% → 30% | 27% → 70% | 47% → 77% | 6 → 2 | 27.8% → 58.9% |
+| Summary 30 | 37% → 60% | 73% → 77% | 77% → 77% | 1 → 0 | 58.9% → 70.0% |
+
+The base configuration is the same code as A11's "Scoped, prompt v2.2". A11's separate grading pass scored its comparative accuracy at 20% (6 of 30), against 7% (2 of 30) here, with correct-or-partial at 26.7% in both. Compare systems only within one grading pass; all differences below are within-pass.
+
+In the extras run, all 12 partially correct comparative answers omit which company is higher.
+
+Paired accuracy differences, extras minus base:
+- **All:** +14.0 points (95% CI +7.0 to +22.0; 15 questions improved, 84 unchanged, 1 worsened).
+- **Test:** +12.0 (CI +4.0 to +22.0; 6 improved, 0 worsened).
+- **Comparative:** +23.3 (CI +10.0 to +40.0).
+- **Summary:** +23.3 (CI +6.7 to +40.0).
+- **Released answers:** fully correct rose from 66.7% to 76.2%.
+
+The one worsened question (dev-047) received the same five passages in both runs, so it reflects model sampling. All three remaining wrong answers appear in both systems:
+- dev-017 and test-028 use a different fiscal-year column;
+- dev-021 gives a segment total as the company figure.
+
+**Live pool (50 questions):**
+
+| System | Good outcomes | Correct | Acceptable clarification | Correct refusal | Partially correct | Wrong | False refusal |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Base | 32 | 22 | 3 | 7 | 3 | 2 | 13 |
+| Extras | 34 | 24 | 3 | 7 | 6 | 3 | 7 |
+
+Good outcomes rose by 2 (+4.0 points, CI −4.0 to +12.0; 3 cases improved, 1 worsened), which is not statistically clear. The extra evidence mostly turned false refusals into partial answers:
+- **Became correct because of an extra:** A08 and B02, where the extra supplied the missing row.
+- **Became partial:** B06, B07, B09 and C01.
+- **Became correct without the extras:** D09. Its base refusal was a verifier error on the same evidence, the mirror image of A11 below.
+
+Two cases regressed:
+- **A03** became wrong after the model called a correctly quoted pre-split figure an error.
+- **A11** abstained after the verifier rejected a correct capex claim.
+
+The other two wrong answers differ:
+- **A06** is a generation error with the right evidence in context: the p68 GAAP row was present, but the model chose a non-GAAP p52 row.
+- **B12** did not have Kraft Heinz's consolidated FY2021 net sales in context. A row-label extra added a FY2021 segment table (18,604), and the model took it as the company base. This is the segment-table risk the roadmap flagged for the table slot.
+
+**Reading.**
+- Appending these passages recovered 18.3 of the 42.5 missing EvR points, from reranker drops and pool misses alike.
+- No equal-size control (reranked Top-8) was run. The design-phase Monte Carlo estimate for it was 69.0% (bounds 59.0–79.5) at a similar token count, so how much of the gain comes from structure rather than from more passages is not settled.
+- On the benchmark this translates into answers: comparative and summary accuracy each rose by about 23 points, and wrong answers fell from 8 to 3.
+- The cost is about 44% more context tokens and about 0.1 s of search time.
+- **Remaining wrong answers.** Six answers are still wrong: 3 on the benchmark and 3 on the live pool.
+  - Four had the needed figure in context: dev-017, test-028, dev-021 and A06. In dev-017 the passage itself printed the year header in reverse order.
+  - Two lacked it: B12 (the consolidated base was missing and an extra supplied a segment table) and A03 (the split note was missing).
+- **Summary trigger.** The trigger is a keyword. It fired on 29 of the 30 templated benchmark summary questions but on only 1 of the 50 live questions, so the summary gain may not carry over to other wording.
+- These rules were designed after diagnosing failures on both benchmark splits and the live pool, so a fresh held-out question set is still needed to confirm the gain.
+
 ## 4. Reproduce
 
 From the repository root, with the local corpus, indexes and cached models:
@@ -366,6 +461,19 @@ Expand-Archive -Force -Path tmp/head_code.zip -DestinationPath tmp/head_code
 # Grading is agent-performed and recorded in data/evaluation/decomposition_e2e_grades.json and
 # data/evaluation/live_decomposition_grades.json.
 .\.venv\Scripts\python.exe scripts/summarize_decomposition_e2e.py
+
+# Context extras (Table A12): base = commit 7234349 via --src, extras = this checkout; 100 benchmark + 50 live questions
+git archive --format=zip -o tmp/extras_base.zip 7234349 src
+Expand-Archive -Force -Path tmp/extras_base.zip -DestinationPath tmp/extras_base
+.\.venv\Scripts\python.exe scripts/run_live_usage.py --questions data/evaluation/retrieval_questions.json `
+  --src tmp/extras_base/src --label bench_base --threshold -1000000 --output data/experiments/context_extras/bench_base.jsonl
+.\.venv\Scripts\python.exe scripts/run_live_usage.py --questions data/evaluation/retrieval_questions.json `
+  --label bench_new --threshold -1000000 --output data/experiments/context_extras/bench_new.jsonl
+# Repeat both without --questions (the live pool) as live_base / live_new. Grading is agent-performed (blind A/B)
+# and recorded with the summary in data/evaluation/context_extras_results.json. The retrieval table, live fact
+# counts, latency and paired CIs were computed by uncommitted analysis code: strict EvR can be recomputed with
+# report_chunker.retrieval.judge_retrieval over each run's search.selected (top_k = len(selected)); the eq judge
+# and the live fact predicates are design-phase tools that are not in this repository.
 
 # Full regression suite
 .\.venv\Scripts\python.exe -m unittest discover -s tests
