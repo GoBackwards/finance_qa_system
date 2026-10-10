@@ -31,7 +31,24 @@ REASONS = {
     "question_not_answered": "The evidence did not support a complete answer to this question.",
     "generator_abstained": "The answer model could not fully answer from the supplied evidence.",
     "source_verification_failed": "The source integrity check failed. Review the local source artifacts.",
+    "context_budget_exceeded": "The selected evidence exceeded the answer context budget even after dropping the passages that could be removed.",
+    "quote_not_in_source": "A supporting quote could not be matched to its source passage.",
+    "claim_period_not_in_evidence": "The proposed answer named a period that its sources do not cover.",
+    "claim_number_not_in_evidence": "The proposed answer contained a number that its sources do not state.",
+    "claim_entity_not_in_evidence": "The proposed answer named a company that its sources do not cover.",
+    "claim_admits_missing_evidence": "The retrieved evidence did not cover every part of the question.",
+    "calculation_result_mismatch": "A calculated value did not match the application's recomputation.",
+    "calculation_operand_not_in_source": "A calculation used a value that its source does not state.",
+    "calculation_operand_not_cited": "A calculation used a value without citing its source.",
+    "calculation_result_not_in_claim": "A calculated value was not stated in the answer it supports.",
+    "calculation_direction_mismatch": "A calculated change was described in the wrong direction.",
+    "invalid_calculation_expression": "A calculation could not be checked by the application.",
+    "invalid_calculation_schema": "A calculation could not be checked by the application.",
+    "claim_qualifier_mismatch": "The proposed answer narrowed or widened a figure's scope beyond its source.",
+    "verifier_reason_contradicts_verdict": "The independent review doubted a claim it marked as supported.",
 }
+
+PERIOD_LABELS = {"relative_latest": "latest report", "unspecified": "not stated"}
 
 
 @st.cache_resource(show_spinner=False)
@@ -84,7 +101,7 @@ def settings():
                                      value=os.getenv("FINANCE_QA_DEADLINE_SECONDS", "30"), key="deadline")
             st.caption("The budget starts after retrieval. An active model call can finish after the deadline; its late answer is discarded.")
         st.divider()
-        st.caption("Evidence: vector Top 20 → reranked Top 5")
+        st.caption("Evidence: question scope → company-scoped vector pools (global Top 20 if no company) → reranked, balanced Top 5")
         st.caption("Search runs locally. First search loads the models.")
         if st.button("Clear results", key="clear_results"):
             for name in ("search_result", "answer_result", "search_error", "preview", "pending_answer"):
@@ -158,6 +175,15 @@ def evidence_panel(search, catalog):
     selected = search.get("selected", [])
     st.subheader("2 · Retrieved evidence")
     st.caption(f"{len(search.get('candidates', []))} candidate passages · {len(selected)} selected for the answer")
+    scope = search.get("scope") or {}
+    if scope.get("tickers") or scope.get("notes") or scope.get("unknown_companies"):
+        with st.container(border=True):
+            companies = ", ".join(scope.get("tickers") or []) or "not recognized (searching all reports)"
+            mode = scope.get("period_mode", "")
+            years = ", ".join(f"FY{year}" for year in scope.get("years") or []) or PERIOD_LABELS.get(mode, mode)
+            st.caption(f"Interpreted scope · companies: {companies} · period: {years}")
+            for note in scope.get("notes") or []:
+                st.caption(note)
     for position, chunk in enumerate(selected, 1):
         citations = citation_list(chunk)
         info = description(catalog, citations[0]) if citations else None

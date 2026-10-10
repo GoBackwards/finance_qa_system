@@ -160,6 +160,77 @@ class DemoServiceTests(unittest.TestCase):
                          [("g1", "key-one"), ("v1", "key-two"), ("g2", "key-three"), ("g2", "key-three")])
         self.assertEqual({thread for _, _, thread in observed}, {resources.calls[0][1]})
 
+    def test_scoped_search_balances_companies_and_recomputes_scope_for_answers(self):
+        calls = {"vector": [], "rerank": [], "generate": []}
+
+        class Scope:
+            def __init__(self, query):
+                self.query = query
+
+            def to_dict(self):
+                return {"tickers": ["KO", "PEP"], "years": [2022], "period_mode": "explicit",
+                        "report_years": {"KO": [2022], "PEP": [2022]}, "latest_year": {"KO": 2023, "PEP": 2023},
+                        "notes": [f"scope for {self.query}"]}
+
+        class Resolver:
+            def resolve(self, query):
+                return Scope(query)
+
+            def entities_in_text(self, text):
+                return frozenset({"unknown:Apple"}) if "Apple" in text else frozenset()
+
+        def chunk(ticker, number):
+            return {"chunk_id": f"{ticker}{number}", "document_id": f"{ticker}-2022", "ticker": ticker,
+                    "fiscal_year": 2022, "text": f"{ticker} passage {number}", "rank": number, "score": 0.5}
+
+        class Engine:
+            stats = {}
+
+            def vector(self, vector, top_k, document_ids=None):
+                calls["vector"].append((top_k, tuple(document_ids or ())))
+                return [chunk(document_ids[0].split("-")[0], number) for number in range(1, top_k + 1)]
+
+            def close(self):
+                pass
+
+        class Reranker:
+            def rank_candidates(self, query, candidates, top_k):
+                calls["rerank"].append(top_k)
+                # PEP dominates the scores; selection must still keep KO evidence.
+                scored = [dict(c, reranker_score=(9.0 if c["ticker"] == "PEP" else 1.0) - c["rank"] / 100,
+                               vector_rank=c["rank"]) for c in candidates]
+                return sorted(scored, key=lambda c: -c["reranker_score"])[:top_k]
+
+        class Encoder:
+            def encode_queries(self, queries):
+                return [[1.0, 0.0]]
+
+        def factory(root, device):
+            return DemoComponents(Encoder(), Engine(), Reranker(), object(), scope_resolver=Resolver(),
+                                  documents={"KO": {2022: "KO-2022"}, "PEP": {2022: "PEP-2022"}})
+
+        def fake_generate(query, selected, **options):
+            calls["generate"].append(options["scope"])
+            # Claim grounding must see out-of-corpus companies too, not only corpus tickers.
+            calls["entities"] = options["company_resolver"]("Apple's revenue")
+            return {"status": "abstain", "answer": "I'm not sure", "citations": [], "reason": "fixture"}
+
+        with DemoService(".", worker_factory=factory) as service:
+            search = service.search("coke vs pepsi 2022 operating margin?")
+            self.assertEqual(calls["vector"], [(10, ("KO-2022",)), (10, ("PEP-2022",))])
+            self.assertEqual(calls["rerank"], [20])
+            self.assertEqual(len(search["selected"]), 5)
+            self.assertEqual(sum(row["ticker"] == "KO" for row in search["selected"]), 2)
+            self.assertEqual(search["retrieval_trace"]["quota"], {"KO": 2, "PEP": 2})
+            self.assertEqual(search["scope"]["tickers"], ["KO", "PEP"])
+            tampered = copy.deepcopy(search)
+            tampered["scope"]["tickers"] = ["XYZ"]
+            with patch("report_search.demo_service.generate_answer", side_effect=fake_generate):
+                service.answer(tampered, threshold=6)
+            self.assertEqual(calls["generate"][0]["tickers"], ["KO", "PEP"])
+            self.assertIn("coke vs pepsi", calls["generate"][0]["notes"][0])
+            self.assertEqual(calls["entities"], frozenset({"unknown:Apple"}))
+
     def test_tampered_or_cross_service_search_is_rejected_before_generation(self):
         resources = Resources()
         with DemoService(".", worker_factory=resources.factory) as first, DemoService(".", worker_factory=Resources().factory) as second:

@@ -21,6 +21,8 @@ import time
 
 from report_search.generation import generate_answer
 from report_search.llm_client import ChatCompletionsClient, ModelConfig, ModelError
+from report_search.decomposition import retrieve_decomposed
+from report_search.scoped_retrieval import document_index, merge_pools, plan_pools, select_candidates
 
 
 class DemoError(RuntimeError):
@@ -39,6 +41,10 @@ class DemoComponents:
     reranker: object
     source_store: object
     stats: dict | None = None
+    # Optional query scoping. Without a resolver the original global vector
+    # Top-20 -> reranked Top-5 path is used unchanged.
+    scope_resolver: object | None = None
+    documents: dict | None = None
 
 
 def _valid_query(query):
@@ -56,6 +62,7 @@ def _default_factory(root, device):
     # loaders verify hashes and ordered SQLite/FAISS chunk mappings themselves.
     from report_index.embedding import DenseEncoder, sha256_file
     from report_search.evidence_binding import SourceEvidenceStore
+    from report_search.query_scope import ScopeResolver
     from report_search.reranker import BGEReranker
     from report_search.retrieval import RetrievalEngine
 
@@ -97,7 +104,8 @@ def _default_factory(root, device):
         reranker._load_model()
         return DemoComponents(encoder, engine, reranker, SourceEvidenceStore(root / "data/processed"),
                               {**engine.stats, "encoder_model": encoder.identity["model_id"],
-                               "reranker_model": reranker.identity["model_id"], "device": device})
+                               "reranker_model": reranker.identity["model_id"], "device": device},
+                              scope_resolver=ScopeResolver(inventory), documents=document_index(inventory))
     except BaseException:
         engine.close()
         raise
@@ -118,11 +126,14 @@ class DemoService:
     ``answer`` accepts only an unmodified result from this service's ``search``.
     """
 
-    def __init__(self, root_dir, *, device="cpu", worker_factory=None):
+    def __init__(self, root_dir, *, device="cpu", worker_factory=None, decompose_comparisons=False):
         if not isinstance(device, str) or not re.fullmatch(r"cpu|cuda:\d+", device):
             raise DemoError("invalid_device")
         self.root_dir = Path(root_dir).resolve()
         self.device = device
+        # Comparisons of two or more resolved companies are split into
+        # per-company sub-questions, each retrieved and reranked on its own.
+        self.decompose_comparisons = bool(decompose_comparisons)
         self._factory = worker_factory or _default_factory
         self._components = None
         self._worker_id = None
@@ -194,12 +205,29 @@ class DemoService:
                              separators=(",", ":")).encode("utf-8")
         return hmac.new(self._secret, payload, hashlib.sha256).hexdigest()
 
-    def search(self, query):
+    def search(self, query, *, decomposer_config=None):
+        """Retrieve and rerank evidence.
+
+        ``decomposer_config`` matters only when the service was built with
+        ``decompose_comparisons=True``: it plans comparison sub-questions with that
+        model instead of the deterministic rewrite.
+        """
         if not _valid_query(query):
             raise DemoError("invalid_query")
-        return self._submit(self._search, query, time.perf_counter())
+        if decomposer_config is not None and not isinstance(decomposer_config, ModelConfig):
+            raise DemoError("invalid_model_configuration")
+        return self._submit(self._search, query, time.perf_counter(), decomposer_config)
 
-    def _search(self, query, queued_at):
+    def _decomposed(self, components, query, scope, pools, decomposer_config, timings):
+        """Per-company sub-questions: own embedding, own scoped search, own reranking."""
+        model = ChatCompletionsClient(decomposer_config) if decomposer_config is not None else None
+        result = retrieve_decomposed(encoder=components.encoder, retrieval_engine=components.retrieval_engine,
+                                     reranker=components.reranker, resolver=components.scope_resolver,
+                                     query=query, scope=scope, pools=pools, model=model)
+        timings.update(result["timings"])
+        return result["candidates"], result["selected"], result["trace"]
+
+    def _search(self, query, queued_at, decomposer_config=None):
         started = time.perf_counter()
         timings = {"queue_wait_ms": (started - queued_at) * 1000}
         partial = {"query": query, "candidates": [], "selected": [], "timings": timings, "stats": {}}
@@ -208,14 +236,46 @@ class DemoService:
             components = self._resources()
             timings["startup_ms"] = (time.perf_counter() - stage_started) * 1000
             partial["stats"] = deepcopy(components.stats or getattr(components.retrieval_engine, "stats", {}))
+            scope, pools = None, []
+            if components.scope_resolver is not None:
+                stage, stage_started = "query_scope", time.perf_counter()
+                scope = components.scope_resolver.resolve(query).to_dict()
+                pools = plan_pools(scope, components.documents or {})
+                partial["scope"] = scope
+                timings["query_scope_ms"] = (time.perf_counter() - stage_started) * 1000
+            if (self.decompose_comparisons and scope is not None and pools
+                    and len(scope.get("tickers") or []) >= 2 and scope.get("comparison")):
+                stage, stage_started = "decomposed_retrieval", time.perf_counter()
+                candidates, selected, trace = self._decomposed(components, query, scope, pools,
+                                                               decomposer_config, timings)
+                partial["candidates"] = deepcopy(candidates)
+                partial["selected"] = deepcopy(selected)
+                partial["retrieval_trace"] = trace
+                timings["total_ms"] = (time.perf_counter() - started) * 1000
+                partial["_signature"] = self._signature(partial)
+                return deepcopy(partial)
             stage, stage_started = "query_embedding", time.perf_counter()
             vector = components.encoder.encode_queries([query])[0]
             timings["query_embedding_ms"] = (time.perf_counter() - stage_started) * 1000
             stage, stage_started = "vector_search", time.perf_counter()
-            partial["candidates"] = deepcopy(components.retrieval_engine.vector(vector, top_k=20))
+            if pools:
+                candidates = merge_pools(components.retrieval_engine.vector(
+                    vector, top_k=pool["top_k"], document_ids=pool["document_ids"]) for pool in pools)
+            else:
+                candidates = components.retrieval_engine.vector(vector, top_k=20)
+            partial["candidates"] = deepcopy(candidates)
             timings["vector_search_ms"] = (time.perf_counter() - stage_started) * 1000
             stage, stage_started = "reranking", time.perf_counter()
-            partial["selected"] = components.reranker.rank_candidates(query, partial["candidates"], top_k=5)
+            if scope is None:
+                partial["selected"] = components.reranker.rank_candidates(query, partial["candidates"], top_k=5)
+            else:
+                reranked = components.reranker.rank_candidates(query, partial["candidates"],
+                                                               top_k=len(partial["candidates"]))
+                partial["selected"], trace = select_candidates(reranked, scope, top_k=5)
+                partial["retrieval_trace"] = {
+                    "mode": "scoped" if pools else "global",
+                    "pools": [{key: pool[key] for key in ("ticker", "fiscal_years", "top_k", "purpose")} for pool in pools],
+                    **trace}
             timings["reranking_ms"] = (time.perf_counter() - stage_started) * 1000
             timings["total_ms"] = (time.perf_counter() - started) * 1000
             partial["_signature"] = self._signature(partial)
@@ -247,10 +307,14 @@ class DemoService:
         generator = ChatCompletionsClient(generator_config) if generator_config is not None else _UnconfiguredModel()
         effective_verifier = verifier_config if verifier_config is not None else generator_config
         verifier = ChatCompletionsClient(effective_verifier) if effective_verifier is not None else _UnconfiguredModel()
+        resolver = components.scope_resolver
         try:
+            # Scope is recomputed from the signed query, never trusted from the payload.
+            scope = resolver.resolve(snapshot["query"]).to_dict() if resolver is not None else None
             return generate_answer(snapshot["query"], snapshot["selected"], threshold=threshold,
                                    source_store=components.source_store, generator=generator, verifier=verifier,
-                                   deadline_seconds=deadline_seconds)
+                                   deadline_seconds=deadline_seconds, scope=scope,
+                                   company_resolver=resolver.entities_in_text if resolver is not None else None)
         except Exception:
             raise DemoError("answer_failed") from None
 
