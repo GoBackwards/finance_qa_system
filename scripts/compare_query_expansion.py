@@ -1,13 +1,15 @@
 """Measure development-only candidate coverage without models or test evaluation.
 
 This is a pre-reranking ablation, not a generated-answer experiment. All four
-approaches have a maximum final pool of 20. The optional lexical recovery is
-evaluated for every dev query here; production fallback frequency is not measured.
+approaches have a maximum final pool of 20. Lexical recovery is evaluated for
+every dev query here. It was not adopted: the bounded-recovery controller that
+offered it as an opt-in fallback has since been removed (docs/failure_handling.md).
 """
 from __future__ import annotations
 
 import argparse
 from contextlib import closing
+import copy
 from datetime import datetime, timezone
 import json
 import os
@@ -24,16 +26,73 @@ from report_chunker.retrieval import _search, index_stats
 from report_index.faiss_index import sha256_file
 from report_search.experiment import aggregate, evaluate_question, paired_interval, write_json
 from report_search.query_policy import plan_query
-from report_search.reliable_pipeline import filter_scope, reciprocal_rank_pool
 
 
 METHODS = ("original_vector20", "scoped_vector20", "scoped_vector_bm25_original20",
            "scoped_vector_bm25_hints20")
 SOURCE_FILES = (
     "scripts/compare_query_expansion.py", "src/report_search/query_policy.py",
-    "src/report_search/reliable_pipeline.py", "src/report_search/experiment.py",
-    "src/report_chunker/retrieval.py",
+    "src/report_search/experiment.py", "src/report_chunker/retrieval.py",
 )
+
+
+def filter_scope(candidates, plan):
+    """Apply only recognized report subjects and explicitly requested filings.
+
+    A bare metric period is not a report-year filter: a later report may carry
+    historical comparative figures. Textual metric support is checked later.
+    """
+    constraints = plan["constraints"]
+    tickers = set(constraints["requested_tickers"])
+    reports = {(r["ticker"], r["fiscal_year"]) for r in constraints.get("requested_reports", [])}
+    years = set(constraints["requested_report_years"])
+    selected = []
+    for candidate in candidates:
+        if tickers and candidate.get("ticker") not in tickers:
+            continue
+        if reports and (candidate.get("ticker"), candidate.get("fiscal_year")) not in reports:
+            continue
+        if years and not reports and candidate.get("fiscal_year") not in years:
+            continue
+        selected.append(candidate)
+    return selected
+
+
+def reciprocal_rank_pool(channels, *, top_k=20):
+    """Bound candidate union by rank, without mixing cosine and BM25 scores.
+
+    Channels are named ordered lists; every channel contributes once per ID.
+    Conflicting source payloads raise instead of silently overwriting text.
+    """
+    ranked, source_ranks = {}, {}
+    for name, candidates in channels:
+        seen = set()
+        for rank, candidate in enumerate(candidates[:20], 1):
+            identifier = candidate["chunk_id"]
+            if identifier in seen:
+                continue
+            seen.add(identifier)
+            if identifier in ranked:
+                previous = ranked[identifier]
+                for field in ("document_id", "text", "evidence", "rows", "source_file", "ticker", "fiscal_year"):
+                    if previous.get(field) != candidate.get(field):
+                        raise ValueError("Conflicting retrieval source payload")
+            else:
+                ranked[identifier] = copy.deepcopy(candidate)
+                source_ranks[identifier] = {}
+            source_ranks[identifier][name] = rank
+    scores = {identifier: sum(1.0 / (60 + rank) for rank in ranks.values())
+              for identifier, ranks in source_ranks.items()}
+    ordered = sorted(ranked, key=lambda identifier: (-scores[identifier], identifier))[:top_k]
+    result = []
+    for rank, identifier in enumerate(ordered, 1):
+        candidate = ranked[identifier]
+        candidate.pop("vector_score", None)
+        candidate.pop("vector_rank", None)
+        candidate.update(score=scores[identifier], rank=rank, retrieval_approach="expanded_rank_fusion",
+                         retrieval_channels=source_ranks[identifier])
+        result.append(candidate)
+    return result
 
 
 def read_json(path):
@@ -215,7 +274,7 @@ def run(args):
             "Non-exhaustive, agent-authored development labels await independent human review.",
             "No reranking or generation is performed; candidate coverage does not establish final answer quality or hallucination reduction.",
             "Bootstrap intervals sample paired questions and ignore company/template dependence.",
-            "Expansion remains opt-in and needs separate threshold calibration under its active policy.",
+            "Expansion was not adopted; any future use would need its own threshold calibration.",
         ],
         "per_query_artifact": detailed_path.as_posix(), "per_query_sha256": sha256_file(detailed_path),
     }
