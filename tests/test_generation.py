@@ -520,6 +520,10 @@ class PromptTests(unittest.TestCase):
         resolver = ScopeResolver(json.loads(manifest.read_text(encoding="utf-8-sig")))
         self.assertEqual(resolver.companies_in_text(GENERATOR_SYSTEM + VERIFIER_SYSTEM), frozenset())
 
+    def test_comparisons_must_state_their_result(self):
+        from report_search.generation import GENERATOR_SYSTEM
+        self.assertIn("which is higher, larger, lower or better, add one claim that states that result", GENERATOR_SYSTEM)
+
 
 if __name__ == "__main__":
     unittest.main()
