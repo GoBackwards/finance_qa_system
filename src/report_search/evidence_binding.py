@@ -23,9 +23,11 @@ _YEAR_HEADER = re.compile(r"(?:FY|Fiscal)?\s*(?:19|20)\d\d|[A-Za-z]+\.? \d{1,2},
 def column_years(table: dict) -> dict[int, int]:
     """Year of each value column, from the year headers above the table placed by x position.
 
-    The parsed caption lists same-line headers in y order, which can reverse
-    them ('2023 2024' over columns 2024 | 2023); bounding boxes cannot. Empty
-    unless at least two distinct years can each be placed in one column.
+    Corpus v1 captions list same-line headers in y order, which can reverse
+    them ('2023 2024' over columns 2024 | 2023); corpus v2 reads them left to
+    right. Bounding boxes are never reversed, so both corpora are bound by
+    position. Empty unless at least two distinct years can each be placed in
+    one column.
     """
     marks = []
     for item in table.get("context") or ():

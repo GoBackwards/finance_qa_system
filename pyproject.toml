@@ -1,15 +1,24 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "financial-report-parser"
+name = "finance-qa-system"
 version = "0.1.0"
 description = "Page-grounded question answering over financial annual reports: parsing, dense retrieval, reranking and evidence-bound generation"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "GoBackwards" }]
 requires-python = ">=3.11"
 dependencies = ["PyMuPDF==1.28.2", "pdfplumber==0.11.9"]
 
+[project.urls]
+Repository = "https://github.com/GoBackwards/finance_qa_system"
+
 [project.optional-dependencies]
+# Report download and corpus verification (scripts/collect_reports.py, scripts/verify_corpus.py)
+corpus = ["pypdf==6.10.0", "pypdfium2==5.14.0"]
 experiments = ["tiktoken==0.14.0"]
 demo = ["streamlit==1.65.0", "tiktoken==0.14.0"]
 vectors = [
@@ -21,12 +30,6 @@ vectors = [
     "peft==0.15.2",
     "accelerate==1.7.0",
 ]
-
-[project.scripts]
-parse-reports = "report_parser.cli:main"
-chunk-experiment = "report_chunker.experiment:main"
-build-vector-index = "report_index.pipeline:main"
-retrieval-experiment = "report_search.experiment:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

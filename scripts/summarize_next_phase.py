@@ -24,6 +24,7 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 from autograde_answers import grade  # noqa: E402
 from report_chunker.retrieval import judge_retrieval  # noqa: E402
+from summarize_live_usage import GOOD  # noqa: E402
 
 RUNS = ROOT / "data/experiments/next_phase"
 ARMS = {"r0_baseline": "baseline (commit 435b7ae: context extras v1, prompt v2.2)",
@@ -32,7 +33,6 @@ ARMS = {"r0_baseline": "baseline (commit 435b7ae: context extras v1, prompt v2.2
         "r3_d4d1d3": "+ 3 citation repair (longest verbatim block, cross-claim calculations)",
         "r4_answer_side": "+ 6 verifier calibration and 5's 3,072-token generator limit",
         "r5_all": "+ 2 and 5 context extras v3 (fresh retrieval)"}
-GOOD = {"correct_answer", "acceptable_clarification", "correct_abstention"}
 
 
 def bootstrap(deltas):

@@ -70,6 +70,18 @@ class GenerationTests(unittest.TestCase):
                 self.assertEqual(source.calls, 0)
                 self.assertFalse(generator.calls or verifier.calls)
 
+    def test_more_passages_than_top5_plus_extras_refuse_before_any_work(self):
+        from report_search.generation import MAX_PASSAGES
+        from report_search.scoped_retrieval import MAX_SUMMARY_EXTRAS
+        self.assertEqual(MAX_PASSAGES, 5 + MAX_SUMMARY_EXTRAS)
+        passages = [{"chunk_id": f"c{number}", "reranker_score": 7.0} for number in range(MAX_PASSAGES + 1)]
+        result, source, generator, verifier = self.run_answer(candidates=passages)
+        self.assertEqual(result["reason"], "too_many_passages")
+        self.assertEqual(source.calls, 0)
+        self.assertFalse(result["audit"]["generation_called"] or generator.calls or verifier.calls)
+        result, *_ = self.run_answer(candidates=passages[:MAX_PASSAGES], threshold=None)
+        self.assertEqual(result["reason"], "unconfigured_threshold")  # past the length check
+
     def test_valid_quote_does_not_allow_false_claim(self):
         # A number absent from the citation is now rejected deterministically.
         draft = copy.deepcopy(DRAFT)

@@ -10,7 +10,7 @@ Earlier audits ([classic_bad_cases.md](classic_bad_cases.md)) injected controlle
    - grades: [`live_usage_grades.json`](../data/evaluation/live_usage_grades.json);
    - run summaries, transitions, gate analysis and per-question outcomes: [`live_bad_case_results.json`](../data/evaluation/live_bad_case_results.json), built by [`summarize_live_usage.py`](../scripts/summarize_live_usage.py);
    - machine-readable version of the table below: [`live_bad_case_table.json`](../data/evaluation/live_bad_case_table.json).
-4. **Fix and rerun** in several rounds. Each round was validated by the full unit-test suite (410 tests at the last commit before the audit; the published suite has 588, 587 passing and one skipped on Windows), adversarial code reviews, and an independent fact-check of these documents. The fact-check found that two worked examples in prompt v2 reused live-pool answers (case 13), so the final run used prompt v2.1 with fictional examples. Prompt v2.2 then added an explicit comparison-result rule, measured in [architecture Table A11](system_architecture.md#a11-comparison-decomposition-per-company-sub-questions-30-comparative-benchmark-questions-12-live-comparisons), and the shipped v2.3 adds a verifier calibration sentence; the full 50-question pool was re-run with v2.3 and the other next-phase directions in [Table A13](system_architecture.md#a13-next-phase-directions-comparison-verdict-value-checks-citation-repair-context-extras-v3).
+4. **Fix and rerun** in several rounds. Each round was validated by the full unit-test suite (410 tests at the last commit before the audit; the published suite has 634, 633 passing and one skipped on Windows), adversarial code reviews, and an independent fact-check of these documents. The fact-check found that two worked examples in prompt v2 reused live-pool answers (case 13), so the final run used prompt v2.1 with fictional examples. Prompt v2.2 then added an explicit comparison-result rule, measured in [architecture Table A11](system_architecture.md#a11-comparison-decomposition-per-company-sub-questions-30-comparative-benchmark-questions-12-live-comparisons), and the shipped v2.3 adds a verifier calibration sentence; the full 50-question pool was re-run with v2.3 and the other next-phase directions in [Table A13](system_architecture.md#a13-next-phase-directions-comparison-verdict-value-checks-citation-repair-context-extras-v3).
 
 | Run | Code state | Answered | Good outcomes | Bad cases |
 |---|---|---:|---:|---:|
@@ -95,7 +95,7 @@ tar -xf tmp/head_code.tar -C tmp/head_code
 
 # Final configuration: the recorded run used prompt v2.1 (commit 960bcc1; extract it as above and pass --src to
 # rerun it exactly). This checkout ships prompt v2.3.
-.\.venv\Scripts\python.exe scripts/run_live_usage.py --label after_fix --threshold -1000000 `
+.\.venv\Scripts\python.exe scripts/run_live_usage.py --label after_fix --threshold -1000000 --corpus v1 `
   --output data/experiments/live_usage/after_fix.jsonl
 
 # Summarize the five recorded runs, then run the regression suite

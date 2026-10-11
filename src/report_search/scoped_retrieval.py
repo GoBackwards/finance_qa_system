@@ -5,6 +5,8 @@ vector Top-20 cannot avoid: one company of a comparison crowding out the other,
 near-identical paragraphs from several report years filling every slot, and
 undated or relative questions answered from stale reports. Scoping uses only
 the user's question (resolved companies and periods), never benchmark labels.
+After the balanced Top-5, ``context_extras`` appends the passages the reranker
+tends to drop: statement tables, summary themes and table continuations.
 """
 from __future__ import annotations
 

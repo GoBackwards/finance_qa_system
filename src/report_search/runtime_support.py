@@ -1,6 +1,8 @@
-"""Bounded retrieval caching and cooperative request deadlines.
+"""Cooperative request deadlines, and a bounded retrieval cache.
 
-Cache entries contain reranked passages only, never generated answers. A caller
+``RequestBudget`` and ``DeadlineExceeded`` bound every answer request.
+``RetrievalCache`` is a tested utility that the demo does not use (see
+docs/failure_handling.md). Cache entries contain reranked passages only, never generated answers. A caller
 must bind all corpus/model/index/query-policy versions to its exact query. The
 byte limit counts the immutable serialized payload and digest, not Python object
 overhead; the independent entry limit also bounds per-entry overhead.

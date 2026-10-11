@@ -14,3 +14,13 @@ data/indexes/
 !.env.example
 .streamlit/secrets.toml
 *.pem
+
+# Local tooling
+.claude/
+.vscode/
+.idea/
+.pytest_cache/
+build/
+dist/
+.DS_Store
+Thumbs.db

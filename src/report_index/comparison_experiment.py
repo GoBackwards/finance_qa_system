@@ -15,7 +15,7 @@ import numpy as np
 
 from report_chunker.retrieval import index_stats
 from report_index.comparison import compare_query_results
-from report_index.faiss_index import load_chunk_mapping, manifest_path, sha256_file
+from report_index.faiss_index import load_chunk_mapping, sha256_file
 from report_search.benchmark import validate_benchmark
 from report_search.experiment import _load_query_cache, aggregate, evaluate_question, json_hash, write_json
 

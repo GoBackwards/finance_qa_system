@@ -24,11 +24,12 @@ from report_search.confidence import confidence_gate
 from report_search.evidence_binding import SourceEvidenceStore
 from report_search.llm_client import ChatCompletionsClient, ModelConfig, ModelError
 from report_search.runtime_support import DeadlineExceeded, RequestBudget
+from report_search.scoped_retrieval import MAX_SUMMARY_EXTRAS
 
 
 PROMPT_VERSION = "evidence-bound-claims-v2.3"
-# Worked examples use a fictional company: v2 reused two live-pool answers
-# (B04's Intel growth and A06's Oracle R&D figure), which leaked evaluation data.
+# Worked examples in these prompts use fictional companies only, never an evaluation question or its
+# answer (prompt v2 did, and was replaced; see docs/live_bad_cases.md).
 GENERATOR_SYSTEM = """You answer questions about company annual reports using ONLY the supplied sources.
 Return one JSON object, with no markdown or extra fields:
 {"status":"answer","claims":[{"text":"One supported claim.","citations":[{"evidence_id":"E1","quote":"exact supporting substring"}]}]}
@@ -67,7 +68,7 @@ Use no external facts. You may disagree with the generator. When uncertain, mark
 Judge support only against the cited sources: never mark a sourced figure unsupported because it seems implausible, or differs from what you would expect from outside knowledge.
 """
 MAX_QUALITY_FLAGS = 4
-MAX_PASSAGES = 15  # reranked Top-5 plus at most 10 context extras (scoped_retrieval.MAX_SUMMARY_EXTRAS)
+MAX_PASSAGES = 5 + MAX_SUMMARY_EXTRAS  # the reranked Top-5 plus the most context extras one question gets
 
 
 def _json(value):
@@ -443,9 +444,11 @@ def _generate_answer(query, candidates, *, threshold=None, source_store=None,
 def answer_with_retrieval(query, *, encoder, retrieval_engine, reranker, threshold=None, **generation_options):
     """Compose the existing dense encoder, vector Top20 and reranked Top5 APIs.
 
-    Callers manage model sessions/devices and can release encoder memory before
-    reranking in memory-constrained applications. The source gate and both
-    generation checks are always applied after retrieval.
+    An older, test-only helper: the demo and the evaluation runners use
+    DemoService, which adds query scoping and context extras before
+    ``generate_answer``. Callers manage model sessions/devices and can release
+    encoder memory before reranking in memory-constrained applications. The
+    source gate and both generation checks are always applied after retrieval.
     """
     if (not _valid_query(query)
             or confidence_gate([], threshold).reason in {"unconfigured_threshold", "invalid_threshold"}):

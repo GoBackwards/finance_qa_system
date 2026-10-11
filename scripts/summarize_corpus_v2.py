@@ -27,7 +27,8 @@ from autograde_answers import grade  # noqa: E402
 from report_chunker.retrieval import judge_retrieval  # noqa: E402
 from report_search.demo_service import CORPORA  # noqa: E402
 from report_search.evidence_binding import column_years  # noqa: E402
-from summarize_next_phase import GOOD, bootstrap  # noqa: E402
+from summarize_live_usage import GOOD  # noqa: E402
+from summarize_next_phase import bootstrap  # noqa: E402
 
 RUNS = ROOT / "data/experiments/corpus_v2"
 YEAR = re.compile(r"\b(?:19|20)\d{2}\b")
@@ -131,8 +132,6 @@ def main():
     position = {name: {chunk["chunk_id"]: key for key, chunk in chunks.items()}
                 for name, chunks in (("v1", chunks1), ("v2", chunks2))}
     reordered = set(reordered)
-    live_questions = {q["id"]: q for q in json.loads((ROOT / "data/evaluation/live_usage_questions.json")
-                                                     .read_text(encoding="utf-8"))["questions"]}
     exposure = {}
     for pool, (old, new), category in (
             ("benchmark", ("v1_control.jsonl", "v2_all.jsonl"), lambda qid: questions[qid]["category"]),

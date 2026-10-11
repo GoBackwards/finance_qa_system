@@ -182,7 +182,7 @@ class AnswerCliTests(unittest.TestCase):
         self.assertEqual(raised.exception.code, 2)
 
     def test_corrupt_cache_and_unknown_query_produce_same_public_abstention(self):
-        run = CachedRun(self.root)
+        CachedRun(self.root)
         _, result = self.invoke(["--question-id", "missing", "--reranker-run", str(self.root)])
         self.assertEqual(result["answer"], "I'm not sure")
         path = self.root / "scores.jsonl"

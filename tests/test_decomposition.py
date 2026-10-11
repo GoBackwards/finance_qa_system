@@ -1,6 +1,5 @@
 import copy
 import json
-from pathlib import Path
 import unittest
 
 from report_search.decomposition import (

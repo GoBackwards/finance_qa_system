@@ -17,7 +17,6 @@ import time
 import types
 
 from report_index.faiss_index import sha256_file
-from report_search.answer_verification import validate_draft
 from report_search.evidence_binding import SourceEvidenceStore
 from report_search.experiment import write_json
 from report_search.generation import generate_answer

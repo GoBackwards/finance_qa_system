@@ -1,5 +1,4 @@
 """Frozen-candidate extraction and atomic scorer resumption contracts."""
-import copy
 import json
 from pathlib import Path
 import tempfile
