@@ -16,6 +16,40 @@ import re
 from report_chunker.chunking import ChunkConfig, chunk_document
 from report_chunker.validation import validate_document_chunks
 
+_YEAR = re.compile(r"(?<!\d)(?:19|20)\d\d(?!\d)")
+_YEAR_HEADER = re.compile(r"(?:FY|Fiscal)?\s*(?:19|20)\d\d|[A-Za-z]+\.? \d{1,2}, (?:19|20)\d\d")
+
+
+def column_years(table: dict) -> dict[int, int]:
+    """Year of each value column, from the year headers above the table placed by x position.
+
+    The parsed caption lists same-line headers in y order, which can reverse
+    them ('2023 2024' over columns 2024 | 2023); bounding boxes cannot. Empty
+    unless at least two distinct years can each be placed in one column.
+    """
+    marks = []
+    for item in table.get("context") or ():
+        text = item.get("text") or ""
+        if item.get("position") == "above" and item.get("bbox") and len(text) <= 45:
+            left, _, right, _ = item["bbox"]
+            marks += [(int(m.group()), left + (right - left) * (m.start() + m.end()) / 2 / len(text))
+                      for m in _YEAR.finditer(text)]
+    for cell in table.get("cells") or ():
+        if cell.get("row", 99) <= 2 and cell.get("bbox") and _YEAR_HEADER.fullmatch((cell.get("text") or "").strip()):
+            left, _, right, _ = cell["bbox"]
+            marks.append((int(_YEAR.findall(cell["text"])[-1]), (left + right) / 2))
+    spans = {}
+    for cell in table.get("cells") or ():
+        if cell.get("column", 0) > 0 and cell.get("bbox"):
+            low, high = spans.get(cell["column"], (cell["bbox"][0], cell["bbox"][2]))
+            spans[cell["column"]] = (min(low, cell["bbox"][0]), max(high, cell["bbox"][2]))
+    columns = {}
+    for column, (low, high) in spans.items():
+        inside = {year for year, x in marks if low <= x <= high}
+        if len(inside) == 1:
+            columns[column] = inside.pop()
+    return columns if len(set(columns.values())) >= 2 else {}
+
 
 def _require(condition: bool, message: str) -> None:
     if not condition:
@@ -85,7 +119,7 @@ class SourceEvidenceStore:
         cached = self._cache.get(key)
         if cached is not None and cached[0] == signature:
             self._cache.move_to_end(key)
-            return cached[1]
+            return cached[1], cached[2]
         metadata = json.loads(paths[0].read_text(encoding="utf-8"))
         _require(isinstance(metadata, dict) and metadata.get("complete") is True
                  and not metadata.get("partial"), "Source parse is incomplete")
@@ -101,11 +135,12 @@ class SourceEvidenceStore:
         validate_document_chunks(metadata, pages, tables, canonical)
         by_id = {chunk["chunk_id"]: chunk for chunk in canonical}
         _require(len(by_id) == len(canonical), "Duplicate canonical chunk ID")
-        self._cache[key] = (signature, by_id)
+        tables_by_id = {table["table_id"]: table for table in tables}
+        self._cache[key] = (signature, by_id, tables_by_id)
         self._cache.move_to_end(key)
         while len(self._cache) > self.cache_documents:
             self._cache.popitem(last=False)
-        return by_id
+        return by_id, tables_by_id
 
     @staticmethod
     def _validate_candidate(candidate: dict, canonical: dict) -> None:
@@ -158,12 +193,21 @@ class SourceEvidenceStore:
             chunk_id = _text(candidate.get("chunk_id"), "chunk_id")
             _require(chunk_id not in seen, f"Duplicate candidate chunk_id: {chunk_id}")
             seen.add(chunk_id)
-            canonical = self._canonical(candidate).get(chunk_id)
+            by_id, tables = self._canonical(candidate)
+            canonical = by_id.get(chunk_id)
             _require(canonical is not None, f"Unknown source chunk_id: {chunk_id}")
             self._validate_candidate(candidate, canonical)
             identifiers, references, unit_keys = [], [], set()
             for atom in canonical["evidence"]:
                 unit = self._unit(atom)
+                if unit["kind"] == "row" and atom["table_id"] in tables:
+                    # Local check data (never shown to the models): each cell's column year.
+                    table = tables[atom["table_id"]]
+                    years = column_years(table)
+                    cells = [[cell.get("text") or "", years[cell["column"]]] for cell in table.get("cells") or ()
+                             if cell.get("row") == atom["row_index"] and cell.get("column") in years]
+                    if cells:
+                        unit["column_years"] = cells
                 source_key = _json({key: unit[key] for key in ("kind", "citation", "source_locator")})
                 _require(source_key not in unit_keys, "Duplicate source unit within chunk")
                 unit_keys.add(source_key)

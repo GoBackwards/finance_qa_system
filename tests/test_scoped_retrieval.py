@@ -1,7 +1,8 @@
 import unittest
 
-from report_search.scoped_retrieval import (MAX_EXTRAS, context_extras, document_index, merge_pools, near_duplicate,
-                                            plan_pools, select_candidates, summary_themes)
+from report_search.scoped_retrieval import (MAX_EXTRAS, MAX_SUMMARY_EXTRAS, context_extras, document_index,
+                                            merge_pools, near_duplicate, plan_pools, select_candidates,
+                                            summary_themes)
 
 
 INVENTORY = [{"ticker": ticker, "fiscal_year": year, "relative_path": f"raw/{ticker}/{ticker}_FY{year}_annual_report.pdf",
@@ -138,6 +139,9 @@ class FakeEngine:
         self.calls.append(("bm25", question, ticker, fiscal_year))
         return [dict(c, score=-1.0) for c in self.lexical.get(question, [])][:top_k]
 
+    def vector_scores(self, query_vector, chunks):
+        return [0.0 for _ in chunks]
+
     def neighbour(self, chunk_id, offset):
         index = next(i for i, c in enumerate(self.chunks) if c["chunk_id"] == chunk_id)
         other = index + offset
@@ -194,9 +198,24 @@ class ContextExtrasTests(unittest.TestCase):
     def test_extras_are_capped_and_never_repeat_selected_passages(self):
         chunks = [piece(f"t{i}", kind="table", table_id="T") for i in range(30)]
         selected = chunks[1:30:2]
-        extras = context_extras("Summarize.", {}, [], selected, FakeEngine(chunks), None)
-        self.assertEqual(len(extras), MAX_EXTRAS)
-        self.assertFalse({e["chunk_id"] for e in extras} & {c["chunk_id"] for c in selected})
+        for question, cap in (("What was revenue?", MAX_EXTRAS), ("Summarize.", MAX_SUMMARY_EXTRAS)):
+            with self.subTest(question):
+                extras = context_extras(question, {}, [], selected, FakeEngine(chunks), None)
+                self.assertEqual(len(extras), cap)
+                self.assertFalse({e["chunk_id"] for e in extras} & {c["chunk_id"] for c in selected})
+
+    def test_summary_adds_two_hits_per_theme_and_the_closest_prose_neighbours(self):
+        chunks = [piece(f"p{i}") for i in range(8)]
+        hits = {"input inflation": [chunks[0], chunks[1], chunks[2]]}
+        engine = FakeEngine(chunks, hits)
+        engine.vector_scores = lambda vector, rows: [1.0 if row["chunk_id"] == "p5" else 0.0 for row in rows]
+        extras = context_extras("Summarize its risks concerning input inflation.", {}, [POOL], [chunks[0], chunks[4]],
+                                engine, None)
+        self.assertEqual([(e["chunk_id"], e["context_reason"]) for e in extras][:2],
+                         [("p1", "summary_theme"), ("p2", "summary_theme")])
+        neighbours = [e["chunk_id"] for e in extras if e["context_reason"] == "summary_neighbour"]
+        self.assertEqual(neighbours[0], "p5")  # highest similarity first; p1 was already added
+        self.assertNotIn("p1", neighbours)
 
 if __name__ == "__main__":
     unittest.main()

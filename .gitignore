@@ -6,6 +6,7 @@ __pycache__/
 tmp/
 data/raw/
 data/processed/
+data/processed_v2/
 data/experiments/
 data/indexes/
 .env

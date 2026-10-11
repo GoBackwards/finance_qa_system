@@ -297,6 +297,12 @@ class RetrievalEngine:
                          score_breakdown={"vector_raw_score": None, "bm25_raw_score": chunk["score"]})
         return results
 
+    def vector_scores(self, query_vector: np.ndarray, chunks: Iterable[dict]) -> list[float]:
+        """Inner products of the query with stored chunk vectors (chunks carry ``vector_id``)."""
+        self._require_open()
+        query = np.asarray(query_vector, dtype=np.float32).reshape(-1)
+        return [float(self.index.reconstruct(int(chunk["vector_id"])) @ query) for chunk in chunks]
+
     def neighbour(self, chunk_id: str, offset: int) -> dict | None:
         """The chunk ``offset`` positions away in the same document, or None at a document edge."""
         self._require_open()

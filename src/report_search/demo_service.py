@@ -9,6 +9,7 @@ from __future__ import annotations
 from concurrent.futures import Future
 from copy import deepcopy
 from dataclasses import dataclass
+import functools
 import hashlib
 import hmac
 import json
@@ -58,7 +59,21 @@ def _valid_query(query):
     return True
 
 
-def _default_factory(root, device):
+# Corpus versions: each is a self-consistent set of parsed sources, chunks and indexes. v1 is the
+# published corpus behind Tables A1-A13; v2 is re-parsed with same-line table headers read left to
+# right (parser fix 4b) and built in separate folders, never over v1.
+CORPORA = {
+    "v1": {"processed": "data/processed", "chunks": "data/experiments/chunking/table_preserving_s512_o50/chunks.jsonl",
+           "vectors": "data/indexes/bge-m3/table_preserving_s512_o50",
+           "bm25": "data/indexes/bm25_s512_o50/retrieval.sqlite"},
+    "v2": {"processed": "data/processed_v2",
+           "chunks": "data/experiments/chunking_v2/table_preserving_s512_o50/chunks.jsonl",
+           "vectors": "data/indexes/bge-m3_v2/table_preserving_s512_o50",
+           "bm25": "data/indexes/bm25_s512_o50_v2/retrieval.sqlite"},
+}
+
+
+def _default_factory(root, device, corpus="v1"):
     # Imports and native resources stay on the owning worker. Existing index
     # loaders verify hashes and ordered SQLite/FAISS chunk mappings themselves.
     from report_index.embedding import DenseEncoder, sha256_file
@@ -67,7 +82,8 @@ def _default_factory(root, device):
     from report_search.reranker import BGEReranker
     from report_search.retrieval import RetrievalEngine
 
-    index_root = root / "data/indexes/bge-m3/table_preserving_s512_o50"
+    paths = {key: root / value for key, value in CORPORA[corpus].items()}
+    index_root = paths["vectors"]
     embedding_path = index_root / "embeddings/embedding_manifest.json"
     metadata = json.loads(embedding_path.read_text(encoding="utf-8"))
     encoder_meta = metadata["encoder"]
@@ -78,8 +94,7 @@ def _default_factory(root, device):
     encoder_snapshot = cache / ("models--" + encoder_meta["model_id"].replace("/", "--")) / "snapshots" / encoder_meta["model_revision"]
     encoder = DenseEncoder(model_id=encoder_meta["model_id"], revision=encoder_meta["model_revision"],
                            device=device, batch_size=1, cache_dir=cache, local_model_path=encoder_snapshot)
-    engine = RetrievalEngine(root / "data/experiments/chunking/table_preserving_s512_o50/chunks.jsonl",
-                             index_root / "flat.faiss", root / "data/indexes/bm25_s512_o50/retrieval.sqlite",
+    engine = RetrievalEngine(paths["chunks"], index_root / "flat.faiss", paths["bm25"],
                              threads=4)
     try:
         for key in ("model_id", "model_revision", "dimension", "pooling", "normalized",
@@ -103,7 +118,7 @@ def _default_factory(root, device):
         # Startup is paid once on the first search, outside warm stage timings.
         encoder._load_model()
         reranker._load_model()
-        return DemoComponents(encoder, engine, reranker, SourceEvidenceStore(root / "data/processed"),
+        return DemoComponents(encoder, engine, reranker, SourceEvidenceStore(paths["processed"]),
                               {**engine.stats, "encoder_model": encoder.identity["model_id"],
                                "reranker_model": reranker.identity["model_id"], "device": device},
                               scope_resolver=ScopeResolver(inventory), documents=document_index(inventory))
@@ -127,15 +142,18 @@ class DemoService:
     ``answer`` accepts only an unmodified result from this service's ``search``.
     """
 
-    def __init__(self, root_dir, *, device="cpu", worker_factory=None, decompose_comparisons=False):
+    def __init__(self, root_dir, *, device="cpu", worker_factory=None, decompose_comparisons=False, corpus="v1"):
         if not isinstance(device, str) or not re.fullmatch(r"cpu|cuda:\d+", device):
             raise DemoError("invalid_device")
+        if corpus not in CORPORA:
+            raise DemoError("invalid_corpus")
+        self.corpus = corpus
         self.root_dir = Path(root_dir).resolve()
         self.device = device
         # Comparisons of two or more resolved companies are split into
         # per-company sub-questions, each retrieved and reranked on its own.
         self.decompose_comparisons = bool(decompose_comparisons)
-        self._factory = worker_factory or _default_factory
+        self._factory = worker_factory or functools.partial(_default_factory, corpus=corpus)
         self._components = None
         self._worker_id = None
         self._closed = False

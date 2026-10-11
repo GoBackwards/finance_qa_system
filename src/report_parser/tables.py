@@ -259,7 +259,17 @@ def _context(lines: list[dict], bbox: list[float]) -> tuple[str | None, list[dic
         if before or after or inside_unit:
             context.append({"text": text, "bbox": [round(float(v), 3) for v in box],
                             "position": "above" if before else "below" if after else "inside"})
+    # Read each visual line left to right: year headers over adjacent columns ('2024' at x=441, '2023' at
+    # x=511) can differ by a fraction of a point in top edge, and a plain (top, x) sort reversed them.
     context.sort(key=lambda item: (item["bbox"][1], item["bbox"][0]))
+    lines_ = []
+    for item in context:
+        middle = (item["bbox"][1] + item["bbox"][3]) / 2
+        if lines_ and abs(middle - lines_[-1][0]) <= 2.0:
+            lines_[-1][1].append(item)
+        else:
+            lines_.append((middle, [item]))
+    context = [item for _, line in lines_ for item in sorted(line, key=lambda item: item["bbox"][0])]
     above = [item["text"] for item in context if item["position"] == "above"]
     return ("\n".join(above) if above else None), context
 

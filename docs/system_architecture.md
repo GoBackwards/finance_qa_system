@@ -56,12 +56,12 @@ The Streamlit demo ([streamlit_demo.md](streamlit_demo.md)) and [`scripts/run_li
 | Retrieve | [`scoped_retrieval.py`](../src/report_search/scoped_retrieval.py), [`retrieval.py`](../src/report_search/retrieval.py) | One exact FAISS search per resolved company (max(6, ⌈20/n⌉) candidates each, at most 30 in total), restricted to that company's reports and to the resolved report years when stated or implied. For an undated question, a 4-candidate search restricted to each company's latest report is added. Without a resolved company, the original global vector Top-20 is used. |
 | Decompose (optional, off by default) | [`decomposition.py`](../src/report_search/decomposition.py) | For a comparison of two or more resolved companies, `DemoService(decompose_comparisons=True)` gives each company its own sub-question (a deterministic rewrite, or a validated model plan), searches it only in that company's reports and reranks it against its own wording; the Top-5 gives each company an equal share first. The original question is then answered from the combined passages. Measured in Table A11. |
 | Rerank and select | [`reranker.py`](../src/report_search/reranker.py), [`scoped_retrieval.py`](../src/report_search/scoped_retrieval.py) | Every pooled candidate is scored by the cross-encoder. The Top-5 reserves floor(5 / companies) slots per compared company (at least one; with six or more companies some get none, which the trace records), skips a passage that repeats one already selected from the same company's other report with identical figures, and for undated questions keeps latest-report slots (two for one company, one per company in a comparison). |
-| Context extras | [`scoped_retrieval.py`](../src/report_search/scoped_retrieval.py) | On the scoped path (a resolved company, decomposition off), up to 8 passages are appended after the Top-5 and scored by the reranker:<br>• for non-summary questions, per company, the table among its vector Top-20 whose row labels best match the question;<br>• one BM25 hit per theme of a single-company question that asks for a summary;<br>• the same-table neighbours of a selected table, and the table chunk that directly follows a selected non-table passage on the same or next page.<br>Measured in Table A12. |
+| Context extras | [`scoped_retrieval.py`](../src/report_search/scoped_retrieval.py) | On the scoped path (a resolved company, decomposition off), up to 8 passages (10 for a summary question) are appended after the Top-5 and scored by the reranker:<br>• for non-summary questions, per company, the table among its vector Top-20 whose row labels best match the question (tables with at least three financial-statement row types first, half a step lower when they mention segments), and for a single company the question's best BM25 hit;<br>• for a question that asks for a summary, up to 3 prose neighbours of the selected prose, the most similar to the question, and for a single company two BM25 hits per theme;<br>• the same-table neighbours of a selected table, and the table chunk that directly follows a selected non-table passage on the same or next page.<br>Measured in Tables A12 (v1) and A13 (v3). |
 | Gate | [`confidence.py`](../src/report_search/confidence.py) | Always applied and fail-closed: the maximum raw reranker logit must reach an explicitly configured threshold, and with no threshold every request abstains (`unconfigured_threshold`). No default value is installed (see Table A8). |
 | Bind | [`evidence_binding.py`](../src/report_search/evidence_binding.py), [`generation.py`](../src/report_search/generation.py) | Re-derives each chunk from the parsed source and checks hashes. The models receive a compact projection: evidence IDs, pages, unit kind (header rows marked) and text, each once. Over the context budget, the lowest-ranked passage that is not a company's or report year's last passage is dropped, repeatedly; if none can be dropped the request abstains (`context_budget_exceeded`), and the gate is rechecked on the passages kept. |
-| Generate | [`generation.py`](../src/report_search/generation.py) | Prompt `evidence-bound-claims-v2.2`: one checkable claim per item, verbatim quotes, period and premise rules, derived values only via a `calculation` object, and an explicit result claim for "which is higher" comparisons (added in v2.2; Tables A9 and A10 were measured with v2.1). |
-| Check | [`answer_verification.py`](../src/report_search/answer_verification.py) | Citation repair re-points a quote to an exact source span: typography (NBSP, ligatures, curly quotes, dot leaders, hyphens, trailing punctuation), a table row quoted with selected cells, an ellipsis inside one unit (the full span is shown), a wrong evidence ID (re-pointed to a unique exact match, first in the cited chunk, then anywhere in the request's sources; a bare figure without letters moves only within its own report), a quote split across adjacent parser fragments (one citation per unit), and two quotes of one unit (merged). Then exact reference validation, recomputation of calculations, grounding of every year, date, number, company and qualifier in the claim, and at most one corrective retry for these mechanical failures. |
-| Verify and render | [`generation.py`](../src/report_search/generation.py), [`answer_verification.py`](../src/report_search/answer_verification.py) | A separate model call judges claim support and completeness. Rendering takes page numbers and locators from verified metadata, never from the model. |
+| Generate | [`generation.py`](../src/report_search/generation.py) | Prompt `evidence-bound-claims-v2.3`: one checkable claim per item, verbatim quotes, period and premise rules, derived values only via a `calculation` object, and an explicit result claim for "which is higher" comparisons (v2.2). v2.3 adds a verifier calibration sentence. Tables A9 and A10 were measured with v2.1. Up to 15 passages and 3,072 output tokens. |
+| Check | [`answer_verification.py`](../src/report_search/answer_verification.py) | Citation repair re-points a quote to an exact source span: typography (NBSP, ligatures, curly quotes, dot leaders, hyphens, trailing punctuation), a table row quoted with selected cells, an ellipsis inside one unit (the full span is shown), a wrong evidence ID (re-pointed to a unique exact match, first in the cited chunk, then anywhere in the request's sources; a bare figure without letters moves only within its own report), a quote split across adjacent parser fragments (one citation per unit), two quotes of one unit (merged), and as a last resort a near-verbatim quote trimmed to its longest exact block. Then exact reference validation, recomputation of calculations, and grounding of every year, date, number, company and qualifier in the claim (a figure may also equal another claim's verified calculation). Value checks reject a table figure taken from another fiscal year's column and a footnoted row whose unmarked row is in context. At most one corrective retry follows for these mechanical failures. |
+| Verify and render | [`generation.py`](../src/report_search/generation.py), [`answer_verification.py`](../src/report_search/answer_verification.py) | A separate model call judges claim support and completeness. For a "which is higher" comparison whose claims give one amount per company but no verdict, the application then appends the result sentence, citing both claims (Table A13). Rendering takes page numbers and locators from verified metadata, never from the model. |
 
 ## 2. Why each module was selected
 
@@ -239,7 +239,7 @@ Fifteen baseline bad cases were fixed and none regressed; 18 of 50 remain bad, a
 
 ### A10. End-to-end answers on the frozen 100-question benchmark: original vs current pipeline
 
-Source: `data/evaluation/benchmark_e2e_results.json` (grades in `data/evaluation/benchmark_e2e_grades.json`). Both systems answered all 100 benchmark questions live with gpt-4.1-mini, gate open. **Original** is commit 6b61b5e, before the live bad-case fixes: vector Top-20, reranked Top-5, prompt v1. **Current** is the pipeline after the live bad-case fixes, with prompt v2.1 as measured at the time of this run; the shipped prompt is v2.2, measured on the comparative questions in Table A11. The fixes were designed on the separate live pool, so this benchmark is independent of them. Each question was graded side by side against the gold answer and its evidence, and every grade was re-checked by a second agent. All benchmark questions are answerable, so every refusal counts as a false refusal.
+Source: `data/evaluation/benchmark_e2e_results.json` (grades in `data/evaluation/benchmark_e2e_grades.json`). Both systems answered all 100 benchmark questions live with gpt-4.1-mini, gate open. **Original** is commit 6b61b5e, before the live bad-case fixes: vector Top-20, reranked Top-5, prompt v1. **Current** is the pipeline after the live bad-case fixes, with prompt v2.1 as measured at the time of this run; v2.2 was measured on the comparative questions in Table A11, and the shipped prompt is v2.3 (Table A13). The fixes were designed on the separate live pool, so this benchmark is independent of them. Each question was graded side by side against the gold answer and its evidence, and every grade was re-checked by a second agent. All benchmark questions are answerable, so every refusal counts as a false refusal.
 
 | Split · system | Accuracy (fully correct) | Correct or partial | Answered | Wrong | Gold answer points covered |
 |---|---:|---:|---:|---:|---:|
@@ -423,6 +423,77 @@ The other two wrong answers differ:
 - **Summary trigger.** The trigger is a keyword. It fired on 29 of the 30 templated benchmark summary questions but on only 1 of the 50 live questions, so the summary gain may not carry over to other wording.
 - These rules were designed after diagnosing failures on both benchmark splits and the live pool, so a fresh held-out question set is still needed to confirm the gain.
 
+### A13. Next-phase directions: comparison verdict, value checks, citation repair, context extras v3
+
+Source: `data/evaluation/next_phase_results.json` (blind grades in `next_phase_grades.json`), produced by [`scripts/summarize_next_phase.py`](../scripts/summarize_next_phase.py). Runs are made with [`scripts/replay_generation.py`](../scripts/replay_generation.py) and graded by [`scripts/autograde_answers.py`](../scripts/autograde_answers.py). Design and diagnosis: [next_phase_plan.md](next_phase_plan.md).
+
+**What changed.** Each change is small and covered by unit tests.
+
+| # | Direction | Change |
+|---|---|---|
+| 1 | Comparison verdict | `comparison_verdict` (`answer_verification.py`) runs after the verifier passes. It fires on a two-company "which is higher/lower" question when each company has exactly one currency or scaled amount and no claim states the comparison. It appends "X reported the higher amount: $A, against $B for Y", citing both claims. |
+| 2 | Context extras v2 | Every compared company's name is dropped from the table-slot terms. Singular and plural forms match. Tables with at least three financial-statement row types rank first, and a table that mentions segments ranks half a step lower. One company's question gets its best BM25 hit, and a theme whose top hit is already selected takes the next one. |
+| 3 | Citation repair | A final repair pass trims a near-verbatim quote to its longest exact block (at least 70% of the quote and 60 characters). A figure may also equal another claim's verified calculation result. |
+| 4 | Value checks | The evidence store binds each table cell to its column year, from the x-position of the year headers. Grounding rejects a figure taken from another year's column (`claim_column_year_mismatch`). It also rejects a footnoted row when the same report's unmarked row is in context (`claim_footnoted_row`). The one corrective retry receives the hint. |
+| 5 | Context extras v3 and longer drafts | Summary questions get up to 3 prose neighbours of the selected prose, the most similar to the question, and a single company's summary two BM25 hits per theme: up to 10 extras, and up to 15 passages per answer. The output limit of the generator and verifier calls rises from 2,048 to 3,072 tokens. |
+| 6 | Verifier calibration | Prompt `evidence-bound-claims-v2.3` tells the verifier never to mark a sourced figure unsupported because it seems implausible against outside expectations. |
+
+The parser header-order fix (direction 4b) is not part of this table. It needs a full re-parse and re-embed, and is being built as a separate corpus version rather than by overwriting the current corpus.
+
+**Method.** Answer-side arms replay only the answer stage, 5 times per question, on identical recorded contexts (the A12 extras run). The all-six arm retrieves fresh contexts with extras v3 first.
+- **Factual and comparative questions:** graded deterministically. The grader matches the gold figures and comparative verdicts. This port agreed with all 230 earlier blind grades it was checked against on fully correct versus not (its prototype agreed with all 310).
+- **Summaries and live questions:** graded blind A/B against the gold, and a skeptic re-checked every grade. Summaries use 2 of the 5 repeats; the live pool uses one run per system.
+- **Column check version:** all arms ran with the column-year check as first written. Its date-year rule was corrected afterwards (Reading 5); the correction only affects claims whose year comes from a date.
+
+**Answers by arm** (cumulative; 100 benchmark questions × 5 repeats; percentages of repeats):
+
+| Arm | Factual: correct / wrong | Comparative: correct / partial / wrong | Fully correct vs baseline, of 70 (95% CI) | Wrong vs baseline (CI) |
+|---|---|---|---:|---:|
+| Baseline (commit 435b7ae) | 90.5% / 3.5% | 36.7% / 33.3% / 6.0% | – | – |
+| + 4 value checks | 91.5% / 1.0% | 33.3% / 36.0% / 8.0% | −0.6 (−2.6 to +1.2) | −0.4 (−2.8 to +1.4) |
+| + 1 comparison verdict | 91.5% / 0.5% | 63.3% / 1.3% / 8.0% | **+8.4 (+4.0 to +13.2)** | −0.6 (−3.2 to +1.2) |
+| + 3 citation repair | 91.5% / 0.0% | 66.0% / 2.0% / 5.3% | +9.2 (+5.0 to +14.0) | −1.6 (−4.2 to +0.4) |
+| + 6 verifier, 3,072-token drafts | 91.0% / 0.0% | 66.7% / 0.0% / 7.3% | +9.2 (+4.8 to +14.2) | −1.0 (−3.6 to +1.0) |
+| **+ 2 and 5: all six, fresh contexts** | **94.0% / 0.0%** | **66.0% / 0.7% / 2.7%** | **+10.2 (+5.2 to +15.8)** | **−2.4 (−5.8 to 0.0)** |
+
+**Summary answers rate:**
+
+| Arm | Baseline | + 4 | + 1 | + 3 | + 6 | All six |
+|---|---:|---:|---:|---:|---:|---:|
+| Answered | 73.3% | 79.3% | 82.7% | 87.3% | 89.3% | 83.3% |
+
+**Final-context evidence recall** (strict repo judge; the contexts the answers received):
+- **Overall:** extras v1 75.83% → extras v3 85.17%.
+  - Factual: 87.50% → 92.50%.
+  - Comparative: 61.67% → 71.67%.
+  - Summary: 74.44% → 88.89%.
+- **With the design-phase equivalence judge:** 86.83% → 91.67%.
+- **Tokens:** 3,046 → 4,181 per question. Summaries average 6,456, about 2.7 times their 2,430-token Top-5 base, which is above the roadmap's 1.6-times gate.
+
+**Blind grades, baseline vs all six:**
+- **Benchmark summaries** (60 graded pairs over 2 repeats):
+  - fully correct 41.7% → **51.7%** (+3.0 questions per repeat, CI 0.0 to +6.0; 9 questions improved, 3 worsened);
+  - gold answer points 58.9% → 69.4%;
+  - wrong 2 → 3;
+  - false refusals 17 → 12.
+- **Live pool** (50 questions):
+  - good outcomes 34 → 34 (CI −5 to +5; 3 improved, 3 worsened);
+  - correct 24 → 24;
+  - wrong 3 → 2;
+  - partially correct 6 → 3;
+  - false refusals 7 → 11.
+
+**Reading.**
+1. **The comparison verdict is the main gain.** Added after the value checks, it moves the gain from −0.6 to +8.4 of 70 questions, and partial comparative answers nearly disappear (33.3% → 0.7%).
+2. **Value checks turn known wrong answers into refusals rather than correct answers.** dev-017, which took the prior-year column, is refused 5 of 5 times in every arm with the checks. test-028 cites its figure from text fragments, where no column year is known, so the check cannot catch it: it was wrong in 17 of the 20 answer-side replays, and correct 5 of 5 times only with the fresh extras v3 contexts.
+3. **Extras v3 adds recall.** It adds about +1 fully correct factual or comparative answer and most of the summary-evidence gain. The cost is about twice the summary context.
+4. **The live pool did not improve.**
+   - Gains: B06 and B07 now state the verdict, and C11 is answered correctly (C07 now answers, partially).
+   - Losses: live A12 misreads a figure, B02 became partially correct and D09 is refused. A11 went from a refusal to a wrong answer.
+   - Shifts to refusal: B09, C01 and C05 (from partially correct), and A03, A06 and B12 (from wrong).
+5. **One false flag was fixed after the runs.** The check as first written ignored a year given only by a date ("December 31, 2019") and fell back to the report year. In live D03 this refused a correct answer; it is the only final refusal caused by a false flag (first-attempt drafts are not stored, so flags that the corrective retry resolved cannot be counted). The check now accepts the date's year and the year before it, since a fiscal year can end early in the next calendar year (January 1, 2022 closes Cadence's FY2021). D03 was replayed 3 times with the date fix and answered correctly each time; the lead updated its grade, and the blind grade is kept in the file.
+6. **These results are in-sample.** The directions were designed after diagnosing failures on these benchmark and live questions, so a fresh held-out set is still needed.
+
 ## 4. Reproduce
 
 From the repository root, with the local corpus, indexes and cached models:
@@ -436,7 +507,7 @@ From the repository root, with the local corpus, indexes and cached models:
   --output data/experiments/live_usage/after_fix.jsonl
 
 # End-to-end benchmark answers (Table A10): commit 6b61b5e (original) vs this checkout, all 100 questions.
-# This checkout ships prompt v2.2; Table A10's current run used v2.1.
+# This checkout ships prompt v2.3; Table A10's current run used v2.1.
 New-Item -ItemType Directory -Force tmp | Out-Null
 git archive --format=zip -o tmp/head_code.zip 6b61b5e src
 Expand-Archive -Force -Path tmp/head_code.zip -DestinationPath tmp/head_code
@@ -474,6 +545,16 @@ Expand-Archive -Force -Path tmp/extras_base.zip -DestinationPath tmp/extras_base
 # counts, latency and paired CIs were computed by uncommitted analysis code: strict EvR can be recomputed with
 # report_chunker.retrieval.judge_retrieval over each run's search.selected (top_k = len(selected)); the eq judge
 # and the live fact predicates are design-phase tools that are not in this repository.
+
+# Next-phase directions (Table A13): replay the answer stage 5x on fixed contexts, grade, summarize
+.\.venv\Scripts\python.exe scripts/replay_generation.py --contexts data/experiments/context_extras/bench_new.jsonl `
+  --src <code snapshot>/src --label r1_d4 --reps 5 --output data/experiments/next_phase/r1_d4.jsonl
+.\.venv\Scripts\python.exe scripts/replay_generation.py --fresh-search --label r5_all --reps 5 `
+  --output data/experiments/next_phase/r5_all.jsonl
+.\.venv\Scripts\python.exe scripts/autograde_answers.py data/experiments/next_phase/r0_baseline.jsonl `
+  data/experiments/next_phase/r5_all.jsonl
+# Summary and live grades are agent-performed (blind A/B) and recorded in data/evaluation/next_phase_grades.json.
+.\.venv\Scripts\python.exe scripts/summarize_next_phase.py
 
 # Full regression suite
 .\.venv\Scripts\python.exe -m unittest discover -s tests

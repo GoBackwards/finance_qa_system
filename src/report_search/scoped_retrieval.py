@@ -26,15 +26,25 @@ _WORD = re.compile(r"[a-z0-9]+(?:[.,][0-9]+)*")
 _FIGURE = re.compile(r"[0-9][0-9,]*(?:\.[0-9]+)?")
 
 # Passages appended after the reranked Top-5 (see context_extras).
-CONTEXT_VERSION = "context-extras-v1"
+CONTEXT_VERSION = "context-extras-v3"
 TABLE_SLOT_DEPTH = 20
 MAX_EXTRAS = 8
+MAX_SUMMARY_EXTRAS = 10
+SUMMARY_NEIGHBOURS = 3
+HITS_PER_THEME = 2
 _TABLE_KINDS = frozenset({"table", "table_fallback"})
 _SUMMARY = re.compile(r"\bsummar(?:y|ies|i[sz]e|i[sz]ing)\b", re.I)
 _NOT_TERMS = frozenset(
     "report reported reports annual based according using use fy higher lower larger smaller compare compared "
     "company companies fiscal year years which million millions billion billions amount value consolidated total "
     "between".split())
+# Row-label families of primary statements; a table naming three or more is statement-like.
+_STATEMENT_ROWS = tuple(re.compile(pattern) for pattern in (
+    r"\b(?:net )?(?:revenues?|sales)\b", r"\bcost of\b", r"\bgross (?:profit|margin)\b",
+    r"\boperating (?:income|profit|earnings|expenses)\b", r"\bincome (?:taxes|before)\b|\bprovision for income\b",
+    r"\bnet (?:income|earnings|loss)\b", r"\bper (?:common )?share\b", r"\btotal assets\b", r"\btotal liabilities\b",
+    r"\b(?:operating|investing|financing) activities\b"))
+_SEGMENT = re.compile(r"(?i)\bsegments?\b")
 _THEME_CUE = re.compile(r"(?i)\b(?:concerning|related to|surrounding|associated with|about|from|of|to|on)\b\s*:?\s*")
 
 
@@ -190,15 +200,29 @@ def select_candidates(reranked: list[dict], scope: Mapping, top_k: int = 5) -> t
     return selected, trace
 
 
+def _singular(word: str) -> str:
+    if len(word) <= 3 or word.endswith(("ss", "us", "is")):
+        return word
+    return word[:-3] + "y" if word.endswith("ies") else word[:-1] if word.endswith("s") else word
+
+
 def _label_terms(question: str, names: Iterable[str]) -> list[str]:
     """Question words that could name a table row: no company names, years or comparison words."""
     drop = set(_NOT_TERMS) | {word for name in names for word in query_terms(str(name))}
-    return [word for word in query_terms(question) if word not in drop and not re.fullmatch(r"(?:fy)?\d{2,4}", word)]
+    return list(dict.fromkeys(_singular(word) for word in query_terms(question)
+                              if word not in drop and not re.fullmatch(r"(?:fy)?\d{2,4}", word)))
 
 
-def _label_overlap(chunk: Mapping, terms: list[str]) -> float:
-    labels = {word for row in chunk.get("rows") or () if row and row[0] for word in query_terms(str(row[0]))}
-    return sum(term in labels for term in terms) / len(terms) if terms else 0.0
+def _table_score(chunk: Mapping, terms: list[str]) -> tuple | None:
+    """Statement-like and non-segment first, then best single-row match, overall match, vector rank."""
+    rows = [{_singular(word) for word in query_terms(str(row[0]))} for row in chunk.get("rows") or () if row and row[0]]
+    overall = sum(term in set().union(*rows) for term in terms) / len(terms) if terms and rows else 0.0
+    if not overall:
+        return None
+    labels = " ".join(str(row[0]).lower() for row in chunk.get("rows") or () if row and row[0])
+    statement = (sum(bool(pattern.search(labels)) for pattern in _STATEMENT_ROWS) >= 3) - 0.5 * bool(
+        _SEGMENT.search(chunk.get("text") or ""))
+    return statement, max(sum(term in row for term in terms) for row in rows) / len(terms), overall, -chunk["rank"]
 
 
 def summary_themes(question: str) -> list[str]:
@@ -228,38 +252,63 @@ def context_extras(question: str, scope: Mapping, pools: list[Mapping], selected
     The diagnosis of the 100-question benchmark found most lost evidence was
     retrieved but outranked: statement tables lose to prose that repeats the
     question's words, one blended summary query loses whole themes, and a
-    table's continuation or a statement title sits in the next chunk. Using
-    only the question and the retrieved passages, this adds per company the
-    table whose row labels best match the question (non-summary questions),
-    one lexical hit per enumerated theme (single-company summary questions),
-    and the continuation of a selected table or the table that follows a
-    selected title. The Top-5 is unchanged; at most MAX_EXTRAS are added.
+    table's continuation or a statement title sits in the next chunk. From
+    the question, the selected passages and scoped searches of the same
+    indexes (no lexicon or gold labels), this adds:
+    - non-summary questions: per company, the table among its vector Top-20
+      whose row labels best match the question (statement-like tables first,
+      half a step lower when they mention segments), and for one company the
+      question's best BM25 hit;
+    - questions asking for a summary: the selected prose's neighbours most
+      similar to the question (risk paragraphs run across chunks), and for one
+      company two BM25 hits per enumerated theme;
+    - the continuation of a selected table, and the table that follows a
+      selected non-table passage on the same or next page.
+    The Top-5 is unchanged; at most MAX_EXTRAS (MAX_SUMMARY_EXTRAS) are added.
     """
     chosen = {chunk["chunk_id"] for chunk in selected}
     extras = []
+    summary = bool(_SUMMARY.search(question))
+    limit = MAX_SUMMARY_EXTRAS if summary else MAX_EXTRAS
 
     def add(chunk, reason):
-        if chunk is not None and chunk["chunk_id"] not in chosen and len(extras) < MAX_EXTRAS:
+        if chunk is not None and chunk["chunk_id"] not in chosen and len(extras) < limit:
             chosen.add(chunk["chunk_id"])
             extras.append(dict(chunk, context_reason=reason))
 
     scoped = [pool for pool in pools if pool.get("purpose") == "scope"]
-    if _SUMMARY.search(question):
+
+    def lexical(text, pool, top_k):
+        hits = [hit for year in pool["fiscal_years"]
+                for hit in engine.bm25_report(text, top_k, ticker=pool["ticker"], fiscal_year=year)]
+        return sorted(hits, key=lambda hit: (hit["score"], hit["chunk_id"]))
+
+    if summary:
         if len(scoped) == 1:
-            pool = scoped[0]
             for theme in summary_themes(question):
-                hits = [hit for year in pool["fiscal_years"]
-                        for hit in engine.bm25_report(theme, 1, ticker=pool["ticker"], fiscal_year=year)]
-                if hits:
-                    add(min(hits, key=lambda hit: (hit["score"], hit["chunk_id"])), "summary_theme")
+                for hit in [hit for hit in lexical(theme, scoped[0], 5) if hit["chunk_id"] not in chosen][:HITS_PER_THEME]:
+                    add(hit, "summary_theme")
+        # Risk paragraphs run across chunks: the prose neighbours of the selected prose most similar to the question.
+        around = {neighbour["chunk_id"]: neighbour for chunk in selected if chunk.get("kind") == "prose"
+                  for neighbour in (engine.neighbour(chunk["chunk_id"], -1), engine.neighbour(chunk["chunk_id"], 1))
+                  if neighbour is not None and neighbour.get("kind") == "prose" and neighbour["chunk_id"] not in chosen}
+        nearby = list(around.values())
+        for _, neighbour in sorted(zip(engine.vector_scores(query_vector, nearby), nearby),
+                                   key=lambda item: (-item[0], item[1]["chunk_id"]))[:SUMMARY_NEIGHBOURS]:
+            add(neighbour, "summary_neighbour")
     else:
-        for pool in scoped:
-            ranked = engine.vector(query_vector, top_k=TABLE_SLOT_DEPTH, document_ids=pool["document_ids"])
-            terms = _label_terms(question, {pool["ticker"], *(chunk.get("company", "") for chunk in ranked)})
-            tables = [chunk for chunk in ranked if chunk.get("kind") in _TABLE_KINDS
-                      and chunk["chunk_id"] not in chosen and _label_overlap(chunk, terms) > 0]
-            if tables:
-                add(max(tables, key=lambda chunk: (_label_overlap(chunk, terms), -chunk["rank"])), "row_label_table")
+        ranked = {pool["ticker"]: engine.vector(query_vector, top_k=TABLE_SLOT_DEPTH, document_ids=pool["document_ids"])
+                  for pool in scoped}
+        names = {*ranked, *(chunk.get("company", "") for rows in ranked.values() for chunk in rows)}
+        terms = _label_terms(question, names)
+        for rows in ranked.values():
+            scored = [(score, chunk) for chunk in rows if chunk.get("kind") in _TABLE_KINDS
+                      and chunk["chunk_id"] not in chosen and (score := _table_score(chunk, terms)) is not None]
+            if scored:
+                add(max(scored, key=lambda item: item[0])[1], "row_label_table")
+        if len(scoped) == 1:
+            add(next((hit for hit in lexical(question, scoped[0], 3) if hit["chunk_id"] not in chosen), None),
+                "question_bm25")
     for chunk in selected:
         if chunk.get("table_id"):
             for offset in (-1, 1):

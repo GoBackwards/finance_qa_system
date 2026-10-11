@@ -7,7 +7,7 @@ Claim texts mirror real drafts from the live usage audit
 import json
 import unittest
 
-from report_search.answer_verification import check_claim_grounding
+from report_search.answer_verification import check_claim_grounding, comparison_verdict
 
 
 def unit(identifier, text, *, kind="prose", chunks=("c1",), ticker="DEMO", year=2025, page=7):
@@ -512,6 +512,107 @@ class QualifierTests(unittest.TestCase):
         source = make_bundle(unit("E1", text, ticker="GIS", year=2024))
         self.assertTrue(check(claim("General Mills' diluted EPS was $4.31 in fiscal 2024.", ("E1", text)), source)["ok"])
 
+
+
+def year_row(identifier, text, cells, **options):
+    entry = unit(identifier, text, kind="row", **options)
+    entry["column_years"] = cells
+    return entry
+
+
+# dev-017: the caption printed "2023 2024" over columns 2024 | 2023; the store binds years by position.
+ASSETS = make_bundle(year_row("E1", "Total Assets | $ 87,764 | $ 87,476", [["$ 87,764", 2024], ["$ 87,476", 2023]],
+                              ticker="CAT", year=2024),
+                     headers={"c1": "December 31, (Millions of dollars) 2023 2024"})
+
+
+class ColumnYearTests(unittest.TestCase):
+    def test_figure_from_the_prior_year_column_is_rejected(self):
+        result = check(claim("Caterpillar's total assets were $87,476 million at the end of fiscal 2024.",
+                             ("E1", "Total Assets | $ 87,764 | $ 87,476")), ASSETS)
+        self.assertEqual(result["reason"], "claim_column_year_mismatch")
+        self.assertIn("2023 column", result["detail"])
+
+    def test_right_column_prior_year_named_and_multi_year_claims_pass(self):
+        for text in ("Total assets were $87,764 million at the end of fiscal 2024.",
+                     "Total assets were $87,476 million at the end of fiscal 2023.",
+                     "Total assets were $87,764 million.",  # no year: the cited report's year
+                     "Total assets were $87,476 million on December 31, 2023.",  # year named only by a date
+                     "Total assets rose from $87,476 million in 2023 to $87,764 million in 2024."):
+            with self.subTest(text=text):
+                self.assertTrue(check(claim(text, ("E1", "Total Assets | $ 87,764 | $ 87,476")), ASSETS)["ok"])
+
+    def test_a_fiscal_year_ending_early_in_the_next_calendar_year_is_accepted(self):
+        # Cadence FY2021 ended January 1, 2022; Home Depot FY2024 ended February 2, 2025.
+        for company, year, value, other, date in (("CDNS", 2021, "2,988.2", "2,682.9", "January 1, 2022"),
+                                                  ("HD", 2024, "159,514", "152,669", "February 2, 2025")):
+            bundle = make_bundle(year_row("E1", f"Total revenue | $ {value} | $ {other}",
+                                          [[f"$ {value}", year], [f"$ {other}", year - 1]], ticker=company, year=year),
+                                 headers={"c1": f"Fiscal year ended {date} {year} {year - 1}"})
+            with self.subTest(company=company):
+                result = check(claim(f"Total revenue was ${value} million for the fiscal year ended {date}.",
+                                     ("E1", f"Total revenue | $ {value} | $ {other}")), bundle)
+                self.assertNotEqual(result.get("reason"), "claim_column_year_mismatch")
+
+    def test_calculation_operands_use_their_label_year(self):
+        calculation = {"expression": "a / 1", "result": "87476", "unit": "USD millions",
+                       "operands": [{"name": "a", "evidence_id": "E1", "value": "87,476",
+                                     "label": "Total assets FY2024 (USD millions)"}]}
+        result = check(claim("Total assets were $87,476 million.", ("E1", "Total Assets | $ 87,764 | $ 87,476"),
+                             calculation=calculation), ASSETS)
+        self.assertEqual(result["reason"], "claim_column_year_mismatch")
+
+    def test_footnoted_row_is_rejected_when_the_plain_row_is_in_context(self):
+        bundle = make_bundle(unit("E1", "Operating income (1) | 6,690", kind="row"),
+                             unit("E2", "Operating income | 8,915", kind="row"))
+        result = check(claim("Operating income was $6,690 million in 2025.", ("E1", "Operating income (1) | 6,690")),
+                       bundle)
+        self.assertEqual(result["reason"], "claim_footnoted_row")
+        alone = make_bundle(unit("E1", "Operating income (1) | 6,690", kind="row"))
+        self.assertTrue(check(claim("Operating income was $6,690 million in 2025.",
+                                    ("E1", "Operating income (1) | 6,690")), alone)["ok"])
+
+
+PAIR = make_bundle(unit("E1", "Net Revenue | $ 91,854 | $ 91,471", kind="row", chunks=("p",), ticker="PEP", year=2024),
+                   unit("E2", "Net Operating Revenues | $ 47,061 | $ 45,754", kind="row", chunks=("k",), ticker="KO",
+                        year=2024))
+for chunk, company in zip(PAIR["chunks"], ("PepsiCo", "Coca-Cola")):
+    chunk["company"] = company
+PEP_CLAIM = claim("PepsiCo's FY2024 net revenue was $91,854 million.", ("E1", "Net Revenue | $ 91,854 | $ 91,471"))
+KO_CLAIM = claim("Coca-Cola's FY2024 net operating revenues were $47,061 million.",
+                 ("E2", "Net Operating Revenues | $ 47,061 | $ 45,754"))
+
+
+class ComparisonVerdictTests(unittest.TestCase):
+    QUESTION = "Which had the higher FY2024 revenue: Coca-Cola or PepsiCo?"
+
+    def test_states_the_higher_company_and_cites_both_sides(self):
+        added = comparison_verdict(self.QUESTION, ["KO", "PEP"], [PEP_CLAIM, KO_CLAIM], PAIR)
+        self.assertEqual(added["text"], "PepsiCo reported the higher amount: $91,854 million, against $47,061 million "
+                                        "for Coca-Cola.")
+        self.assertEqual({c["evidence_id"] for c in added["citations"]}, {"E1", "E2"})
+
+    def test_lower_questions_and_one_claim_with_both_companies(self):
+        both = claim("PepsiCo reported $91,854 million and Coca-Cola reported $47,061 million in FY2024.",
+                     ("E1", "Net Revenue | $ 91,854 | $ 91,471"), ("E2", "Net Operating Revenues | $ 47,061 | $ 45,754"))
+        added = comparison_verdict("Which company had lower revenue in FY2024, Coca-Cola or PepsiCo?",
+                                   ["KO", "PEP"], [both], PAIR)
+        self.assertEqual(added["text"], "Coca-Cola reported the lower amount: $47,061 million, against $91,854 million "
+                                        "for PepsiCo.")
+
+    def test_does_not_fire_without_a_clear_two_company_amount_comparison(self):
+        stated = claim("PepsiCo's revenue was higher than Coca-Cola's in FY2024.", ("E1", "Net Revenue | $ 91,854 | $ 91,471"))
+        margin = [claim("PepsiCo's margin was 13.3%.", ("E1", "Net Revenue | $ 91,854 | $ 91,471")),
+                  claim("Coca-Cola's margin was 25.4%.", ("E2", "Net Operating Revenues | $ 47,061 | $ 45,754"))]
+        cases = {"verdict already stated": (self.QUESTION, ["KO", "PEP"], [PEP_CLAIM, KO_CLAIM, stated]),
+                 "percentages": (self.QUESTION, ["KO", "PEP"], margin),
+                 "one side missing": (self.QUESTION, ["KO", "PEP"], [PEP_CLAIM]),
+                 "three companies": (self.QUESTION, ["KO", "PEP", "MDLZ"], [PEP_CLAIM, KO_CLAIM]),
+                 "not a which question": ("Summarize Coca-Cola's and PepsiCo's FY2024 revenue.", ["KO", "PEP"],
+                                          [PEP_CLAIM, KO_CLAIM])}
+        for name, (question, tickers, claims) in cases.items():
+            with self.subTest(name):
+                self.assertIsNone(comparison_verdict(question, tickers, claims, PAIR))
 
 if __name__ == "__main__":
     unittest.main()

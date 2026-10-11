@@ -245,6 +245,15 @@ class DemoServiceTests(unittest.TestCase):
             self.assertIn("coke vs pepsi", calls["generate"][0]["notes"][0])
             self.assertEqual(calls["entities"], frozenset({"unknown:Apple"}))
 
+    def test_corpus_versions_are_explicit_and_complete(self):
+        from report_search.demo_service import CORPORA
+        self.assertEqual(DemoService(".", worker_factory=Resources().factory).corpus, "v1")
+        with self.assertRaisesRegex(DemoError, "invalid_corpus"):
+            DemoService(".", corpus="v9")
+        for version, paths in CORPORA.items():
+            self.assertEqual(set(paths), {"processed", "chunks", "vectors", "bm25"}, version)
+        self.assertEqual(len({paths["vectors"] for paths in CORPORA.values()}), len(CORPORA))  # never shared
+
     def test_tampered_or_cross_service_search_is_rejected_before_generation(self):
         resources = Resources()
         with DemoService(".", worker_factory=resources.factory) as first, DemoService(".", worker_factory=Resources().factory) as second:

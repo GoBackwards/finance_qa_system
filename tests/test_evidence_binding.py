@@ -211,5 +211,19 @@ class EvidenceBindingTests(unittest.TestCase):
                 self.store.build(value)
 
 
+
+class ColumnYearBindingTests(unittest.TestCase):
+    def test_years_are_placed_by_position_not_caption_order(self):
+        from report_search.evidence_binding import column_years
+        table = {"context": [{"text": "2023", "position": "above", "bbox": [511, 314, 527, 324]},
+                             {"text": "2024", "position": "above", "bbox": [441, 315, 457, 324]},
+                             {"text": "(Millions of dollars)", "position": "above", "bbox": [46, 303, 99, 311]}],
+                 "cells": [{"row": 0, "column": 0, "text": "Total Assets", "bbox": [45, 519, 326, 528]},
+                           {"row": 0, "column": 1, "text": "$ 87,764", "bbox": [326, 519, 484, 528]},
+                           {"row": 0, "column": 2, "text": "$ 87,476", "bbox": [484, 519, 552, 528]}]}
+        self.assertEqual(column_years(table), {1: 2024, 2: 2023})
+        table["context"] = table["context"][1:]  # one placeable year is not enough
+        self.assertEqual(column_years(table), {})
+
 if __name__ == "__main__":
     unittest.main()

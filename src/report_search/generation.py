@@ -17,7 +17,7 @@ import json
 import time
 
 from report_search.answer_verification import (
-    canonicalize_citations, check_claim_grounding, render_verified_answer, validate_draft,
+    canonicalize_citations, check_claim_grounding, comparison_verdict, render_verified_answer, validate_draft,
     validate_semantic_verdict,
 )
 from report_search.confidence import confidence_gate
@@ -26,7 +26,7 @@ from report_search.llm_client import ChatCompletionsClient, ModelConfig, ModelEr
 from report_search.runtime_support import DeadlineExceeded, RequestBudget
 
 
-PROMPT_VERSION = "evidence-bound-claims-v2.2"
+PROMPT_VERSION = "evidence-bound-claims-v2.3"
 # Worked examples use a fictional company: v2 reused two live-pool answers
 # (B04's Intel growth and A06's Oracle R&D figure), which leaked evaluation data.
 GENERATOR_SYSTEM = """You answer questions about company annual reports using ONLY the supplied sources.
@@ -64,9 +64,10 @@ Read the complete cited source entries and their passages, not just the selected
 Set answers_question=true ONLY if all essential parts of the question are answered for the requested companies and periods (see query_scope.notes) and any false premise in the question is corrected rather than adopted.
 Comparisons need both sides. Summaries must cover the requested topics. Missing/conflicting evidence or unreliable table associations require false.
 Use no external facts. You may disagree with the generator. When uncertain, mark unsupported.
+Judge support only against the cited sources: never mark a sourced figure unsupported because it seems implausible, or differs from what you would expect from outside knowledge.
 """
 MAX_QUALITY_FLAGS = 4
-MAX_PASSAGES = 13  # reranked Top-5 plus at most 8 context extras (scoped_retrieval.MAX_EXTRAS)
+MAX_PASSAGES = 15  # reranked Top-5 plus at most 10 context extras (scoped_retrieval.MAX_SUMMARY_EXTRAS)
 
 
 def _json(value):
@@ -422,8 +423,17 @@ def _generate_answer(query, candidates, *, threshold=None, source_store=None,
         return _abstain("deadline_exceeded", audit)
     if not semantic["ok"]:
         return _abstain(semantic.get("reason") or "unsupported_answer", audit)
+    claims, rendered_verdict = checked["claims"], verdict
+    # Deterministic result sentence for "which is higher" comparisons, from claims that passed every check.
+    added = comparison_verdict(query, list((scope or {}).get("tickers") or []), claims, bundle)
+    if added is not None:
+        claims = claims + [added]
+        rendered_verdict = dict(verdict, claim_verdicts=list(verdict["claim_verdicts"]) + [{
+            "claim_index": len(claims) - 1, "supported": True,
+            "reason": "Comparison of the verified figures above, computed by the application."}])
+        audit["comparison_verdict_added"] = True
     try:
-        result = run_stage("rendering", lambda: render_verified_answer(checked["claims"], bundle, verdict))
+        result = run_stage("rendering", lambda: render_verified_answer(claims, bundle, rendered_verdict))
     except DeadlineExceeded:
         return _abstain("deadline_exceeded", audit)
     result["audit"] = audit

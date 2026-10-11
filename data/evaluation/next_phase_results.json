@@ -1,0 +1,346 @@
+{
+ "schema_version": 1,
+ "experiment": "next-phase improvement directions (docs/next_phase_plan.md)",
+ "created_at_utc": "2026-10-11T04:32:43.928343+00:00",
+ "runs": "data/experiments/next_phase/*.jsonl (gitignored); gpt-4.1-mini generator and verifier; gate open",
+ "arms": {
+  "r0_baseline": {
+   "label": "baseline (commit 435b7ae: context extras v1, prompt v2.2)",
+   "generations": 500,
+   "factual": {
+    "correct": 0.905,
+    "wrong": 0.035,
+    "false_abstention": 0.06
+   },
+   "comparative": {
+    "false_abstention": 0.24,
+    "correct": 0.3667,
+    "partially_correct": 0.3333,
+    "wrong": 0.06
+   },
+   "summary": {
+    "answer": 0.7333,
+    "abstain": 0.2667
+   }
+  },
+  "r1_d4": {
+   "label": "+ 4 column-year and footnoted-row checks",
+   "generations": 500,
+   "factual": {
+    "correct": 0.915,
+    "false_abstention": 0.075,
+    "wrong": 0.01
+   },
+   "comparative": {
+    "correct": 0.3333,
+    "false_abstention": 0.2267,
+    "wrong": 0.08,
+    "partially_correct": 0.36
+   },
+   "summary": {
+    "answer": 0.7933,
+    "abstain": 0.2067
+   },
+   "paired_correct_vs_baseline": {
+    "delta_questions": -0.6,
+    "ci95": [
+     -2.6,
+     1.2
+    ],
+    "increased": 5,
+    "decreased": 7
+   },
+   "paired_wrong_vs_baseline": {
+    "delta_questions": -0.4,
+    "ci95": [
+     -2.8,
+     1.4
+    ],
+    "increased": 2,
+    "decreased": 1
+   },
+   "paired_refused_vs_baseline": {
+    "delta_questions": 0.2,
+    "ci95": [
+     -2.6,
+     3.4
+    ],
+    "increased": 7,
+    "decreased": 8
+   }
+  },
+  "r2_d4d1": {
+   "label": "+ 1 deterministic comparison verdict",
+   "generations": 500,
+   "factual": {
+    "correct": 0.915,
+    "false_abstention": 0.08,
+    "wrong": 0.005
+   },
+   "comparative": {
+    "correct": 0.6333,
+    "false_abstention": 0.2733,
+    "wrong": 0.08,
+    "partially_correct": 0.0133
+   },
+   "summary": {
+    "answer": 0.8267,
+    "abstain": 0.1733
+   },
+   "paired_correct_vs_baseline": {
+    "delta_questions": 8.4,
+    "ci95": [
+     4.0,
+     13.2
+    ],
+    "increased": 15,
+    "decreased": 1
+   },
+   "paired_wrong_vs_baseline": {
+    "delta_questions": -0.6,
+    "ci95": [
+     -3.2,
+     1.2
+    ],
+    "increased": 3,
+    "decreased": 3
+   },
+   "paired_refused_vs_baseline": {
+    "delta_questions": 1.8,
+    "ci95": [
+     -1.0,
+     5.0
+    ],
+    "increased": 9,
+    "decreased": 6
+   }
+  },
+  "r3_d4d1d3": {
+   "label": "+ 3 citation repair (longest verbatim block, cross-claim calculations)",
+   "generations": 500,
+   "factual": {
+    "correct": 0.915,
+    "false_abstention": 0.085
+   },
+   "comparative": {
+    "correct": 0.66,
+    "wrong": 0.0533,
+    "false_abstention": 0.2667,
+    "partially_correct": 0.02
+   },
+   "summary": {
+    "answer": 0.8733,
+    "abstain": 0.1267
+   },
+   "paired_correct_vs_baseline": {
+    "delta_questions": 9.2,
+    "ci95": [
+     5.0,
+     14.0
+    ],
+    "increased": 19,
+    "decreased": 3
+   },
+   "paired_wrong_vs_baseline": {
+    "delta_questions": -1.6,
+    "ci95": [
+     -4.2,
+     0.4
+    ],
+    "increased": 2,
+    "decreased": 4
+   },
+   "paired_refused_vs_baseline": {
+    "delta_questions": 1.8,
+    "ci95": [
+     -0.8,
+     4.8
+    ],
+    "increased": 11,
+    "decreased": 7
+   }
+  },
+  "r4_answer_side": {
+   "label": "+ 6 verifier calibration and 5's 3,072-token generator limit",
+   "generations": 500,
+   "factual": {
+    "correct": 0.91,
+    "false_abstention": 0.09
+   },
+   "comparative": {
+    "false_abstention": 0.26,
+    "correct": 0.6667,
+    "wrong": 0.0733
+   },
+   "summary": {
+    "answer": 0.8933,
+    "abstain": 0.1067
+   },
+   "paired_correct_vs_baseline": {
+    "delta_questions": 9.2,
+    "ci95": [
+     4.8,
+     14.2
+    ],
+    "increased": 16,
+    "decreased": 2
+   },
+   "paired_wrong_vs_baseline": {
+    "delta_questions": -1.0,
+    "ci95": [
+     -3.6,
+     1.0
+    ],
+    "increased": 2,
+    "decreased": 3
+   },
+   "paired_refused_vs_baseline": {
+    "delta_questions": 1.8,
+    "ci95": [
+     -0.4,
+     4.4
+    ],
+    "increased": 8,
+    "decreased": 3
+   }
+  },
+  "r5_all": {
+   "label": "+ 2 and 5 context extras v3 (fresh retrieval)",
+   "generations": 500,
+   "factual": {
+    "correct": 0.94,
+    "false_abstention": 0.06
+   },
+   "comparative": {
+    "correct": 0.66,
+    "false_abstention": 0.3067,
+    "wrong": 0.0267,
+    "partially_correct": 0.0067
+   },
+   "summary": {
+    "abstain": 0.1667,
+    "answer": 0.8333
+   },
+   "paired_correct_vs_baseline": {
+    "delta_questions": 10.2,
+    "ci95": [
+     5.2,
+     15.8
+    ],
+    "increased": 18,
+    "decreased": 2
+   },
+   "paired_wrong_vs_baseline": {
+    "delta_questions": -2.4,
+    "ci95": [
+     -5.8,
+     0.0
+    ],
+    "increased": 0,
+    "decreased": 3
+   },
+   "paired_refused_vs_baseline": {
+    "delta_questions": 2.0,
+    "ci95": [
+     -1.8,
+     6.0
+    ],
+    "increased": 9,
+    "decreased": 6
+   }
+  }
+ },
+ "retrieval_final_context_strict_evr": {
+  "extras_v1 (r0-r4 contexts)": {
+   "all": 75.83,
+   "factual": 87.5,
+   "comparative": 61.67,
+   "summary": 74.44,
+   "tokens": 3046
+  },
+  "extras_v3 (r5 contexts)": {
+   "all": 85.17,
+   "factual": 92.5,
+   "comparative": 71.67,
+   "summary": 88.89,
+   "tokens": 4181
+  }
+ },
+ "summary_blind": {
+  "base": {
+   "outcomes": {
+    "false_abstention": 17,
+    "partially_correct": 16,
+    "correct": 25,
+    "wrong": 2
+   },
+   "fully_correct": 0.4167,
+   "points": 0.5889
+  },
+  "all": {
+   "outcomes": {
+    "false_abstention": 12,
+    "partially_correct": 14,
+    "correct": 31,
+    "wrong": 3
+   },
+   "fully_correct": 0.5167,
+   "points": 0.6944
+  },
+  "paired_fully_correct": {
+   "delta_questions": 3.0,
+   "ci95": [
+    0.0,
+    6.0
+   ],
+   "increased": 9,
+   "decreased": 3
+  }
+ },
+ "live_blind": {
+  "base": {
+   "acceptable_clarification": 3,
+   "correct_answer": 24,
+   "wrong_answer": 3,
+   "false_abstention": 7,
+   "partially_correct": 6,
+   "correct_abstention": 7
+  },
+  "all": {
+   "acceptable_clarification": 3,
+   "correct_answer": 24,
+   "false_abstention": 11,
+   "wrong_answer": 2,
+   "partially_correct": 3,
+   "correct_abstention": 7
+  },
+  "base_good": 34,
+  "all_good": 34,
+  "paired_good": {
+   "delta_questions": 0.0,
+   "ci95": [
+    -5.0,
+    5.0
+   ],
+   "increased": 3,
+   "decreased": 3
+  }
+ },
+ "grading": {
+  "method": "Blind A/B grading. Per question the baseline and all-six answers were shown as system_A/system_B in a seeded random order; one grader agent per 10 questions graded both against the gold, and an independent skeptic agent re-checked every grade and could change it (1 of 110 changed). Labels mapped back afterwards.",
+  "systems": {
+   "base": "r0_baseline (summaries) / live_new of Table A12 (live): commit 435b7ae",
+   "all": "r5_all (summaries, repeats 0 and 1) / r5_all_live (live): all six directions"
+  },
+  "reruns": {
+   "D03": "The all-six live run refused D03 because the column-year check read a year given only by a date ('December 31, 2019') as the report year; the only false flag in any run. After the one-line fix D03 was replayed 3 times on its recorded passages and answered correctly each time; its 'all' grade was updated by the lead (blind grade kept in all_blind_grade_before_fix)."
+  },
+  "human_reviewed": false
+ },
+ "limitations": [
+  "The directions were designed after diagnosing failures on these benchmark and live questions; no held-out set.",
+  "Factual and comparative answers are graded deterministically (230/230 agreement with blind fully-correct grades); summaries and live answers by agents.",
+  "Summaries were graded on 2 of the 5 repeats; live questions on one run per system.",
+  "Context extras v3 roughly doubles summary context (about 2.7x the Top-5 tokens), above the roadmap's 1.6x gate."
+ ]
+}

@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import ast
 import copy
+import difflib
 from decimal import Decimal, DecimalException, localcontext
 import json
 import keyword
@@ -441,6 +442,30 @@ def _repair_citation(citation: Any, evidence: dict, cache: dict) -> tuple[str, s
     return None
 
 
+def _trim_to_longest_block(claim_index: int, claim: dict, evidence: dict, repairs: list[dict]) -> None:
+    """Last repair, after all others: keep the longest verbatim block of a near-exact quote.
+
+    Live drafts added or changed a few words inside an otherwise verbatim
+    quote. The block must cover at least 70% of the quote (and 60 characters);
+    it is a verbatim substring of the cited unit, and the grounding checks and
+    the verifier still read the whole unit, not just the quote.
+    """
+    for citation_index, citation in enumerate(claim["citations"]):
+        if type(citation) is not dict or not isinstance(citation.get("quote"), str):
+            continue
+        entry = evidence.get(citation.get("evidence_id")) if isinstance(citation.get("evidence_id"), str) else None
+        source, quote = (entry or {}).get("text"), citation["quote"]
+        if not isinstance(source, str) or quote in source or len(quote) > MAX_QUOTE_CHARS:
+            continue
+        block = difflib.SequenceMatcher(None, quote, source, autojunk=False).find_longest_match(
+            0, len(quote), 0, len(source))
+        span = _trim(source[block.b:block.b + block.size]) if block.size >= max(60, 0.7 * len(quote)) else ""
+        if span and span in source:
+            citation["quote"] = span
+            repairs.append({"claim_index": claim_index, "citation_index": citation_index, "kind": "longest_block",
+                            "from_evidence_id": citation["evidence_id"], "to_evidence_id": citation["evidence_id"]})
+
+
 def _repair_claim(claim_index: int, citations: list, evidence: dict, cache: dict,
                   repairs: list[dict]) -> list:
     proposals = [_repair_citation(citation, evidence, cache) for citation in citations]
@@ -615,6 +640,7 @@ def canonicalize_citations(draft: Any, bundle: dict) -> tuple[Any, list[dict]]:
                 _rebind_operands(claim_index, claim, evidence, repairs)
                 _split_claim(claim_index, claim, evidence, bundle, repairs)
                 _merge_same_unit(claim_index, claim, evidence, repairs)
+                _trim_to_longest_block(claim_index, claim, evidence, repairs)
         return repaired, repairs
     except Exception:  # noqa: BLE001 - repair is best effort; validation still decides
         return draft, []
@@ -1138,6 +1164,78 @@ def _claim_sources(claim: dict, bundle: dict) -> dict:
             "tickers": {item["ticker"].upper() for item in metadata if isinstance(item.get("ticker"), str)}}
 
 
+
+_MONTH_DATE = re.compile(r"(?i)\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d{1,2},\s*(?:19|20)\d\d")
+_FOOTNOTE_MARK = re.compile(r"\s*(?:\(\d\)|\*+)\s*$")
+
+
+def _cell_value(text) -> Decimal | None:
+    digits = re.sub(r"[\s$,%]", "", text if isinstance(text, str) else "").strip("()")
+    return Decimal(digits) if re.fullmatch(r"\d+(?:\.\d+)?", digits) else None
+
+
+def _column_year_mismatch(claim: dict, bundle: dict) -> str | None:
+    """A claimed table figure that sits in another fiscal year's column of its cited row.
+
+    Row units carry each cell's column year, bound by x position in the
+    evidence store. Accepted years for the claim: the one year it names outside
+    dates; else the year of its one date and the year before (a fiscal year
+    'ended January 1, 2022' is FY2021); else the cited report's year. A claim
+    naming several years is not checked. Years are also compared as offsets
+    from the latest column, since some reports label a fiscal year by its
+    calendar end. Calculation operands use their label's year.
+    """
+    evidence = bundle["evidence"]
+    stripped = {year for year, _ in _years(_MONTH_DATE.sub(" ", claim["text"]))}
+    dated = {year for year, _ in _years(claim["text"])}
+    if len(stripped) > 1 or (not stripped and len(dated) > 1):
+        accepted = None
+    else:
+        accepted = stripped or {year for date in dated for year in (date, date - 1)}
+    figures = [(value, scale) for _, value, _, scale in _claim_numbers(claim["text"])]
+    targets = [(citation["evidence_id"], figures, accepted) for citation in claim["citations"]] if accepted is not None else []
+    for operand in (claim.get("calculation") or {}).get("operands") or ():
+        label_years = {year for year, _ in _years(operand.get("label") or "")}
+        value = _cell_value(operand.get("value"))
+        if value is not None and len(label_years) == 1:
+            targets.append((operand["evidence_id"], [(value, 1)], label_years))
+    for identifier, values, years in targets:
+        entry = evidence.get(identifier) or {}
+        cells, report_year = entry.get("column_years"), (entry.get("citation") or {}).get("fiscal_year")
+        if not cells or not isinstance(report_year, int):
+            continue
+        years = years or {report_year}
+        latest = max(year for _, year in cells)
+        for position, (value, scale) in enumerate(values, 1):
+            wanted = {value, value * scale / 10**6, value * scale / 10**3}
+            hits = {year for text, year in cells if _cell_value(text) in wanted}
+            if hits and not hits & years and not {report_year - year for year in years} & {latest - year for year in hits}:
+                label = "/".join(map(str, sorted(years)))
+                return (f"figure {position} is in the {'/'.join(map(str, sorted(hits)))} column of cited row "
+                        f"{identifier}, not the {label} column; use that column's value or name the year the "
+                        "figure belongs to")
+    return None
+
+
+def _footnoted_row(claim: dict, bundle: dict) -> str | None:
+    """A figure cited from a footnoted row label while the same report's unmarked row is in context."""
+    evidence = bundle["evidence"]
+    for citation in claim["citations"]:
+        entry = evidence.get(citation["evidence_id"]) or {}
+        label = entry.get("text", "").split("|")[0].strip()
+        if entry.get("kind") != "row" or not _FOOTNOTE_MARK.search(label):
+            continue
+        plain, origin = _FOOTNOTE_MARK.sub("", label).strip().lower(), entry.get("citation") or {}
+        for identifier, other in evidence.items():
+            source = other.get("citation") or {}
+            if (other.get("kind") == "row" and identifier != citation["evidence_id"]
+                    and other["text"].split("|")[0].strip().lower() == plain
+                    and (source.get("ticker"), source.get("fiscal_year")) == (origin.get("ticker"), origin.get("fiscal_year"))):
+                return (f"cited row {citation['evidence_id']} carries a footnote marker; {identifier} is the same "
+                        "report's unmarked row with the same label. Cite that row unless the question asks for "
+                        "the footnoted measure")
+    return None
+
 _QUALIFIERS = {
     # One family: the live audit restated "Organic Net Revenue, a non-GAAP
     # financial measure" as plain "net revenues".
@@ -1291,8 +1389,12 @@ def check_claim_grounding(claims: list[dict], bundle: dict, *,
                                              f"date {position} of {len(dates)} in the claim does not occur "
                                              "in the cited passages")
 
+    # A figure may restate another claim's application-verified calculation result.
+    computed = [(abs(Decimal(_result_text(claim["calculation"]["result"]))), None,
+                 _dimensionless_unit(claim["calculation"]["unit"])) for claim in claims if "calculation" in claim]
     for index, (claim, text, source) in enumerate(zip(claims, texts, sources)):
         candidates = [number for unit in source["unit_texts"] for number in _source_numbers(_normalized(unit))]
+        candidates += computed
         calculation = claim.get("calculation")
         if calculation is not None:
             candidates.append((abs(Decimal(_result_text(calculation["result"]))), None,
@@ -1313,6 +1415,14 @@ def check_claim_grounding(claims: list[dict], bundle: dict, *,
         if mismatch:
             return _grounding_result("claim_qualifier_mismatch", index, mismatch)
 
+    for index, claim in enumerate(claims):
+        mismatch = _column_year_mismatch(claim, bundle)
+        if mismatch:
+            return _grounding_result("claim_column_year_mismatch", index, mismatch)
+        footnoted = _footnoted_row(claim, bundle)
+        if footnoted:
+            return _grounding_result("claim_footnoted_row", index, footnoted)
+
     if company_resolver is not None:
         for index, (claim, source) in enumerate(zip(claims, sources)):
             try:
@@ -1327,6 +1437,60 @@ def check_claim_grounding(claims: list[dict], bundle: dict, *,
                                          f"claim names a company outside the cited sources (cited: {cited})")
     return _grounding_result()
 
+
+
+_COMPARATIVE = r"(?:higher|larger|more|bigger|greater|lower|less|smaller)"
+_ASKS_WHICH = re.compile(r"(?i)\b(?:which|whose|who)\b.*\b" + _COMPARATIVE + r"\b|\b(?:did|does|was|is|were)\b[^?]*\bor\b"
+                         r"[^?]*\b" + _COMPARATIVE + r"\b")
+_ASKS_LOWER = re.compile(r"(?i)\b(?:lower|less|smaller)\b")
+_STATES_COMPARISON = re.compile(r"(?i)\b(?:higher|more than|larger|greater|exceed\w*|lower than|less than|outpac\w*|"
+                                r"surpass\w*|bigger|smaller)\b")
+
+
+def comparison_verdict(question: str, tickers: list[str], claims: list[dict], bundle: dict) -> dict | None:
+    """A 'which is higher' result claim built from verified claims, or None.
+
+    Generators often state both companies' amounts without saying which is
+    higher (all 12 partially correct comparative benchmark answers). This
+    fires only for a two-company question asking for the higher or lower one,
+    when no claim states a comparison and each company has exactly one
+    currency or scaled amount, attributed by its cited unit's ticker. The
+    sentence follows the question's direction and cites the compared claims.
+    """
+    if (len(tickers) != 2 or not _ASKS_WHICH.search(question)
+            or any(_STATES_COMPARISON.search(claim["text"]) for claim in claims)):
+        return None
+    evidence, found = bundle["evidence"], {ticker: {} for ticker in tickers}
+    for index, claim in enumerate(claims):
+        text = _normalized(claim["text"])
+        cited = [evidence[citation["evidence_id"]] for citation in claim["citations"]]
+        owners = {entry["citation"].get("ticker") for entry in cited}
+        for raw, value, _, scale in _claim_numbers(text):
+            at = text.find(raw)
+            dollar = "$" in text[max(0, at - 2):at] or "usd" in text[at + len(raw):at + len(raw) + 12].lower()
+            if at < 0 or _PERCENT_AFTER.match(text, at + len(raw)) or (not dollar and scale == 1):
+                continue
+            digits = re.search(r"[0-9][0-9,.]*[0-9]|[0-9]", raw).group()
+            owner = owners if len(owners) == 1 else {entry["citation"].get("ticker") for entry in cited
+                                                     if digits in entry["text"]}
+            ticker = next(iter(owner)) if len(owner) == 1 else None
+            if ticker in found:
+                found[ticker][value * scale] = (index, ("$" if dollar else "") + raw.strip(), (dollar, scale > 1))
+    if any(len(amounts) != 1 for amounts in found.values()):
+        return None
+    (high, high_ticker, high_index, high_text, high_mark), (low, low_ticker, low_index, low_text, low_mark) = sorted(
+        ((amount, ticker, *entry) for ticker, amounts in found.items() for amount, entry in amounts.items()),
+        key=lambda item: item[0], reverse=True)
+    if high == low or high_mark != low_mark:
+        return None
+    names = {chunk.get("ticker"): chunk.get("company") for chunk in bundle.get("chunks") or ()}
+    high_name, low_name = names.get(high_ticker) or high_ticker, names.get(low_ticker) or low_ticker
+    text = (f"{low_name} reported the lower amount: {low_text}, against {high_text} for {high_name}."
+            if _ASKS_LOWER.search(question) else
+            f"{high_name} reported the higher amount: {high_text}, against {low_text} for {low_name}.")
+    citations = list({(c["evidence_id"], c["quote"]): c for index in (high_index, low_index)
+                      for c in claims[index]["citations"]}.values())
+    return {"text": text, "citations": copy.deepcopy(citations)}
 
 # --- Semantic verdict and rendering ------------------------------------------
 

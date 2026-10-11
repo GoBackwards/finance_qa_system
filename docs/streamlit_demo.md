@@ -94,7 +94,7 @@ Source actions resolve documents through the checked report catalog rather than 
 
 ## Validation scope
 
-The current suite has **575 tests: 574 pass and one Windows symlink-privilege test is skipped**; resolved-path confinement is also covered without needing that privilege. It includes eleven service tests, thirteen source-catalog tests, and seven Streamlit AppTest flows. When the demo was first released (commit 6b61b5e), the regression run covered 410 tests (409 passed, the same test skipped) in an isolated snapshot that preserved unrelated workspace edits.
+The current suite has **587 tests: 586 pass and one Windows symlink-privilege test is skipped**; resolved-path confinement is also covered without needing that privilege. It includes twelve service tests, thirteen source-catalog tests, and seven Streamlit AppTest flows. When the demo was first released (commit 6b61b5e), the regression run covered 410 tests (409 passed, the same test skipped) in an isolated snapshot that preserved unrelated workspace edits.
 
 Recorded at commit 6b61b5e, before scoped retrieval and prompt v2 (implementation hashes are in the record): a real Chrome browser exercised resident BGE-M3 and BGE reranker models on the local RTX 4060 GPU, using the existing 200-report corpus. Both Microsoft and NVIDIA queries returned 20 candidates (that commit's global vector Top 20) and five selected passages. The browser displayed a final answer and its cited source through two prescribed localhost responses (one generator call, one reviewer call); no paid or live LLM was used. Opening the cited page did not regenerate the answer. The downloaded Microsoft PDF matched the manifest's SHA256. See [recorded demo checks](../data/evaluation/streamlit_demo_checks.json).
 

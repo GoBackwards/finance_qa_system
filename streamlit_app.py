@@ -46,6 +46,8 @@ REASONS = {
     "invalid_calculation_schema": "A calculation could not be checked by the application.",
     "claim_qualifier_mismatch": "The proposed answer narrowed or widened a figure's scope beyond its source.",
     "verifier_reason_contradicts_verdict": "The independent review doubted a claim it marked as supported.",
+    "claim_column_year_mismatch": "The proposed answer took a figure from another fiscal year's column.",
+    "claim_footnoted_row": "The proposed answer used a footnoted figure where the plain figure was available.",
 }
 
 PERIOD_LABELS = {"relative_latest": "latest report", "unspecified": "not stated"}
@@ -53,7 +55,7 @@ PERIOD_LABELS = {"relative_latest": "latest report", "unspecified": "not stated"
 
 @st.cache_resource(show_spinner=False)
 def get_service(root: str, device: str):
-    service = DemoService(Path(root), device=device)
+    service = DemoService(Path(root), device=device, corpus=os.getenv("FINANCE_QA_CORPUS", "v1"))
     atexit.register(service.close)
     return service
 

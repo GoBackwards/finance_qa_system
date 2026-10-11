@@ -216,5 +216,16 @@ class TableExtractionTests(unittest.TestCase):
                 extract_tables(document.pages[0], lines, 792, 612)
 
 
+
+class ContextOrderTests(unittest.TestCase):
+    def test_same_line_headers_read_left_to_right(self):
+        from report_parser.tables import _context
+        lines = [{"text": "December 31,", "bbox": [462.0, 302.0, 507.0, 312.0]},
+                 {"text": "2023", "bbox": [511.0, 314.54, 527.0, 324.0]},  # right column, top edge 0.2 pt higher
+                 {"text": "2024", "bbox": [441.0, 314.70, 457.0, 324.0]}]
+        caption, context = _context(lines, [40.0, 330.0, 560.0, 500.0])
+        self.assertEqual(caption.split("\n"), ["December 31,", "2024", "2023"])
+        self.assertEqual([item["text"] for item in context], ["December 31,", "2024", "2023"])
+
 if __name__ == "__main__":
     unittest.main()

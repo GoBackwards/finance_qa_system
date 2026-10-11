@@ -48,7 +48,7 @@ class ClientTests(unittest.TestCase):
         self.assertEqual(request.full_url, "https://provider.example/v1/chat/completions")
         self.assertEqual(body["model"], "chosen-model")
         self.assertEqual(body["response_format"], {"type": "json_object"})
-        self.assertEqual(body["max_completion_tokens"], 2048)
+        self.assertEqual(body["max_completion_tokens"], 3072)
         self.assertFalse(body["stream"])
         self.assertEqual(request.get_header("Authorization"), "Bearer secret-test-key")
         self.assertNotIn("secret-test-key", repr(self.client().config))

@@ -106,7 +106,7 @@ class ModelConfig:
     model: str
     api_key: str = field(default="", repr=False)
     timeout_seconds: float = 45.0
-    max_output_tokens: int = 2048
+    max_output_tokens: int = 3072
     token_parameter: str = "max_completion_tokens"
     max_response_bytes: int = 2_000_000
 
