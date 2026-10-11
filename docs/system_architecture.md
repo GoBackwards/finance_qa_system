@@ -438,7 +438,7 @@ Source: `data/evaluation/next_phase_results.json` (blind grades in `next_phase_g
 | 5 | Context extras v3 and longer drafts | Summary questions get up to 3 prose neighbours of the selected prose, the most similar to the question, and a single company's summary two BM25 hits per theme: up to 10 extras, and up to 15 passages per answer. The output limit of the generator and verifier calls rises from 2,048 to 3,072 tokens. |
 | 6 | Verifier calibration | Prompt `evidence-bound-claims-v2.3` tells the verifier never to mark a sourced figure unsupported because it seems implausible against outside expectations. |
 
-The parser header-order fix (direction 4b) is not part of this table. It needs a full re-parse and re-embed, and is being built as a separate corpus version rather than by overwriting the current corpus.
+The parser header-order fix (direction 4b) is not part of this table. It needs a full re-parse and re-embed, so it was built as a separate corpus version and measured in [Table A14](#a14-corpus-v2-parser-header-order-fix-separate-versioned-rebuild).
 
 **Method.** Answer-side arms replay only the answer stage, 5 times per question, on identical recorded contexts (the A12 extras run). The all-six arm retrieves fresh contexts with extras v3 first.
 - **Factual and comparative questions:** graded deterministically. The grader matches the gold figures and comparative verdicts. This port agreed with all 230 earlier blind grades it was checked against on fully correct versus not (its prototype agreed with all 310).
@@ -493,6 +493,52 @@ The parser header-order fix (direction 4b) is not part of this table. It needs a
    - Shifts to refusal: B09, C01 and C05 (from partially correct), and A03, A06 and B12 (from wrong).
 5. **One false flag was fixed after the runs.** The check as first written ignored a year given only by a date ("December 31, 2019") and fell back to the report year. In live D03 this refused a correct answer; it is the only final refusal caused by a false flag (first-attempt drafts are not stored, so flags that the corrective retry resolved cannot be counted). The check now accepts the date's year, and for a January or February date also the year before, since such a fiscal year can carry the previous year's label (January 1, 2022 closes Cadence's FY2021). An intermediate version accepted the year before for every date; in a replay it let dev-017's prior-year figure through "as of December 31, 2024", so the allowance was limited to those two months. D03 was replayed 3 times with the date fix and answered correctly each time; the lead updated its grade, and the blind grade is kept in the file.
 6. **These results are in-sample.** The directions were designed after diagnosing failures on these benchmark and live questions, so a fresh held-out set is still needed.
+
+### A14. Corpus v2: parser header-order fix (separate, versioned rebuild)
+
+Source: `data/evaluation/corpus_v2_results.json` (live blind grades in `corpus_v2_grades.json`), produced by [`scripts/summarize_corpus_v2.py`](../scripts/summarize_corpus_v2.py).
+
+**What changed.** `_context` in [`tables.py`](../src/report_parser/tables.py) groups the items above a table into lines (y-centres within 2 pt) and reads each line left to right. Before, the items were sorted by exact y, so a '2023' printed 0.16 pt higher than '2024' came first, and the caption read "2023 2024" over columns 2024 | 2023 (dev-017).
+
+All 200 reports were re-parsed, re-chunked, re-embedded and re-indexed into separate folders: `data/processed_v2`, `data/experiments/chunking_v2`, `data/indexes/bge-m3_v2` and `data/indexes/bm25_s512_o50_v2`. Corpus v1 was not modified. `CORPORA` in [`demo_service.py`](../src/report_search/demo_service.py) names both versions, and the version is selected with `DemoService(corpus=...)`, `FINANCE_QA_CORPUS` for the demo, or `--corpus` for replays. The default is still v1.
+
+**What the re-parse changed:**
+- **Parse audit:** unchanged. 200 of 200 reports pass, with 23,280 pages, 13,141 tables and 1,086 text fallbacks.
+- **Chunks:** the same 56,525 chunks. 2,547 chunks in 186 reports have different text, mostly same-line caption items such as units now read in left-to-right order.
+- **Year order:** 215 chunks list their year headers in a different order: CAT 79, EMR 44, PEP 29, INTC 24, DE 13, and 5 or fewer elsewhere.
+- **Header order against the columns:** 5,196 tables have columns that can be placed by position.
+  - In v1 the caption lists their years out of column order in 256 tables (4.93%); in v2, in 148 (2.85%).
+  - 108 tables were fixed and none broke.
+  - Most of the remaining 148 are audit artefacts, such as prose above the table that names years ("fiscal 2021 and 2020").
+- **Gold evidence and dense retrieval:** all 190 gold units are still resolvable. Dense-only Recall@5 on the 40-question pilot is 48.75% on both corpora.
+
+**Method.** Both arms run this checkout: all six A13 directions plus the January/February date rule.
+- **Arms:** the v1 arm replays the recorded A13 all-six contexts; the v2 arm searches its own indexes afresh.
+- **Repeats:** the benchmark is answered 5 times per question, and the live pool once.
+- **Grading:** factual and comparative answers are graded deterministically. Live answers are graded blind A/B, and a skeptic re-checked every grade, changing 2 outcomes.
+- **Summaries:** not graded. All 30 summary contexts are identical on both corpora, so any difference would be sampling.
+- **Date-rule rerun:** a first v1 control ran an intermediate date rule that accepted the year before any date. It released dev-017's prior-year figure once ("as of December 31, 2024"), so the rule was limited to January and February dates and both controls were rerun.
+- **Control check:** the v1 control agrees with A13's all-six run on the same contexts: fully correct +1.0 of 70 (CI −1.2 to +3.4).
+
+| Measure | Corpus v1 | Corpus v2 | Paired v2 − v1 (95% CI) |
+|---|---:|---:|---:|
+| Final-context evidence recall, strict (Top-5 only) | 85.17% (57.50%) | 85.17% (57.50%) | no unit lost or gained on any question |
+| Context tokens per question | 4,181 | 4,176 | – |
+| Factual: correct / wrong | 93.5% / 0.0% | 96.0% / 0.0% | – |
+| Comparative: correct / partial / wrong | 70.0% / 5.3% / 4.0% | 68.0% / 0.7% / 2.7% | – |
+| Fully correct, factual + comparative (of 70) | – | – | +0.4 (−1.8 to +3.2) |
+| Wrong (of 70) | – | – | −0.4 (−1.0 to 0.0) |
+| Refused (of 70) | – | – | +1.4 (−1.8 to +4.2) |
+| Live pool: good outcomes / wrong answers (of 50) | 31 / 3 | 35 / 1 | +4 (−2 to +10) |
+
+**Reading.**
+1. **The fix does what it was built for.** dev-017, which took the prior-year column of Caterpillar's balance sheet, goes from refused 5 of 5 times (caught by the A13 column check) to correct 5 of 5 times. The model now reads "2024 2023" over the right columns.
+2. **Few answers can change.**
+   - Only 3 of 100 benchmark contexts contain a chunk whose year headers moved: dev-012, dev-017 and dev-034. The other two stay correct 5 of 5 times.
+   - Only 1 of 50 live contexts does (D13), which is correct on both corpora.
+   - 88 benchmark and 46 live contexts are identical, so the aggregate differences are mostly sampling.
+3. **The live difference is noise.** Every live outcome that changed did so on an identical context; the 4 live questions whose contexts differ have the same outcome on both corpora. Single-run live grades move by several questions between reruns: the v1 control scored 31 good outcomes on the same contexts that A13 graded at 34.
+4. **No regressions were found.** Retrieval and gold-unit coverage are unchanged and no table's header order broke, so v2 is safe to adopt. Its measured benefit is limited to the CAT, EMR, PEP, INTC and DE tables that it fixes.
 
 ## 4. Reproduce
 
@@ -555,6 +601,27 @@ Expand-Archive -Force -Path tmp/extras_base.zip -DestinationPath tmp/extras_base
   data/experiments/next_phase/r5_all.jsonl
 # Summary and live grades are agent-performed (blind A/B) and recorded in data/evaluation/next_phase_grades.json.
 .\.venv\Scripts\python.exe scripts/summarize_next_phase.py
+
+# Corpus v2 (Table A14): re-parse with the header-order fix into separate folders; v1 is never touched
+.\.venv\Scripts\python.exe scripts/parse_reports.py --output data/processed_v2 --workers 8
+.\.venv\Scripts\python.exe scripts/verify_parsed.py --root data/processed_v2 `
+  --output data/parsed_validation_report_v2.json --source-manifest data/manifest.json
+.\.venv\Scripts\python.exe scripts/run_chunking_experiment.py --input data/processed_v2 `
+  --output data/experiments/chunking_v2 --sizes 512 --overlaps 50 --workers 8
+New-Item -ItemType Directory -Force data/indexes/bm25_s512_o50_v2
+.\.venv\Scripts\python.exe -c "import sys; sys.path.insert(0, 'src'); from report_chunker.retrieval import build_index; build_index('data/experiments/chunking_v2/table_preserving_s512_o50/chunks.jsonl', 'data/indexes/bm25_s512_o50_v2/retrieval.sqlite')"
+.\.venv\Scripts\python.exe scripts/build_vector_index.py `
+  --chunks data/experiments/chunking_v2/table_preserving_s512_o50/chunks.jsonl `
+  --output data/indexes/bge-m3_v2/table_preserving_s512_o50 --device cuda:0 --batch-size 8 `
+  --gpu-memory-fraction 0.9 --index-types flat --threads 4
+.\.venv\Scripts\python.exe scripts/replay_generation.py --contexts data/experiments/next_phase/r5_all.jsonl `
+  --corpus v1 --label v1_control --reps 5 --output data/experiments/corpus_v2/v1_control.jsonl
+.\.venv\Scripts\python.exe scripts/replay_generation.py --fresh-search --corpus v2 --label v2_all --reps 5 `
+  --output data/experiments/corpus_v2/v2_all.jsonl
+# Live: the same two replays with --questions data/evaluation/live_usage_questions.json --reps 1
+# (contexts r5_all_live.jsonl; outputs v1_control_live.jsonl and v2_live.jsonl). Live grades are
+# agent-performed (blind A/B) and recorded in data/evaluation/corpus_v2_grades.json.
+.\.venv\Scripts\python.exe scripts/summarize_corpus_v2.py
 
 # Full regression suite
 .\.venv\Scripts\python.exe -m unittest discover -s tests

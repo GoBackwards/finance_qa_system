@@ -1,0 +1,218 @@
+{
+ "schema_version": 1,
+ "experiment": "corpus v2: parser header-order fix (docs/next_phase_plan.md, 4b)",
+ "created_at_utc": "2026-10-11T05:14:30.038487+00:00",
+ "corpora": {
+  "v1": {
+   "processed": "data/processed",
+   "chunks": "data/experiments/chunking/table_preserving_s512_o50/chunks.jsonl",
+   "vectors": "data/indexes/bge-m3/table_preserving_s512_o50",
+   "bm25": "data/indexes/bm25_s512_o50/retrieval.sqlite"
+  },
+  "v2": {
+   "processed": "data/processed_v2",
+   "chunks": "data/experiments/chunking_v2/table_preserving_s512_o50/chunks.jsonl",
+   "vectors": "data/indexes/bge-m3_v2/table_preserving_s512_o50",
+   "bm25": "data/indexes/bm25_s512_o50_v2/retrieval.sqlite"
+  }
+ },
+ "runs": "data/experiments/corpus_v2/*.jsonl (gitignored); gpt-4.1-mini; gate open",
+ "corpus_change": {
+  "chunks": [
+   56525,
+   56525
+  ],
+  "chunks_with_changed_text": 2547,
+  "documents_with_changed_text": 186,
+  "chunks_with_reordered_year_headers": 215,
+  "reordered_by_company": {
+   "CAT": 79,
+   "EMR": 44,
+   "PEP": 29,
+   "INTC": 24,
+   "DE": 13,
+   "PG": 5,
+   "DOV": 5,
+   "ORCL": 4,
+   "KO": 3,
+   "TGT": 3,
+   "GIS": 2,
+   "SBUX": 1,
+   "AVGO": 1,
+   "ADSK": 1,
+   "CMI": 1
+  },
+  "header_order_tables_checked": 5196,
+  "header_order_disagreements": {
+   "v1": 256,
+   "v2": 148
+  },
+  "header_order_transitions": {
+   "agree->agree": 4940,
+   "disagree->disagree": 148,
+   "disagree->agree": 108
+  },
+  "gold_units": 190,
+  "gold_units_resolvable": {
+   "v1": 190,
+   "v2": 190
+  },
+  "exposure": {
+   "benchmark_exposed_ids": [
+    "dev-012",
+    "dev-017",
+    "dev-034"
+   ],
+   "benchmark": {
+    "comparative:identical_context": 25,
+    "comparative:questions": 30,
+    "comparative:with_reordered_year_headers": 1,
+    "factual:identical_context": 33,
+    "factual:questions": 40,
+    "factual:with_reordered_year_headers": 2,
+    "summary:identical_context": 30,
+    "summary:questions": 30
+   },
+   "live_exposed_ids": [
+    "D13"
+   ],
+   "live": {
+    "live:identical_context": 46,
+    "live:questions": 50,
+    "live:with_reordered_year_headers": 1
+   }
+  }
+ },
+ "retrieval_strict_evr": {
+  "v1": {
+   "top5": 57.5,
+   "all": 85.17,
+   "factual": 92.5,
+   "comparative": 71.67,
+   "summary": 88.89,
+   "tokens": 4181
+  },
+  "v2": {
+   "top5": 57.5,
+   "all": 85.17,
+   "factual": 92.5,
+   "comparative": 71.67,
+   "summary": 88.89,
+   "tokens": 4176
+  }
+ },
+ "answers": {
+  "v1": {
+   "generations": 500,
+   "factual": {
+    "correct": 0.935,
+    "false_abstention": 0.065
+   },
+   "comparative": {
+    "false_abstention": 0.2067,
+    "correct": 0.7,
+    "wrong": 0.04,
+    "partially_correct": 0.0533
+   },
+   "summary": {
+    "answer": 0.8333,
+    "abstain": 0.1667
+   }
+  },
+  "v2": {
+   "generations": 500,
+   "factual": {
+    "correct": 0.96,
+    "false_abstention": 0.04
+   },
+   "comparative": {
+    "correct": 0.68,
+    "false_abstention": 0.2867,
+    "wrong": 0.0267,
+    "partially_correct": 0.0067
+   },
+   "summary": {
+    "answer": 0.8267,
+    "abstain": 0.1733
+   }
+  }
+ },
+ "paired_v2_vs_v1": {
+  "correct": {
+   "delta_questions": 0.4,
+   "ci95": [
+    -1.8,
+    3.2
+   ],
+   "increased": 6,
+   "decreased": 7
+  },
+  "wrong": {
+   "delta_questions": -0.4,
+   "ci95": [
+    -1.0,
+    0.0
+   ],
+   "increased": 0,
+   "decreased": 2
+  },
+  "refused": {
+   "delta_questions": 1.4,
+   "ci95": [
+    -1.8,
+    4.2
+   ],
+   "increased": 11,
+   "decreased": 5
+  }
+ },
+ "questions_moved_by_3_or_more_correct": {
+  "dev-017": {
+   "v1": {
+    "false_abstention": 5
+   },
+   "v2": {
+    "correct": 5
+   }
+  }
+ },
+ "live_blind": {
+  "v1": {
+   "false_abstention": 14,
+   "correct_answer": 22,
+   "wrong_answer": 3,
+   "acceptable_clarification": 2,
+   "partially_correct": 2,
+   "correct_abstention": 7
+  },
+  "v2": {
+   "acceptable_clarification": 3,
+   "correct_answer": 25,
+   "false_abstention": 12,
+   "partially_correct": 2,
+   "wrong_answer": 1,
+   "correct_abstention": 7
+  },
+  "v1_good": 31,
+  "v2_good": 35,
+  "paired_good": {
+   "delta_questions": 4.0,
+   "ci95": [
+    -2.0,
+    10.0
+   ],
+   "increased": 6,
+   "decreased": 2
+  }
+ },
+ "grading": {
+  "systems": {
+   "v1": "this checkout on corpus v1, replaying the A13 all-six live contexts (data/experiments/corpus_v2/v1_control_live.jsonl)",
+   "v2": "this checkout on corpus v2, fresh search (data/experiments/corpus_v2/v2_live.jsonl)"
+  },
+  "method": "blind A/B: labels shuffled per question (seed 20261031); one grader agent per 10 questions, then an independent skeptic agent re-checked every grade",
+  "rubric": "same live rubric as data/evaluation/next_phase_grades.json",
+  "skeptic_changes": 3,
+  "skeptic_outcome_changes": "2 (A11 corpus v1: partially_correct -> wrong_answer; B08 corpus v2: partially_correct -> wrong_answer); D08 notes only"
+ }
+}

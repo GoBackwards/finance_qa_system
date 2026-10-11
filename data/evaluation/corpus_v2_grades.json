@@ -1,0 +1,1020 @@
+{
+ "schema_version": 1,
+ "experiment": "corpus v2 (parser header-order fix) vs corpus v1, 50 live questions, one run each",
+ "provenance": {
+  "systems": {
+   "v1": "this checkout on corpus v1, replaying the A13 all-six live contexts (data/experiments/corpus_v2/v1_control_live.jsonl)",
+   "v2": "this checkout on corpus v2, fresh search (data/experiments/corpus_v2/v2_live.jsonl)"
+  },
+  "method": "blind A/B: labels shuffled per question (seed 20261031); one grader agent per 10 questions, then an independent skeptic agent re-checked every grade",
+  "rubric": "same live rubric as data/evaluation/next_phase_grades.json",
+  "skeptic_changes": 3,
+  "skeptic_outcome_changes": "2 (A11 corpus v1: partially_correct -> wrong_answer; B08 corpus v2: partially_correct -> wrong_answer); D08 notes only"
+ },
+ "limitations": [
+  "Agent grades; no human review.",
+  "One run per system: 46 of 50 live contexts are identical across corpora, so most differences are generation sampling."
+ ],
+ "live": [
+  {
+   "question_id": "A01",
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained with reason model_http_503 (generation failed, no model call recorded). The passages contained the FY2024 income statement (p137, Revenue $60,922M), so the corpus answers it."
+   },
+   "v2": {
+    "outcome": "acceptable_clarification",
+    "contains_error": false,
+    "note": "States revenue for fiscal year 2024 was $60,922 million, cited to FY2024 p137. That is correct and explicitly labelled as fiscal year 2024. It does not give the Jan 28, 2024 year end or mention that FY2025 ($130,497M) covers most of calendar 2024. Its passages came only from the FY2024 report."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked. A's model_http_503 abstention is an infrastructure failure, but the corpus answers the question and its passages included FY2024 p137 (Revenue $60,922M), so false_abstention is right. B labels 'fiscal year 2024' explicitly and gives $60,922M, which matches FY2024 p137 (the quote is verbatim in the passage). It omits the Jan 28, 2024 year end and the FY2025 $130,497M calendar-2024 caveat, so it does not reach the gold's full treatment. It still fits the rubric's 'correct for one explicitly labelled reasonable interpretation', so acceptable_clarification stands. No change.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "A02",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives approximately 221,000 full-time employees as of June 30, 2023, with 72,000 in product R&D. Cited to MSFT FY2023 p19, which matches the gold."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives the same figures (221,000 as of June 30, 2023; 72,000 in product R&D), cited to FY2023 p19. Correct year, with no FY2024/FY2025 mix-up."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked. Both quotes are verbatim from MSFT FY2023 p19 (also in the passages). 221,000 as of June 30, 2023 and 72,000 in product R&D match the gold; no FY2024/FY2025 figures (228,000; 81,000/80,000) leaked in. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "A03",
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (unsupported_claim). The corpus answers it: there was a 3-for-1 split on Feb 23, 2024, and split-adjusted diluted EPS was $1.42 for FY2023 vs $1.91 for FY2024. Its retrieved passages lacked the EPS rows but did include the split note (p96)."
+   },
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (unsupported_claim) with essentially the same passages. The premise correction (split-adjusted $1.42 to $1.91) is supported in the corpus."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked. Expected answer; the gold premise correction ($1.42 split-adjusted FY2023 vs $1.91 FY2024; 3-for-1 split Feb 23, 2024) is in the corpus. Both systems got near-identical passages, only one of which (FY2024 p96) has the split footnote and none of which has the EPS rows. Both abstained with unsupported_claim, so false_abstention for both, with no error. No change.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "A04",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives FY2024 dividends declared of $19.36 per share, including a $15 special dividend, cited to the MD&A duplicate on p35, whose text matches the Note 6 sentence. It answers both parts. It omits the $8,589M total and the $1.16 quarterly rate, which were not asked for."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Same content and citation: $19.36 per share in FY2024, including the $15 special dividend (p35)."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked. The cited quote appears verbatim on COST FY2024 p35 (verified in pages.jsonl page_number 35) and duplicates Note 6 on p59. $19.36 per share, including the $15 special dividend, answers both parts correctly. Omitting $8,589M and $1.16 is not material. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "A05",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives 50.0M Class B shares for $5.5B at an average $110.32 (p49). It also correctly splits this into 6.5M shares (~$710.0M) under the prior $15B program and 43.5M shares (~$4.8B) under the new $18B program, which handles the two-program trap."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives 50.0M shares for $5.5B at an average $110.32 (p49). Correct and complete for what was asked, but it has no program breakdown."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked. A's long p49 quote is verbatim in NKE FY2023 document.md (the digest passage is truncated). Its 6.5M/$710.0M (prior $15B program, Q1) plus 43.5M/~$4.8B (new $18B program) breakdown is accurate and sums to 50.0M. B's 50.0M / $5.5B / $110.32 is correct. Neither gives the $5,480M cash-flow figure, which is not needed. A is better because it handles the two-program trap. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "A06",
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source after 2 attempts), although its passages included the p68 Consolidated Statements of Operations row 'Research and development ... 8,915'."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives $8,915 million for the fiscal year ended May 31, 2024, cited to p68. That is the GAAP figure; it avoided the $6,690M ex-SBC MD&A row. The user asked for billions and it gave millions, but the value is right (about $8.9B)."
+   },
+   "better": "v1",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked. Passages were identical for A and B and included the p68 row 'Research and development | 8,915 | 8,623 | 7,219', so A's quote_not_in_source abstention is a false_abstention. B gives the GAAP $8,915M for the FY ended May 31, 2024, avoiding the $6,690M ex-SBC MD&A row. Not converting to billions is a presentation shortfall, not a wrong figure. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "A07",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives net income attributable to Deere of $10,166M and diluted EPS of $34.63 for FY2023, cited to p46. It used the correct attributable line."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Same figures ($10,166M; $34.63) and the same p46 citations."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked. Both citations ('Net Income Attributable to Deere & Company | $ 10,166 | ...', 'Diluted | 34.63 | ...') are verbatim on DE FY2023 p46 (document.md lines 2641/2644). The digest passage is truncated at 1,000 chars. Both systems used the attributable line, not the consolidated $10,155M. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "A08",
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Says GAAP diluted EPS fell from $4.42 (FY2022) to $4.31 (FY2024) and dividends per share rose from $2.04 to $2.36. Cited to the FY2024 p43 rows, with the correct column order and directions."
+   },
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (calculation_result_mismatch; the first attempt failed quote_not_in_source). The answer is directly readable from FY2024 p43."
+   },
+   "better": "v1",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked. In A's passages the p43 header reads 2024 | 2023 | 2022 (no column reordering), so $4.42 (FY2022) to $4.31 (FY2024) GAAP diluted EPS (down) and $2.04 to $2.36 dividends (up) are right. There is no non-GAAP mix-up. The EPS quote is on FY2024 p43 in the gold and also appears in the p72 passage. B had the same passages but abstained (calculation_result_mismatch), so false_abstention. No change.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "A09",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives Digital Media revenue of $15.86B, Creative Cloud $12.68B and Document Cloud $3.18B for FY2024, cited to the p66 segment note. These match the gold's $15,864M / $12,682M / $3,182M, and it avoided the $15,547M subscription-only figure."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives identical figures and citations ($15.86B; Creative Cloud $12.68B; Document Cloud $3.18B; p66)."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked. p66 passages (same for both) show Creative Cloud 12,682, Document Cloud 3,182 and Total Digital Media revenue 15,864 under 2024 | 2023 | 2022. $15.86B, $12.68B and $3.18B are correct roundings, and neither used the $15,547M subscription figure. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "A10",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives Credit Karma revenue of $1,805M (FY2022), $1,634M (FY2023, -9%) and $1,708M (FY2024, +5%). Cited to FY2024 p45, the Credit Karma segment table (verified in document.md: Total segment revenue 1,708 | 1,634 | 1,805, 5% (9%)). The percentages match the source."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives the same three figures and the same down-then-up trend, with the same p45 citation, but without percentages."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked. The FY2024 p45 Credit Karma table (identical in both systems) reads 2024 | 2023 | 2022: 1,708 | 1,634 | 1,805, with '5% (9%)'. 1,634/1,805 = -9.5% and 1,708/1,634 = +4.5% are consistent with the reported percentages. Neither used the operating-income row. A's percentages are extra but not gold-required, so 'same' is reasonable. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "A11",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Gives the cash-flow-statement line requested: purchases of property and equipment $82,999M for FY2024 (correct 2024 column, not the 2022 $63,645M trap). Also adds the MD&A net cash capex of $77.7B, correctly labelled. Matches gold."
+   },
+   "v1": {
+    "outcome": "wrong_answer",
+    "contains_error": true,
+    "note": "The user explicitly asked for the cash-flow-statement number. B instead gives $77,700 million and attributes it to 'cash flow statement data'. That figure is the MD&A net cash capex (p35, $77.7B, net of $5,341M proceeds; exact 77,658), not a statement line. The statement's purchases of property and equipment were $82,999M (p48), which B cites but never states. The only requested figure is misreported and its source is misattributed (the gross-vs-net trap). The period (2024) is right, and $77.7B is a legitimate Amazon capex measure, but it is not the one requested."
+   },
+   "better": "v2",
+   "verifier_agrees": false,
+   "verifier_notes": "Changed system_B from partially_correct to wrong_answer. The user asked only for the cash-flow-statement number. B reports '$77,700 million' and says it comes from 'the cash flow statement data', but it is the MD&A net cash capex (p35, $77.7B; p40 shows 77,658 = 82,999 - 5,341). The p48 statement line is 82,999, which B cites but never states. The requested figure is therefore misreported and the attribution is false, which is the named gross-vs-net trap. A was re-checked against p48 (column order 2022/2023/2024, so 82,999 is 2024) and is correct.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "A12",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Cash and equivalents $7.041B at Aug 29, 2024 and total debt $13.397B (431 + 12,966, matching the debt-note total net carrying amount on p72). Both are in billions as requested and match gold. It does not mention cash plus marketable investments ($9.15B), which is optional."
+   },
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (claim_number_not_in_evidence) although the corpus answers it. Its own passages included the p61 balance sheet and the p72 debt note with 7,041 / 12,966 / 13,397."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: p61 cash 7,041 and the p72 debt-note total 13,397 (431 + 12,966) match gold, and A converts both to billions. B's passages held the p61 and p72 rows, and the corpus answers the question, so false_abstention stands.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "A13",
+   "v1": {
+    "outcome": "acceptable_clarification",
+    "contains_error": false,
+    "note": "Answers with an explicit period label: fiscal year ended June 30, 2025, $136,162M, which matches the gold. It does not say that later periods (FY2026 / calendar 2025) are outside the corpus, but the explicit FYE label makes the interpretation clear."
+   },
+   "v2": {
+    "outcome": "acceptable_clarification",
+    "contains_error": false,
+    "note": "Answers 'fiscal year 2025' $136,162M, which is correct and labelled. It gives no fiscal-year-end date and does not say that later periods are outside the corpus, so it is slightly less explicit than A."
+   },
+   "better": "v1",
+   "verifier_agrees": true,
+   "verifier_notes": "Both use the FY2025 p43 figure of 136,162 with an explicit period label. Neither adds the gold's note that later periods are absent from the corpus, but the rubric's 'explicitly labelled reasonable interpretation' is met. A is marginally better because it gives the June 30 year end.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "B01",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "KO 25.4% vs PEP 13.3% for FY2022, so KO is higher by 12.1 pts. The calculation is correct, both figures are verbatim (KO p50, PEP p51), and it avoids the equity-investee trap. Matches gold."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Same figures and verdict as A: KO 25.4%, PEP 13.3%, gap 12.1 pts, with correct citations. Matches gold."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Both match gold: KO 25.4% (p50), PEP 13.3% (p51, the split 'Operating margin / 13.3 %' block confirmed in document.md), and a 12.1-pt gap. Neither uses the p86 equity-investee figures.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "B02",
+   "v2": {
+    "outcome": "partially_correct",
+    "contains_error": true,
+    "note": "HD 14.2% is correct and the verdict (HD better) is right. For Lowe's it uses the explicitly labelled ADJUSTED operating margin of 13.3% (shareholder letter p3), the non-GAAP trap measure, instead of the GAAP 13.38%. The comparison therefore mixes GAAP and non-GAAP bases. The basis mismatch does not change the verdict and nothing stated is false, but the requested Lowe's operating margin is missing."
+   },
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (claim_qualifier_mismatch) on an answerable question. Both margins are reported verbatim in the corpus."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed that A's Lowe's figure is the p3 letter's 'adjusted operating margin of 13.3%' rather than GAAP 13.38% (p51/p98). It is labelled 'adjusted' and the HD-better verdict holds, so partially_correct with contains_error=true is consistent with the convention for a non-material basis mismatch. B's abstention is false because both margins are verbatim in the corpus.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "B03",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Intel DCAI: revenue $15.5B and an operating loss of $530M. AMD Data Center: revenue $6.5B and operating income $1.3B. Explicitly answers that Intel's DCAI lost money while AMD's segment was profitable. All are segment figures (verified on INTC p32 DCAI section and AMD p51). Matches gold, rounded."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Same correct segment figures: Intel DCAI $15.5B revenue / $530M operating loss, AMD DC $6.5B / $1.3B operating income. It answers the 'losing money' part only implicitly, by stating Intel's operating loss, with no explicit comparison sentence."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Checked INTC document.md p32: the '$15.5' chart value and 'operating loss of $530 million in 2023' sit in the DCAI section, consistent with p91 (15,521 / (530)). AMD p51 shows 6,496 / 1,267. Both systems use segment figures. B's stated operating loss and AMD operating income answer 'losing money' implicitly, so correct_answer stands for both, with A better for its explicit comparison.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "B04",
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (calculation failures) although the corpus supports Intel -31.4% (79,024 to 54,228) and AMD +38.0% (16,434 to 22,680)."
+   },
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (invalid_calculation_schema) on an answerable two-year change question."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Both abstained (A: calculation_operand_not_in_source; B: invalid_calculation_schema). The corpus supports Intel -31.4% (79,024 to 54,228) and AMD +38.0% (16,434 to 22,680), so both are false abstentions.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "B05",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "TXN 41.8% vs 50.6% (decline) and ADI 31.1% vs 27.3% (improvement). States the verdict explicitly: ADI held up better. All four percentages are verbatim (TXN p23, ADI p32). Matches gold."
+   },
+   "v1": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "Correct consolidated margins: TXN 41.8% vs 50.6% and ADI 31.1% vs 27.3%. Also adds TI's Analog segment margin (44.6% vs 54.4%, -30% operating profit), which is correctly labelled as segment and verified on p24. It never states which company held up better, so the requested verdict is missing."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Checked TXN p24 in document.md: Analog operating profit 5,821 vs 8,359 (-30%) and margin 44.6% vs 54.4%. B's segment claims are accurate and labelled. B gives all four consolidated margins but never states which company held up better, so partially_correct (verdict missing) is consistent with prior grading. A states the ADI verdict correctly.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "B06",
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (invalid_quote) although the net margins can be computed from the corpus: CAT 10,335/67,060 = 15.4% vs DE 10,166/61,251 = 16.6%, so Deere is higher."
+   },
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (calculation_result_not_in_claim) on an answerable question."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Both abstained. CAT 10,335/67,060 = 15.4% and DE 10,166/61,251 = 16.6% are computable from the corpus, so both are false abstentions.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "B07",
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (invalid_calculation_schema) although both figures are stated directly. No calculation was needed for the verdict."
+   },
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "CAT ME&T sales $63,869M vs Deere equipment operations net sales $55,565M, so CAT is bigger. Both exclude financing, period is FY2023, and figures were verified on CAT p30 and DE p41. Matches gold. It omits the $8,304M gap, which is optional."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Checked CAT document.md: the ME&T bridge row ends at 63,869 for 2023. DE p41 (supplemental consolidating data, equipment operations) shows 55,565. B's figures and the CAT-bigger verdict are right, and both exclude financing. A's abstention is false.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "B08",
+   "v2": {
+    "outcome": "wrong_answer",
+    "contains_error": true,
+    "note": "Both figures are right: CL FY2023 gross margin 58.2% (p35) and PG FY2023 47.9% of net sales (p31). The verdict 'not strictly apples-to-apples' is right, but the reasons it gives are materially wrong, and they are the substance of the second half of the question. The GPI charge moved Colgate's gross profit by only $1M ($11,326 GAAP vs $11,327 ex-charges), and P&G's premium-product mix effects are an operating driver, not a basis difference; Colgate's margin also reflects mix. It misses the real basis difference: Colgate books shipping and handling in SG&A while P&G puts it in cost of products sold. Including those costs would cut Colgate's 2023 margin by 910 bps to about 49.1% vs P&G's 47.9%, so the gap shrinks from about 10.3 to about 1.2 points. It also misses the different fiscal periods (P&G Jul 2022-Jun 2023 vs CL calendar 2023). The user would come away thinking the ~10-point gap is mostly real, apart from a one-off charge and mix."
+   },
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Said 'I'm not sure' (verifier_reason_contradicts_verdict), although its passages had both margins (CL p35 58.2%, PG p31 47.9%) and the corpus answers the question."
+   },
+   "better": "v1",
+   "verifier_agrees": false,
+   "verifier_notes": "Changed system_A from partially_correct to wrong_answer. partially_correct requires 'nothing materially wrong', and A's comparability explanation is wrong: a $1M charge and P&G mix effects are presented as why the margins are not comparable, while the 910 bps shipping and handling classification that accounts for most of the gap is missing. The figures and the bare verdict are right, but the stated reasons are a materially wrong statement about the very thing asked. Changed better from system_A to system_B, keeping the convention used in B12 that an abstention ranks above a materially wrong answer. Close call, since A's two figures are correct. system_B's grade was checked and is unchanged.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "B09",
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (invalid_claim_schema after quote_not_in_source retry). The corpus answers it: QCOM $35,820M vs AVGO $35,819M revenue, and R&D about 24.6% (25% verbatim) vs 14.7% (15)."
+   },
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (quote_not_in_source on both attempts). The corpus answers it: QCOM $35,820M vs AVGO $35,819M revenue, and R&D about 25% vs 15%."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. Expected answer. Both systems had the QCOM p41-42 revenue/R&D block (35,820; 8,818; 25%) and the AVGO p43/p53 statements (35,819; 5,253; 15) in their passages, but both still abstained.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "B10",
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence). The corpus answers it: CRM FY2024 GAAP operating margin about 14% (5,011/34,857) vs NOW FY2023 about 8.5% (762/8,971). Salesforce is higher."
+   },
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (generator_abstained). The corpus answers it: CRM FY2024 about 14% vs NOW FY2023 about 8.5% on a GAAP basis."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. Expected answer; both abstained. Their passages mostly held non-GAAP and irrelevant material (CRM FY2023 p7-9 guidance footnotes, the NOW FY2024 stock graph), so retrieval missed the key rows, but the corpus does answer it.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "B11",
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (generator_abstained). The question is answerable or clarifiable from the corpus: TGT FY2023 about 3.85% vs WMT FY2023 about 1.91% (or period-aligned WMT FY2024 about 2.39%). It neither answered nor clarified."
+   },
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (claim_admits_missing_evidence). The question is answerable or clarifiable from the corpus (TGT about 3.85% vs WMT about 1.91% / 2.39%). It neither answered nor clarified."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. Expected answer_or_clarify. A bare 'I'm not sure' is neither a clarification nor an expected abstention, so false_abstention is right for both.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "B12",
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (calculation_operand_not_in_source). The corpus answers it: KHC $26,042M to $26,640M (+2.3%) and MDLZ $28,720M to $36,016M (+25.4%)."
+   },
+   "v1": {
+    "outcome": "wrong_answer",
+    "contains_error": true,
+    "note": "MDLZ is right: $28,720M to $36,016M, +25.4%. KHC is materially wrong. It uses $18,604M as KHC's 2021 net sales, but that comes from the KHC FY2021 p34 segment-level table (Dec 25, 2021 vs Dec 26, 2020); consolidated 2021 net sales were $26,042M. That error gives a false +43.2% KHC growth (true about +2.3%) and so inverts the comparison."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. KHC_FY2021 document.md shows 18,604 / 19,204 as the 'United States' segment net sales (also in the segment note), not consolidated net sales. system_B's KHC growth is therefore wrong, and so is its implied ranking (KHC ahead of MDLZ).",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "C01",
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (question_not_answered). The corpus answers both steps (FY2022: two software businesses plus ~$6.0B cash, 55% stake, $11,188M consideration; FY2025: remaining shares for ~$7.2B on Mar 12, 2025). Its passages already covered step 1."
+   },
+   "v2": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "Step 1 is right and well cited (May 16, 2022; OSI and GSS contributed plus ~$6.0B cash to Heritage AspenTech holders; 55% fully diluted; total purchase consideration $11,188M). Step 2 is missing: nothing on the Mar 12, 2025 ~$7.2B buyout of the remaining shares, and only FY2022 passages were retrieved. It does not flag the gap, but it states nothing wrong."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. B's step-1 facts match the gold (p38/p62). It does not add the amounts together, and the $11,188M is labelled correctly as the acquisition-accounting purchase consideration. The missing FY2025 step makes it partial, not wrong.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "C02",
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Closed Sep 12, 2022; $7.2B aggregate cash price including assumed debt; Meggitt annual sales ~$2.1B for CY2021; plus the business description (aerospace, defense, energy). All match PH p60/p42/p48. It omits 800p/share in the text (it is in the citation) and the 82/18 segment split, both optional."
+   },
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Closed Sep 12, 2022; $7.2B aggregate cash price including assumed debt; Meggitt sales ~$2.1B for CY2021. All correct. It is slightly thinner than A (no business description; 800p only in the citation)."
+   },
+   "better": "v1",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. All three asked items (price, close date, size) are correct in both answers, with no contamination from the GBP 6.5B bridge, the $2.0B term loan or EMR's $7.2B. Small note: the size and description citations come from PH FY2025 p50, not FY2023 p60, but the facts match the gold p60 text. The edge to A for the business description is reasonable.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "C03",
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Lists VLAB Works, Arm's Artisan foundation IP business and Secure-IC (Oct 30, 2025, $139.6M net), plus the three other fiscal-2025 business combinations ($38.9M), as the gold ideally wants. Correctly says Hexagon D&E (agreement Sep 4, 2025) had not closed and was pending regulatory approvals. No BETA CAE or Invecas contamination."
+   },
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": true,
+    "note": "Lists VLAB Works, Artisan IP and Secure-IC ($139.6M net), and correctly says Hexagon is pending regulatory approval and not completed. Minor misstatement: 'deadline extended to March 4, 2027'. The outside date is Sep 4, 2026, extendable by two optional three-month extensions at Cadence's election to Mar 4, 2027; nothing has been extended. It omits the three other small business combinations. The core answer is correct."
+   },
+   "better": "v1",
+   "verifier_agrees": true,
+   "verifier_notes": "Kept system_B as correct_answer with contains_error=true. Both asked items are right: the completed 2025 deals (the three named ones, introduced with 'including', so not presented as exhaustive) and Hexagon not closed / pending. The 'extended' wording misstates a termination-date detail nobody asked about. It does not change the deal-status verdict, so it is not material under the rubric. Omitting the $38.9M other deals is acceptable, because the gold calls them 'ideally' mentioned.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "C04",
+   "v1": {
+    "outcome": "wrong_answer",
+    "contains_error": true,
+    "note": "Strategy summary, Q2 FY25 support-org restructuring, Q4 closures, 627 stores and the $892M FY2025 charge are all right. It misstates the cost outlook, which is the exact trap. It says the ~$1.0B estimate includes 'the amount incurred in the second and third quarters', but p89 says the $137M from Q2/Q3 is in addition to the $1.0B. It also calls the FY2026 $230M 'additional' to the $1.0B, when it is part of that total. Other extras ($272.8M lease liability, NA margin -830 bps with ~240 bps from restructuring) are accurate."
+   },
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Accurate summary: the strategy goal, Q2 FY25 support-org restructuring and Q4 FY25 closure plan with criteria, 627 stores closed, $892.0M FY2025 restructuring and impairment. The ~$1.0B total estimate for the Q4 plan is correctly stated as inclusive of FY25 charges and in addition to $137M from Q2/Q3, with ~$230M expected in FY2026 and completion in FY2026. It omits the segment split and the strategy pillars, both optional."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. A cited the p89 sentence that says '$1.0 billion ... in addition to the $137 million' but reversed it in the text, which is a material error on the cost question. Its extra figures ($272.8M on p89; 41%, 830 bps and ~240 bps on p36) were checked against the SBUX FY2025 document and are accurate. The $230M is part of the $1.0B (about $755M of Q4-plan charges in FY2025 plus $230M is roughly $1.0B), so 'additional' is also misleading.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "C05",
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Deloitte & Touche LLP, auditor since 1967, and both FY2025 CAMs (Sensia goodwill/intangibles impairment evaluation; asbestos claim liability). All correct from ROK FY2025 pp95-97. It does not mention the defense-cost policy change or the $441M liability, both optional."
+   },
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Same content as A: Deloitte & Touche LLP, since 1967, and the two CAMs (Sensia goodwill/intangibles; asbestos liability), all correct. It has richer citations (triggering event, asbestos CAM description), but the released text is equivalent."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed. Both have the right auditor, tenure (1967, not the KMB, DOV or ITW tenures) and both FY2025 CAMs, with no wrong-company contamination. The released texts are essentially identical.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "C06",
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "14,596,708 shares remaining as of Dec 31, 2025 under the August 2023 authorization; matches gold (DOV FY2025). Cites p.31 (Item 5), which carries the same figure per gold_review. Share count, not converted to dollars. Omits optional ASR context."
+   },
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Same correct figure and as-of date (14,596,708 shares at Dec 31, 2025, August 2023 authorization), cited on both p.31 and p.105. Omits optional ASR context."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: both give 14,596,708 shares at Dec 31, 2025 under the August 2023 authorization, quoted verbatim from FY2025 p.31 (and p.105 for B); no FY2024 or Emerson/ITW figure swapped in. No change.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "C07",
+   "v1": {
+    "outcome": "partially_correct",
+    "contains_error": false,
+    "note": "2026 $999M, 2027 $1,467M, 2028 $759M are correct and not shifted by a year. But the ladder stops at 2028: it leaves out 2029 (none), 2030 ($585M), 2031+ ($3,872M) and the $7,682M total, even though the question asks for every year."
+   },
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (claim_number_not_in_evidence after 2 attempts), but the FY2025 p.78 maturity schedule answers it and was among the retrieved passages."
+   },
+   "better": "v1",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked against ITW FY2025 document.md p.78 schedule (2026 $999, 2027 $1,467, 2028 $759, 2029 none, 2030 $585, 2031+ $3,872): A's three values are not year-shifted and it does not claim the list is complete, so partially_correct stands. A and B received identical passages (the p.77-78 passage A quoted from), and the corpus answers it in any case, so B is a false abstention. No change.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "C08",
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "All four parts match KMB FY2024 p.20: 4%-5% workforce reduction (as a percentage, no headcount invented), about $1.5B pre-tax cost with about half in cash, $3.0B gross productivity plus $200M SG&A savings ($200 correctly read as millions), done by end of 2026. Also gives the Mar 27, 2024 announcement date."
+   },
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Same correct content as A (4%-5% workforce, ~$1.5B cost with ~half in cash, $3.0B + $200M savings, end of 2026), with one citation per part."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked against KMB FY2024 p.20: all four parts are right in both, and both give the Mar 27, 2024 announcement date. One caveat that does not change the grade: the FY2025 report keeps $1.5B, 4%-5%, $3.0B + $200M and end-2026, but raises the cash share from about half to about 60%. Both answers follow the FY2024 report they cite, which matches the gold. No change.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "C09",
+   "v1": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Abstained. Correct: Colgate's reports give no Scope 1/2 figures."
+   },
+   "v2": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Abstained. Correct: Colgate's reports give no Scope 1/2 figures."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: Scope 1/2 figures are not in the corpus. Both abstained and fabricated nothing. No change.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "C10",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Faithful to MDLZ FY2024 p.60: expects higher cocoa costs in the near and medium term; ICE London cocoa up 161% (Q4 2024 vs Q4 2023 last trading day), likely to stay elevated; pricing and hedging may not cover it, which could significantly hit profitability. Invents no quantified hit. Leaves out the gold's supply-risk factors (climate, EU Deforestation Regulation), the 2024 cost drivers and the mitigation, but covers both things the question asks."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Correct and faithful: 161% ICE cocoa price rise, prices likely to stay elevated, pricing and hedging may not cover it, which could significantly hit profitability. Slightly thinner than A (no explicit near- and medium-term higher cocoa cost expectation); also leaves out supply risk, cost drivers and mitigation."
+   },
+   "better": "v2",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked against MDLZ FY2024 p.60: both are faithful (161% ICE London change, prices likely to stay elevated, pricing or hedging may fall short, significant profit impact) and invent no quantified hit. The omitted gold context (cost drivers, supply/EUDR, mitigation) is not material to the two things asked. A is fuller because it adds the near- and medium-term expectation of higher cocoa costs. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "C11",
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Latest ratings from KHC FY2025 p.23: S&P BBB stable, Fitch BBB rating watch negative, Moody's Baa2 under review for downgrade. Anchors them to the FY2025 filing date. No stale FY2021/FY2022 ratings."
+   },
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Same correct FY2025 ratings and outlooks. Says only 'as of the date of this filing' without naming which filing (the citation shows FY2025), so the as-of date is less clear than in A."
+   },
+   "better": "v1",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked against KHC FY2025 p.23: both give BBB stable / BBB watch negative / Baa2 under review for downgrade, with no stale FY2021/FY2022 ratings. A anchors them to the FY2025 filing; B only says 'this filing'. No change.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "D01",
+   "v2": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Abstained. Apple is not in the corpus."
+   },
+   "v1": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Abstained. Apple is not in the corpus."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: Apple is not in the corpus. Both abstained and gave no Qualcomm/Broadcom figure. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "D02",
+   "v2": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Abstained. Tesla is not in the corpus and no delivery counts exist."
+   },
+   "v1": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Abstained. Tesla is not in the corpus and no delivery counts exist."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: Tesla is not in the corpus and no delivery counts exist. Both abstained. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "D03",
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "2019 Net Operating Revenues of $37,266M from the KO FY2021 p.62 comparative column; correct column (not 2021 or 2020), correct units."
+   },
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Same correct $37,266M for 2019, cited from KO FY2021 p.62. Calls it 'revenue' rather than the line name 'Net Operating Revenues'; no error."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: both give the 2019 column ($37,266M) from KO FY2021 p.62, not 2021's $38,655M or 2020's $33,014M, in correct units. No change.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "D04",
+   "v2": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Abstained. There is no FY2026 Walmart report; the corpus ends at FY2025 (year ended Jan 31, 2025). Did not offer labelled FY2025 figures (optional)."
+   },
+   "v1": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Abstained. There is no FY2026 Walmart report in the corpus. Did not offer labelled FY2025 figures (optional)."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: the WMT folder holds only FY2021-FY2025, so there is no FY2026 report. Both abstained. Offering labelled FY2025 figures was optional. No change.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "D05",
+   "v1": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Abstained on a 2027 revenue forecast request; no forecast exists in AMD reports, matching expected abstain."
+   },
+   "v2": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Abstained on a 2027 revenue forecast request; no forecast exists in AMD reports, matching expected abstain."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: both abstained with 'I'm not sure', released no number, and did not extrapolate from the 2024-2025 growth seen in the passages (p56/p74 revenue tables). expected_behavior is abstain, so correct_abstention is right for both.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "D06",
+   "v1": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Declined to give a buy/sell recommendation on Intel stock (investment advice), as expected."
+   },
+   "v2": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Declined to give a buy/sell recommendation on Intel stock (investment advice), as expected."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Re-checked: both returned a bare 'I'm not sure' and gave no recommendation or valuation opinion. The expected behaviour is abstain (investment advice), so correct_abstention stands. Optional Intel facts were not required.",
+   "blind_labels": {
+    "system_A": "v1",
+    "system_B": "v2"
+   }
+  },
+  {
+   "question_id": "D07",
+   "v2": {
+    "outcome": "acceptable_clarification",
+    "contains_error": false,
+    "note": "Reports FY2025 (FYE Sep 28, 2025) net earnings including noncontrolling interests of $1,856.7M, which matches SBUX FY2025 p48 (verified in document.md). Explicitly labels metric and period, so correct for the 'profit' reading of 'make'. Omits revenue ($37,184.4M) and uses the incl.-NCI line rather than attributable ($1,856.4M); does not say it is the latest year or that 'make' is ambiguous."
+   },
+   "v1": {
+    "outcome": "acceptable_clarification",
+    "contains_error": false,
+    "note": "Identical content to the other system: FY2025 net earnings including NCI $1,856.7M (correct, p48), explicitly labelled. Omits revenue ($37,184.4M) and the attributable figure ($1,856.4M); no note on ambiguity."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Checked the passages: SBUX FY2025 p48 comprehensive income shows 'Net earnings including noncontrolling interests | $ 1,856.7', and the p51 equity statement gives 1,856.4 + 0.3 = 1,856.7. Both answers label the metric and the period end (Sep 28, 2025), so each gives one labelled, reasonable profit reading. That makes acceptable_clarification right, consistent with the earlier context-extras grading of D07. Neither covers revenue ($37,184.4M) or flags the ambiguity. Not an error.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "D08",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "FY2024 membership fee revenue of $4,828M matches gold (COST FY2024 p42; p3 '$4.8 billion'). Cites p3 and the p32 MD&A Membership Fees table, whose quote is split into '$' and '4,828' fragments. The p32 page is valid because the table shows $4,828 / $4,580 / $4,224. Does not cite p42 and gives no 52/53-week context."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "FY2024 membership fee revenue of $4,828M matches gold. Cites the p42 income statement row (4,828/4,580/4,224), the p30 MD&A sentence, p3 and the p32 MD&A table value '4,828'. All citations are valid."
+   },
+   "better": "same",
+   "verifier_agrees": false,
+   "verifier_notes": "Outcomes unchanged (both correct_answer), but I corrected the notes. The first grader called the p32 '4,828' citation a page slip. I checked COST FY2024 document.md: '## PDF page 32' opens with a 'Membership Fees' table ('Membership fees ... $ 4,828 $ 4,580 $ 4,224', +5%), so p32 is a valid source. A's p32 quote is merely split into two fragments. The answers are identical. B also cites the p42 income statement and the p30 MD&A, which is cleaner but not enough to call it better.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "D09",
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (unsupported_claim) although received passages include NVDA FY2025 p172 'Data Center | $ 115,186' and p130 text; the corpus answers it ($115,186M, ~1,152亿美元)."
+   },
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained (unsupported_claim) although the p172 Revenue by End Market table with Data Center $115,186M was in its passages."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: both systems' passages include NVDA FY2025 p172 'Data Center | $ 115,186 | $ 47,525 | $ 15,005' (Jan 26, 2025 column) and p130 'Data Center revenue ... up 142%'. Both abstained (unsupported_claim), so it is a false_abstention for both.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "D10",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Reports FY2023 net income attributable to shareowners $10,714M, matching KO FY2023 p63 (preferred attributable line). Wording 'consolidated net income attributable' slightly blends labels (consolidated net income is $10,703M) but the line and figure are correctly identified; answered in English, no 亿 conversion."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Identical answer: FY2023 attributable net income $10,714M, correct per p63. Same minor label wording; answered in English."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: KO FY2023 p63 'Net Income Attributable to Shareowners of The Coca-Cola Company | $ 10,714', in the 2023 column. Both cite this exact row. The phrase 'consolidated net income attributable' is loose, but the line, value and period are right, so it is not material. Neither gives a 亿 conversion or a Chinese answer, which is not an error. correct_answer stands.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "D11",
+   "v2": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Ignored the prompt injection and declined to guess MSFT FY2026 revenue, as expected."
+   },
+   "v1": {
+    "outcome": "correct_abstention",
+    "contains_error": false,
+    "note": "Ignored the prompt injection and declined to guess MSFT FY2026 revenue, as expected."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: both ignored the injection and abstained. Neither used the p33 unearned-revenue schedule (June 30, 2026 | 5,889) or the 15% growth to fabricate a FY2026 figure. correct_abstention for both.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "D12",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "No year given; answers with the latest year and labels it: HD fiscal 2025 net sales $164,683M, matching gold (consolidated figure, not the $151,966M segment distractor). Does not mention FYE Feb 1, 2026 or that it chose the latest year, but the label is explicit."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Identical answer: fiscal 2025 net sales $164,683M, correct consolidated figure, labelled with fiscal year."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: $164,683M is the Fiscal 2025 column of the p37 consolidated earnings table (also p48). It is not the p59 Primary-segment $151,966M or the FY2022 $157,403M that both also retrieved. The gold explicitly accepts answering the latest labelled year, so I keep correct_answer, consistent with the prior verified D12 grade. The missing Feb 1, 2026 year end is not required.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "D13",
+   "v2": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Uses the most recent (FY2025) report: firm backlog ~$51.2B at Dec 31, 2025 vs $30.0B at Dec 31, 2024, increase across primary segments led by Power & Energy, ~$19.3B not expected to be filled in 2026; all match gold p17. Omits the secondary p31 outlook mention of a robust backlog supporting Construction Industries; not material."
+   },
+   "v1": {
+    "outcome": "correct_answer",
+    "contains_error": false,
+    "note": "Same p17 facts correctly stated ($51.2B vs $30.0B, Power & Energy largest increase, $19.3B not filled in 2026). Omits the minor p31 outlook mention."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: all three p17 facts ($51.2B vs $30.0B, the increase across primary segments led by Power & Energy, $19.3B not filled in 2026) match the gold excerpts and the FY2025 report. Neither used the older-report figures ($27.5B, Energy & Transportation). The omitted p31 outlook mention is minor, so correct_answer stands for both.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  },
+  {
+   "question_id": "D14",
+   "v2": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained instead of correcting the false premise. Its passages included NKE FY2023 p32 (record revenue $51.2B, up 10%) and p35 (Revenues $51,217 vs $46,710), so the corpus answers it."
+   },
+   "v1": {
+    "outcome": "false_abstention",
+    "contains_error": false,
+    "note": "Abstained instead of correcting the false premise despite having p32 and p35 passages showing FY2023 revenue rose 10% to $51,217M."
+   },
+   "better": "same",
+   "verifier_agrees": true,
+   "verifier_notes": "Confirmed: both had NKE FY2023 p32 ('record Revenues of $51.2 billion, which increased 10%') and p35 (Revenues $51,217 vs $46,710, +10%). The expected behaviour is to answer by correcting the false premise, so a bare 'I'm not sure' is a false_abstention for both. Neither accepted the premise.",
+   "blind_labels": {
+    "system_A": "v2",
+    "system_B": "v1"
+   }
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 # Next phase: raising evidence recall and fully-correct answers
 
-> **Outcome.** All six directions were implemented in reduced form and measured in [system_architecture.md, Table A13](system_architecture.md). Factual and comparative fully correct answers rose by +10.2 of 70 (CI +5.2 to +15.8), and comparisons went from 36.7% to 66.0%. Final-context recall rose from 75.8% to 85.2%, and summaries went from 41.7% to 51.7% fully correct. The live pool was unchanged (34 good of 50). The estimates below are the design-phase projections, and the parser header-order fix (4b) is being built as a separate corpus version.
+> **Outcome.** All six directions were implemented in reduced form and measured in [system_architecture.md, Table A13](system_architecture.md). Factual and comparative fully correct answers rose by +10.2 of 70 (CI +5.2 to +15.8), and comparisons went from 36.7% to 66.0%. Final-context recall rose from 75.8% to 85.2%, and summaries went from 41.7% to 51.7% fully correct. The live pool was unchanged (34 good of 50). The estimates below are the design-phase projections. The parser header-order fix (4b) was built as a separate corpus version and measured in [Table A14](system_architecture.md): it fixes dev-017 at the source, loses no gold unit, and is otherwise within noise.
 
 **Short answer.** The best next step is mostly not more recall. 24 of the 36 benchmark answers that are not fully correct already have every gold unit in their context. So the largest gains come from CPU-only fixes at the answer layer, in this order:
 

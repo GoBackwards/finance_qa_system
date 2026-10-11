@@ -60,6 +60,7 @@ Environment variables can provide the initial settings when launching the server
 | Variable | Meaning and default |
 |---|---|
 | `FINANCE_QA_DEVICE` | `cpu` by default; set `cuda:0` before launch to select the first GPU. |
+| `FINANCE_QA_CORPUS` | Corpus version, `v1` by default. `v2` uses the re-parsed corpus with same-line table headers in reading order ([architecture Table A14](system_architecture.md)); its folders must be built first. |
 | `FINANCE_QA_BASE_URL` | Compatible API base, normally ending in `/v1`. The client appends `/chat/completions`. Empty means no configured endpoint. |
 | `FINANCE_QA_MODEL` | Generator model identifier; empty by default. |
 | `FINANCE_QA_API_KEY` | Provider credential. It may be empty for a local endpoint that does not require authentication. |

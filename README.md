@@ -13,6 +13,7 @@ The system was measured on a frozen 100-question benchmark (50 dev and 50 test q
 | Live usage pool, 50 questions: good / wrong / unsafe | 17 / 5 / 1 → 32 / 1 / 0 | [A9](docs/system_architecture.md#a9-end-to-end-live-usage-pool-before-and-after-the-bad-case-fixes) |
 | Context extras after the Top-5, 100 benchmark and 50 live questions | Evidence Recall of the delivered context 57.5% (5 passages) → 75.8% (7.6 on average); answer accuracy 50% → 64% (test 44% → 56%), wrong answers 8 → 3; live pool good outcomes 32 → 34 (not significant), wrong 2 → 3 | [A12](docs/system_architecture.md#a12-context-extras-passages-appended-after-the-reranked-top-5-benchmark-and-live-pool) |
 | Next-phase directions, 100 benchmark questions × 5 repeats | Fully correct on factual + comparative +10.2 of 70 (CI +5.2 to +15.8); comparisons 36.7% → 66.0%; final-context recall 75.8% → 85.2%; summaries fully correct 41.7% → 51.7%; live pool unchanged (34 good of 50) | [A13](docs/system_architecture.md#a13-next-phase-directions-comparison-verdict-value-checks-citation-repair-context-extras-v3) |
+| Corpus v2: parser header-order fix, rebuilt in separate folders | 108 tables' year headers now in column order, none broken; dev-017 refused → correct 5 of 5; retrieval unchanged (no gold unit lost); fully correct +0.4 of 70 (CI −1.8 to +3.2) | [A14](docs/system_architecture.md#a14-corpus-v2-parser-header-order-fix-separate-versioned-rebuild) |
 | Comparison decomposition, 30 comparative questions | Evidence Recall@5 31.67% → 53.33% (rule rewrite); no clear answer-accuracy gain, so off by default | [A11](docs/system_architecture.md#a11-comparison-decomposition-per-company-sub-questions-30-comparative-benchmark-questions-12-live-comparisons) |
 
 A good outcome is a correct answer, an acceptable clarification or a correct refusal. The caveats in [Evaluation](#evaluation) apply to every row.
@@ -89,7 +90,7 @@ python scripts/run_retrieval_experiment.py --cutoffs 3 5 10 20 50 --output data/
 python scripts/run_reranker_experiment.py
 ```
 
-Without CUDA, pass `--device cpu` to steps 4–6. The reranker refuses to resume a checkpoint made with a different configuration, so give a CPU rerun its own output directory, such as `--output data/experiments/reranker_cpu`. Pinned model snapshots are cached under `.cache/huggingface/`, and the demo loads them from there without downloading. Steps 5 and 6 rerun the retrieval and reranker experiments; the demo needs the SQLite chunk store and reranker snapshot they leave behind. Parser options are covered in [docs/parsing.md](docs/parsing.md).
+Without CUDA, pass `--device cpu` to steps 4–6. The reranker refuses to resume a checkpoint made with a different configuration, so give a CPU rerun its own output directory, such as `--output data/experiments/reranker_cpu`. Pinned model snapshots are cached under `.cache/huggingface/`, and the demo loads them from there without downloading. Steps 5 and 6 rerun the retrieval and reranker experiments; the demo needs the SQLite chunk store and reranker snapshot they leave behind. This checkout's parser includes the header-order fix, so these steps produce the content of corpus v2 in the v1 folders; [A14](docs/system_architecture.md#a14-corpus-v2-parser-header-order-fix-separate-versioned-rebuild) builds v2 in its own folders. Parser options are covered in [docs/parsing.md](docs/parsing.md).
 
 **Run the demo.**
 
@@ -146,25 +147,25 @@ Read the results with these caveats:
 - **The live fixes were designed on the live questions.** The live pool's 17 → 32 good outcomes show that the fixes work on those cases, not that they generalise. The benchmark answer comparison (A10) was not used to design them.
 - **Source selection is not answer accuracy.** Evidence Recall@K measures whether labelled passages reach the Top-K. On test, scoping's +3.33 points over re-ranking alone (CI −4.00 to +10.67) are within noise.
 - **More answers, not fewer wrong answers.** On the benchmark, wrong answers did not fall (8 → 9), because 21 more questions now receive an answer.
-- **Few repeats.** Tables A9–A12 ran each end-to-end configuration once, so gpt-4.1-mini sampling adds noise. A13 replays factual and comparative answers 5 times, summaries 2 times and the live pool once. The gate was open so that every stage could be observed. Bootstrap intervals ignore dependence between questions that share a company or template.
+- **Few repeats.** Tables A9–A12 ran each end-to-end configuration once, so gpt-4.1-mini sampling adds noise. A13 and A14 replay factual and comparative answers 5 times and the live pool once; A13 also grades summaries over 2 repeats. The gate was open so that every stage could be observed. Bootstrap intervals ignore dependence between questions that share a company or template.
 - **Post-hoc prompt.** Prompt v2.2 was written after seeing the v2.1 grades on the comparative questions. The only pre-registered decomposition result is the rule-decomposition retrieval comparison. Likewise, the A13 directions were designed after diagnosing failures on the same benchmark and live questions.
 
 ## Project status
 
-**Complete.** Every stage, from PDF download to cited answer, is implemented and runs on one machine; answer generation also needs an OpenAI-compatible model endpoint. The Streamlit demo shows the interpreted scope, the selected passages and each cited PDF page. The main design choices are backed by recorded comparisons (Tables A1–A13); each table names its result file, most of them in [`data/evaluation/`](data/evaluation).
+**Complete.** Every stage, from PDF download to cited answer, is implemented and runs on one machine; answer generation also needs an OpenAI-compatible model endpoint. The Streamlit demo shows the interpreted scope, the selected passages and each cited PDF page. The main design choices are backed by recorded comparisons (Tables A1–A14); each table names its result file, most of them in [`data/evaluation/`](data/evaluation).
 
 **Open problems.**
 - **The live pool has not improved.** After the next-phase directions, 16 of 50 live questions still fail: 11 false refusals, 3 partially correct answers and 2 wrong answers. Good outcomes stayed at 34 ([A13](docs/system_architecture.md#a13-next-phase-directions-comparison-verdict-value-checks-citation-repair-context-extras-v3)).
 - **Comparisons and summaries remain the weakest categories.** Comparisons reached 66.0% fully correct across 5 replays and summaries 51.7%, against 94.0% for factual questions. Most remaining comparison failures are refusals (30.7% of replays).
-- **Column and segment errors.** A wrong fiscal-year column in a structured table row is now caught and refused, not fixed: dev-017 is refused 5 of 5 times instead of answered wrongly. Figures cited from loose text fragments carry no column year, so the check cannot catch test-028: it was wrong in 17 of 20 answer-side replays, and correct 5 of 5 times only with the fresh v3 contexts. A segment table taken as the company total is not checked (dev-021, B12).
-- **Parser header order.** Same-line year headers can be printed in reverse order in table captions. The parser fix is written and tested, and is being built as a separate corpus version.
+- **Column and segment errors.** A wrong fiscal-year column in a structured table row is caught and refused, not fixed: on corpus v1, dev-017 is refused 5 of 5 times instead of answered wrongly (corpus v2 fixes its header order at the source). Figures cited from loose text fragments carry no column year, so the check cannot catch test-028: it was wrong in 17 of 20 answer-side replays, and correct 5 of 5 times only with the fresh v3 contexts. A segment table taken as the company total is not checked (dev-021, B12).
+- **Two corpus versions.** The parser now reads same-line table headers left to right. Corpus v2 is built with this fix and fixes dev-017 at the source, with no measured regression ([A14](docs/system_architecture.md#a14-corpus-v2-parser-header-order-fix-separate-versioned-rebuild)). The demo still defaults to v1, the corpus that Tables A1–A13 were measured on. A fresh build with this checkout's parser produces v2 content.
 - **Token cost.** Context extras v3 roughly doubles summary context.
 - **No OCR.** 324 pages carry sparse-text or encoding warnings.
 - **No default confidence threshold.** Raw reranker logits are not calibrated probabilities. The dev-calibrated threshold (6.359375) would have kept only 4 of the 25 correct or acceptable live answers, so operators must choose a threshold.
 - **No independent human review** of labels or grades.
 
 **Next steps.**
-- Measure the parser header-order fix on its separate corpus version.
+- Decide whether corpus v2 becomes the default (`FINANCE_QA_CORPUS=v2`); its measured benefit is limited to the tables it fixes.
 - Confirm the A12 and A13 gains on a fresh held-out question set, since their rules were designed on the benchmark and live failures.
 - Reduce summary context, for example by keeping only reranker-ranked neighbours, and reduce refusals on comparisons.
 - Add scoped BM25 candidates for lexical cues ("critical audit matter", credit ratings) and section typing for summary themes outside Item 1A ([recall roadmap](docs/recall_roadmap.md)).
@@ -175,7 +176,7 @@ Read the results with these caveats:
 
 | Document | Contents |
 |---|---|
-| [System architecture](docs/system_architecture.md) | Start here: pipeline diagram, request path in code, module rationale, experiment Tables A1–A13, reproduction commands |
+| [System architecture](docs/system_architecture.md) | Start here: pipeline diagram, request path in code, module rationale, experiment Tables A1–A14, reproduction commands |
 | [Corpus](data/README.md) | Report collection, sources, fiscal-year naming and page-citation conventions |
 | [PDF parsing](docs/parsing.md) · [DeepDoc reference](docs/deepdoc_reference.md) | Parser commands, output format, parsing decisions, quality limits and the validated corpus run; design review of DeepDoc |
 | [Chunking experiment](docs/chunking_experiment.md) · [chunking pilot benchmark](docs/chunking_benchmark.md) | Table-preserving chunker and the size/overlap comparison (A1) |
@@ -187,5 +188,5 @@ Read the results with these caveats:
 | [Live bad cases](docs/live_bad_cases.md) | Live audit: failure types, root causes, mitigations and before/after results (A9) |
 | [Classic bad cases](docs/classic_bad_cases.md) | Earlier controlled audit: retrieval probes, injected generation faults and provider defects |
 | [Failure handling](docs/failure_handling.md) | Failure taxonomy and the query-expansion ablation (A5) |
-| [Next-phase plan](docs/next_phase_plan.md) | Residual failures after the context extras, ranked directions and Colab Pro options; implemented and measured in A13 |
+| [Next-phase plan](docs/next_phase_plan.md) | Residual failures after the context extras, ranked directions and Colab Pro options; implemented and measured in A13 and A14 |
 | [Recall roadmap](docs/recall_roadmap.md) | Where recall is lost (pool vs reranking), ranked improvement directions and what not to do; its quick wins became the context extras (A12) |
