@@ -1596,6 +1596,11 @@ def _result_label(calculation: dict) -> str:
     return f"{result}{unit}" if unit in ("%", "x") else f"{result} {unit}"
 
 
+# Public names for the demo's presentation layer (report_search.demo_presentation).
+escape_markdown = _escape
+result_label = _result_label
+
+
 def _calculation_line(calculation: dict, display: str, markers: dict[str, str]) -> str:
     """One escaped line that shows the application-computed arithmetic and operands."""
     parts = [_escape(f"Calculated by the application: {display} = {_result_label(calculation)} (operands: ")]

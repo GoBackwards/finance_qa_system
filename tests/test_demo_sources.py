@@ -154,6 +154,19 @@ class SourceCatalogTests(unittest.TestCase):
         self.assertEqual(SourceCatalog(self.root).describe(self.citation)["public_url"],
                          "https://reports.example/secure.pdf#page=2")
 
+    def test_preview_highlights_only_a_valid_box_on_the_page(self):
+        catalog = SourceCatalog(self.root)
+        plain = catalog.page_png(self.citation)
+        self.assertNotEqual(catalog.page_png(self.citation, highlight=[60, 50, 300, 90]), plain)
+        for invalid in ([float("nan"), 0, 10, 10], [300, 50, 60, 90], [5000, 5000, 6000, 6000],
+                        ["a", 1, 2, 3], [1, 2, 3], "not a box"):
+            with self.subTest(box=invalid):
+                self.assertEqual(catalog.page_png(self.citation, highlight=invalid), plain)
+        self.assertEqual(hashlib.sha256(self.raw.read_bytes()).hexdigest(), self.sha)  # drawn in memory only
+        self.assertTrue(catalog.page_png(self.citation, highlight=[60, 50, 300, 90], report_highlight=True)[1])
+        self.assertEqual(catalog.page_png(self.citation, highlight=[300, 50, 60, 90], report_highlight=True),
+                         (plain, False))
+
     def test_preview_size_is_bounded(self):
         catalog = SourceCatalog(self.root)
         for width in (0, 255, 2401, True, 500.0):

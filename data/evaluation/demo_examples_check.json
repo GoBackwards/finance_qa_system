@@ -1,0 +1,175 @@
+{
+ "schema_version": 1,
+ "check": "one live run of each demo example question through the Streamlit app (scripts: headless Chrome)",
+ "run_date": "2026-10-10",
+ "configuration": {
+  "corpus": "v2",
+  "device": "cuda:0 (RTX 4060 Laptop GPU)",
+  "generator_model": "gpt-4.1-mini-2025-04-14",
+  "verifier_model": "gpt-4.1-mini-2025-04-14",
+  "prompt_version": "evidence-bound-claims-v2.3",
+  "threshold": -1000000,
+  "threshold_note": "gate open, as in the evaluations"
+ },
+ "summary": {
+  "examples": 8,
+  "as_expected": 8
+ },
+ "limitations": [
+  "One run per question; generation varies between calls, so an example can refuse on another run.",
+  "Figures were checked by the author against the parsed source rows listed; no human review.",
+  "The page text was captured before the review fixes to the checklist wording; the answer stage (generation and checks) was unchanged."
+ ],
+ "examples": [
+  {
+   "question": "How much did Walmart spend on capital expenditures in fiscal 2024?",
+   "expected": "verified answer",
+   "outcome": "verified answer",
+   "seconds": 35.2,
+   "claims": [
+    {
+     "claim": "Walmart's total capital expenditures for fiscal 2024 were $20,606 million.",
+     "sources": [
+      1
+     ]
+    }
+   ],
+   "source_rows_checked": [
+    "WMT FY2024: Total capital expenditures | $ 20,606"
+   ]
+  },
+  {
+   "question": "how much did coke pay in dividends last year?",
+   "expected": "verified answer",
+   "outcome": "verified answer",
+   "seconds": 6.0,
+   "claims": [
+    {
+     "claim": "The Coca-Cola Company paid dividends of $8,779 million during the fiscal year 2025.",
+     "sources": [
+      1
+     ]
+    }
+   ],
+   "source_rows_checked": [
+    "KO FY2025 (latest report): Dividends | (8,779)"
+   ]
+  },
+  {
+   "question": "英伟达2024财年的研发费用是多少？",
+   "expected": "verified answer",
+   "outcome": "verified answer",
+   "seconds": 6.1,
+   "claims": [
+    {
+     "claim": "NVIDIA's research and development expenses for the fiscal year 2024 were $8,675 million.",
+     "sources": [
+      1
+     ]
+    }
+   ],
+   "source_rows_checked": [
+    "NVDA FY2024: Research and development | 8,675"
+   ]
+  },
+  {
+   "question": "Which had higher net sales in fiscal 2024, Target or Lowe's?",
+   "expected": "verified answer",
+   "outcome": "verified answer",
+   "seconds": 8.1,
+   "claims": [
+    {
+     "claim": "In fiscal 2024, Target Corporation had net sales of $106,566 million.",
+     "sources": [
+      1
+     ]
+    },
+    {
+     "claim": "In fiscal 2024, Lowe's Companies, Inc. had net sales of $83,674 million.",
+     "sources": [
+      2
+     ]
+    },
+    {
+     "claim": "Target's fiscal 2024 net sales of $106,566 million were higher than Lowe's fiscal 2024 net sales of $83,674 million.",
+     "sources": [
+      1,
+      2
+     ]
+    }
+   ],
+   "source_rows_checked": [
+    "TGT FY2024: Net Sales | $ 106,566",
+    "LOW FY2024: Net sales | $ 83,674"
+   ]
+  },
+  {
+   "question": "Which company reported higher revenue in fiscal 2024, Adobe or Intuit?",
+   "expected": "verified answer",
+   "outcome": "verified answer",
+   "seconds": 8.0,
+   "claims": [
+    {
+     "claim": "Adobe reported total revenue of $21,505 million in fiscal 2024.",
+     "sources": [
+      1
+     ]
+    },
+    {
+     "claim": "Intuit reported total net revenue of $16,285 million in fiscal 2024.",
+     "sources": [
+      2
+     ]
+    },
+    {
+     "claim": "Adobe's fiscal 2024 revenue of $21,505 million was higher than Intuit's fiscal 2024 revenue of $16,285 million.",
+     "sources": [
+      1,
+      2
+     ]
+    }
+   ],
+   "source_rows_checked": [
+    "ADBE FY2024: Total revenue | $ 21,505",
+    "INTU FY2024: Total net revenue | $16,285"
+   ]
+  },
+  {
+   "question": "By what percentage did Kimberly-Clark's net sales change from 2023 to 2024?",
+   "expected": "verified answer",
+   "outcome": "verified answer",
+   "seconds": 8.1,
+   "claims": [
+    {
+     "claim": "Kimberly-Clark's net sales decreased by 1.8% from FY2023 to FY2024.",
+     "sources": [
+      1
+     ]
+    }
+   ],
+   "source_rows_checked": [
+    "KMB FY2024: net sales 20,058 (2024) and 20,431 (2023), a change of -1.83%"
+   ]
+  },
+  {
+   "question": "What were Netflix's paid memberships at the end of 2024?",
+   "expected": "refused",
+   "outcome": "refused",
+   "seconds": 6.0,
+   "refusal": {
+    "reason_code": "generator_abstained",
+    "reason": "The answer model could not fully answer from the supplied evidence."
+   }
+  },
+  {
+   "question": "What will Costco's net sales be in fiscal 2026?",
+   "expected": "refused",
+   "outcome": "refused",
+   "seconds": 7.1,
+   "refusal": {
+    "reason_code": "generator_abstained",
+    "reason": "The answer model could not fully answer from the supplied evidence."
+   }
+  }
+ ]
+}

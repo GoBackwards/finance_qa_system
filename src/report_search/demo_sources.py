@@ -70,7 +70,7 @@ class SourceCatalog:
         manifest = self.root / "data" / "manifest.json"
         if not manifest.resolve().is_relative_to(self.root):
             raise SourceCatalogError("Manifest escapes the project root")
-        rows = json.loads(manifest.read_text(encoding="utf-8"))
+        rows = json.loads(manifest.read_text(encoding="utf-8-sig"))
         if not isinstance(rows, list):
             raise SourceCatalogError("Report manifest must be a list")
         self._reports = {}
@@ -151,8 +151,14 @@ class SourceCatalog:
             raise SourceCatalogError("Local source is not a readable PDF") from error
         return data
 
-    def page_png(self, citation, *, max_width=1200):
-        """Render a bounded RGB preview from the same hash-verified PDF bytes."""
+    def page_png(self, citation, *, max_width=1200, highlight=None, report_highlight=False):
+        """Render a bounded RGB preview from the same hash-verified PDF bytes.
+
+        ``highlight`` is an optional [x0, y0, x1, y1] box in PDF points, such as
+        an answer citation's bbox. It is drawn only on the in-memory copy, and
+        only when it is a valid box on an unrotated page; otherwise it is ignored.
+        With ``report_highlight`` the result is ``(png, drawn)``.
+        """
         if type(max_width) is not int or not 256 <= max_width <= 2400:
             raise SourceCatalogError("Preview width must be between 256 and 2400 pixels")
         _, page = self._resolve(citation)
@@ -165,9 +171,29 @@ class SourceCatalog:
                 if not all(math.isfinite(x) and x > 0 for x in (width, height)):
                     raise SourceCatalogError("Invalid PDF page dimensions")
                 scale = min(max_width / width, 2400 / height, 2.0)
-                return source_page.get_pixmap(matrix=pymupdf.Matrix(scale, scale),
-                                             colorspace=pymupdf.csRGB, alpha=False).tobytes("png")
+                box = _highlight_box(highlight, source_page)
+                if box is not None:
+                    source_page.draw_rect(box, color=(0.85, 0.45, 0.0), fill=(1.0, 0.85, 0.2), width=1.5,
+                                          fill_opacity=0.25, overlay=True)
+                png = source_page.get_pixmap(matrix=pymupdf.Matrix(scale, scale),
+                                            colorspace=pymupdf.csRGB, alpha=False).tobytes("png")
+                return (png, box is not None) if report_highlight else png
         except SourceCatalogError:
             raise
         except (RuntimeError, ValueError) as error:
             raise SourceCatalogError("Unable to render source PDF page") from error
+
+
+def _highlight_box(highlight, page):
+    """A padded pymupdf.Rect for a finite, ordered box that meets an unrotated page, else None."""
+    import pymupdf
+    if highlight is None or page.rotation != 0:
+        return None
+    try:
+        x0, y0, x1, y1 = (float(value) for value in highlight)
+    except (TypeError, ValueError):
+        return None
+    if not all(math.isfinite(value) for value in (x0, y0, x1, y1)) or x0 >= x1 or y0 >= y1:
+        return None
+    box = pymupdf.Rect(x0 - 2, y0 - 2, x1 + 2, y1 + 2)
+    return box if box.intersects(page.rect) else None
