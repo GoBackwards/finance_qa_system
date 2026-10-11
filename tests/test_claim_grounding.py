@@ -542,6 +542,12 @@ class ColumnYearTests(unittest.TestCase):
             with self.subTest(text=text):
                 self.assertTrue(check(claim(text, ("E1", "Total Assets | $ 87,764 | $ 87,476")), ASSETS)["ok"])
 
+    def test_a_december_date_does_not_accept_the_prior_year_column(self):
+        # dev-017 replay: the prior-year figure was released 'as of December 31, 2024'.
+        result = check(claim("Caterpillar reported total assets of $87,476 million as of December 31, 2024.",
+                             ("E1", "Total Assets | $ 87,764 | $ 87,476")), ASSETS)
+        self.assertEqual(result.get("reason"), "claim_column_year_mismatch")
+
     def test_a_fiscal_year_ending_early_in_the_next_calendar_year_is_accepted(self):
         # Cadence FY2021 ended January 1, 2022; Home Depot FY2024 ended February 2, 2025.
         for company, year, value, other, date in (("CDNS", 2021, "2,988.2", "2,682.9", "January 1, 2022"),

@@ -1179,19 +1179,21 @@ def _column_year_mismatch(claim: dict, bundle: dict) -> str | None:
 
     Row units carry each cell's column year, bound by x position in the
     evidence store. Accepted years for the claim: the one year it names outside
-    dates; else the year of its one date and the year before (a fiscal year
-    'ended January 1, 2022' is FY2021); else the cited report's year. A claim
+    dates; else the year of its one date, plus the year before for a January or
+    February date (a fiscal year 'ended January 1, 2022' is FY2021, while
+    'December 31, 2024' is only 2024); else the cited report's year. A claim
     naming several years is not checked. Years are also compared as offsets
     from the latest column, since some reports label a fiscal year by its
     calendar end. Calculation operands use their label's year.
     """
     evidence = bundle["evidence"]
     stripped = {year for year, _ in _years(_MONTH_DATE.sub(" ", claim["text"]))}
-    dated = {year for year, _ in _years(claim["text"])}
-    if len(stripped) > 1 or (not stripped and len(dated) > 1):
+    dates = {(match.group()[:3].lower(), int(match.group()[-4:])) for match in _MONTH_DATE.finditer(claim["text"])}
+    if len(stripped) > 1 or (not stripped and len({year for _, year in dates}) > 1):
         accepted = None
     else:
-        accepted = stripped or {year for date in dated for year in (date, date - 1)}
+        accepted = stripped or {year - back for month, year in dates
+                                for back in ((0, 1) if month in ("jan", "feb") else (0,))}
     figures = [(value, scale) for _, value, _, scale in _claim_numbers(claim["text"])]
     targets = [(citation["evidence_id"], figures, accepted) for citation in claim["citations"]] if accepted is not None else []
     for operand in (claim.get("calculation") or {}).get("operands") or ():
