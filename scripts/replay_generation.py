@@ -41,12 +41,18 @@ def main(argv=None):
     parser.add_argument("--deadline-seconds", type=float, default=30)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--ids", nargs="*")
-    parser.add_argument("--corpus", default="v1", help="corpus version (report_search.demo_service.CORPORA)")
+    parser.add_argument("--corpus", default="v1", choices=("v1", "v2"),
+                        help="corpus the contexts were retrieved from; v1 reproduces Tables A1-A13")
     parser.add_argument("--src", type=Path, default=ROOT / "src")
     args = parser.parse_args(argv)
     load_env_file(ROOT / ".env")
 
-    from report_search.demo_service import CORPORA
+    try:
+        from report_search.demo_service import CORPORA
+    except ImportError:  # --src code that predates corpus versions reads corpus v1 only
+        CORPORA = {"v1": {"processed": "data/processed", "bm25": "data/indexes/bm25_s512_o50/retrieval.sqlite"}}
+    if args.corpus not in CORPORA:
+        parser.error(f"--corpus {args.corpus} is not available in this source tree")
     from report_search.evidence_binding import SourceEvidenceStore
     from report_search.generation import PROMPT_VERSION, generate_answer
     from report_search.llm_client import ChatCompletionsClient, ModelConfig
@@ -59,7 +65,8 @@ def main(argv=None):
             encoding="utf-8").splitlines()) if r.get("search")}
     else:
         from report_search.demo_service import DemoService
-        with DemoService(ROOT, device=args.device, corpus=args.corpus) as service:
+        options = {"corpus": args.corpus} if "v2" in CORPORA else {}  # older code has no corpus argument
+        with DemoService(ROOT, device=args.device, **options) as service:
             contexts = {qid: service.search(query)["selected"]
                         for qid, query in questions.items() if not args.ids or qid in args.ids}
     ids = [qid for qid in contexts if qid in questions and (not args.ids or qid in args.ids)]

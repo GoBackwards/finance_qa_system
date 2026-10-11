@@ -20,11 +20,11 @@ import secrets
 import threading
 import time
 
-from report_search.generation import generate_answer
+from report_search.generation import _valid_query, generate_answer
 from report_search.llm_client import ChatCompletionsClient, ModelConfig, ModelError
 from report_search.decomposition import retrieve_decomposed
-from report_search.scoped_retrieval import (context_extras, document_index, merge_pools, plan_pools,
-                                            select_candidates)
+from report_search.scoped_retrieval import (CONTEXT_VERSION, context_extras, document_index, merge_pools,
+                                            plan_pools, select_candidates)
 
 
 class DemoError(RuntimeError):
@@ -49,19 +49,9 @@ class DemoComponents:
     documents: dict | None = None
 
 
-def _valid_query(query):
-    if not isinstance(query, str) or not query.strip() or len(query) > 10_000:
-        return False
-    try:
-        query.encode("utf-8")
-    except UnicodeError:
-        return False
-    return True
-
-
-# Corpus versions: each is a self-consistent set of parsed sources, chunks and indexes. v1 is the
-# published corpus behind Tables A1-A13; v2 is re-parsed with same-line table headers read left to
-# right (parser fix 4b) and built in separate folders, never over v1.
+# Corpus versions: each is a self-consistent set of parsed sources, chunks and indexes, built in its
+# own folders. v2, the default, is parsed with same-line table headers read left to right (Table A14);
+# v1, parsed before that fix, is kept read-only because Tables A1-A13 were measured on it.
 CORPORA = {
     "v1": {"processed": "data/processed", "chunks": "data/experiments/chunking/table_preserving_s512_o50/chunks.jsonl",
            "vectors": "data/indexes/bge-m3/table_preserving_s512_o50",
@@ -71,9 +61,10 @@ CORPORA = {
            "vectors": "data/indexes/bge-m3_v2/table_preserving_s512_o50",
            "bm25": "data/indexes/bm25_s512_o50_v2/retrieval.sqlite"},
 }
+DEFAULT_CORPUS = "v2"
 
 
-def _default_factory(root, device, corpus="v1"):
+def _default_factory(root, device, *, corpus):
     # Imports and native resources stay on the owning worker. Existing index
     # loaders verify hashes and ordered SQLite/FAISS chunk mappings themselves.
     from report_index.embedding import DenseEncoder, sha256_file
@@ -120,7 +111,8 @@ def _default_factory(root, device, corpus="v1"):
         reranker._load_model()
         return DemoComponents(encoder, engine, reranker, SourceEvidenceStore(paths["processed"]),
                               {**engine.stats, "encoder_model": encoder.identity["model_id"],
-                               "reranker_model": reranker.identity["model_id"], "device": device},
+                               "reranker_model": reranker.identity["model_id"], "device": device,
+                               "corpus": corpus},
                               scope_resolver=ScopeResolver(inventory), documents=document_index(inventory))
     except BaseException:
         engine.close()
@@ -142,7 +134,8 @@ class DemoService:
     ``answer`` accepts only an unmodified result from this service's ``search``.
     """
 
-    def __init__(self, root_dir, *, device="cpu", worker_factory=None, decompose_comparisons=False, corpus="v1"):
+    def __init__(self, root_dir, *, device="cpu", worker_factory=None, decompose_comparisons=False,
+                 corpus=DEFAULT_CORPUS):
         if not isinstance(device, str) or not re.fullmatch(r"cpu|cuda:\d+", device):
             raise DemoError("invalid_device")
         if corpus not in CORPORA:
@@ -306,6 +299,7 @@ class DemoService:
                     partial["selected"] += [dict(chunk, rank=rank) for rank, chunk in enumerate(scored, first)]
                     partial["retrieval_trace"]["context_extras"] = [
                         {"chunk_id": chunk["chunk_id"], "reason": chunk["context_reason"]} for chunk in scored]
+                partial["retrieval_trace"]["context_version"] = CONTEXT_VERSION
                 timings["context_extras_ms"] = (time.perf_counter() - stage_started) * 1000
             timings["total_ms"] = (time.perf_counter() - started) * 1000
             partial["_signature"] = self._signature(partial)

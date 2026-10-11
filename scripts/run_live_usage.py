@@ -1,12 +1,17 @@
 """Run real questions through the demo's product path with a live model.
 
 Each question uses ``DemoService.search`` (query scope -> company-scoped BGE-M3
-vector pools -> BGE reranker -> balanced Top5; global Top20 when no company is
-recognized) and ``DemoService.answer`` (gate -> source binding -> generator ->
-citation repair + reference/grounding checks -> semantic verifier). The only addition is an observer
-that records the generator/verifier JSON so failures can be diagnosed; it never
-changes requests or responses. Credentials are read from the environment or a
-local .env file and are never written to the output.
+vector pools -> BGE reranker -> balanced Top5, plus context extras for
+company-scoped questions; global Top20 when no company is recognized) and
+``DemoService.answer`` (gate -> source binding -> generator -> citation repair +
+reference/grounding checks -> semantic verifier). The only addition is an
+observer that records the generator/verifier JSON so failures can be diagnosed;
+it never changes requests or responses. Credentials are read from the
+environment or a local .env file and are never written to the output.
+
+Without ``--corpus`` the run uses the DemoService default (corpus v2); Tables
+A9-A12 were measured on ``--corpus v1``. Code from ``--src`` that predates
+corpus versions always reads corpus v1.
 """
 from __future__ import annotations
 
@@ -117,6 +122,8 @@ def main(argv=None):
                         help="Split comparisons into per-company sub-questions (deterministic rewrite or model)")
     parser.add_argument("--src", type=Path, default=ROOT / "src",
                         help="Package source directory to import (default: this checkout's src)")
+    parser.add_argument("--corpus", help="Corpus version (report_search.demo_service.CORPORA); "
+                                         "default: the DemoService default")
     args = parser.parse_args(argv)
     if not math.isfinite(args.threshold):
         parser.error("--threshold must be finite")
@@ -156,7 +163,13 @@ def main(argv=None):
     print(f"{len(todo)} questions to run ({len(done)} already recorded)", flush=True)
 
     options = {"decompose_comparisons": True} if args.decompose else {}
+    corpora = getattr(demo_service, "CORPORA", None)  # None: --src code that predates corpus versions (v1 only)
+    if args.corpus and args.corpus not in (corpora or ("v1",)):
+        parser.error(f"--corpus must be one of {sorted(corpora or ('v1',))} for this source tree")
+    if args.corpus and corpora:
+        options["corpus"] = args.corpus
     service = demo_service.DemoService(ROOT, device=args.device, **options)
+    corpus = getattr(service, "corpus", "v1")
     try:
         for number, question in enumerate(todo, 1):
             record = {"id": question["id"], "label": args.label, "query": question["query"],
@@ -164,7 +177,8 @@ def main(argv=None):
                       "settings": {"threshold": args.threshold, "deadline_seconds": deadline,
                                    "device": args.device, "generator_model": generator_config.model,
                                    "verifier_model": verifier_config.model,
-                                   "prompt_version": PROMPT_VERSION, "decompose": args.decompose}}
+                                   "prompt_version": PROMPT_VERSION, "decompose": args.decompose,
+                                   "corpus": corpus}}
             log.take()
             started = time.perf_counter()
             try:

@@ -53,6 +53,7 @@ def main(argv=None):
     parser.add_argument("--category", default="comparative")
     parser.add_argument("--output", type=Path, default=ROOT / "data/evaluation/decomposition_results.json")
     parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--corpus", default="v1", help="Corpus version; the published table was measured on v1")
     args = parser.parse_args(argv)
 
     _load_env(ROOT / ".env")
@@ -62,7 +63,7 @@ def main(argv=None):
     model = ChatCompletionsClient(ModelConfig.from_env())
     benchmark_bytes = args.benchmark.read_bytes()
     questions = [q for q in json.loads(benchmark_bytes)["questions"] if q["category"] == args.category]
-    components = _default_factory(ROOT, args.device)
+    components = _default_factory(ROOT, args.device, corpus=args.corpus)
     rows = []
     try:
         for question in questions:
@@ -111,7 +112,7 @@ def main(argv=None):
               "benchmark": {"path": "data/evaluation/retrieval_questions.json", "category": args.category,
                             "sha256": hashlib.sha256(benchmark_bytes).hexdigest(), "question_count": len(rows)},
               "configuration": {"decomposition_version": DECOMPOSITION_VERSION, "decomposer_model": model.config.model,
-                                "top_k": 5, "device": args.device,
+                                "top_k": 5, "device": args.device, "corpus": args.corpus,
                                 "selection": "round-robin across sub-questions (decomposed) vs balanced scoped Top5"},
               "policy": "Designed on the live bad-case pool. The rule variant was fixed before any benchmark run; the model plan prompt v2 and company-first quotas were revised after seeing v1 test results, so decomposed_llm test numbers are not held out. Dev and test both reported.",
               "summary": summary, "per_question": rows,

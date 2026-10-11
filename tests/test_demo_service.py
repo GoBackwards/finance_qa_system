@@ -246,13 +246,16 @@ class DemoServiceTests(unittest.TestCase):
             self.assertEqual(calls["entities"], frozenset({"unknown:Apple"}))
 
     def test_corpus_versions_are_explicit_and_complete(self):
-        from report_search.demo_service import CORPORA
-        self.assertEqual(DemoService(".", worker_factory=Resources().factory).corpus, "v1")
+        from report_search.demo_service import CORPORA, DEFAULT_CORPUS
+        self.assertEqual(DEFAULT_CORPUS, "v2")
+        with DemoService(".", worker_factory=Resources().factory) as service:
+            self.assertEqual(service.corpus, DEFAULT_CORPUS)
         with self.assertRaisesRegex(DemoError, "invalid_corpus"):
             DemoService(".", corpus="v9")
         for version, paths in CORPORA.items():
             self.assertEqual(set(paths), {"processed", "chunks", "vectors", "bm25"}, version)
-        self.assertEqual(len({paths["vectors"] for paths in CORPORA.values()}), len(CORPORA))  # never shared
+        for kind in ("processed", "chunks", "vectors", "bm25"):  # versions never share a folder
+            self.assertEqual(len({paths[kind] for paths in CORPORA.values()}), len(CORPORA), kind)
 
     def test_tampered_or_cross_service_search_is_rejected_before_generation(self):
         resources = Resources()
@@ -343,25 +346,29 @@ class DemoServiceTests(unittest.TestCase):
         metadata = {"encoder": identity, "status": "complete", "normalized": True,
                     "dimension": 2, "source_sha256": "chunks", "vector_count": 1}
         inventory = [{"relative_path": "data/raw/DEMO/DEMO.pdf", "sha256": "b" * 64, "status": "validated"}]
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            path = root / "data/indexes/bge-m3/table_preserving_s512_o50/embeddings/embedding_manifest.json"
-            path.parent.mkdir(parents=True)
-            path.write_text(json.dumps(metadata), encoding="utf-8")
-            (root / "data/manifest.json").write_text(json.dumps(inventory), encoding="utf-8")
-            for mismatch in ("encoder", "vectors", "inventory", "source"):
-                with self.subTest(mismatch=mismatch):
-                    encoder = Mock(identity={**identity, "pooling": "mean"} if mismatch == "encoder" else identity)
-                    engine = Mock(stats={"dimension": 2, "chunks_sha256": "wrong" if mismatch == "source" else "chunks",
-                                         "chunk_count": 1, "document_ids": ["WRONG"] if mismatch == "inventory" else ["DEMO-" + "b" * 12]},
-                                  vector_manifest={"vectors_file_sha256": "vectors"})
-                    with patch("report_index.embedding.DenseEncoder", return_value=encoder), \
-                         patch("report_index.embedding.sha256_file", return_value="wrong" if mismatch == "vectors" else "vectors"), \
-                         patch("report_search.retrieval.RetrievalEngine", return_value=engine):
-                        with self.assertRaises(ValueError):
-                            _default_factory(root, "cpu")
-                    engine.close.assert_called_once()
-                    encoder._load_model.assert_not_called()
+        from report_search.demo_service import CORPORA
+        for corpus in CORPORA:
+            with tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                path = root / CORPORA[corpus]["vectors"] / "embeddings/embedding_manifest.json"
+                path.parent.mkdir(parents=True)
+                path.write_text(json.dumps(metadata), encoding="utf-8")
+                (root / "data/manifest.json").write_text(json.dumps(inventory), encoding="utf-8")
+                for mismatch in ("encoder", "vectors", "inventory", "source"):
+                    with self.subTest(corpus=corpus, mismatch=mismatch):
+                        encoder = Mock(identity={**identity, "pooling": "mean"} if mismatch == "encoder" else identity)
+                        engine = Mock(stats={"dimension": 2, "chunks_sha256": "wrong" if mismatch == "source" else "chunks",
+                                             "chunk_count": 1,
+                                             "document_ids": ["WRONG"] if mismatch == "inventory" else ["DEMO-" + "b" * 12]},
+                                      vector_manifest={"vectors_file_sha256": "vectors"})
+                        with patch("report_index.embedding.DenseEncoder", return_value=encoder), \
+                             patch("report_index.embedding.sha256_file",
+                                   return_value="wrong" if mismatch == "vectors" else "vectors"), \
+                             patch("report_search.retrieval.RetrievalEngine", return_value=engine):
+                            with self.assertRaises(ValueError):
+                                _default_factory(root, "cpu", corpus=corpus)
+                        engine.close.assert_called_once()
+                        encoder._load_model.assert_not_called()
 
 
 if __name__ == "__main__":

@@ -45,6 +45,7 @@ def main(argv=None):
     parser.add_argument("--benchmark", type=Path, default=ROOT / "data/evaluation/retrieval_questions.json")
     parser.add_argument("--output", type=Path, default=ROOT / "data/evaluation/scoped_retrieval_results.json")
     parser.add_argument("--device", default="cuda:0")
+    parser.add_argument("--corpus", default="v1", help="Corpus version; the published table was measured on v1")
     args = parser.parse_args(argv)
 
     from report_search.demo_service import _default_factory
@@ -53,7 +54,7 @@ def main(argv=None):
     benchmark_bytes = args.benchmark.read_bytes()
     questions = json.loads(benchmark_bytes)["questions"]
     started = time.perf_counter()
-    components = _default_factory(ROOT, args.device)
+    components = _default_factory(ROOT, args.device, corpus=args.corpus)
     setup_seconds = time.perf_counter() - started
     rows = []
     try:
@@ -112,7 +113,7 @@ def main(argv=None):
               "created_at_utc": datetime.now(timezone.utc).isoformat(),
               "benchmark": {"path": "data/evaluation/retrieval_questions.json",
                             "sha256": hashlib.sha256(benchmark_bytes).hexdigest(), "question_count": len(questions)},
-              "configuration": {"device": args.device, "scope_version": SCOPE_VERSION,
+              "configuration": {"device": args.device, "corpus": args.corpus, "scope_version": SCOPE_VERSION,
                                 "selection_version": SELECTION_VERSION, "global_pool": 20, "scoped_pool": "20 split across resolved companies (>=6 each, <=30 total)",
                                 "top_k": 5, "reranker_score": "raw logit, same pinned reranker for both paths"},
               "policy": "Scoping uses only the question text and the corpus inventory; no labels; no tuning on dev or test.",

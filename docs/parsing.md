@@ -13,30 +13,33 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e .
 ```
 
-Parse the full downloaded corpus:
+Parse the full downloaded corpus into the demo corpus folder (corpus v2; `scripts/build_corpus.py` runs this together with the later stages):
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/parse_reports.py --workers 4
+.\.venv\Scripts\python.exe scripts/parse_reports.py --output data/processed_v2 --workers 4
 ```
+
+Always pass `--output`. The parser's own default is `data/processed`, the folder of corpus v1 behind Tables A1–A13; this parser's code fingerprint differs from v1's, so every v1 report would be re-parsed and overwritten, and v1 can only be rebuilt with the parser from commit `435b7ae` (Table A14). `scripts/parse_reports.py` therefore refuses to run without `--output` or with `--output data/processed`. Likewise, `verify_parsed.py` without `--root` and `--output` audits v1 and overwrites its recorded audit, `data/parsed_validation_report.json`.
 
 Useful scoped runs:
 
 ```powershell
 # One company/year
-.\.venv\Scripts\python.exe scripts/parse_reports.py --tickers NVDA --years 2025
+.\.venv\Scripts\python.exe scripts/parse_reports.py --output data/processed_v2 --tickers NVDA --years 2025
 
-# Specific PDF pages; written to a separate partial-output folder
-.\.venv\Scripts\python.exe scripts/parse_reports.py --tickers NVDA --years 2025 --pages 140-150
+# Specific PDF pages; a partial parse, so keep it out of data/processed_v2 (the chunker rejects partial parses)
+.\.venv\Scripts\python.exe scripts/parse_reports.py --output tmp/parsed_pages --tickers NVDA --years 2025 --pages 140-150
 
 # Try table extraction on every page, bypassing the native-text candidate gate
-.\.venv\Scripts\python.exe scripts/parse_reports.py --tickers MSFT --years 2025 --table-mode all
+.\.venv\Scripts\python.exe scripts/parse_reports.py --output tmp/parsed_table_mode_all --tickers MSFT --years 2025 --table-mode all
 
 # A PDF outside the collection
-.\.venv\Scripts\python.exe scripts/parse_reports.py --input path/to/report.pdf
+.\.venv\Scripts\python.exe scripts/parse_reports.py --output tmp/parsed_other --input path/to/report.pdf
 
 # Parser tests (base dependencies only) and output-integrity audit
 .\.venv\Scripts\python.exe -m unittest tests.test_layout tests.test_pipeline tests.test_tables -v
-.\.venv\Scripts\python.exe scripts/verify_parsed.py --source-manifest data/manifest.json
+.\.venv\Scripts\python.exe scripts/verify_parsed.py --root data/processed_v2 `
+  --output data/parsed_validation_report_v2.json --source-manifest data/manifest.json
 ```
 
 The full suite (`-m unittest discover -s tests`) also needs the `experiments`, `vectors` and `demo` extras.
@@ -47,8 +50,10 @@ Successful runs are resumable. Before reusing an output, the parser checks the P
 
 ## Output
 
+Corpus v2 is laid out as below under `data/processed_v2/`; corpus v1 uses the same layout under `data/processed/`.
+
 ```text
-data/processed/
+data/processed_v2/
 ├── parse_manifest.json
 └── NVDA/
     └── NVDA_FY2025_annual_report/
@@ -95,7 +100,7 @@ Coordinates above are illustrative. Actual boxes are in PDF points, relative to 
 
 `complete: true` means the configured extraction finished; it does **not** mean that every page or table is accurate. Inspect `review_pages`, page `warnings`, and `table_scan`. The integrity audit checks bookkeeping and provenance, not semantic accuracy.
 
-The audit writes `data/parsed_validation_report.json`, including `sparse_pages` and `table_error_pages` for follow-up. With `--source-manifest`, it also requires full coverage of the downloaded corpus and compares source hashes, tickers, fiscal years, and page counts. Omit that option when auditing an intentionally limited subset.
+The audit writes the file named by `--output` (`data/parsed_validation_report.json` is the recorded v1 audit and the default; the command above writes the recorded v2 audit, `data/parsed_validation_report_v2.json`), including `sparse_pages` and `table_error_pages` for follow-up. With `--source-manifest`, it also requires full coverage of the downloaded corpus and compares source hashes, tickers, fiscal years, and page counts. Omit that option when auditing an intentionally limited subset.
 
 - Scanned/image-only content requires a later OCR stage. Sparse covers may be intentionally empty; the parser flags both cases for review.
 - Complex magazine spreads, sidebars, charts, text embedded in figures, and unusual typography may need learned layout analysis. Column ordering is heuristic.

@@ -136,7 +136,7 @@ All nine variants are table-preserving; no naive splitter was measured. The pilo
 
 ### A2. Indexing: embedding-model feasibility (all 56,525 rendered chunks)
 
-Source: `docs/vector_preflight_results.json` (token audit) and `docs/vector_index_results.json` (build time); details in [vector_index.md](vector_index.md).
+Source: `data/evaluation/vector_preflight_results.json` (token audit) and `data/evaluation/vector_index_results.json` (build time); details in [vector_index.md](vector_index.md).
 
 | Model | Token limit | Mean / max tokens | Inputs over limit | Outcome |
 |---|---:|---:|---:|---|
@@ -500,7 +500,7 @@ Source: `data/evaluation/corpus_v2_results.json` (live blind grades in `corpus_v
 
 **What changed.** `_context` in [`tables.py`](../src/report_parser/tables.py) groups the items above a table into lines (y-centres within 2 pt) and reads each line left to right. Before, the items were sorted by exact y, so a '2023' printed 0.16 pt higher than '2024' came first, and the caption read "2023 2024" over columns 2024 | 2023 (dev-017).
 
-All 200 reports were re-parsed, re-chunked, re-embedded and re-indexed into separate folders: `data/processed_v2`, `data/experiments/chunking_v2`, `data/indexes/bge-m3_v2` and `data/indexes/bm25_s512_o50_v2`. Corpus v1 was not modified. `CORPORA` in [`demo_service.py`](../src/report_search/demo_service.py) names both versions, and the version is selected with `DemoService(corpus=...)`, `FINANCE_QA_CORPUS` for the demo, or `--corpus` for replays. The default is still v1.
+All 200 reports were re-parsed, re-chunked, re-embedded and re-indexed into separate folders: `data/processed_v2`, `data/experiments/chunking_v2`, `data/indexes/bge-m3_v2` and `data/indexes/bm25_s512_o50_v2`. Corpus v1 was not modified. `CORPORA` in [`demo_service.py`](../src/report_search/demo_service.py) names both versions, and the version is selected with `DemoService(corpus=...)`, `FINANCE_QA_CORPUS` for the demo, or `--corpus` for the runners. The default is now v2 (`DEFAULT_CORPUS`), `scripts/build_corpus.py` builds its folders in one command, and the §4 commands that reproduce Tables A1–A13 select v1.
 
 **What the re-parse changed:**
 - **Parse audit:** unchanged. 200 of 200 reports pass, with 23,280 pages, 13,141 tables and 1,086 text fallbacks.
@@ -542,14 +542,14 @@ All 200 reports were re-parsed, re-chunked, re-embedded and re-indexed into sepa
 
 ## 4. Reproduce
 
-From the repository root, with the local corpus, indexes and cached models:
+From the repository root, with the local corpus, indexes and cached models. Tables A1–A13 were measured on corpus v1, so the commands that run this checkout through `run_live_usage.py` pass `--corpus v1`; `replay_generation.py` and the two `evaluate_*` scripts default to v1, and code from `--src` that predates corpus versions always reads v1. Rebuilding v1 itself needs the parser from commit `435b7ae`; this checkout's parser builds v2 (Table A14).
 
 ```powershell
 # Frozen-benchmark global vs scoped retrieval (GPU)
 .\.venv\Scripts\python.exe scripts/evaluate_scoped_retrieval.py --device cuda:0
 
 # Live usage pool through the demo product path (needs FINANCE_QA_* model settings)
-.\.venv\Scripts\python.exe scripts/run_live_usage.py --label after_fix --threshold -1000000 `
+.\.venv\Scripts\python.exe scripts/run_live_usage.py --label after_fix --threshold -1000000 --corpus v1 `
   --output data/experiments/live_usage/after_fix.jsonl
 
 # End-to-end benchmark answers (Table A10): commit 6b61b5e (original) vs this checkout, all 100 questions.
@@ -560,14 +560,15 @@ Expand-Archive -Force -Path tmp/head_code.zip -DestinationPath tmp/head_code
 .\.venv\Scripts\python.exe scripts/run_live_usage.py --questions data/evaluation/retrieval_questions.json `
   --src tmp/head_code/src --label baseline_head --threshold -1000000 --output data/experiments/benchmark_e2e/baseline.jsonl
 .\.venv\Scripts\python.exe scripts/run_live_usage.py --questions data/evaluation/retrieval_questions.json `
-  --label current --threshold -1000000 --output data/experiments/benchmark_e2e/current.jsonl
+  --label current --threshold -1000000 --corpus v1 --output data/experiments/benchmark_e2e/current.jsonl
 # Grading is agent-performed and recorded in data/evaluation/benchmark_e2e_grades.json.
 .\.venv\Scripts\python.exe scripts/summarize_benchmark_e2e.py
 
 # Comparison decomposition (Table A11): retrieval ablation, then comparative answers with rule decomposition
 .\.venv\Scripts\python.exe scripts/evaluate_decomposition.py --device cuda:0
 .\.venv\Scripts\python.exe scripts/run_live_usage.py --questions data/evaluation/retrieval_questions.json --category comparative `
-  --decompose rule --label decomposed_rule_v22 --threshold -1000000 --output data/experiments/benchmark_e2e/decomposed_rule_v22.jsonl
+  --decompose rule --label decomposed_rule_v22 --threshold -1000000 --corpus v1 `
+  --output data/experiments/benchmark_e2e/decomposed_rule_v22.jsonl
 # The summary reads six runs from data/experiments/benchmark_e2e/: current (the A10 run), decomposed_rule and
 # decomposed_model (prompt v2.1: commit 960bcc1, run with --src as for the baseline above), and current_v22,
 # decomposed_rule_v22 and decomposed_model_v22 (this checkout; --decompose model for the model plan; omit
@@ -585,14 +586,15 @@ Expand-Archive -Force -Path tmp/extras_base.zip -DestinationPath tmp/extras_base
 .\.venv\Scripts\python.exe scripts/run_live_usage.py --questions data/evaluation/retrieval_questions.json `
   --src tmp/extras_base/src --label bench_base --threshold -1000000 --output data/experiments/context_extras/bench_base.jsonl
 .\.venv\Scripts\python.exe scripts/run_live_usage.py --questions data/evaluation/retrieval_questions.json `
-  --label bench_new --threshold -1000000 --output data/experiments/context_extras/bench_new.jsonl
+  --label bench_new --threshold -1000000 --corpus v1 --output data/experiments/context_extras/bench_new.jsonl
 # Repeat both without --questions (the live pool) as live_base / live_new. Grading is agent-performed (blind A/B)
 # and recorded with the summary in data/evaluation/context_extras_results.json. The retrieval table, live fact
 # counts, latency and paired CIs were computed by uncommitted analysis code: strict EvR can be recomputed with
 # report_chunker.retrieval.judge_retrieval over each run's search.selected (top_k = len(selected)); the eq judge
 # and the live fact predicates are design-phase tools that are not in this repository.
 
-# Next-phase directions (Table A13): replay the answer stage 5x on fixed contexts, grade, summarize
+# Next-phase directions (Table A13): replay the answer stage 5x on fixed contexts, grade, summarize.
+# The baseline arm r0 replays commit 435b7ae via --src; the intermediate arm snapshots r1-r4 are not published.
 .\.venv\Scripts\python.exe scripts/replay_generation.py --contexts data/experiments/context_extras/bench_new.jsonl `
   --src <code snapshot>/src --label r1_d4 --reps 5 --output data/experiments/next_phase/r1_d4.jsonl
 .\.venv\Scripts\python.exe scripts/replay_generation.py --fresh-search --label r5_all --reps 5 `
@@ -602,18 +604,9 @@ Expand-Archive -Force -Path tmp/extras_base.zip -DestinationPath tmp/extras_base
 # Summary and live grades are agent-performed (blind A/B) and recorded in data/evaluation/next_phase_grades.json.
 .\.venv\Scripts\python.exe scripts/summarize_next_phase.py
 
-# Corpus v2 (Table A14): re-parse with the header-order fix into separate folders; v1 is never touched
-.\.venv\Scripts\python.exe scripts/parse_reports.py --output data/processed_v2 --workers 8
-.\.venv\Scripts\python.exe scripts/verify_parsed.py --root data/processed_v2 `
-  --output data/parsed_validation_report_v2.json --source-manifest data/manifest.json
-.\.venv\Scripts\python.exe scripts/run_chunking_experiment.py --input data/processed_v2 `
-  --output data/experiments/chunking_v2 --sizes 512 --overlaps 50 --workers 8
-New-Item -ItemType Directory -Force data/indexes/bm25_s512_o50_v2
-.\.venv\Scripts\python.exe -c "import sys; sys.path.insert(0, 'src'); from report_chunker.retrieval import build_index; build_index('data/experiments/chunking_v2/table_preserving_s512_o50/chunks.jsonl', 'data/indexes/bm25_s512_o50_v2/retrieval.sqlite')"
-.\.venv\Scripts\python.exe scripts/build_vector_index.py `
-  --chunks data/experiments/chunking_v2/table_preserving_s512_o50/chunks.jsonl `
-  --output data/indexes/bge-m3_v2/table_preserving_s512_o50 --device cuda:0 --batch-size 8 `
-  --gpu-memory-fraction 0.9 --index-types flat --threads 4
+# Corpus v2 (Table A14): parse, audit, chunk, chunk store, BGE-M3 index and reranker snapshot into the v2 folders
+# (CORPORA in demo_service.py); v1 is never touched
+.\.venv\Scripts\python.exe scripts/build_corpus.py --device cuda:0 --workers 8 --gpu-memory-fraction 0.9
 .\.venv\Scripts\python.exe scripts/replay_generation.py --contexts data/experiments/next_phase/r5_all.jsonl `
   --corpus v1 --label v1_control --reps 5 --output data/experiments/corpus_v2/v1_control.jsonl
 .\.venv\Scripts\python.exe scripts/replay_generation.py --fresh-search --corpus v2 --label v2_all --reps 5 `
